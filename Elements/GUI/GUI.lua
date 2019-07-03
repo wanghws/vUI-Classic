@@ -513,7 +513,7 @@ end
 GUI.Widgets["CreateSwitch"] = CreateSwitch
 
 -- Dropdown
-local DROPDOWN_WIDTH = 165
+local DROPDOWN_WIDTH = 150
 local DROPDOWN_HEIGHT = 20
 local DROPDOWN_FADE_DELAY = 3 -- To be implemented
 
@@ -889,7 +889,7 @@ GUI.Widgets["CreateDropdown"] = CreateDropdown
 
 -- Slider
 local SLIDER_HEIGHT = 20
-local SLIDER_WIDTH = 118
+local SLIDER_WIDTH = 103
 
 local EDITBOX_WIDTH = 45
 local EDITBOX_HEIGHT = SLIDER_HEIGHT
