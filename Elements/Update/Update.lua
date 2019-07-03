@@ -14,7 +14,7 @@ local AddOnVersion = tonumber(vUI.Version)
 
 local Update = CreateFrame("Frame")
 
--- We only store information on the previous 5-10 versions
+-- We'll only store information on the previous 5-10 versions
 local RecentVersions = {
 	[1] = "Minor",
 	[1.01] = "Minor",

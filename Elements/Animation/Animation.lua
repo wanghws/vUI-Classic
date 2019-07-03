@@ -18,7 +18,7 @@ local tremove = table.remove
 local lower = string.lower
 local Updater = CreateFrame("StatusBar")
 local Texture = Updater:CreateTexture()
-local Text = Updater:CreateFontString()
+local FontString = Updater:CreateFontString()
 local AnimTypes = {}
 local UpdateFuncs = {}
 local Callbacks = {["onplay"] = {}, ["onpause"] = {}, ["onresume"] = {}, ["onstop"] = {}, ["onreset"] = {}, ["onfinished"] = {}}
@@ -52,7 +52,7 @@ local Set = {
 	["backdrop"] = Updater.SetBackdropColor,
 	["border"] = Updater.SetBackdropBorderColor,
 	["statusbar"] = Updater.SetStatusBarColor,
-	["text"] = Text.SetTextColor,
+	["text"] = FontString.SetTextColor,
 	["texture"] = Texture.SetTexture,
 	["vertex"] = Texture.SetVertexColor,
 }
@@ -61,7 +61,7 @@ local Get = {
 	["backdrop"] = Updater.GetBackdropColor,
 	["border"] = Updater.GetBackdropBorderColor,
 	["statusbar"] = Updater.GetStatusBarColor,
-	["text"] = Text.GetTextColor,
+	["text"] = FontString.GetTextColor,
 	["texture"] = Texture.GetVertexColor,
 	["vertex"] = Texture.GetVertexColor,
 }
