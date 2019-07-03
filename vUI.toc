@@ -1,0 +1,35 @@
+## Interface: 11302
+## Author: Hydra
+## Version: 1.01
+## Title: |cFFF39C12vUI|r
+## Notes: An interface replacement for World of Warcraft: Classic
+## SavedVariables: vUISettings
+## SavedVariablesPerCharacter: vUISettingsPerCharacter
+
+Initialize.lua
+Media\Media.lua
+Languages\Languages.lua
+Languages\deDE.lua
+Languages\enUS.lua
+Languages\esES.lua
+Languages\esMX.lua
+Languages\frFR.lua
+Languages\itIT.lua
+Languages\koKR.lua
+Languages\ptBR.lua
+Languages\ruRU.lua
+Languages\zhCN.lua
+Languages\zhTW.lua
+Elements\Animation\Animation.lua
+Elements\GUI\Defaults.lua
+Elements\GUI\GUI.lua
+Elements\Chat\Chat.lua
+Elements\Experience\Experience.lua
+Elements\Actionbars\Actionbars.lua
+Elements\Unitframes\Unitframes.lua
+Elements\Tooltips\Tooltips.lua
+Elements\Minimap\Minimap.lua
+Elements\ZoneText\ZoneText.lua
+Elements\Alerts\Alerts.lua
+Elements\Update\Update.lua
+Elements\Test\Test.lua
