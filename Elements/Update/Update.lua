@@ -14,21 +14,39 @@ local AddOnVersion = tonumber(vUI.Version)
 
 local Update = CreateFrame("Frame")
 
--- We only store information on the previous 5 versions
+-- We only store information on the previous 5-10 versions
 local RecentVersions = {
-	[1] = "minor",
-	[1.01] = "minor",
+	[1] = "Minor",
+	[1.01] = "Minor",
+	[1.02] = "Major",
+	[1.03] = "Major",
+	[1.04] = "Minor",
+	[1.045] = "Major",
 }
 
 local WhatsNew = {
 	[1] = {
-		"Everything! Whoo."
+		"You installed vUI!"
 	},
 	[1.01] = {
 		"Alert frames",
 		"Version check module",
 	},
 }
+
+local GetRecentVersionTypes = function(ref)
+	local Major = 0
+	
+	for Version, Importance in pairs(RecentVersions) do
+		if (Version > ref) then
+			if (Importance == "Major") then
+				Major = Major + 1
+			end
+		end
+	end
+	
+	return Major
+end
 
 -- Make a frame to display "What's new" list.
 
@@ -86,15 +104,25 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (prefix ~= "vUI-Version") then
-		return
-	end
-	
-	sender = match(sender, "(%S+)-%S+")
-	
-	if (sender ~= User) then
-		if (tonumber(message) > AddOnVersion) then
-			vUI:SendAlert("New Version", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], message))
+	if (prefix == "vUI-Version") then
+		if (match(sender, "(%S+)-%S+") ~= User) then
+			local SenderVersion = tonumber(message)
+			
+			if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
+				local Count = GetRecentVersionTypes(SenderVersion)
+				
+				SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
+			end
+		end
+	elseif (prefix == "vUI-Version-Detailed") then -- Someone is sending us more detailed information because we were behind.
+		if (match(sender, "(%S+)-%S+") ~= User) then
+			local Version, Major = match("(%S+):(%S+)")
+			
+			if (Major > 0) then
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes at least |cff%s|r major updates.", Major))
+			else
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version))
+			end
 			
 			self:UnregisterEvent(event)
 		end
@@ -111,3 +139,8 @@ Update:SetScript("OnEvent", function(self, event, ...)
 end)
 
 C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version")
+C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version-Detailed")
+
+__updatetest = function() -- /run __updatetest()
+	vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], 1.04), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], 2))
+end
