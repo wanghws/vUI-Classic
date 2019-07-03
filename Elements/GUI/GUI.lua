@@ -235,7 +235,7 @@ local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip
 	Bar.Tooltip = tooltip
 	
 	Bar.Anim = CreateAnimationGroup(Bar):CreateAnimation("progress")
-	Bar.Anim:SetSmoothing("in")
+	Bar.Anim:SetEasing("in")
 	Bar.Anim:SetDuration(0.15)
 	
 	Bar.Spark = Bar:CreateTexture(nil, "ARTWORK")
@@ -354,12 +354,12 @@ local CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Checkbox.Fade = CreateAnimationGroup(Checkbox.Texture)
 	
 	Checkbox.FadeIn = Checkbox.Fade:CreateAnimation("Fade")
-	Checkbox.FadeIn:SetSmoothing("in")
+	Checkbox.FadeIn:SetEasing("in")
 	Checkbox.FadeIn:SetDuration(0.15)
 	Checkbox.FadeIn:SetChange(1)
 	
 	Checkbox.FadeOut = Checkbox.Fade:CreateAnimation("Fade")
-	Checkbox.FadeOut:SetSmoothing("out")
+	Checkbox.FadeOut:SetEasing("out")
 	Checkbox.FadeOut:SetDuration(0.15)
 	Checkbox.FadeOut:SetChange(0)
 	
@@ -496,7 +496,7 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Anim = CreateAnimationGroup(Switch.Thumb)
 	
 	Switch.Move = Switch.Anim:CreateAnimation("Move")
-	Switch.Move:SetSmoothing("out")
+	Switch.Move:SetEasing("out")
 	Switch.Move:SetDuration(0.15)
 	
 	if Switch.Value then
@@ -727,7 +727,7 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	ArrowTop.BG:SetVertexColor(0, 0, 0)
 	
 	ArrowTop.Anim = CreateAnimationGroup(ArrowTop):CreateAnimation("Width")
-	ArrowTop.Anim:SetSmoothing("in")
+	ArrowTop.Anim:SetEasing("in")
 	ArrowTop.Anim:SetDuration(0.15)
 	
 	local ArrowBottom = Dropdown.Button:CreateTexture(nil, "OVERLAY", 7)
@@ -743,7 +743,7 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	ArrowBottom.BG:SetVertexColor(0, 0, 0)
 	
 	ArrowBottom.Anim = CreateAnimationGroup(ArrowBottom):CreateAnimation("Width")
-	ArrowBottom.Anim:SetSmoothing("in")
+	ArrowBottom.Anim:SetEasing("in")
 	ArrowBottom.Anim:SetDuration(0.15)
 	
 	Dropdown.Menu = CreateFrame("Frame", nil, Dropdown)
@@ -765,12 +765,12 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	Dropdown.Menu.Fade = CreateAnimationGroup(Dropdown.Menu)
 	
 	Dropdown.Menu.FadeIn = Dropdown.Menu.Fade:CreateAnimation("Fade")
-	Dropdown.Menu.FadeIn:SetSmoothing("in")
+	Dropdown.Menu.FadeIn:SetEasing("in")
 	Dropdown.Menu.FadeIn:SetDuration(0.15)
 	Dropdown.Menu.FadeIn:SetChange(1)
 	
 	Dropdown.Menu.FadeOut = Dropdown.Menu.Fade:CreateAnimation("Fade")
-	Dropdown.Menu.FadeOut:SetSmoothing("in")
+	Dropdown.Menu.FadeOut:SetEasing("in")
 	Dropdown.Menu.FadeOut:SetDuration(0.15)
 	Dropdown.Menu.FadeOut:SetChange(0)
 	Dropdown.Menu.FadeOut:SetScript("OnFinished", function(self)
@@ -1475,7 +1475,7 @@ local CreateSwatchWindow = function()
 	
 	SwatchWindow.Transition = CreateAnimationGroup(SwatchWindow.CompareNew):CreateAnimation("Color")
 	SwatchWindow.Transition:SetColorType("vertex")
-	SwatchWindow.Transition:SetSmoothing("in")
+	SwatchWindow.Transition:SetEasing("in")
 	SwatchWindow.Transition:SetDuration(0.15)
 	
 	-- Accept
@@ -1552,12 +1552,12 @@ local CreateSwatchWindow = function()
 	SwatchWindow.Fade = CreateAnimationGroup(SwatchWindow)
 	
 	SwatchWindow.FadeIn = SwatchWindow.Fade:CreateAnimation("Fade")
-	SwatchWindow.FadeIn:SetSmoothing("in")
+	SwatchWindow.FadeIn:SetEasing("in")
 	SwatchWindow.FadeIn:SetDuration(0.15)
 	SwatchWindow.FadeIn:SetChange(1)
 	
 	SwatchWindow.FadeOut = SwatchWindow.Fade:CreateAnimation("Fade")
-	SwatchWindow.FadeOut:SetSmoothing("in")
+	SwatchWindow.FadeOut:SetEasing("in")
 	SwatchWindow.FadeOut:SetDuration(0.15)
 	SwatchWindow.FadeOut:SetChange(0)
 	SwatchWindow.FadeOut:SetScript("OnFinished", function(self)
@@ -1711,7 +1711,7 @@ local CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	
 	Button.Transition = CreateAnimationGroup(Swatch.Texture):CreateAnimation("Color")
 	Button.Transition:SetColorType("vertex")
-	Button.Transition:SetSmoothing("in")
+	Button.Transition:SetEasing("in")
 	Button.Transition:SetDuration(0.15)
 	
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
@@ -1976,12 +1976,12 @@ local NewWindow = function(self, name, default)
 	Button.Fade = CreateAnimationGroup(Button.Selected)
 	
 	Button.FadeIn = Button.Fade:CreateAnimation("Fade")
-	Button.FadeIn:SetSmoothing("in")
+	Button.FadeIn:SetEasing("in")
 	Button.FadeIn:SetDuration(0.15)
 	Button.FadeIn:SetChange(SELECTED_HIGHLIGHT_ALPHA)
 	
 	Button.FadeOut = Button.Fade:CreateAnimation("Fade")
-	Button.FadeOut:SetSmoothing("out")
+	Button.FadeOut:SetEasing("out")
 	Button.FadeOut:SetDuration(0.15)
 	Button.FadeOut:SetChange(0)
 	
@@ -2121,12 +2121,12 @@ GUI.AddOptions = AddOptions
 GUI.Fade = CreateAnimationGroup(GUI)
 
 GUI.FadeIn = GUI.Fade:CreateAnimation("Fade")
-GUI.FadeIn:SetSmoothing("in")
+GUI.FadeIn:SetEasing("in")
 GUI.FadeIn:SetDuration(0.15)
 GUI.FadeIn:SetChange(1)
 
 GUI.FadeOut = GUI.Fade:CreateAnimation("Fade")
-GUI.FadeOut:SetSmoothing("in")
+GUI.FadeOut:SetEasing("in")
 GUI.FadeOut:SetDuration(0.15)
 GUI.FadeOut:SetChange(0)
 GUI.FadeOut:SetScript("OnFinished", function(self)

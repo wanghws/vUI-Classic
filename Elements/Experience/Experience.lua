@@ -280,20 +280,20 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.Change = CreateAnimationGroup(self.Bar):CreateAnimation("Progress")
 	self.Change:SetOrder(1)
-	self.Change:SetSmoothing("in")
+	self.Change:SetEasing("in")
 	self.Change:SetDuration(0.3)
 	
 	self.Flash = CreateAnimationGroup(self.Shine)
 	
 	self.Flash.In = self.Flash:CreateAnimation("Fade")
 	self.Flash.In:SetOrder(1)
-	self.Flash.In:SetSmoothing("in")
+	self.Flash.In:SetEasing("in")
 	self.Flash.In:SetDuration(0.3)
 	self.Flash.In:SetChange(0.3)
 	
 	self.Flash.Out = self.Flash:CreateAnimation("Fade")
 	self.Flash.Out:SetOrder(2)
-	self.Flash.Out:SetSmoothing("out")
+	self.Flash.Out:SetEasing("out")
 	self.Flash.Out:SetDuration(0.5)
 	self.Flash.Out:SetChange(0)
 	

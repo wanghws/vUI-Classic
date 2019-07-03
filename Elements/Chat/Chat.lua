@@ -230,13 +230,13 @@ local TabButton_OnEvent = function(self, event)
 		
 		self.FadeIn = self.Anim:CreateAnimation("Fade")
 		self.FadeIn:SetDuration(1)
-		self.FadeIn:SetSmoothing("inout")
+		self.FadeIn:SetEasing("inout")
 		self.FadeIn:SetChange(1)
 		self.FadeIn:SetOrder(1)
 		
 		self.FadeOut = self.Anim:CreateAnimation("Fade")
 		self.FadeOut:SetDuration(1)
-		self.FadeOut:SetSmoothing("inout")
+		self.FadeOut:SetEasing("inout")
 		self.FadeOut:SetChange(0)
 		self.FadeOut:SetOrder(2)
 	end
@@ -598,7 +598,7 @@ local StyleChatFrame = function(frame)
 	EditBox.HeaderBackdrop.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	EditBox.HeaderBackdrop.AnimateWidth = CreateAnimationGroup(EditBox.HeaderBackdrop):CreateAnimation("Width")
-	EditBox.HeaderBackdrop.AnimateWidth:SetSmoothing("in")
+	EditBox.HeaderBackdrop.AnimateWidth:SetEasing("in")
 	EditBox.HeaderBackdrop.AnimateWidth:SetDuration(0.15)
 	
 	EditBox.Backdrop = CreateFrame("Frame", nil, EditBox)
@@ -620,7 +620,7 @@ local StyleChatFrame = function(frame)
 	
 	EditBox.Backdrop.Change = AnimGroup:CreateAnimation("Color")
 	EditBox.Backdrop.Change:SetColorType("vertex")
-	EditBox.Backdrop.Change:SetSmoothing("in")
+	EditBox.Backdrop.Change:SetEasing("in")
 	EditBox.Backdrop.Change:SetDuration(0.2)
 	
 	EditBox.header:ClearAllPoints()
