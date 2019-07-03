@@ -1,6 +1,8 @@
 -- LibAnim by Hydra
 local Version = 2.03
 
+-- Note, deprecated items will be removed next version. Please update your usage accordingly.
+
 if (_LibAnim and _LibAnim >= Version) then
 	return
 end
@@ -11,9 +13,9 @@ local sin = sin
 local sqrt = sqrt
 local pairs = pairs
 local floor = floor
-local tinsert = tinsert
-local tremove = tremove
-local strlower = strlower
+local tinsert = table.insert
+local tremove = table.remove
+local lower = string.lower
 local Updater = CreateFrame("StatusBar")
 local Texture = Updater:CreateTexture()
 local Text = Updater:CreateFontString()
@@ -64,7 +66,7 @@ local Get = {
 	["vertex"] = Texture.GetVertexColor,
 }
 
-local Smoothing = {
+local Easing = {
 	["none"] = function(t, b, c, d)
 		return c * t / d + b
 	end,
@@ -336,15 +338,19 @@ local AnimMethods = {
 			return self.Stopped
 		end,
 		
-		SetSmoothing = function(self, smoothType)
-			smoothType = strlower(smoothType)
+		SetEasing = function(self, easing)
+			easing = lower(easing)
 			
-			self.Smoothing = Smoothing[smoothType] and smoothType or "none"
+			self.Easing = Easing[easing] and easing or "none"
 		end,
 		
-		GetSmoothing = function(self)
-			return self.Smoothing
+		GetEasing = function(self)
+			return self.Easing
 		end,
+		
+		SetSmoothing = SetEasing, -- Deprecated, change "SetSmoothing" to "SetEasing"
+		
+		GetSmoothing = GetEasing, -- Deprecated, change "GetSmoothing" to "GetEasing"
 		
 		SetDuration = function(self, duration)
 			self.Duration = duration or 0
@@ -375,7 +381,7 @@ local AnimMethods = {
 		end,
 		
 		SetScript = function(self, handler, func)
-			handler = strlower(handler)
+			handler = lower(handler)
 			
 			if Callbacks[handler] then
 				Callbacks[handler][self] = func
@@ -383,7 +389,7 @@ local AnimMethods = {
 		end,
 		
 		GetScript = function(self, handler)
-			handler = strlower(handler)
+			handler = lower(handler)
 			
 			if (Callbacks[handler] and Callbacks[handler][self]) then
 				return Callbacks[handler][self]
@@ -391,7 +397,7 @@ local AnimMethods = {
 		end,
 		
 		Callback = function(self, handler)
-			handler = strlower(handler)
+			handler = lower(handler)
 			
 			if Callbacks[handler][self] then
 				Callbacks[handler][self](self)
@@ -422,6 +428,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:ClearAllPoints()
 			self.Parent:SetPoint(self.A1, self.P, self.A2, self.StartX, self.StartY)
 		end,
@@ -441,6 +448,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:SetAlpha(self.StartAlpha)
 		end,
 	},
@@ -459,6 +467,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:SetHeight(self.StartHeight)
 		end,
 	},
@@ -477,6 +486,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:SetWidth(self.StartWidth)
 		end,
 	},
@@ -493,7 +503,7 @@ local AnimMethods = {
 		end,
 		
 		SetColorType = function(self, type)
-			type = strlower(type)
+			type = lower(type)
 			
 			self.ColorType = Set[type] and type or "border"
 		end,
@@ -507,6 +517,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			Set[self.ColorType](self.Parent, self.StartR, self.StartG, self.StartB)
 		end,
 	},
@@ -525,6 +536,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:SetValue(self.StartValue)
 		end,
 	},
@@ -567,6 +579,7 @@ local AnimMethods = {
 		end,
 		
 		Reset = function(self)
+			self.Timer = 0
 			self.Parent:SetText(self.StartNumber)
 		end,
 	},
@@ -649,7 +662,7 @@ local GroupMethods = {
 	end,
 	
 	SetScript = function(self, handler, func)
-		handler = strlower(handler)
+		handler = lower(handler)
 		
 		if Callbacks[handler] then
 			Callbacks[handler][self] = func
@@ -657,7 +670,7 @@ local GroupMethods = {
 	end,
 	
 	GetScript = function(self, handler)
-		handler = strlower(handler)
+		handler = lower(handler)
 		
 		if (Callbacks[handler] and Callbacks[handler][self]) then
 			return Callbacks[handler][self]
@@ -665,7 +678,7 @@ local GroupMethods = {
 	end,
 	
 	Callback = function(self, handler)
-		handler = strlower(handler)
+		handler = lower(handler)
 		
 		if Callbacks[handler][self] then
 			Callbacks[handler][self](self)
@@ -714,7 +727,7 @@ local GroupMethods = {
 	end,
 	
 	CreateAnimation = function(self, type)
-		type = strlower(type)
+		type = lower(type)
 		
 		if (not AnimTypes[type]) then
 			return
@@ -744,7 +757,7 @@ local GroupMethods = {
 		Animation.Parent = self.Parent
 		Animation.Order = 1
 		Animation.Duration = 0.3
-		Animation.Smoothing = "none"
+		Animation.Easing = "none"
 		Animation.Update = UpdateFuncs[type]
 		
 		tinsert(self.Animations, Animation)
@@ -776,12 +789,12 @@ UpdateFuncs["move"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
 	
 	if self.IsRounded then
-		self.ModTimer = Smoothing[self.Smoothing](self.Timer, 0, self.Duration, self.Duration)
+		self.ModTimer = Easing[self.Easing](self.Timer, 0, self.Duration, self.Duration)
 		self.XOffset = self.StartX - (-1) * (self.XChange * (1 - cos(90 * self.ModTimer / self.Duration)))
 		self.YOffset = self.StartY + self.YChange * sin(90 * self.ModTimer / self.Duration)
 	else
-		self.XOffset = Smoothing[self.Smoothing](self.Timer, self.StartX, self.XChange, self.Duration)
-		self.YOffset = Smoothing[self.Smoothing](self.Timer, self.StartY, self.YChange, self.Duration)
+		self.XOffset = Easing[self.Easing](self.Timer, self.StartX, self.XChange, self.Duration)
+		self.YOffset = Easing[self.Easing](self.Timer, self.StartY, self.YChange, self.Duration)
 	end
 	
 	self.Parent:SetPoint(self.A1, self.P, self.A2, (self.EndX ~= 0 and self.XOffset or self.StartX), (self.EndY ~= 0 and self.YOffset or self.StartY))
@@ -827,7 +840,7 @@ end
 -- Fade
 UpdateFuncs["fade"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.AlphaOffset = Smoothing[self.Smoothing](self.Timer, self.StartAlpha, self.Change, self.Duration)
+	self.AlphaOffset = Easing[self.Easing](self.Timer, self.StartAlpha, self.Change, self.Duration)
 	self.Parent:SetAlpha(self.AlphaOffset)
 	
 	if (self.Timer >= self.Duration) then
@@ -855,7 +868,7 @@ end
 -- Height
 UpdateFuncs["height"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.HeightOffset = Smoothing[self.Smoothing](self.Timer, self.StartHeight, self.HeightChange, self.Duration)
+	self.HeightOffset = Easing[self.Easing](self.Timer, self.StartHeight, self.HeightChange, self.Duration)
 	self.Parent:SetHeight(self.HeightOffset)
 	
 	if (self.Timer >= self.Duration) then
@@ -883,7 +896,7 @@ end
 -- Width
 UpdateFuncs["width"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.WidthOffset = Smoothing[self.Smoothing](self.Timer, self.StartWidth, self.WidthChange, self.Duration)
+	self.WidthOffset = Easing[self.Easing](self.Timer, self.StartWidth, self.WidthChange, self.Duration)
 	self.Parent:SetWidth(self.WidthOffset)
 	
 	if (self.Timer >= self.Duration) then
@@ -911,7 +924,7 @@ end
 -- Color
 UpdateFuncs["color"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.ColorOffset = Smoothing[self.Smoothing](self.Timer, 0, self.Duration, self.Duration)
+	self.ColorOffset = Easing[self.Easing](self.Timer, 0, self.Duration, self.Duration)
 	Set[self.ColorType](self.Parent, GetColor(self.Timer / self.Duration, self.StartR, self.StartG, self.StartB, self.EndR, self.EndG, self.EndB))
 	
 	if (self.Timer >= self.Duration) then
@@ -937,7 +950,7 @@ end
 -- Progress
 UpdateFuncs["progress"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.ValueOffset = Smoothing[self.Smoothing](self.Timer, self.StartValue, self.ProgressChange, self.Duration)
+	self.ValueOffset = Easing[self.Easing](self.Timer, self.StartValue, self.ProgressChange, self.Duration)
 	self.Parent:SetValue(self.ValueOffset)
 	
 	if (self.Timer >= self.Duration) then
@@ -979,7 +992,7 @@ end
 -- Number
 UpdateFuncs["number"] = function(self, elapsed, i)
 	self.Timer = self.Timer + elapsed
-	self.NumberOffset = Smoothing[self.Smoothing](self.Timer, self.StartNumber, self.NumberChange, self.Duration)
+	self.NumberOffset = Easing[self.Easing](self.Timer, self.StartNumber, self.NumberChange, self.Duration)
 	self.Parent:SetText(self.Prefix..floor(self.NumberOffset)..self.Postfix)
 	
 	if (self.Timer >= self.Duration) then
@@ -1009,9 +1022,9 @@ end
 _G["_LibAnim"] = Version
 
 --[[
-function _LibAnim:RegisterTween(name, func)
-	if (not Smoothing[name]) then
-		Smoothing[name] = func
+function _LibAnim:RegisterEase(name, func)
+	if (not Easing[name]) then
+		Easing[name] = func
 	end
 end
 
