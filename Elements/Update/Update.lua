@@ -18,10 +18,6 @@ local Update = CreateFrame("Frame")
 local RecentVersions = {
 	[1] = "Minor",
 	[1.01] = "Minor",
-	[1.02] = "Major",
-	[1.03] = "Major",
-	[1.04] = "Minor",
-	[1.045] = "Major",
 }
 
 local WhatsNew = {
@@ -34,11 +30,11 @@ local WhatsNew = {
 	},
 }
 
-local GetRecentVersionTypes = function(ref)
+local GetRecentVersionTypes = function(compare)
 	local Major = 0
 	
 	for Version, Importance in pairs(RecentVersions) do
-		if (Version > ref) then
+		if (Version > compare) then
 			if (Importance == "Major") then
 				Major = Major + 1
 			end
@@ -46,6 +42,11 @@ local GetRecentVersionTypes = function(ref)
 	end
 	
 	return Major
+end
+
+-- To be implemented. Add something here like a link or whatever to update.
+local OnMouseUp = function()
+	
 end
 
 -- Make a frame to display "What's new" list.
@@ -116,12 +117,14 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 		end
 	elseif (prefix == "vUI-Version-Detailed") then -- Someone is sending us more detailed information because we were behind.
 		if (match(sender, "(%S+)-%S+") ~= User) then
-			local Version, Major = match("(%S+):(%S+)")
+			local Version, Major = match(message, "(%S+):(%S+)")
+			
+			Major = tonumber(Major)
 			
 			if (Major > 0) then
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes at least |cff%s|r major updates.", Major))
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], Major), OnMouseUp, true)
 			else
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version))
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), nil, OnMouseUp, true)
 			end
 			
 			self:UnregisterEvent(event)
@@ -142,5 +145,5 @@ C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version")
 C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version-Detailed")
 
 __updatetest = function() -- /run __updatetest()
-	vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], 1.04), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], 2))
+	vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r", Settings["ui-header-font-color"], 1.04), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], 2), OnMouseUp, true)
 end

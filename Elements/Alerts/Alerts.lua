@@ -208,7 +208,7 @@ end
 
 local SendAlert = function(header, line1, line2, func, nofade)
 	local AlertFrame = GetAlertFrame()
-	
+	print(func, nofade)
 	if nofade then
 		AlertFrame.FadeIn:SetScript("OnFinished", nil)
 	else
@@ -229,11 +229,6 @@ local SendAlert = function(header, line1, line2, func, nofade)
 	AlertFrame.FadeIn:Play()
 end
 
-function vUI:SendAlert(header, line1, line2, func)
-	SendAlert(header, line1, line2, func)
-end
-
--- Testing
-__TESTALERT = function() -- /run __TESTALERT()
-	SendAlert("Lorem Ipsum", "Dolor sit amet", "Consectetur adipiscing elit", function() print('lul') end)
+function vUI:SendAlert(header, line1, line2, func, nofade)
+	SendAlert(header, line1, line2, func, nofade)
 end
