@@ -93,7 +93,6 @@ local CreateAlertFrame = function()
 	AlertFrame.FadeIn:SetDuration(0.15)
 	AlertFrame.FadeIn:SetChange(1)
 	AlertFrame.FadeIn:SetScript("OnPlay", FadeInOnPlay)
-	AlertFrame.FadeIn:SetScript("OnFinished", FadeInOnFinished)
 	
 	AlertFrame.FadeOut = AlertFrame.Fade:CreateAnimation("Fade")
 	AlertFrame.FadeOut:SetSmoothing("out")
@@ -121,7 +120,8 @@ local CreateAlertFrame = function()
 	AlertFrame.Header.Text:SetJustifyH("LEFT")
 	AlertFrame.Header.Text:SetShadowColor(0, 0, 0)
 	AlertFrame.Header.Text:SetShadowOffset(1, -1)
-	AlertFrame.Header.Text:SetTextColor(vUI:HexToRGB(Settings["ui-header-font-color"]))
+	--AlertFrame.Header.Text:SetTextColor(vUI:HexToRGB(Settings["ui-header-font-color"]))
+	AlertFrame.Header.Text:SetTextColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	-- Line 1
 	AlertFrame.Line1 = CreateFrame("Frame", nil, AlertFrame)
@@ -188,7 +188,7 @@ local GetAlertFrame = function()
 	return AlertFrame
 end
 
-local SendAlert = function(header, line1, line2, func)
+local SendAlert = function(header, line1, line2, func, nofade)
 	local AlertFrame = GetAlertFrame()
 	
 	-- NOTE: Eventually may change depending on how many things I tie into this system. That's why I wrote it to handle multiple alerts.
@@ -198,6 +198,12 @@ local SendAlert = function(header, line1, line2, func)
 	AlertFrame.Line1.Text:SetText(line1)
 	AlertFrame.Line2.Text:SetText(line2)
 	AlertFrame.FadeIn:Play()
+	
+	if nofade then
+		AlertFrame.FadeIn:SetScript("OnFinished", nil)
+	else
+		AlertFrame.FadeIn:SetScript("OnFinished", FadeInOnFinished)
+	end
 	
 	if (func and (type(func) == "function")) then
 		AlertFrame:SetScript("OnMouseUp", func)
@@ -212,5 +218,5 @@ end
 
 -- Testing
 __TESTALERT = function() -- /run __TESTALERT()
-	SendAlert("Lorem Ipsum", "dolor sit amet", "consectetur adipiscing elit", function() print('lul') end)
+	SendAlert("Lorem Ipsum", "Dolor sit amet", "Consectetur adipiscing elit", function() print('lul') end, true)
 end

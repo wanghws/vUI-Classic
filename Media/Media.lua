@@ -6,9 +6,6 @@ Media.Highlights = {}
 Media.Templates = {}
 Media.Colors = {}
 
-local tsort = table.sort
-local strmatch = string.match
-
 local TemplateList = {}
 local HighlightList = {}
 local TextureList = {}
@@ -182,6 +179,12 @@ Media.Colors[7] = {"E53935", "D81B60", "8E24AA", "5E35B1", "3949AB", "1E88E5", "
 Media.Colors[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D1", "0097A7", "00796B", "388E3C", "689F38", "AFB42B", "FBC02D", "FFA000", "F57C00", "E64A19", "5D4037", "616161", "455A64"}
 Media.Colors[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
 Media.Colors[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
+
+--[[
+Media.Colors[1] = {"f17171", "ffa071", "ffd071", "a2d471", "71e2d0", "71d0ff", "7ea9ff", "b38dff", "ff71b7", "a2adb8"}
+Media.Colors[2] = {"ee4d4d", "ff884d", "ffc44d", "8bc94d", "4ddbc4", "4dc4ff", "5e94ff", "ad71ff", "ff4da5", "8b98a6"}
+Media.Colors[3] = {"d64545", "e57a45", "e5b045", "7db545", "45c5b0", "45b0e5", "5485e5", "9065e5", "e54594", "7d8995"}
+]]
 
 -- Templates
 
