@@ -44,16 +44,19 @@ local GetRecentVersionTypes = function(compare)
 	return Major
 end
 
--- To be implemented. Add something here like a link or whatever to update.
-local OnMouseUp = function()
+-- Make a frame to display a simple "What's new" list.
+local WhatsNewOnMouseUp = function()
 	
 end
 
--- Make a frame to display "What's new" list.
+-- To be implemented. Add something here like a link or whatever to update.
+local UpdateOnMouseUp = function()
+	
+end
 
 Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 	if self.NewVersion then
-		vUI:SendAlert("What's new?", "Click here to learn more")
+		vUI:SendAlert("What's new?", "Click here to learn more", nil, WhatsNewOnMouseUp, true)
 		
 		self.NewVersion = true
 	end
@@ -122,9 +125,9 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 			Major = tonumber(Major)
 			
 			if (Major > 0) then
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], Major), OnMouseUp, true)
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
 			else
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), nil, OnMouseUp, true)
+				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 			end
 			
 			self:UnregisterEvent(event)
@@ -143,7 +146,3 @@ end)
 
 C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version")
 C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version-Detailed")
-
-__updatetest = function() -- /run __updatetest()
-	vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r", Settings["ui-header-font-color"], 1.04), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], 2), OnMouseUp, true)
-end
