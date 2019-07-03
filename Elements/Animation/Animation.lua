@@ -1021,14 +1021,17 @@ end
 
 _G["_LibAnim"] = Version
 
---[[
-function _LibAnim:RegisterEase(name, func)
+--[[function _LibAnim:RegisterEase(name, func)
+	name = lower(name)
+	
 	if (not Easing[name]) then
 		Easing[name] = func
 	end
 end
 
 function _LibAnim:RegisterAnimation(name, update, start)
+	name = lower(name)
+	
 	if AnimTypes[name] then
 		return
 	end
