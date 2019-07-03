@@ -2,15 +2,30 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Alerts = CreateFrame("Frame")
 
-local ALERT_WIDTH = 160
+local ALERT_WIDTH = 170
 local HEADER_HEIGHT = 22
-local LINE_HEIGHT = 16
+local LINE_HEIGHT = 18
+local HOLD_TIME = 4
+local FADE_IN_TIME = 0.3
+local FADE_OUT_TIME = 1
 
 local ActiveAlerts = {}
 local UnusedAlerts = {}
 
 local tinsert = table.insert
 local tremove = table.remove
+
+local SortAlerts = function()
+	for i = 1, #ActiveAlerts do
+		ActiveAlerts[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			ActiveAlerts[i]:SetScaledPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
+		else
+			ActiveAlerts[i]:SetScaledPoint("BOTTOM", ActiveAlerts[i-1], "TOP", 0, 2)
+		end
+	end
+end
 
 local OnEnter = function(self)
 	if self.Hold:IsPlaying() then
@@ -52,6 +67,7 @@ local FadeOutOnFinished = function(self)
 		end
 	end
 	
+	SortAlerts()
 	Alert:Hide()
 end
 
@@ -68,6 +84,8 @@ local CloseOnMouseUp = function(self)
 			break
 		end
 	end
+	
+	SortAlerts()
 end
 
 local CreateAlertFrame = function()
@@ -83,20 +101,20 @@ local CreateAlertFrame = function()
 	AlertFrame:SetScript("OnLeave", OnLeave)
 	
 	AlertFrame.Hold = CreateAnimationGroup(AlertFrame):CreateAnimation("Sleep")
-	AlertFrame.Hold:SetDuration(4)
+	AlertFrame.Hold:SetDuration(HOLD_TIME)
 	AlertFrame.Hold:SetScript("OnFinished", HoldOnFinished)
 	
 	AlertFrame.Fade = CreateAnimationGroup(AlertFrame)
 	
 	AlertFrame.FadeIn = AlertFrame.Fade:CreateAnimation("Fade")
 	AlertFrame.FadeIn:SetSmoothing("in")
-	AlertFrame.FadeIn:SetDuration(0.15)
+	AlertFrame.FadeIn:SetDuration(FADE_IN_TIME)
 	AlertFrame.FadeIn:SetChange(1)
 	AlertFrame.FadeIn:SetScript("OnPlay", FadeInOnPlay)
 	
 	AlertFrame.FadeOut = AlertFrame.Fade:CreateAnimation("Fade")
 	AlertFrame.FadeOut:SetSmoothing("out")
-	AlertFrame.FadeOut:SetDuration(1)
+	AlertFrame.FadeOut:SetDuration(FADE_OUT_TIME)
 	AlertFrame.FadeOut:SetChange(0)
 	AlertFrame.FadeOut:SetScript("OnFinished", FadeOutOnFinished)
 	
@@ -191,14 +209,6 @@ end
 local SendAlert = function(header, line1, line2, func, nofade)
 	local AlertFrame = GetAlertFrame()
 	
-	-- NOTE: Eventually may change depending on how many things I tie into this system. That's why I wrote it to handle multiple alerts.
-	AlertFrame:SetScaledPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
-	
-	AlertFrame.Header.Text:SetText(header)
-	AlertFrame.Line1.Text:SetText(line1)
-	AlertFrame.Line2.Text:SetText(line2)
-	AlertFrame.FadeIn:Play()
-	
 	if nofade then
 		AlertFrame.FadeIn:SetScript("OnFinished", nil)
 	else
@@ -210,6 +220,13 @@ local SendAlert = function(header, line1, line2, func, nofade)
 	else
 		AlertFrame:SetScript("OnMouseUp", nil) -- Clear old functions
 	end
+	
+	SortAlerts()
+	
+	AlertFrame.Header.Text:SetText(header)
+	AlertFrame.Line1.Text:SetText(line1)
+	AlertFrame.Line2.Text:SetText(line2)
+	AlertFrame.FadeIn:Play()
 end
 
 function vUI:SendAlert(header, line1, line2, func)
@@ -218,5 +235,5 @@ end
 
 -- Testing
 __TESTALERT = function() -- /run __TESTALERT()
-	SendAlert("Lorem Ipsum", "Dolor sit amet", "Consectetur adipiscing elit", function() print('lul') end, true)
+	SendAlert("Lorem Ipsum", "Dolor sit amet", "Consectetur adipiscing elit", function() print('lul') end)
 end
