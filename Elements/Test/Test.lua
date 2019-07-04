@@ -53,7 +53,7 @@ GUI:AddOptions(function(self)
 	local Bar = StatusBarsGroup:CreateStatusBar(0, 0, 0, "Statusbar Demo", "", function(v)
 		Framerate = floor(GetFramerate())
 		
-		return 0, 250, Framerate, Framerate
+		return 0, 350, Framerate, Framerate
 	end)
 	
 	Bar.Ela = 0
