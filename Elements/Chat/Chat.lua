@@ -136,6 +136,8 @@ ChatFrame_DisplayGMOTD = function(frame, gmotd)
 end
 
 local SetEditBoxToLink = function(box, text)
+	box:SetText("")
+	
 	if (not box:IsShown()) then
 		ChatEdit_ActivateChat(box)
 	else
@@ -178,6 +180,8 @@ ItemRefTooltip.SetHyperlink = function(self, link, text, button, chatFrame)
 	elseif (sub(link, 1, 7) == "command") then
 		local EditBox = ChatEdit_ChooseBoxForSend()
 		local Command = sub(link, 9)
+		
+		EditBox:SetText("")
 		
 		if (not EditBox:IsShown()) then
 			ChatEdit_ActivateChat(EditBox)

@@ -1,7 +1,7 @@
 ## Interface: 11302
 ## Author: Hydra
 ## Version: 1.01
-## Title: |cFFF39C12vUI|r
+## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUISettings
 ## SavedVariablesPerCharacter: vUISettingsPerCharacter

@@ -3,6 +3,10 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 MainMenuBar.Show = function() end
 MainMenuBar:Hide()
 
+if (1 == 1) then
+	return
+end
+
 local BUTTON_SIZE = 34
 local SPACING = 2
 
