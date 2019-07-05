@@ -17,6 +17,7 @@ GUI.Widgets = {}
 -- To do: add :Disable() and :Enable() for GUI controls.
 -- Since I changed to using paired table inputs on dropdowns, I need to rework selected highlights
 -- Adjust sizes & spacing, and add Scrolling by rows
+-- EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
 
 -- Constants
 local GUI_WIDTH = 700
@@ -46,7 +47,6 @@ local LABEL_SPACING = 3
 
 local SELECTED_HIGHLIGHT_ALPHA = 0.3
 local MOUSEOVER_HIGHLIGHT_ALPHA = 0.1
-local DEFAULT_WINDOW
 local LAST_ACTIVE_DROPDOWN
 
 -- Functions
@@ -385,19 +385,19 @@ local SwitchOnMouseUp = function(self)
 		return
 	end
 	
+	self.Thumb:ClearAllPoints()
+	
 	if self.Value then
-		self.Thumb:ClearAllPoints()
 		self.Thumb:SetScaledPoint("RIGHT", self, 0, 0)
 		self.Move:SetOffset(-30, 0)
-		self.Move:Play()
 		self.Value = false
 	else
-		self.Thumb:ClearAllPoints()
 		self.Thumb:SetScaledPoint("LEFT", self, 0, 0)
 		self.Move:SetOffset(30, 0)
-		self.Move:Play()
 		self.Value = true
 	end
+	
+	self.Move:Play()
 	
 	SetVariable(self.ID, self.Value)
 	
@@ -468,7 +468,7 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.ThumbTexture = Switch.Thumb:CreateTexture(nil, "ARTWORK")
 	Switch.ThumbTexture:SetScaledSize(SWITCH_HEIGHT - 2, SWITCH_HEIGHT - 2)
 	Switch.ThumbTexture:SetScaledPoint("TOPLEFT", Switch.Thumb, 1, -1)
-	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, -1, 1)
+	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, "BOTTOMLEFT", -1, 1)
 	Switch.ThumbTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Switch.ThumbTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
@@ -493,9 +493,7 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Highlight:SetVertexColor(1, 1, 1, 0.4)
 	Switch.Highlight:SetAlpha(0)
 	
-	Switch.Anim = CreateAnimationGroup(Switch.Thumb)
-	
-	Switch.Move = Switch.Anim:CreateAnimation("Move")
+	Switch.Move = CreateAnimationGroup(Switch.Thumb):CreateAnimation("Move")
 	Switch.Move:SetEasing("out")
 	Switch.Move:SetDuration(0.15)
 	
@@ -902,12 +900,11 @@ end
 
 local SliderOnValueChanged = function(self)
 	local Value = self:GetValue()
-	local Step = self.EditBox.StepValue
 	
-	if (Step >= 1) then
+	if (self.EditBox.StepValue >= 1) then
 		Value = floor(Value)
 	else
-		if (Step <= 0.01) then
+		if (self.EditBox.StepValue <= 0.01) then
 			Value = Round(Value, 2)
 		else
 			Value = Round(Value, 1)
@@ -1098,8 +1095,7 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	
 	local Slider = CreateFrame("Slider", nil, self)
 	Slider:SetScaledPoint("RIGHT", EditBox, "LEFT", -2, 0)
-	Slider:SetScaledWidth(SLIDER_WIDTH)
-	Slider:SetScaledHeight(SLIDER_HEIGHT)
+	Slider:SetScaledSize(SLIDER_WIDTH, SLIDER_HEIGHT)
 	Slider:SetThumbTexture(Media:GetTexture("Blank"))
 	Slider:SetOrientation("HORIZONTAL")
 	Slider:SetValueStep(step)
@@ -1128,15 +1124,14 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	Slider.Text:SetShadowOffset(1, -1)
 	Slider.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	Slider.TrackTex = Slider:CreateTexture(nil, "ARTWORK")
-	Slider.TrackTex:SetScaledPoint("TOPLEFT", Slider, 1, -1)
-	Slider.TrackTex:SetScaledPoint("BOTTOMRIGHT", Slider, -1, 1)
-	Slider.TrackTex:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	Slider.TrackTex:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	Slider.TrackTexture = Slider:CreateTexture(nil, "ARTWORK")
+	Slider.TrackTexture:SetScaledPoint("TOPLEFT", Slider, 1, -1)
+	Slider.TrackTexture:SetScaledPoint("BOTTOMRIGHT", Slider, -1, 1)
+	Slider.TrackTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Slider.TrackTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	
 	local Thumb = Slider:GetThumbTexture() 
-	Thumb:SetScaledWidth(8)
-	Thumb:SetScaledHeight(SLIDER_HEIGHT)
+	Thumb:SetScaledSize(8, SLIDER_HEIGHT)
 	Thumb:SetTexture(Media:GetTexture("Blank"))
 	Thumb:SetVertexColor(0, 0, 0)
 	
@@ -1152,11 +1147,11 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	Slider.NewTexture2:SetTexture(Media:GetTexture("Blank"))
 	Slider.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	Slider.Flavor = Slider:CreateTexture(nil, "ARTWORK")
-	Slider.Flavor:SetScaledPoint("TOPLEFT", Slider, 1, -1)
-	Slider.Flavor:SetScaledPoint("BOTTOMRIGHT", Slider.NewTexture, "BOTTOMLEFT", 0, 0)
-	Slider.Flavor:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	Slider.Flavor:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
+	Slider.Progress = Slider:CreateTexture(nil, "ARTWORK")
+	Slider.Progress:SetScaledPoint("TOPLEFT", Slider, 1, -1)
+	Slider.Progress:SetScaledPoint("BOTTOMRIGHT", Slider.NewTexture, "BOTTOMLEFT", 0, 0)
+	Slider.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Slider.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
 	Slider.Highlight = Slider:CreateTexture(nil, "OVERLAY", 8)
 	Slider.Highlight:SetScaledPoint("TOPLEFT", Slider, 1, -1)
@@ -1889,6 +1884,8 @@ local ShowWindow = function(self, name)
 		end
 	end
 	
+	CloseLastDropdown()
+	
 	local Window = self.Windows[name]
 	
 	if (not Window.Sorted) then
@@ -1921,7 +1918,7 @@ end
 
 local WindowButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
-	ShowWindow(self.Parent, self.Name)
+	self.Parent:ShowWindow(self.Name)
 end
 
 local WindowButtonOnMouseDown = function(self)
@@ -2159,7 +2156,7 @@ function GUI:VARIABLES_LOADED()
 	
 	-- Show the default window, if one was found
 	if self.DefaultWindow then
-		ShowWindow(self, self.DefaultWindow)
+		self:ShowWindow(self.DefaultWindow)
 	end
 	
 	self:UnregisterEvent("VARIABLES_LOADED")
