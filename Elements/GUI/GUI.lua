@@ -2018,6 +2018,14 @@ local NewWindow = function(self, name, default)
 	return Window
 end
 
+GUI.GetWindow = function(self, name)
+	if self.Windows[name] then
+		return self.Windows[name]
+	else
+		return self.Windows[self.DefaultWindow]
+	end
+end
+
 local AddOptions = function(self, func)
 	if (type(func) == "function") then
 		tinsert(self.Queue, func)
