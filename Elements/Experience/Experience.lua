@@ -419,6 +419,7 @@ GUI:AddOptions(function(self)
 	local LanguageGroup = GeneralOptions:CreateGroup("Language", "Right")
 	
 	LanguageGroup:CreateDropdown("ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
+	LanguageGroup:CreateButton("Contribute", Language["Help Localize"], "Contribute", function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]

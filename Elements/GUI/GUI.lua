@@ -16,8 +16,8 @@ GUI.Widgets = {}
 
 --[[
 
-	To do: add :Disable() and :Enable() for GUI controls.
-	Since I changed to using paired table inputs on dropdowns, I need to rework selected highlights
+	To do:
+	
 	Adjust sizes & spacing, and add Scrolling by rows
 	EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
 	Change all widgets to look like
@@ -26,6 +26,12 @@ GUI.Widgets = {}
 	
 	so that everything is uniform
 	
+	
+	widget methods
+	
+	widget:SetWarning(true) -- to determine if the widget should pop up a warning before proceeding
+	widget:Disable()
+	widget:Enable()
 --]]
 
 -- Constants
@@ -125,7 +131,7 @@ end
 
 -- Button
 local BUTTON_HEIGHT = 20
-local BUTTON_WIDTH = 140
+local BUTTON_WIDTH = 150
 
 local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
@@ -2073,7 +2079,9 @@ function GUI:Create()
 	self.Header.Text:SetJustifyH("CENTER")
 	self.Header.Text:SetShadowColor(0, 0, 0)
 	self.Header.Text:SetShadowOffset(1, -1)
-	self.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..format(Language["- vUI version %s -"], vUI.Version).."|r")
+	self.Header.Text:SetTextColor(vUI:HexToRGB(Settings["ui-header-font-color"]))
+	self.Header.Text:SetText(format(Language["- vUI version %s -"], vUI.Version))
+	--self.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..format(Language["- |cff%svUI|r version %s -"], Settings["ui-widget-color"], vUI.Version).."|r")
 	
 	-- Selection parent
 	self.SelectionParent = CreateFrame("Frame", nil, self)
