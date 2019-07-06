@@ -477,7 +477,7 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.ThumbTexture = Switch.Thumb:CreateTexture(nil, "ARTWORK")
 	Switch.ThumbTexture:SetScaledSize(SWITCH_HEIGHT - 2, SWITCH_HEIGHT - 2)
 	Switch.ThumbTexture:SetScaledPoint("TOPLEFT", Switch.Thumb, 1, -1)
-	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, "BOTTOMLEFT", -1, 1)
+	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, -1, 1) -- the slider blur
 	Switch.ThumbTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Switch.ThumbTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
@@ -1143,24 +1143,19 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	Slider.NewThumb = CreateFrame("Frame", nil, Slider)
 	Slider.NewThumb:SetScaledPoint("TOPLEFT", Thumb, 0, -1)
 	Slider.NewThumb:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 1)
-	Slider.NewThumb:SetBackdrop(vUI.Backdrop)
-	Slider.NewThumb:SetBackdropColor(0, 0, 0)
+	Slider.NewThumb:SetBackdrop(vUI.BackdropAndBorder)
+	Slider.NewThumb:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	Slider.NewThumb:SetBackdropBorderColor(0, 0, 0)
 	
-	--[[Slider.NewThumbTexture = Slider:CreateTexture(nil, "OVERLAY")
-	Slider.NewThumbTexture:SetScaledPoint("TOPLEFT", Thumb, 0, -1)
-	Slider.NewThumbTexture:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 1)
-	Slider.NewThumbTexture:SetTexture(Media:GetTexture("Blank"))
-	Slider.NewThumbTexture:SetVertexColor(0, 0, 0)]]
-	
-	Slider.NewThumbTexture = Slider.NewThumb:CreateTexture(nil, "OVERLAY")
-	Slider.NewThumbTexture:SetScaledPoint("TOPLEFT", Slider.NewThumb, 1, 0)
-	Slider.NewThumbTexture:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumb, -1, 0)
-	Slider.NewThumbTexture:SetTexture(Media:GetTexture("Blank"))
-	Slider.NewThumbTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	Slider.NewThumb.Texture = Slider.NewThumb:CreateTexture(nil, "OVERLAY")
+	Slider.NewThumb.Texture:SetScaledPoint("TOPLEFT", Slider.NewThumb, 1, 0)
+	Slider.NewThumb.Texture:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumb, -1, 0)
+	Slider.NewThumb.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Slider.NewThumb.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
 	Slider.Progress = Slider:CreateTexture(nil, "ARTWORK")
 	Slider.Progress:SetScaledPoint("TOPLEFT", Slider, 1, -1)
-	Slider.Progress:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumbTexture, "BOTTOMLEFT", 0, 0)
+	Slider.Progress:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumb.Texture, "BOTTOMLEFT", 0, 0)
 	Slider.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Slider.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
