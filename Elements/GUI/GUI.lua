@@ -211,7 +211,7 @@ GUI.Widgets["CreateButton"] = CreateButton
 
 -- StatusBar
 local STATUSBAR_HEIGHT = 20
-local STATUSBAR_WIDTH = 120
+local STATUSBAR_WIDTH = 100
 
 local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
@@ -2202,22 +2202,22 @@ GUI:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-local ToggleGUI = function()
-	if (not GUI:IsVisible()) then
+GUI.Toggle = function(self)
+	if (not self:IsVisible()) then
 		if InCombatLockdown() then
 			vUI:print(ERR_NOT_IN_COMBAT)
 			
 			return
 		end
 		
-		GUI:SetAlpha(0)
-		GUI:Show()
-		GUI.FadeIn:Play()
+		self:SetAlpha(0)
+		self:Show()
+		self.FadeIn:Play()
 	else
-		GUI.FadeOut:Play()
+		self.FadeOut:Play()
 		
-		if (GUI.SwatchWindow and GUI.SwatchWindow:GetAlpha() > 0) then
-			GUI.SwatchWindow.FadeOut:Play()
+		if (self.SwatchWindow and self.SwatchWindow:GetAlpha() > 0) then
+			self.SwatchWindow.FadeOut:Play()
 		end
 		
 		CloseLastDropdown()
@@ -2227,7 +2227,7 @@ end
 -- Move this to a commands file later
 SLASH_VUI1 = "/vui"
 SlashCmdList["VUI"] = function()
-	ToggleGUI()
+	GUI:Toggle()
 end
 
 GUI:AddOptions(function(self)
