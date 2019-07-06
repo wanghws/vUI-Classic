@@ -14,10 +14,19 @@ local floor = math.floor
 
 GUI.Widgets = {}
 
--- To do: add :Disable() and :Enable() for GUI controls.
--- Since I changed to using paired table inputs on dropdowns, I need to rework selected highlights
--- Adjust sizes & spacing, and add Scrolling by rows
--- EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
+--[[
+
+	To do: add :Disable() and :Enable() for GUI controls.
+	Since I changed to using paired table inputs on dropdowns, I need to rework selected highlights
+	Adjust sizes & spacing, and add Scrolling by rows
+	EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
+	Change all widgets to look like
+	
+	Label Text          [control]
+	
+	so that everything is uniform
+	
+--]]
 
 -- Constants
 local GUI_WIDTH = 700
@@ -494,8 +503,8 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Highlight:SetAlpha(0)
 	
 	Switch.Move = CreateAnimationGroup(Switch.Thumb):CreateAnimation("Move")
-	Switch.Move:SetEasing("out")
-	Switch.Move:SetDuration(0.15)
+	Switch.Move:SetEasing("in")
+	Switch.Move:SetDuration(0.1)
 	
 	if Switch.Value then
 		Switch.Thumb:SetScaledPoint("RIGHT", Switch, 0, 0)
@@ -608,13 +617,11 @@ local MenuItemOnMouseUp = function(self)
 	
 	if (self.GrandParent.CustomType == "Texture") then
 		self.GrandParent.Texture:SetTexture(Media:GetTexture(self.Key))
-		self.GrandParent.Current:SetText(self.Key)
 	elseif (self.GrandParent.CustomType == "Font") then
 		self.GrandParent.Current:SetFont(Media:GetFont(self.Key), 12)
-		self.GrandParent.Current:SetText(self.Key)
-	else
-		self.GrandParent.Current:SetText(self.Key)
 	end
+	
+	self.GrandParent.Current:SetText(self.Key)
 end
 
 local DropdownOnEnter = function(self)
@@ -782,7 +789,7 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	Dropdown.Menu.BG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Dropdown.Menu.BG:SetBackdropBorderColor(0, 0, 0)
 	Dropdown.Menu.BG:SetFrameLevel(Dropdown.Menu:GetFrameLevel() - 1)
-	Dropdown.Menu.BG:EnableMouse(true)
+	Dropdown.Menu.BG:EnableMouse(true) -- Just to prevent misclicks from going through the frame
 	
 	local Count = 0
 	local LastMenuItem
@@ -874,9 +881,7 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 		Dropdown.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	end
 	
-	local MENU_HEIGHT = ((DROPDOWN_HEIGHT - 1) * Count) + 1
-	
-	Dropdown.Menu:SetScaledHeight(MENU_HEIGHT)
+	Dropdown.Menu:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * Count) + 1)
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -1100,7 +1105,7 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	Slider:SetOrientation("HORIZONTAL")
 	Slider:SetValueStep(step)
 	Slider:SetBackdrop(vUI.BackdropAndBorder)
-	Slider:SetBackdropColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	Slider:SetBackdropColor(0, 0, 0)
 	Slider:SetBackdropBorderColor(0, 0, 0)
 	Slider:SetMinMaxValues(minvalue, maxvalue)
 	Slider:SetValue(value)
@@ -1135,21 +1140,27 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	Thumb:SetTexture(Media:GetTexture("Blank"))
 	Thumb:SetVertexColor(0, 0, 0)
 	
-	Slider.NewTexture = Slider:CreateTexture(nil, "OVERLAY")
-	Slider.NewTexture:SetScaledPoint("TOPLEFT", Slider:GetThumbTexture(), 0, -1)
-	Slider.NewTexture:SetScaledPoint("BOTTOMRIGHT", Slider:GetThumbTexture(), 0, 1)
-	Slider.NewTexture:SetTexture(Media:GetTexture("Blank"))
-	Slider.NewTexture:SetVertexColor(0, 0, 0)
+	Slider.NewThumb = CreateFrame("Frame", nil, Slider)
+	Slider.NewThumb:SetScaledPoint("TOPLEFT", Thumb, 0, -1)
+	Slider.NewThumb:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 1)
+	Slider.NewThumb:SetBackdrop(vUI.Backdrop)
+	Slider.NewThumb:SetBackdropColor(0, 0, 0)
 	
-	Slider.NewTexture2 = Slider:CreateTexture(nil, "OVERLAY")
-	Slider.NewTexture2:SetScaledPoint("TOPLEFT", Slider.NewTexture, 1, 0)
-	Slider.NewTexture2:SetScaledPoint("BOTTOMRIGHT", Slider.NewTexture, -1, 0)
-	Slider.NewTexture2:SetTexture(Media:GetTexture("Blank"))
-	Slider.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	--[[Slider.NewThumbTexture = Slider:CreateTexture(nil, "OVERLAY")
+	Slider.NewThumbTexture:SetScaledPoint("TOPLEFT", Thumb, 0, -1)
+	Slider.NewThumbTexture:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 1)
+	Slider.NewThumbTexture:SetTexture(Media:GetTexture("Blank"))
+	Slider.NewThumbTexture:SetVertexColor(0, 0, 0)]]
+	
+	Slider.NewThumbTexture = Slider.NewThumb:CreateTexture(nil, "OVERLAY")
+	Slider.NewThumbTexture:SetScaledPoint("TOPLEFT", Slider.NewThumb, 1, 0)
+	Slider.NewThumbTexture:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumb, -1, 0)
+	Slider.NewThumbTexture:SetTexture(Media:GetTexture("Blank"))
+	Slider.NewThumbTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
 	Slider.Progress = Slider:CreateTexture(nil, "ARTWORK")
 	Slider.Progress:SetScaledPoint("TOPLEFT", Slider, 1, -1)
-	Slider.Progress:SetScaledPoint("BOTTOMRIGHT", Slider.NewTexture, "BOTTOMLEFT", 0, 0)
+	Slider.Progress:SetScaledPoint("BOTTOMRIGHT", Slider.NewThumbTexture, "BOTTOMLEFT", 0, 0)
 	Slider.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Slider.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
@@ -2033,13 +2044,11 @@ function GUI:Create()
 	self:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	self:SetBackdropBorderColor(0, 0, 0)
 	self:EnableMouse(true)
-	self:Hide()
-	
 	self:SetMovable(true)
-	self:EnableMouse(true)
 	self:RegisterForDrag("LeftButton")
 	self:SetScript("OnDragStart", self.StartMoving)
 	self:SetScript("OnDragStop", self.StopMovingOrSizing)
+	self:Hide()
 	
 	-- Header
 	self.Header = CreateFrame("Frame", nil, self)
