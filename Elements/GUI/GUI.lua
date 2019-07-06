@@ -1794,7 +1794,7 @@ local SortGroupWidgets = function(self)
 	self.WidgetParent:SetScaledHeight(Height)
 end
 
-local SortButtons = function(self)
+GUI.SortButtons = function(self)
 	tsort(self.Buttons, function(a, b)
 		return a.Name < b.Name
 	end)
@@ -1882,7 +1882,7 @@ local CreateGroup = function(self, name, side)
 	return Group
 end
 
-local ShowWindow = function(self, name)
+GUI.ShowWindow = function(self, name)
 	for windowname, window in pairs(self.Windows) do
 		if (windowname ~= name) then
 			window:Hide()
@@ -1933,7 +1933,7 @@ local WindowButtonOnMouseDown = function(self)
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
-local NewWindow = function(self, name, default)
+GUI.NewWindow = function(self, name, default)
 	-- Button
 	local Button = CreateFrame("Frame", nil, self)
 	Button:SetScaledSize(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
@@ -2026,7 +2026,7 @@ GUI.GetWindow = function(self, name)
 	end
 end
 
-local AddOptions = function(self, func)
+GUI.AddOptions = function(self, func)
 	if (type(func) == "function") then
 		tinsert(self.Queue, func)
 	end
@@ -2120,12 +2120,6 @@ end
 GUI.Buttons = {}
 GUI.Windows = {}
 GUI.Queue = {}
-
--- Methods
-GUI.NewWindow = NewWindow
-GUI.ShowWindow = ShowWindow
-GUI.SortButtons = SortButtons
-GUI.AddOptions = AddOptions
 
 GUI.Fade = CreateAnimationGroup(GUI)
 
