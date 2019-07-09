@@ -256,8 +256,8 @@ Media:SetTemplate("Slate", {
 
 --Gui.Template = "template"
  -- system where "template" options are available, so that you can use the overall theme, or a custom return value
--- Chaos
-Media:SetTemplate("Chaos", {
+-- Demon
+Media:SetTemplate("Demon", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",

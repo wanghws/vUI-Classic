@@ -22,6 +22,9 @@ GUI.Widgets = {}
 	EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
 	Change all widgets to look like
 	
+	widgets:
+	input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
+	
 	Label Text          [control]
 	
 	so that everything is uniform
@@ -81,7 +84,7 @@ local HexToRGB = function(hex)
 end
 
 local TrimHex = function(s)
-	local Subbed = match(s, "|cFF%x%x%x%x%x%x(.-)|r")
+	local Subbed = match(s, "|c%x%x%x%x%x%x%x%x(.-)|r")
 	
 	return Subbed or s
 end
@@ -149,10 +152,12 @@ end
 
 local ButtonWidgetOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
+	self.MiddleText:SetTextColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 end
 
 local ButtonWidgetOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
+	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
 local CreateButton = function(self, value, label, tooltip, hook)

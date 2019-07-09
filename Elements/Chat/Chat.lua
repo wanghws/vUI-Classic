@@ -24,7 +24,7 @@ local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
 local Discord = "https://discord.gg/%s"
 
-local FormatDiscordHyperlink = function(id) -- /run print("https://discord.gg/1a2b")
+local FormatDiscordHyperlink = function(id) -- /run print("https://discord.gg/1a2b3c")
 	local Link = format(Discord, id)
 	
 	return format("|cFF7289DA|Hdiscord:%s|h[%s: %s]|h|r", Link, Language["Discord"], id)
@@ -39,7 +39,7 @@ local FormatEmailHyperlink = function(address) -- /run print("user@gmail.com")
 end
 
 -- This can be b.net or discord, so just calling it a "friend tag" for now.
-local FormatFriendHyperlink = function(tag) -- /run print("Player#1111")
+local FormatFriendHyperlink = function(tag) -- /run print("Player#1111") -- /run print("Hydrazine#1152") -- /run print("Hydra#2948") 
 	return format("|cFF00AAFF|Hfriend:%s|h[%s]|h|r", tag, tag)
 end
 
