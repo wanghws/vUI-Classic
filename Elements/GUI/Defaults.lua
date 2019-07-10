@@ -3,6 +3,7 @@ local Settings = select(2, ...):get(5)
 -- These are just default values. Use the GUI to change settings.
 
 -- UI
+Settings["ui-scale"] = 0.71
 Settings["ui-display-welcome"] = true
 Settings["ui-display-dev-tools"] = false
 

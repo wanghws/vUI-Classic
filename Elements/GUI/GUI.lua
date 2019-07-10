@@ -83,6 +83,12 @@ local HexToRGB = function(hex)
     return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
 end
 
+local Round = function(num, dec)
+	local Mult = 10 ^ (dec or 0)
+	
+	return floor(num * Mult + 0.5) / Mult
+end
+
 local TrimHex = function(s)
 	local Subbed = match(s, "|c%x%x%x%x%x%x%x%x(.-)|r")
 	
@@ -92,8 +98,8 @@ end
 local GetOrderedIndex = function(t)
     local OrderedIndex = {}
 	
-    for key in pairs(t) do
-        tinsert(OrderedIndex, key)
+    for Key in pairs(t) do
+        tinsert(OrderedIndex, Key)
     end
 	
 	tsort(OrderedIndex, function(a, b)
@@ -178,26 +184,26 @@ local CreateButton = function(self, value, label, tooltip, hook)
 	Button.Hook = hook
 	Button.Tooltip = tooltip
 	
-	Button.Texture = Button:CreateTexture(nil, "ARTWORK")
+	Button.Texture = Button:CreateTexture(nil, "BORDER")
 	Button.Texture:SetScaledPoint("TOPLEFT", Button, 1, -1)
 	Button.Texture:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
 	Button.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Button.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	Button.MiddleText = Button:CreateFontString(nil, "ARTWORK")
+	Button.Highlight = Button:CreateTexture(nil, "ARTWORK")
+	Button.Highlight:SetScaledPoint("TOPLEFT", Button, 1, -1)
+	Button.Highlight:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
+	Button.Highlight:SetTexture(Media:GetTexture("Blank"))
+	Button.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	Button.Highlight:SetAlpha(0)
+	
+	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
 	Button.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetShadowColor(0, 0, 0)
 	Button.MiddleText:SetShadowOffset(1, -1)
 	Button.MiddleText:SetText(value)
-	
-	Button.Highlight = Button:CreateTexture(nil, "OVERLAY")
-	Button.Highlight:SetScaledPoint("TOPLEFT", Button, 1, -1)
-	Button.Highlight:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
-	Button.Highlight:SetTexture(Media:GetTexture("Blank"))
-	Button.Highlight:SetVertexColor(1, 1, 1, 0.4)
-	Button.Highlight:SetAlpha(0)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
@@ -805,7 +811,7 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	local Count = 0
 	local LastMenuItem
 	
-	for k, v in PairsByKeys(values) do
+	for Key, Value in PairsByKeys(values) do
 		Count = Count + 1
 		
 		local MenuItem = CreateFrame("Frame", nil, Dropdown.Menu)
@@ -816,8 +822,8 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 		MenuItem:SetScript("OnMouseUp", MenuItemOnMouseUp)
 		MenuItem:SetScript("OnEnter", MenuItemOnEnter)
 		MenuItem:SetScript("OnLeave", MenuItemOnLeave)
-		MenuItem.Key = k
-		MenuItem.Value = v
+		MenuItem.Key = Key
+		MenuItem.Value = Value
 		MenuItem.ID = id
 		MenuItem.Parent = MenuItem:GetParent()
 		MenuItem.GrandParent = MenuItem:GetParent():GetParent()
@@ -848,25 +854,25 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 		MenuItem.Text:SetJustifyH("LEFT")
 		MenuItem.Text:SetShadowColor(0, 0, 0)
 		MenuItem.Text:SetShadowOffset(1, -1)
-		MenuItem.Text:SetText(k)
+		MenuItem.Text:SetText(Key)
 		
 		if (custom == "Texture") then
-			MenuItem.Texture:SetTexture(Media:GetTexture(k))
+			MenuItem.Texture:SetTexture(Media:GetTexture(Key))
 		elseif (custom == "Font") then
-			MenuItem.Text:SetFont(Media:GetFont(k), 12)
+			MenuItem.Text:SetFont(Media:GetFont(Key), 12)
 		end
 		
 		if custom then
 			if (MenuItem.Key == MenuItem.GrandParent.Value) then
 				MenuItem.Selected:Show()
-				MenuItem.GrandParent.Current:SetText(k)
+				MenuItem.GrandParent.Current:SetText(Key)
 			else
 				MenuItem.Selected:Hide()
 			end
 		else
 			if (MenuItem.Value == MenuItem.GrandParent.Value) then
 				MenuItem.Selected:Show()
-				MenuItem.GrandParent.Current:SetText(k)
+				MenuItem.GrandParent.Current:SetText(Key)
 			else
 				MenuItem.Selected:Hide()
 			end
@@ -907,12 +913,6 @@ local SLIDER_WIDTH = 103
 
 local EDITBOX_WIDTH = 45
 local EDITBOX_HEIGHT = SLIDER_HEIGHT
-
-local Round = function(num, dec)
-	local Mult = 10 ^ (dec or 0)
-	
-	return floor(num * Mult + 0.5) / Mult
-end
 
 local SliderOnValueChanged = function(self)
 	local Value = self:GetValue()
@@ -1276,10 +1276,11 @@ local SwatchEditBoxOnChar = function(self)
 	local Value = self:GetText()
 	
 	Value = gsub(Value, "#", "")
+	Value = upper(Value)
+	
+	self:SetText(Value)
 	
 	if (Value and match(Value, "%x%x%x%x%x%x")) then
-		SwatchEditBoxOnEditFocusLost(self)
-		
 		self:SetAutoFocus(false)
 		self:ClearFocus()
 	end
@@ -1465,7 +1466,7 @@ local CreateSwatchWindow = function()
 	SwatchWindow.NewHexText:SetShadowColor(0, 0, 0)
 	SwatchWindow.NewHexText:SetShadowOffset(1, -1)
 	SwatchWindow.NewHexText:SetText("#FFFFFF")
-	
+	SwatchWindow.NewHexText:SetHighlightColor(0, 0, 0)
 	SwatchWindow.NewHexText:SetScript("OnEscapePressed", SwatchEditBoxOnEscapePressed)
 	SwatchWindow.NewHexText:SetScript("OnEnterPressed", SwatchEditBoxOnEnterPressed)
 	SwatchWindow.NewHexText:SetScript("OnEditFocusLost", SwatchEditBoxOnEditFocusLost)
@@ -1879,8 +1880,8 @@ local CreateGroup = function(self, name, side)
 	
 	tinsert(self[Key], Group)
 	
-	for key, value in pairs(GUI.Widgets) do
-		Group[key] = value
+	for Name, Function in pairs(GUI.Widgets) do
+		Group[Name] = Function
 	end
 	
 	Group.SortGroupWidgets = SortGroupWidgets
@@ -1894,10 +1895,10 @@ local CreateGroup = function(self, name, side)
 end
 
 GUI.ShowWindow = function(self, name)
-	for windowname, window in pairs(self.Windows) do
-		if (windowname ~= name) then
-			window:Hide()
-			window.Button.FadeOut:Play()
+	for WindowName, Window in pairs(self.Windows) do
+		if (WindowName ~= name) then
+			Window:Hide()
+			Window.Button.FadeOut:Play()
 		end
 	end
 	
@@ -2165,8 +2166,8 @@ function GUI:VARIABLES_LOADED()
 	if (not vUISettings) then
 		vUISettings = {}
 	else
-		for id, value in pairs(vUISettings) do
-			Settings[id] = value
+		for ID, Value in pairs(vUISettings) do
+			Settings[ID] = Value
 		end
 	end
 	

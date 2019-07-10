@@ -21,9 +21,6 @@ local RecentVersions = {
 }
 
 local WhatsNew = {
-	[1] = {
-		"You installed vUI!"
-	},
 	[1.01] = {
 		"Alert frames",
 		"Version check module",
@@ -58,7 +55,7 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 	if self.NewVersion then
 		vUI:SendAlert("What's new?", "Click here to learn more", nil, WhatsNewOnMouseUp, true)
 		
-		self.NewVersion = true
+		self.NewVersion = false
 	end
 	
 	if IsInGuild() then
@@ -125,9 +122,9 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 			Major = tonumber(Major)
 			
 			if (Major > 0) then
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cff%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
+				vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
 			else
-				vUI:SendAlert("New Version!", format("Update to version |cff%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
+				vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 			end
 			
 			self:UnregisterEvent(event)

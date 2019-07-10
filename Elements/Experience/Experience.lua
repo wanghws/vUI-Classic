@@ -381,6 +381,10 @@ local Languages = {
 	["Chinese (Traditional)"] = "zhTW",
 }
 
+local UpdateUIScale = function(value)
+	SetCVar("uiScale", value)
+end
+
 GUI:AddOptions(function(self)
 	local ExperienceOptions = self:NewWindow(Language["Experience"])
 	
@@ -420,6 +424,10 @@ GUI:AddOptions(function(self)
 	
 	LanguageGroup:CreateDropdown("ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
 	LanguageGroup:CreateButton("Contribute", Language["Help Localize"], "Contribute", function() vUI:print("put something here. print a link, or pop up a window or something.") end)
+	
+	local Scale = GeneralOptions:CreateGroup(Language["Scale"], "Right")
+	
+	Scale:CreateSlider("ui-scale", Settings["ui-scale"], 0.64, 1, 0.01, "Set UI Scale", "", UpdateUIScale)
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]
