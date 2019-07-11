@@ -266,14 +266,14 @@ Media:SetTemplate("Chaos", {
 	["ui-widget-texture"] = "pHishTex12",
 	["ui-button-texture"] = "pHishTex12",
 	
-	["ui-header-font-color"] = "EEEEEE",
+	["ui-header-font-color"] = "E8EAF6",
 	["ui-header-texture-color"] = "3C3C3C",
 	["ui-window-bg-color"] = "3C3C3C",
 	["ui-window-main-color"] = "2C2C2C",
 	["ui-widget-color"] = "9FA8DA",
 	["ui-widget-bright-color"] = "757575",
 	["ui-widget-bg-color"] = "424242",
-	["ui-widget-font-color"] = "EEEEEE",
+	["ui-widget-font-color"] = "FAFAFA",
 	["ui-button-font-color"] = "9FA8DA",
 	["ui-button-texture-color"] = "616161",
 })

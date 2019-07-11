@@ -1205,6 +1205,8 @@ local ColorSwatchOnLeave = function(self)
 end
 
 local SwatchWindowAccept = function(self)
+	self.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	
 	local Active = self:GetParent().Active
 	
 	if GUI.SwatchWindow.Selected then
@@ -1224,7 +1226,9 @@ local SwatchWindowAccept = function(self)
 	GUI.SwatchWindow.FadeOut:Play()
 end
 
-local SwatchWindowCancel = function()
+local SwatchWindowCancel = function(self)
+	self.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	
 	GUI.SwatchWindow.FadeOut:Play()
 end
 
@@ -1289,6 +1293,12 @@ local SwatchEditBoxOnEditFocusGained = function(self)
 	
 	self:SetText(Text)
 	self:HighlightText()
+end
+
+local SwatchButtonOnMouseDown = function(self)
+	local R, G, B = HexToRGB(Settings["ui-button-texture-color"])
+	
+	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
 local CreateSwatchWindow = function()
@@ -1494,15 +1504,16 @@ local CreateSwatchWindow = function()
 	SwatchWindow.Accept:SetBackdrop(vUI.BackdropAndBorder)
 	SwatchWindow.Accept:SetBackdropColor(0, 0, 0)
 	SwatchWindow.Accept:SetBackdropBorderColor(0, 0, 0)
+	SwatchWindow.Accept:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
 	SwatchWindow.Accept:SetScript("OnMouseUp", SwatchWindowAccept)
 	SwatchWindow.Accept:SetScript("OnEnter", SwatchWindowOnEnter)
 	SwatchWindow.Accept:SetScript("OnLeave", SwatchWindowOnLeave)
 	
-	SwatchWindow.AcceptTexture = SwatchWindow.Accept:CreateTexture(nil, "ARTWORK")
-	SwatchWindow.AcceptTexture:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, 1, -1)
-	SwatchWindow.AcceptTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Accept, -1, 1)
-	SwatchWindow.AcceptTexture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
-	SwatchWindow.AcceptTexture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	SwatchWindow.Accept.Texture = SwatchWindow.Accept:CreateTexture(nil, "ARTWORK")
+	SwatchWindow.Accept.Texture:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, 1, -1)
+	SwatchWindow.Accept.Texture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Accept, -1, 1)
+	SwatchWindow.Accept.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
+	SwatchWindow.Accept.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	SwatchWindow.Accept.Highlight = SwatchWindow.Accept:CreateTexture(nil, "OVERLAY")
 	SwatchWindow.Accept.Highlight:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, 1, -1)
@@ -1526,15 +1537,16 @@ local CreateSwatchWindow = function()
 	SwatchWindow.Cancel:SetBackdrop(vUI.BackdropAndBorder)
 	SwatchWindow.Cancel:SetBackdropColor(0, 0, 0)
 	SwatchWindow.Cancel:SetBackdropBorderColor(0, 0, 0)
+	SwatchWindow.Cancel:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
 	SwatchWindow.Cancel:SetScript("OnMouseUp", SwatchWindowCancel)
 	SwatchWindow.Cancel:SetScript("OnEnter", SwatchWindowOnEnter)
 	SwatchWindow.Cancel:SetScript("OnLeave", SwatchWindowOnLeave)
 	
-	SwatchWindow.CancelTexture = SwatchWindow.Cancel:CreateTexture(nil, "ARTWORK")
-	SwatchWindow.CancelTexture:SetScaledPoint("TOPLEFT", SwatchWindow.Cancel, 1, -1)
-	SwatchWindow.CancelTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Cancel, -1, 1)
-	SwatchWindow.CancelTexture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
-	SwatchWindow.CancelTexture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	SwatchWindow.Cancel.Texture = SwatchWindow.Cancel:CreateTexture(nil, "ARTWORK")
+	SwatchWindow.Cancel.Texture:SetScaledPoint("TOPLEFT", SwatchWindow.Cancel, 1, -1)
+	SwatchWindow.Cancel.Texture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Cancel, -1, 1)
+	SwatchWindow.Cancel.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
+	SwatchWindow.Cancel.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	SwatchWindow.Cancel.Highlight = SwatchWindow.Cancel:CreateTexture(nil, "OVERLAY")
 	SwatchWindow.Cancel.Highlight:SetScaledPoint("TOPLEFT", SwatchWindow.Cancel, 1, -1)
