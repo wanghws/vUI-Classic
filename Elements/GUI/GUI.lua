@@ -27,20 +27,20 @@ GUI.Widgets = {}
 	
 	To do:
 	
+	Shorten Dropdowns, sliders, and buttons, and set both sides of the page to the same width
+	
 	Adjust sizes & spacing, and add Scrolling by rows
-	EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
-	Change all widgets to look like
-	
-	Label Text          [control]
-	
-	so that everything is uniform
 	
 	widgets:
 	input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	
+	Input label blah blah
+	[      editbox on line below      ]
+	
 	widget methods
 	
 	widget:SetWarning(true) -- to determine if the widget should pop up a warning before proceeding
+	widget:RequiresReload(true) -- to determine if the widget should pop up a warning before proceeding
 	widget:Disable()
 	widget:Enable()
 --]]
@@ -148,7 +148,7 @@ end
 
 -- Button
 local BUTTON_HEIGHT = 20
-local BUTTON_WIDTH = 150
+local BUTTON_WIDTH = 140
 
 local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
@@ -537,7 +537,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 end
 
 -- Dropdown
-local DROPDOWN_WIDTH = 150
+local DROPDOWN_WIDTH = 140
 local DROPDOWN_HEIGHT = 20
 local DROPDOWN_FADE_DELAY = 3 -- To be implemented
 
@@ -907,7 +907,7 @@ end
 
 -- Slider
 local SLIDER_HEIGHT = 20
-local SLIDER_WIDTH = 103
+local SLIDER_WIDTH = 93
 
 local EDITBOX_WIDTH = 45
 local EDITBOX_HEIGHT = SLIDER_HEIGHT
