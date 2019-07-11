@@ -105,30 +105,26 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (prefix == "vUI-Version") then
-		if (match(sender, "(%S+)-%S+") ~= User) then
-			local SenderVersion = tonumber(message)
+	if (prefix == "vUI-Version") and (match(sender, "(%S+)-%S+") ~= User) then
+		local SenderVersion = tonumber(message)
+		
+		if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
+			local Count = GetRecentVersionTypes(SenderVersion)
 			
-			if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
-				local Count = GetRecentVersionTypes(SenderVersion)
-				
-				SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
-			end
+			SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
 		end
-	elseif (prefix == "vUI-Version-Detailed") then -- Someone is sending us more detailed information because we were behind.
-		if (match(sender, "(%S+)-%S+") ~= User) then
-			local Version, Major = match(message, "(%S+):(%S+)")
-			
-			Major = tonumber(Major)
-			
-			if (Major > 0) then
-				vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
-			else
-				vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
-			end
-			
-			self:UnregisterEvent(event)
+	elseif (prefix == "vUI-Version-Detailed") and (match(sender, "(%S+)-%S+") ~= User) then -- Someone is sending us more detailed information because we were behind.
+		local Version, Major = match(message, "(%S+):(%S+)")
+		
+		Major = tonumber(Major)
+		
+		if (Major > 0) then
+			vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
+		else
+			vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 		end
+		
+		self:UnregisterEvent(event)
 	end
 end
 
