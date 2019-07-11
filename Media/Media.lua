@@ -5,11 +5,13 @@ Media.Textures = {}
 Media.Highlights = {}
 Media.Templates = {}
 Media.Colors = {}
+Media.Palettes = {}
 
 local TemplateList = {}
 local HighlightList = {}
 local TextureList = {}
 local FontList = {}
+local PaletteList = {}
 
 function Media:SetFont(name, path, silent)
 	if self.Fonts[name] then
@@ -125,6 +127,30 @@ function Media:ApplyTemplate(name)
 	end
 end
 
+function Media:SetPalette(name, t, silent)
+	if self.Palettes[name] then
+		return
+	end
+	
+	self.Palettes[name] = t
+	
+	if (not silent) then
+		PaletteList[name] = t
+	end
+end
+
+function Media:GetPalette(name)
+	if self.Palettes[name] then
+		return self.Palettes[name]
+	else
+		return self.Palettes["PT Sans"]
+	end
+end
+
+function Media:GetPaletteList()
+	return PaletteList
+end
+
 -- Some pre-loaded goodness.
 
 -- Textures
@@ -161,16 +187,16 @@ Media:SetHighlight("Ferous 14", "Interface\\AddOns\\vUI\\Media\\Textures\\fer14.
 Media:SetFont("PT Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\PTSans.ttf")
 Media:SetFont("Roboto", "Interface\\Addons\\vUI\\Media\\Fonts\\Roboto.ttf")
 Media:SetFont("Prototype", "Interface\\Addons\\vUI\\Media\\Fonts\\Prototype.ttf")
-Media:SetFont("Mosk Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\MoskBold.ttf")
+Media:SetFont("Mosk", "Interface\\Addons\\vUI\\Media\\Fonts\\MoskBold.ttf")
 Media:SetFont("SW Crawl Body", "Interface\\Addons\\vUI\\Media\\Fonts\\SWCrawlBody.ttf")
 Media:SetFont("Matthan", "Interface\\Addons\\vUI\\Media\\Fonts\\MatthanSans.ttf", true)
 Media:SetFont("Swansea", "Interface\\Addons\\vUI\\Media\\Fonts\\Swansea.ttf")
-Media:SetFont("Expressway Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
-Media:SetFont("FranKlein Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
+Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
+Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 
--- Yes, doing this did take forever. And it was so worth it.
+-- Yes, doing these did take forever. And it was so worth it.
 
--- https://htmlcolorcodes.com/
+--[[ https://htmlcolorcodes.com/
 Media.Colors[1] = {"F9EBEA", "FDEDEC", "F5EEF8", "F4ECF7", "EAF2F8", "EBF5FB", "E8F8F5", "E8F6F3", "E9F7EF","EAFAF1", "FEF9E7", "FEF5E7", "FDF2E9", "FBEEE6", "FDFEFE", "F8F9F9", "F4F6F6", "F2F4F4", "EBEDEF", "EAECEE"}
 Media.Colors[2] = {"F2D7D5", "FADBD8", "EBDEF0", "E8DAEF", "D4E6F1", "D6EAF8", "D1F2EB", "D0ECE7", "D4EFDF", "D5F5E3", "FCF3CF", "FDEBD0", "FAE5D3", "F6DDCC", "FBFCFC", "F2F3F4", "EAEDED", "E5E8E8", "D6DBDF", "D5D8DC"}
 Media.Colors[3] = {"#E6B0AA", "F5B7B1", "D7BDE2", "D2B4DE", "A9CCE3", "AED6F1", "A3E4D7", "A2D9CE", "A9DFBF", "ABEBC6", "F9E79F", "FAD7A0", "F5CBA7", "EDBB99", "F7F9F9", "E5E7E9", "D5DBDB", "CCD1D1", "AEB6BF", "ABB2B9"}
@@ -181,8 +207,9 @@ Media.Colors[7] = {"A93226", "CB4335", "884EA0", "7D3C98", "2471A3", "2E86C1", "
 Media.Colors[8] = {"922B21", "B03A2E", "76448A", "6C3483", "1F618D", "2874A6", "148F77", "117A65", "1E8449", "239B56", "B7950B", "B9770E", "AF601A", "A04000", "B3B6B7", "909497", "717D7E", "616A6B", "283747", "212F3D"}
 Media.Colors[9] = {"7B241C", "943126", "633974", "5B2C6F", "1A5276", "21618C", "117864", "0E6655", "196F3D", "1D8348", "9A7D0A", "9C640C", "935116", "873600", "979A9A", "797D7F", "5F6A6A", "515A5A", "212F3C", "1C2833"}
 Media.Colors[10] = {"641E16", "78281F", "512E5F", "4A235A", "154360", "1B4F72", "0E6251", "0B5345", "145A32", "186A3B", "7D6608", "7E5109", "784212", "6E2C00", "7B7D7D", "626567", "4D5656", "424949", "1B2631", "17202A"}
+]]
 
---[[ Colors
+-- Colors
 Media.Colors[1] = {"FFEBEE", "FCE4EC", "F3E5F5", "EDE7F6", "E8EAF6", "E3F2FD", "E1F5FE", "E0F7FA", "E0F2F1", "E8F5E9", "F1F8E9", "F9FBE7", "FFFDE7", "FFF8E1", "FFF3E0", "FBE9E7", "EFEBE9", "FAFAFA", "ECEFF1"}
 Media.Colors[2] = {"FFCDD2", "F8BBD0", "E1BEE7", "D1C4E9", "C5CAE9", "BBDEFB", "B3E5FC", "B2EBF2", "B2DFDB", "C8E6C9", "DCEDC8", "F0F4C3", "FFF9C4", "FFECB3", "FFE0B2", "FFCCBC", "D7CCC8", "F5F5F5", "CFD8DC"}
 Media.Colors[3] = {"EF9A9A", "F48FB1", "CE93D8", "B39DDB", "9FA8DA", "90CAF9", "81D4FA", "80DEEA", "80CBC4", "A5D6A7", "C5E1A5", "E6EE9C", "FFF59D", "FFE082", "FFCC80", "FFAB91", "BCAAA4", "EEEEEE", "B0BEC5"}
@@ -192,7 +219,7 @@ Media.Colors[6] = {"F44336", "E91E63", "9C27B0", "673AB7", "3F51B5", "2196F3", "
 Media.Colors[7] = {"E53935", "D81B60", "8E24AA", "5E35B1", "3949AB", "1E88E5", "039BE5", "00ACC1", "00897B", "43A047", "7CB342", "C0CA33", "FDD835", "FFB300", "FB8C00", "F4511E", "6D4C41", "757575", "546E7A"}
 Media.Colors[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D1", "0097A7", "00796B", "388E3C", "689F38", "AFB42B", "FBC02D", "FFA000", "F57C00", "E64A19", "5D4037", "616161", "455A64"}
 Media.Colors[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
-Media.Colors[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}]]
+Media.Colors[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
 
 --[[
 Media.Colors[1] = {"f17171", "ffa071", "ffd071", "a2d471", "71e2d0", "71d0ff", "7ea9ff", "b38dff", "ff71b7", "a2adb8"}
