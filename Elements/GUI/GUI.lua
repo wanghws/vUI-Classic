@@ -174,7 +174,7 @@ local ButtonWidgetOnLeave = function(self)
 	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
-local CreateButton = function(self, value, label, tooltip, hook)
+GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(WIDE_GROUP_WIDTH - (SPACING * 2), BUTTON_HEIGHT)
 	Anchor.WidgetHeight = BUTTON_HEIGHT
@@ -226,13 +226,11 @@ local CreateButton = function(self, value, label, tooltip, hook)
 	return Button
 end
 
-GUI.Widgets["CreateButton"] = CreateButton
-
 -- StatusBar
 local STATUSBAR_HEIGHT = 20
 local STATUSBAR_WIDTH = 100
 
-local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
+GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), STATUSBAR_HEIGHT)
 	Anchor.WidgetHeight = STATUSBAR_HEIGHT
@@ -299,8 +297,6 @@ local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip
 	return Bar
 end
 
-GUI.Widgets["CreateStatusBar"] = CreateStatusBar
-
 -- Checkbox
 local CHECKBOX_SIZE = 20
 
@@ -328,7 +324,7 @@ local CheckboxOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-local CreateCheckbox = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -408,8 +404,6 @@ local CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	return Checkbox
 end
 
-GUI.Widgets["CreateCheckbox"] = CreateCheckbox
-
 -- Switch
 local SWITCH_HEIGHT = 20
 local SWITCH_WIDTH = 50
@@ -463,7 +457,7 @@ local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-local CreateSwitch = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -541,8 +535,6 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	
 	return Switch
 end
-
-GUI.Widgets["CreateSwitch"] = CreateSwitch
 
 -- Dropdown
 local DROPDOWN_WIDTH = 150
@@ -665,7 +657,7 @@ local MenuItemOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-local CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
+GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -913,8 +905,6 @@ local CreateDropdown = function(self, id, value, values, label, tooltip, hook, c
 	return Dropdown
 end
 
-GUI.Widgets["CreateDropdown"] = CreateDropdown
-
 -- Slider
 local SLIDER_HEIGHT = 20
 local SLIDER_WIDTH = 103
@@ -1047,7 +1037,7 @@ local SliderOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
+GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -1193,8 +1183,6 @@ local CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, 
 	
 	return Slider
 end
-
-GUI.Widgets["CreateSlider"] = CreateSlider
 
 -- Color
 local COLOR_HEIGHT = 20
@@ -1680,7 +1668,7 @@ local ColorSelectionOnMouseUp = function(self)
 	end
 end
 
-local CreateColorSelection = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -1755,8 +1743,6 @@ local CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	
 	return Button
 end
-
-GUI.Widgets["CreateColorSelection"] = CreateColorSelection
 
 -- GUI
 local ButtonOnEnter = function(self)
