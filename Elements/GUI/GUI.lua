@@ -46,7 +46,7 @@ GUI.Widgets = {}
 --]]
 
 -- Constants
-local GUI_WIDTH = 700
+local GUI_WIDTH = 682
 local GUI_HEIGHT = 406
 local SPACING = 3
 
@@ -61,13 +61,13 @@ local PARENT_WIDTH = GUI_WIDTH - BUTTON_LIST_WIDTH - ((SPACING * 2) + 2)
 local PARENT_HEIGHT = (GUI_HEIGHT - HEADER_HEIGHT - (SPACING * 2) - 2)
 
 local GROUP_HEIGHT = 80
-local GROUP_WIDTH = 258
+local GROUP_WIDTH = 270
 local GROUP_WIDGETHEIGHT = GROUP_HEIGHT - HEADER_HEIGHT + 1
-
-local WIDE_GROUP_WIDTH = 300
 
 local MENU_BUTTON_WIDTH = BUTTON_LIST_WIDTH - (SPACING * 2)
 local MENU_BUTTON_HEIGHT = HEADER_HEIGHT
+
+local MAX_BUTTONS_SHOWN = 16
 
 local LABEL_SPACING = 3
 
@@ -88,6 +88,8 @@ local GetVariable = function(id)
 end
 
 local HexToRGB = function(hex)
+	hex = gsub(hex, "#", "")
+
     return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
 end
 
@@ -148,7 +150,7 @@ end
 
 -- Button
 local BUTTON_HEIGHT = 20
-local BUTTON_WIDTH = 140
+local BUTTON_WIDTH = 130
 
 local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
@@ -176,7 +178,7 @@ end
 
 GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(WIDE_GROUP_WIDTH - (SPACING * 2), BUTTON_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), BUTTON_HEIGHT)
 	Anchor.WidgetHeight = BUTTON_HEIGHT
 	
 	local Button = CreateFrame("Frame", nil, self)
@@ -537,7 +539,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 end
 
 -- Dropdown
-local DROPDOWN_WIDTH = 140
+local DROPDOWN_WIDTH = 130
 local DROPDOWN_HEIGHT = 20
 local DROPDOWN_FADE_DELAY = 3 -- To be implemented
 
@@ -663,7 +665,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(WIDE_GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
 	Anchor.WidgetHeight = DROPDOWN_HEIGHT
 	
 	local Dropdown = CreateFrame("Frame", nil, self)
@@ -907,7 +909,7 @@ end
 
 -- Slider
 local SLIDER_HEIGHT = 20
-local SLIDER_WIDTH = 90
+local SLIDER_WIDTH = 80
 
 local EDITBOX_WIDTH = 48
 local EDITBOX_HEIGHT = SLIDER_HEIGHT
@@ -1043,7 +1045,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(WIDE_GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
 	Anchor.WidgetHeight = SLIDER_HEIGHT
 	
 	if prefix then
@@ -1830,19 +1832,16 @@ end
 
 local CreateGroup = function(self, name, side)
 	local Key
-	local Width
 	
 	if (side == "Left") then
 		Key = "LeftGroups"
-		Width = GROUP_WIDTH
 	else
 		Key = "RightGroups"
-		Width = WIDE_GROUP_WIDTH
 	end
 	
 	-- Frame
 	local Group = CreateFrame("Frame", nil, self)
-	Group:SetScaledSize(Width, GROUP_HEIGHT)
+	Group:SetScaledSize(GROUP_WIDTH, GROUP_HEIGHT)
 	Group:SetScaledPoint("CENTER", self, 0, 0)
 	Group:SetBackdrop(vUI.BackdropAndBorder)
 	Group:SetBackdropColor(0.4, 0.4, 0.4)
@@ -1850,7 +1849,7 @@ local CreateGroup = function(self, name, side)
 	
 	-- Header
 	Group.Header = CreateFrame("Frame", nil, Group)
-	Group.Header:SetScaledSize(Width, HEADER_HEIGHT)
+	Group.Header:SetScaledSize(GROUP_WIDTH, HEADER_HEIGHT)
 	Group.Header:SetScaledPoint("TOPLEFT", Group, 0, 0)
 	Group.Header:SetBackdrop(vUI.BackdropAndBorder)
 	Group.Header:SetBackdropColor(0.3, 0.3, 0.3)
@@ -1872,7 +1871,7 @@ local CreateGroup = function(self, name, side)
 	
 	-- Widget parent
 	Group.WidgetParent = CreateFrame("Frame", nil, Group)
-	Group.WidgetParent:SetScaledSize(Width, GROUP_WIDGETHEIGHT)
+	Group.WidgetParent:SetScaledSize(GROUP_WIDTH, GROUP_WIDGETHEIGHT)
 	Group.WidgetParent:SetScaledPoint("TOP", Group.Header, "BOTTOM", 0, 0)
 	Group.WidgetParent:SetBackdrop(vUI.BackdropAndBorder)
 	Group.WidgetParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
