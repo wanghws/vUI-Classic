@@ -368,8 +368,8 @@ local UpdateDisplayDevTools = function()
 end
 
 local Languages = {
-	["German"] = "deDE",
 	["English"] = "enUS",
+	--[[["German"] = "deDE",
 	["Spanish (Spain)"] = "esES",
 	["Spanish (Mexico)"] = "esMX",
 	["French"] = "frFR",
@@ -378,7 +378,7 @@ local Languages = {
 	["Portuguese (Brazil)"] = "ptBR",
 	["Russian"] = "ruRU",
 	["Chinese (Simplified)"] = "zhCN",
-	["Chinese (Traditional)"] = "zhTW",
+	["Chinese (Traditional)"] = "zhTW",]]
 }
 
 local UpdateUIScale = function(value)
