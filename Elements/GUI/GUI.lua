@@ -907,9 +907,9 @@ end
 
 -- Slider
 local SLIDER_HEIGHT = 20
-local SLIDER_WIDTH = 93
+local SLIDER_WIDTH = 90
 
-local EDITBOX_WIDTH = 45
+local EDITBOX_WIDTH = 48
 local EDITBOX_HEIGHT = SLIDER_HEIGHT
 
 local SliderOnValueChanged = function(self)
