@@ -15,20 +15,28 @@ local floor = math.floor
 GUI.Widgets = {}
 
 --[[
-
+	
+	Thoughts:
+	I can likely do 2 lined widgets by just creating 2 anchors and inserting them so that the scroll system still handles them just fine.
+	[Line of text anchor]
+	[Editbox for input anchor]
+	
+	Test different resolutions and find the pixel perfect scale for each. Then either set or suggest the scale
+	
+	Debug window of the GUI. With info like ui scale, resolution, windowed, language, etc etc
+	
 	To do:
 	
 	Adjust sizes & spacing, and add Scrolling by rows
 	EditBox:SetTextInsets() to adjust the padding properly of editboxes. https://wow.gamepedia.com/API_EditBox_SetTextInsets
 	Change all widgets to look like
 	
-	widgets:
-	input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
-	
 	Label Text          [control]
 	
 	so that everything is uniform
 	
+	widgets:
+	input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	
 	widget methods
 	
@@ -226,12 +234,12 @@ local STATUSBAR_WIDTH = 100
 
 local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(WIDE_GROUP_WIDTH - (SPACING * 2), STATUSBAR_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), STATUSBAR_HEIGHT)
 	Anchor.WidgetHeight = STATUSBAR_HEIGHT
 	
-	local Backdrop = CreateFrame("Frame", nil, self)
+	local Backdrop = CreateFrame("Frame", nil, Anchor)
 	Backdrop:SetScaledSize(STATUSBAR_WIDTH, STATUSBAR_HEIGHT)
-	Backdrop:SetScaledPoint("LEFT", Anchor, 0, 0)
+	Backdrop:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	Backdrop:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Backdrop:SetBackdropBorderColor(0, 0, 0)
@@ -279,7 +287,7 @@ local CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip
 	Bar.MiddleText:SetText(value)
 	
 	Bar.Text = Bar:CreateFontString(nil, "OVERLAY")
-	Bar.Text:SetScaledPoint("LEFT", Bar, "RIGHT", LABEL_SPACING, 0)
+	Bar.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Bar.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Bar.Text:SetJustifyH("LEFT")
 	Bar.Text:SetShadowColor(0, 0, 0)
@@ -326,12 +334,12 @@ local CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize((GROUP_WIDTH - (SPACING * 2)), CHECKBOX_SIZE)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), CHECKBOX_SIZE)
 	Anchor.WidgetHeight = CHECKBOX_SIZE
 	
-	local Checkbox = CreateFrame("Frame", nil, self)
+	local Checkbox = CreateFrame("Frame", nil, Anchor)
 	Checkbox:SetScaledSize(CHECKBOX_SIZE, CHECKBOX_SIZE)
-	Checkbox:SetScaledPoint("LEFT", Anchor, 0, 0)
+	Checkbox:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Checkbox:SetBackdrop(vUI.BackdropAndBorder)
 	Checkbox:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Checkbox:SetBackdropBorderColor(0, 0, 0)
@@ -362,8 +370,8 @@ local CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Checkbox.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Checkbox.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
-	Checkbox.Text = Checkbox:CreateFontString(nil, "OVERLAY")
-	Checkbox.Text:SetScaledPoint("LEFT", Checkbox, "RIGHT", LABEL_SPACING, 0)
+	Checkbox.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Checkbox.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Checkbox.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Checkbox.Text:SetJustifyH("LEFT")
 	Checkbox.Text:SetShadowColor(0, 0, 0)
@@ -461,12 +469,12 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(SWITCH_WIDTH, SWITCH_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), SWITCH_HEIGHT)
 	Anchor.WidgetHeight = SWITCH_HEIGHT
 	
-	local Switch = CreateFrame("Frame", nil, self)
+	local Switch = CreateFrame("Frame", nil, Anchor)
 	Switch:SetScaledSize(SWITCH_WIDTH, SWITCH_HEIGHT)
-	Switch:SetScaledPoint("CENTER", Anchor, 0, 0)
+	Switch:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Switch:SetBackdrop(vUI.BackdropAndBorder)
 	Switch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Switch:SetBackdropBorderColor(0, 0, 0)
@@ -504,8 +512,8 @@ local CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Flavor:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Switch.Flavor:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
-	Switch.Text = Switch:CreateFontString(nil, "OVERLAY")
-	Switch.Text:SetScaledPoint("LEFT", Switch, "RIGHT", LABEL_SPACING, 0)
+	Switch.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Switch.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Switch.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Switch.Text:SetJustifyH("LEFT")
 	Switch.Text:SetShadowColor(0, 0, 0)
@@ -1678,12 +1686,12 @@ local CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(COLOR_WIDTH, COLOR_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), COLOR_HEIGHT)
 	Anchor.WidgetHeight = COLOR_HEIGHT
 	
-	local Swatch = CreateFrame("Frame", nil, self)
+	local Swatch = CreateFrame("Frame", nil, Anchor)
 	Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)
-	Swatch:SetScaledPoint("LEFT", Anchor, 0, 0)
+	Swatch:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Swatch:SetBackdrop(vUI.BackdropAndBorder)
 	Swatch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Swatch:SetBackdropBorderColor(0, 0, 0)
@@ -1696,7 +1704,7 @@ local CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	
 	local Button = CreateFrame("Frame", nil, self)
 	Button:SetScaledSize(COLOR_WIDTH, COLOR_HEIGHT)
-	Button:SetScaledPoint("LEFT", Swatch, "RIGHT", 2, 0)
+	Button:SetScaledPoint("RIGHT", Swatch, "LEFT", -2, 0)
 	Button:SetBackdrop(vUI.BackdropAndBorder)
 	Button:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Button:SetBackdropBorderColor(0, 0, 0)
@@ -1736,7 +1744,7 @@ local CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	Button.MiddleText:SetText("#"..upper(value))
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
-	Button.Text:SetScaledPoint("LEFT", Button, "RIGHT", LABEL_SPACING, 0)
+	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetShadowColor(0, 0, 0)

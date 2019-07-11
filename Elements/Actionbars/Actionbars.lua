@@ -171,7 +171,7 @@ local SkinButton = function(button, pet)
 	
 	--[[if button.CountBG then
 		if (button.Count and button.Count.GetText and button.Count:GetText()) then
-			button.CountBG:vWidth(button.Count:GetWidth() + 6)
+			button.CountBG:SetScaledWidth(button.Count:GetWidth() + 6)
 			
 			button.CountBG:Show()
 		else
@@ -185,38 +185,38 @@ end
 local ShowGridAndSkin = function()
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		local Button
-
+		
 		Button = _G[format("ActionButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
 		ActionButton_ShowGrid(Button)
 		SkinButton(Button)
-
+		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
 		ActionButton_ShowGrid(Button)
 		SkinButton(Button)
-
+		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
 		ActionButton_ShowGrid(Button)
 		SkinButton(Button)
-
+		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
 		ActionButton_ShowGrid(Button)
 		SkinButton(Button)
-
+		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
-		--Button:SetAttribute("statehidden", true)
+		Button:SetAttribute("statehidden", true)
 		Button:Show()
 		ActionButton_ShowGrid(Button)
 		SkinButton(Button)
@@ -224,21 +224,21 @@ local ShowGridAndSkin = function()
 end
 
 local UpdateBar1 = function()
-	local ActionBar1 = vUIBottomActionBarsPanel
+	local ActionBar1 = vUIActionBar1
 	local Button
-
+	
 	for i = 1, Num do
 		Button = _G["ActionButton"..i]
 		ActionBar1:SetFrameRef("ActionButton"..i, Button)
 	end
-
+	
 	ActionBar1:Execute([[
 		Button = table.new()
 		for i = 1, 12 do
 			table.insert(Button, self:GetFrameRef("ActionButton"..i))
 		end
 	]])
-
+	
 	ActionBar1:SetAttribute("_onstate-page", [[
 		if HasTempShapeshiftActionBar() then
 			newstate = GetTempShapeshiftBarIndex() or newstate
@@ -248,39 +248,47 @@ local UpdateBar1 = function()
 			Button:SetAttribute("actionpage", tonumber(newstate))
 		end
 	]])
-
+	
 	RegisterStateDriver(ActionBar1, "page", ActionBar1.GetBar())
 end
 
 local CreateBar1 = function()
-	local ActionBar1 = vUIBottomActionBarsPanel
 	local Druid, Rogue = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;", "[bonusbar:1] 7;"
 	
-	--[[if (C.ActionBars.SwitchBarOnStance) then
-		Rogue = "[bonusbar:1] 7;"
-		Druid = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;"
-	end]]
-
+	local Druid, Rogue, Warrior, Priest = "", "", "", ""
+	
+	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", UIParent, "SecureHandlerStateTemplate")
+	ActionBar1:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	ActionBar1:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, 0, SPACING + 1)
+	ActionBar1:SetFrameStrata("MEDIUM")
+	
+	Rogue = "[bonusbar:1] 7;"
+	Druid = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;"
+	Warrior = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;"
+	Priest = "[bonusbar:1] 7;"
+	
 	ActionBar1.Page = {
 		["DRUID"] = Druid,
-		["ROGUE"] = Rogue, -- Rogue
-		["DEFAULT"] = "[vehicleui:12] 12; [possessbar] 12; [overridebar] 14; [shapeshift] 13; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;",
+		["ROGUE"] = Rogue,
+		["WARRIOR"] = Warrior,
+		["PRIEST"] = Priest,
+		["DEFAULT"] = "[bar:6] 6;[bar:5] 5;[bar:4] 4;[bar:3] 3;[bar:2] 2;[overridebar] 14;[shapeshift] 13;[vehicleui] 12;[possessbar] 12;",
 	}
-
-	function ActionBar1:GetBar()
+	
+	ActionBar1.GetBar = function()
 		local Condition = ActionBar1.Page["DEFAULT"]
 		local Class = select(2, UnitClass("player"))
 		local Page = ActionBar1.Page[Class]
-
+		
 		if Page then
 			Condition = Condition .. " " .. Page
 		end
-
+		
 		Condition = Condition .. " [form] 1; 1"
-
+		
 		return Condition
 	end
-
+	
 	for i = 1, Num do
 		local Button = _G["ActionButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
@@ -288,7 +296,7 @@ local CreateBar1 = function()
 		Button:SetParent(ActionBar1)
 		
 		if (i == 1) then
-			Button:SetScaledPoint("BOTTOMLEFT", SPACING, SPACING)
+			Button:SetScaledPoint("LEFT", 0, 0)
 		else
 			Button:SetScaledPoint("LEFT", _G["ActionButton"..i-1], "RIGHT", SPACING, 0)
 		end
@@ -303,27 +311,29 @@ local CreateBar1 = function()
 end
 
 local CreateBar2 = function()
-	local MultiBarBottomLeft = MultiBarBottomLeft
-	local ActionBar2 = vUIBottomActionBarsPanel
+	local ActionBar2 = CreateFrame("Frame", "vUIActionBar2", UIParent, "SecureHandlerStateTemplate")
+	ActionBar2:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	ActionBar2:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
+	ActionBar2:SetFrameStrata("MEDIUM")
+	
+	MultiBarBottomLeft:SetParent(ActionBar2)
 	
 	for i = 1, Num do
 		local Button = _G["MultiBarBottomLeftButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
 		Button:ClearAllPoints()
-		Button:SetParent(ActionBar2)
+		--Button:SetParent(ActionBar2)
 		
 		if (i == 1) then
-			Button:SetScaledPoint("TOPLEFT", ActionBar2, SPACING, -SPACING)
+			Button:SetScaledPoint("LEFT", ActionBar2, 0, 0)
 		else
 			Button:SetScaledPoint("LEFT", _G["MultiBarBottomLeftButton"..i-1], "RIGHT", SPACING, 0)
 		end
 	end
-	
-	MultiBarBottomLeft:SetParent(Hider)
 end
 
 local CreateBarPanels = function()
-	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent, "SecureHandlerStateTemplate")
+	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
 	BottomPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
 	BottomPanel:SetScaledPoint("BOTTOM", UIParent, 0, 12)
 	BottomPanel:SetBackdrop(vUI.BackdropAndBorder)
@@ -331,7 +341,7 @@ local CreateBarPanels = function()
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
 	BottomPanel:SetFrameStrata("LOW")
 	
-	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent, "SecureHandlerStateTemplate")
+	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent)
 	SidePanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
 	SidePanel:SetScaledPoint("RIGHT", UIParent, -12, 0)
 	SidePanel:SetBackdrop(vUI.BackdropAndBorder)
