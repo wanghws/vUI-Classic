@@ -1083,7 +1083,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box:SetScaledPoint("TOPLEFT", EditBox, SPACING, -2)
 	EditBox.Box:SetScaledPoint("BOTTOMRIGHT", EditBox, -SPACING, 2)
 	EditBox.Box:SetJustifyH("CENTER")
-	EditBox.Box:SetMaxLetters(4)
+	EditBox.Box:SetMaxLetters(5)
 	EditBox.Box:SetAutoFocus(false)
 	EditBox.Box:EnableKeyboard(true)
 	EditBox.Box:EnableMouse(true)

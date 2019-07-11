@@ -382,6 +382,8 @@ local Languages = {
 }
 
 local UpdateUIScale = function(value)
+	value = value / 100
+	
 	SetCVar("uiScale", value)
 end
 
@@ -426,8 +428,7 @@ GUI:AddOptions(function(self)
 	LanguageGroup:CreateButton("Contribute", Language["Help Localize"], "Contribute", function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
 	local Scale = GeneralOptions:CreateGroup(Language["Scale"], "Right")
-	
-	Scale:CreateSlider("ui-scale", Settings["ui-scale"], 0.64, 1, 0.01, "Set UI Scale", "", UpdateUIScale)
+	Scale:CreateSlider("ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]
