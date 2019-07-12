@@ -1103,16 +1103,13 @@ end
 local EditBoxOnEnterPressed = function(self)
 	self.Value = tonumber(self:GetText())
 	
-	if (self.Value ~= self.Value) then
-		self.Slider:SetValue(self.Value)
-		SliderOnValueChanged(self.Slider)
-	else
+	self:SetAutoFocus(false)
+	self:ClearFocus()
+	
+	if (type(Value) == "number") then
 		self.Slider:SetValue(self.Value)
 		SliderOnValueChanged(self.Slider)
 	end
-	
-	self:SetAutoFocus(false)
-	self:ClearFocus()
 end
 
 local EditBoxOnMouseDown = function(self)
@@ -1128,6 +1125,12 @@ local EditBoxOnEditFocusLost = function(self)
 	end
 	
 	self:SetText(self.Prefix..self.Value..self.Postfix)
+end
+
+local EditBoxOnChar = function(self)
+	if (type(tonumber(self:GetText())) ~= "number") then
+		self:SetText(self.Value)
+	end
 end
 
 local EditBoxOnMouseWheel = function(self, delta)
@@ -1237,6 +1240,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box:SetScript("OnEscapePressed", EditBoxOnEnterPressed)
 	EditBox.Box:SetScript("OnEnterPressed", EditBoxOnEnterPressed)
 	EditBox.Box:SetScript("OnEditFocusLost", EditBoxOnEditFocusLost)
+	EditBox.Box:SetScript("OnChar", EditBoxOnChar)
 	EditBox.Box:SetScript("OnEnter", EditBoxOnEnter)
 	EditBox.Box:SetScript("OnLeave", EditboxOnLeave)
 	
