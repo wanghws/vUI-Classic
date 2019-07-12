@@ -316,16 +316,16 @@ Media:SetTemplate("Chaos", {
 	["ui-header-texture-color"] = "3C3C3C",
 	["ui-window-bg-color"] = "3C3C3C",
 	["ui-window-main-color"] = "2C2C2C",
-	["ui-widget-color"] = "8787ED",
+	["ui-widget-color"] = "A2D471",
 	["ui-widget-bright-color"] = "757575",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FAFAFA",
-	["ui-button-font-color"] = "8787ED",
+	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
 })
 
--- Unnamed
-Media:SetTemplate("Unnamed", {
+-- Malice
+Media:SetTemplate("Malice", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Expressway",
 	["ui-button-font"] = "Expressway",
@@ -334,14 +334,14 @@ Media:SetTemplate("Unnamed", {
 	["ui-widget-texture"] = "Ferous 27",
 	["ui-button-texture"] = "Ferous",
 	
-	["ui-header-font-color"] = "FAFAFA",
+	["ui-header-font-color"] = "F0F3F4",
 	["ui-header-texture-color"] = "414141",
 	["ui-window-bg-color"] = "414141",
 	["ui-window-main-color"] = "2B2B2B",
-	["ui-widget-color"] = "FF8A65",
+	["ui-widget-color"] = "CD6155",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "414141",
 	["ui-widget-font-color"] = "FAFAFA",
-	["ui-button-font-color"] = "FF8A65",
+	["ui-button-font-color"] = "CD6155",
 	["ui-button-texture-color"] = "414141",
 })
