@@ -543,6 +543,7 @@ end
 local DROPDOWN_WIDTH = 130
 local DROPDOWN_HEIGHT = 20
 local DROPDOWN_FADE_DELAY = 3 -- To be implemented
+local DROPDOWN_MAX_SHOWN = 8
 
 local SetArrowUp = function(button)
 	button.ArrowTop.Anim:SetChange(2)
@@ -660,6 +661,131 @@ local MenuItemOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
+local ScrollMenu = function(self)
+	local First = false
+	
+	for i = 1, #self do
+		if (i >= self.Offset) and (i <= self.Offset + DROPDOWN_MAX_SHOWN - 1) then
+			if (not First) then
+				self[i]:SetScaledPoint("TOPLEFT", self, 0, 0)
+				First = true
+			else
+				self[i]:SetScaledPoint("TOPLEFT", self[i-1], "BOTTOMLEFT", 0, 1)
+			end
+			
+			self[i]:Show()
+		else
+			self[i]:Hide()
+		end
+	end
+end
+
+local SetDropdownOffsetByDelta = function(self, delta)
+	if (delta == 1) then -- up
+		self.Offset = self.Offset - 1
+		
+		if (self.Offset <= 1) then
+			self.Offset = 1
+		end
+	else -- down
+		self.Offset = self.Offset + 1
+		
+		if (self.Offset > (#self - (DROPDOWN_MAX_SHOWN - 1))) then
+			self.Offset = self.Offset - 1
+		end
+	end
+end
+
+local DropdownOnMouseWheel = function(self, delta)
+	self:SetDropdownOffsetByDelta(delta)
+	self:ScrollMenu()
+	self.ScrollBar:SetValue(self.Offset)
+end
+
+local SetDropdownOffset = function(self, offset)
+	self.Offset = offset
+	
+	if (self.Offset <= 1) then
+		self.Offset = 1
+	elseif (self.Offset > (#self - DROPDOWN_MAX_SHOWN - 1)) then
+		self.Offset = self.Offset - 1
+	end
+	
+	self:ScrollMenu()
+end
+
+local DropdownScrollBarOnValueChanged = function(self)
+	local Value = Round(self:GetValue())
+	local Parent = self:GetParent()
+	Parent.Offset = Value
+	
+	Parent:ScrollMenu()
+end
+
+local DropdownScrollBarOnMouseWheel = function(self, delta)
+	DropdownOnMouseWheel(self:GetParent(), delta)
+end
+
+local AddDropdownScrollBar = function(self)
+	local MaxValue = (#self - (DROPDOWN_MAX_SHOWN - 1))
+	local ScrollWidth = (DROPDOWN_HEIGHT / 2)
+	
+	local ScrollBar = CreateFrame("Slider", nil, self)
+	ScrollBar:SetScaledPoint("TOPLEFT", self, "TOPRIGHT", 2, 0)
+	ScrollBar:SetScaledPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 2, 0)
+	ScrollBar:SetScaledWidth(ScrollWidth)
+	ScrollBar:SetThumbTexture(Media:GetTexture(Settings["Blank"]))
+	ScrollBar:SetOrientation("VERTICAL")
+	ScrollBar:SetValueStep(1)
+	ScrollBar:SetBackdrop(vUI.BackdropAndBorder)
+	ScrollBar:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	ScrollBar:SetBackdropBorderColor(0, 0, 0)
+	ScrollBar:SetMinMaxValues(1, MaxValue)
+	ScrollBar:SetValue(1)
+	ScrollBar:EnableMouseWheel(true)
+	ScrollBar:SetScript("OnMouseWheel", DropdownScrollBarOnMouseWheel)
+	ScrollBar:SetScript("OnValueChanged", DropdownScrollBarOnValueChanged)
+	
+	self.ScrollBar = ScrollBar
+	
+	local Thumb = ScrollBar:GetThumbTexture() 
+	Thumb:SetScaledSize(ScrollWidth, DROPDOWN_HEIGHT)
+	Thumb:SetTexture(Media:GetTexture("Blank"))
+	Thumb:SetVertexColor(0, 0, 0)
+	
+	ScrollBar.NewTexture = ScrollBar:CreateTexture(nil, "OVERLAY")
+	ScrollBar.NewTexture:SetScaledPoint("TOPLEFT", Thumb, 0, 0)
+	ScrollBar.NewTexture:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 0)
+	ScrollBar.NewTexture:SetTexture(Media:GetTexture("Blank"))
+	ScrollBar.NewTexture:SetVertexColor(0, 0, 0)
+	
+	ScrollBar.NewTexture2 = ScrollBar:CreateTexture(nil, "OVERLAY")
+	ScrollBar.NewTexture2:SetScaledPoint("TOPLEFT", ScrollBar.NewTexture, 1, -1)
+	ScrollBar.NewTexture2:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, -1, 1)
+	ScrollBar.NewTexture2:SetTexture(Media:GetTexture("Blank"))
+	ScrollBar.NewTexture2:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
+	
+	self:EnableMouseWheel(true)
+	self:SetScript("OnMouseWheel", DropdownOnMouseWheel)
+	
+	self.ScrollMenu = ScrollMenu
+	self.SetDropdownOffset = SetDropdownOffset
+	self.SetDropdownOffsetByDelta = SetDropdownOffsetByDelta
+	self.ScrollBar = ScrollBar
+	
+	self:SetDropdownOffset(1)
+	
+	ScrollBar:Show()
+	
+	for i = 1, #self do
+		self[i]:SetScaledWidth((DROPDOWN_WIDTH - ScrollWidth) - (SPACING * 3) + 1)
+	end
+	
+	self:SetScaledWidth((DROPDOWN_WIDTH - ScrollWidth) - (SPACING * 3) + 1)
+	
+	self:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * DROPDOWN_MAX_SHOWN) + 1)
+end
+
 GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -772,12 +898,12 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	ArrowBottom.Anim:SetDuration(0.15)
 	
 	Dropdown.Menu = CreateFrame("Frame", nil, Dropdown)
-	Dropdown.Menu:SetScaledPoint("TOP", Dropdown, "BOTTOM", 0, -2)
-	Dropdown.Menu:SetScaledSize(DROPDOWN_WIDTH - 6, 1)
+	Dropdown.Menu:SetScaledPoint("TOPLEFT", Dropdown, "BOTTOMLEFT", SPACING, -2)
+	Dropdown.Menu:SetScaledSize(DROPDOWN_WIDTH - (SPACING * 2), 1)
 	Dropdown.Menu:SetBackdrop(vUI.BackdropAndBorder)
 	Dropdown.Menu:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Dropdown.Menu:SetBackdropBorderColor(0, 0, 0)
-	Dropdown.Menu:SetFrameLevel(Dropdown.Menu:GetFrameLevel() + 1)
+	Dropdown.Menu:SetFrameStrata("HIGH")
 	Dropdown.Menu:Hide()
 	Dropdown.Menu:SetAlpha(0)
 	
@@ -803,8 +929,8 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	end)
 	
 	Dropdown.Menu.BG = CreateFrame("Frame", nil, Dropdown.Menu)
-	Dropdown.Menu.BG:SetScaledPoint("TOPLEFT", Dropdown.Menu, -3, 3)
-	Dropdown.Menu.BG:SetScaledPoint("BOTTOMRIGHT", Dropdown.Menu, 3, -3)
+	Dropdown.Menu.BG:SetScaledPoint("BOTTOMLEFT", Dropdown.Menu, -SPACING, -SPACING)
+	Dropdown.Menu.BG:SetScaledPoint("TOPRIGHT", Dropdown, "BOTTOMRIGHT", 0, 1)
 	Dropdown.Menu.BG:SetBackdrop(vUI.BackdropAndBorder)
 	Dropdown.Menu.BG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Dropdown.Menu.BG:SetBackdropBorderColor(0, 0, 0)
@@ -901,7 +1027,11 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		Dropdown.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	end
 	
-	Dropdown.Menu:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * Count) + 1)
+	if (#Dropdown.Menu > DROPDOWN_MAX_SHOWN) then
+		AddDropdownScrollBar(Dropdown.Menu)
+	else
+		Dropdown.Menu:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * Count) + 1)
+	end
 	
 	tinsert(self.Widgets, Anchor)
 	
