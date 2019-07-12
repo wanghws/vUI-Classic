@@ -388,47 +388,42 @@ local UpdateUIScale = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local ExperienceOptions = self:NewWindow(Language["Experience"])
+	local Window = self:NewWindow(Language["Experience"])
 	
-	local EnableGroup = ExperienceOptions:CreateGroup(Language["Enable"], "Left")
+	Window:CreateHeader("Left", Language["Enable"])
+	Window:CreateCheckbox("Left", "experience-enable", true, Language["Enable Experience"], "")
 	
-	EnableGroup:CreateCheckbox("experience-enable", true, Language["Enable Experience"], "")
+	Window:CreateHeader("Left", Language["Styling"])
+	Window:CreateCheckbox("Left", "experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
+	Window:CreateCheckbox("Left", "experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "", UpdateDisplayProgress)
+	Window:CreateCheckbox("Left", "experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "", UpdateDisplayPercent)
+	Window:CreateCheckbox("Left", "experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
 	
-	local StylingGroup = ExperienceOptions:CreateGroup(Language["Styling"], "Left")
+	Window:CreateHeader("Right", Language["Size"])
+	Window:CreateSlider("Right", "experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
+	Window:CreateSlider("Right", "experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
-	StylingGroup:CreateCheckbox("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
-	StylingGroup:CreateCheckbox("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "", UpdateDisplayProgress)
-	StylingGroup:CreateCheckbox("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "", UpdateDisplayPercent)
-	StylingGroup:CreateCheckbox("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
+	Window:CreateHeader("Right", Language["Positioning"])
+	Window:CreateDropdown("Right", "experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
 	
-	local SizeGroup = ExperienceOptions:CreateGroup(Language["Size"], "Right")
+	Window:CreateHeader("Right", Language["Visibility"])
 	
-	SizeGroup:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
-	SizeGroup:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
-	
-	local PositioningGroup = ExperienceOptions:CreateGroup(Language["Positioning"], "Right")
-	
-	PositioningGroup:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
-	
-	local VisibilityGroup = ExperienceOptions:CreateGroup(Language["Visibility"], "Right")
-	
-	VisibilityGroup:CreateDropdown("experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
-	VisibilityGroup:CreateDropdown("experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
+	Window:CreateDropdown("Right", "experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
+	Window:CreateDropdown("Right", "experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
 	
 	-- TEMPORARY -- Debug/Test
-	local GeneralOptions = self:NewWindow("General")
-	local WelcomeGroup = GeneralOptions:CreateGroup(Language["Welcome"], "Left")
+	local GeneralWindow = self:NewWindow(Language["General"])
 	
-	WelcomeGroup:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
-	WelcomeGroup:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
+	GeneralWindow:CreateHeader("Left", Language["Welcome"])
+	GeneralWindow:CreateCheckbox("Left", "ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
+	GeneralWindow:CreateCheckbox("Left", "ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
-	local LanguageGroup = GeneralOptions:CreateGroup("Language", "Right")
+	GeneralWindow:CreateHeader("Right", Language["Language"])
+	GeneralWindow:CreateDropdown("Right", "ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
+	GeneralWindow:CreateButton("Right", Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
-	LanguageGroup:CreateDropdown("ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
-	LanguageGroup:CreateButton("Contribute", Language["Help Localize"], "Contribute", function() vUI:print("put something here. print a link, or pop up a window or something.") end)
-	
-	local Scale = GeneralOptions:CreateGroup(Language["Scale"], "Right")
-	Scale:CreateSlider("ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
+	GeneralWindow:CreateHeader("Right", Language["Scale"])
+	GeneralWindow:CreateSlider("Right", "ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]

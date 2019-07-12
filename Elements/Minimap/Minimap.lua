@@ -163,13 +163,11 @@ Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Frame:SetScript("OnEvent", OnEvent)
 
 GUI:AddOptions(function(self)
-	local MinimapOptions = self:NewWindow(Language["Minimap"])
+	local Window = self:NewWindow(Language["Minimap"])
 	
-	local EnableMinimap = MinimapOptions:CreateGroup(Language["Enable"], "Left")
+	Window:CreateHeader("Left", Language["Enable"])
+	Window:CreateCheckbox("Left", "minimap-enable", Settings["minimap-enable"], Language["Enable Minimap"], "bloop.")
 	
-	EnableMinimap:CreateCheckbox("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap"], "bloop.")
-	
-	local MinimapSize = MinimapOptions:CreateGroup(Language["Size"], "Right")
-	
-	MinimapSize:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "doesn't matter", UpdateMinimapSize)
+	Window:CreateHeader("Right", Language["Size"])
+	Window:CreateSlider("Right", "minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "doesn't matter", UpdateMinimapSize)
 end)

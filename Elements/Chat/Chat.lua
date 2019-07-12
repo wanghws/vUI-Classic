@@ -959,22 +959,17 @@ local UpdateOpacity = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local ChatOptions = self:NewWindow(Language["Chat"])
+	local Window = self:NewWindow(Language["Chat"])
 	
-	local EnableGroup = ChatOptions:CreateGroup(Language["Enable"], "Left")
+	Window:CreateHeader("Left", Language["Enable"])
+	Window:CreateCheckbox("Left", "chat-enable", Settings["chat-enable"], Language["Enable Chat"], "")
 	
-	EnableGroup:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat"], "")
+	Window:CreateHeader("Left", Language["Opacity"])
+	Window:CreateSlider("Left", "chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
 	
-	local Opacity = ChatOptions:CreateGroup(Language["Opacity"], "Left")
-	
-	Opacity:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
-	
-	-- Add options to hyperlink things
-	
-	local LinksGroup = ChatOptions:CreateGroup(Language["Links"], "Right")
-	
-	LinksGroup:CreateCheckbox("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
-	LinksGroup:CreateCheckbox("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")
-	LinksGroup:CreateCheckbox("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
-	LinksGroup:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
+	Window:CreateHeader("Right", Language["Links"])
+	Window:CreateCheckbox("Right","chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
+	Window:CreateCheckbox("Right","chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")
+	Window:CreateCheckbox("Right","chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
+	Window:CreateCheckbox("Right","chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
 end)

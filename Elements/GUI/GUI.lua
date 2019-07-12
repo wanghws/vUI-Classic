@@ -27,9 +27,6 @@ GUI.Widgets = {}
 	Debug window of the GUI. With info like ui scale, resolution, windowed, language, etc etc
 	
 	To do:
-	
-	Shorten Dropdowns, sliders, and buttons, and set both sides of the page to the same width
-	
 	Adjust sizes & spacing, and add Scrolling by rows
 	
 	widgets:
@@ -66,9 +63,11 @@ local GROUP_WIDTH = 270
 local GROUP_WIDGETHEIGHT = GROUP_HEIGHT - HEADER_HEIGHT + 1
 
 local MENU_BUTTON_WIDTH = BUTTON_LIST_WIDTH - (SPACING * 2)
-local MENU_BUTTON_HEIGHT = HEADER_HEIGHT
+local MENU_BUTTON_HEIGHT = 20
 
 local MAX_BUTTONS_SHOWN = 16
+
+local WIDGET_HEIGHT = 20
 
 local LABEL_SPACING = 3
 
@@ -149,6 +148,45 @@ end
 
 -- Widgets
 
+-- Header
+local HEADER_WIDGET_HEIGHT = 20
+
+GUI.Widgets.CreateHeader = function(self, side, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, HEADER_WIDGET_HEIGHT)
+	Anchor.WidgetHeight = BUTTON_HEIGHT
+	
+	-- Header
+	local Header = CreateFrame("Frame", nil, Anchor)
+	Header:SetScaledSize(GROUP_WIDTH, HEADER_WIDGET_HEIGHT)
+	Header:SetScaledPoint("LEFT", Anchor, 0, 0)
+	Header:SetBackdrop(vUI.BackdropAndBorder)
+	Header:SetBackdropColor(0.3, 0.3, 0.3)
+	Header:SetBackdropBorderColor(0, 0, 0)
+	
+	Header.NewTexture = Header:CreateTexture(nil, "OVERLAY")
+	Header.NewTexture:SetScaledPoint("TOPLEFT", Header, 1, -1)
+	Header.NewTexture:SetScaledPoint("BOTTOMRIGHT", Header, -1, 1)
+	Header.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Header.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	Header.Text = Header:CreateFontString(nil, "OVERLAY")
+	Header.Text:SetScaledPoint("LEFT", Header, HEADER_SPACING, 0)
+	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Header.Text:SetJustifyH("LEFT")
+	Header.Text:SetShadowColor(0, 0, 0)
+	Header.Text:SetShadowOffset(1, -1)
+	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
+	
+	return Header
+end
+
 -- Button
 local BUTTON_HEIGHT = 20
 local BUTTON_WIDTH = 130
@@ -169,7 +207,7 @@ end
 
 local ButtonWidgetOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
-	self.MiddleText:SetTextColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	self.MiddleText:SetTextColor(HexToRGB(Settings["ui-widget-color"]))
 end
 
 local ButtonWidgetOnLeave = function(self)
@@ -177,14 +215,14 @@ local ButtonWidgetOnLeave = function(self)
 	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
-GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
+GUI.Widgets.CreateButton = function(self, side, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), BUTTON_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, BUTTON_HEIGHT)
 	Anchor.WidgetHeight = BUTTON_HEIGHT
 	
-	local Button = CreateFrame("Frame", nil, self)
+	local Button = CreateFrame("Frame", nil, Anchor)
 	Button:SetScaledSize(BUTTON_WIDTH, BUTTON_HEIGHT)
-	Button:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Button:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Button:SetBackdrop(vUI.BackdropAndBorder)
 	Button:SetBackdropColor(0.17, 0.17, 0.17)
 	Button:SetBackdropBorderColor(0, 0, 0)
@@ -217,14 +255,18 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button.MiddleText:SetText(value)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
-	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Button.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetShadowColor(0, 0, 0)
 	Button.Text:SetShadowOffset(1, -1)
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Button
 end
@@ -233,21 +275,19 @@ end
 local STATUSBAR_HEIGHT = 20
 local STATUSBAR_WIDTH = 100
 
-GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
+GUI.Widgets.CreateStatusBar = function(self, side, value, minvalue, maxvalue, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), STATUSBAR_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, STATUSBAR_HEIGHT)
 	Anchor.WidgetHeight = STATUSBAR_HEIGHT
 	
 	local Backdrop = CreateFrame("Frame", nil, Anchor)
 	Backdrop:SetScaledSize(STATUSBAR_WIDTH, STATUSBAR_HEIGHT)
-	Backdrop:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Backdrop:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	Backdrop:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Backdrop:SetBackdropBorderColor(0, 0, 0)
 	Backdrop.Value = value
-	Backdrop.Hook = hook
-	Backdrop.Tooltip = tooltip
-	Backdrop.ID = id
+	--Backdrop.Hook = hook
 	
 	Backdrop.BG = Backdrop:CreateTexture(nil, "ARTWORK")
 	Backdrop.BG:SetScaledPoint("TOPLEFT", Backdrop, 1, -1)
@@ -263,7 +303,7 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	Bar:SetBackdropColor(0, 0, 0, 0)
 	Bar:SetBackdropBorderColor(0, 0, 0, 0)
 	Bar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	Bar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	Bar:SetStatusBarColor(HexToRGB(Settings["ui-widget-color"]))
 	Bar:SetMinMaxValues(minvalue, maxvalue)
 	Bar:SetValue(value)
 	Bar.Hook = hook
@@ -288,14 +328,18 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	Bar.MiddleText:SetText(value)
 	
 	Bar.Text = Bar:CreateFontString(nil, "OVERLAY")
-	Bar.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Bar.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Bar.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Bar.Text:SetJustifyH("LEFT")
 	Bar.Text:SetShadowColor(0, 0, 0)
 	Bar.Text:SetShadowOffset(1, -1)
 	Bar.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Bar
 end
@@ -327,18 +371,18 @@ local CheckboxOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateCheckbox = function(self, side, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), CHECKBOX_SIZE)
+	Anchor:SetScaledSize(GROUP_WIDTH, CHECKBOX_SIZE)
 	Anchor.WidgetHeight = CHECKBOX_SIZE
 	
 	local Checkbox = CreateFrame("Frame", nil, Anchor)
 	Checkbox:SetScaledSize(CHECKBOX_SIZE, CHECKBOX_SIZE)
-	Checkbox:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Checkbox:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Checkbox:SetBackdrop(vUI.BackdropAndBorder)
 	Checkbox:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Checkbox:SetBackdropBorderColor(0, 0, 0)
@@ -370,7 +414,7 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Checkbox.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
 	Checkbox.Text = Anchor:CreateFontString(nil, "OVERLAY")
-	Checkbox.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Checkbox.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Checkbox.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Checkbox.Text:SetJustifyH("LEFT")
 	Checkbox.Text:SetShadowColor(0, 0, 0)
@@ -402,7 +446,11 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 		Checkbox.Texture:SetAlpha(0)
 	end
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Checkbox
 end
@@ -460,18 +508,18 @@ local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateSwitch = function(self, side, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), SWITCH_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, SWITCH_HEIGHT)
 	Anchor.WidgetHeight = SWITCH_HEIGHT
 	
 	local Switch = CreateFrame("Frame", nil, Anchor)
 	Switch:SetScaledSize(SWITCH_WIDTH, SWITCH_HEIGHT)
-	Switch:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Switch:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Switch:SetBackdrop(vUI.BackdropAndBorder)
 	Switch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Switch:SetBackdropBorderColor(0, 0, 0)
@@ -510,7 +558,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Flavor:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
 	Switch.Text = Anchor:CreateFontString(nil, "OVERLAY")
-	Switch.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Switch.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Switch.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Switch.Text:SetJustifyH("LEFT")
 	Switch.Text:SetShadowColor(0, 0, 0)
@@ -534,7 +582,11 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 		Switch.Thumb:SetScaledPoint("LEFT", Switch, 0, 0)
 	end
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Switch
 end
@@ -734,11 +786,11 @@ local AddDropdownScrollBar = function(self)
 	ScrollBar:SetScaledPoint("TOPLEFT", self, "TOPRIGHT", 2, 0)
 	ScrollBar:SetScaledPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 2, 0)
 	ScrollBar:SetScaledWidth(ScrollWidth)
-	ScrollBar:SetThumbTexture(Media:GetTexture(Settings["Blank"]))
+	ScrollBar:SetThumbTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	ScrollBar:SetOrientation("VERTICAL")
 	ScrollBar:SetValueStep(1)
 	ScrollBar:SetBackdrop(vUI.BackdropAndBorder)
-	ScrollBar:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	ScrollBar:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	ScrollBar:SetBackdropBorderColor(0, 0, 0)
 	ScrollBar:SetMinMaxValues(1, MaxValue)
 	ScrollBar:SetValue(1)
@@ -750,10 +802,10 @@ local AddDropdownScrollBar = function(self)
 	
 	local Thumb = ScrollBar:GetThumbTexture() 
 	Thumb:SetScaledSize(ScrollWidth, DROPDOWN_HEIGHT)
-	Thumb:SetTexture(Media:GetTexture("Blank"))
+	Thumb:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Thumb:SetVertexColor(0, 0, 0)
 	
-	ScrollBar.NewTexture = ScrollBar:CreateTexture(nil, "OVERLAY")
+	ScrollBar.NewTexture = ScrollBar:CreateTexture(nil, "BORDER")
 	ScrollBar.NewTexture:SetScaledPoint("TOPLEFT", Thumb, 0, 0)
 	ScrollBar.NewTexture:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 0)
 	ScrollBar.NewTexture:SetTexture(Media:GetTexture("Blank"))
@@ -762,8 +814,14 @@ local AddDropdownScrollBar = function(self)
 	ScrollBar.NewTexture2 = ScrollBar:CreateTexture(nil, "OVERLAY")
 	ScrollBar.NewTexture2:SetScaledPoint("TOPLEFT", ScrollBar.NewTexture, 1, -1)
 	ScrollBar.NewTexture2:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, -1, 1)
-	ScrollBar.NewTexture2:SetTexture(Media:GetTexture("Blank"))
-	ScrollBar.NewTexture2:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
+	ScrollBar.NewTexture2:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	
+	ScrollBar.Progress = ScrollBar:CreateTexture(nil, "ARTWORK")
+	ScrollBar.Progress:SetScaledPoint("TOPLEFT", ScrollBar, 1, -1)
+	ScrollBar.Progress:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, "TOPRIGHT", -1, 0)
+	ScrollBar.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
 	
 	self:EnableMouseWheel(true)
 	self:SetScript("OnMouseWheel", DropdownOnMouseWheel)
@@ -786,18 +844,18 @@ local AddDropdownScrollBar = function(self)
 	self:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * DROPDOWN_MAX_SHOWN) + 1)
 end
 
-GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
+GUI.Widgets.CreateDropdown = function(self, side, id, value, values, label, tooltip, hook, custom)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, DROPDOWN_HEIGHT)
 	Anchor.WidgetHeight = DROPDOWN_HEIGHT
 	
-	local Dropdown = CreateFrame("Frame", nil, self)
+	local Dropdown = CreateFrame("Frame", nil, Anchor)
 	Dropdown:SetScaledSize(DROPDOWN_WIDTH, DROPDOWN_HEIGHT)
-	Dropdown:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Dropdown:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Dropdown:SetBackdrop(vUI.BackdropAndBorder)
 	Dropdown:SetBackdropColor(0.6, 0.6, 0.6)
 	Dropdown:SetBackdropBorderColor(0, 0, 0)
@@ -841,7 +899,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Button.Highlight:SetAlpha(0)
 	
 	Dropdown.Text = Dropdown:CreateFontString(nil, "OVERLAY")
-	Dropdown.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Dropdown.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Dropdown.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Dropdown.Text:SetJustifyH("LEFT")
 	Dropdown.Text:SetScaledWidth(DROPDOWN_WIDTH - 4)
@@ -904,6 +962,8 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Menu:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Dropdown.Menu:SetBackdropBorderColor(0, 0, 0)
 	Dropdown.Menu:SetFrameStrata("HIGH")
+	Dropdown.Menu:EnableMouse(true)
+	Dropdown.Menu:EnableMouseWheel(true)
 	Dropdown.Menu:Hide()
 	Dropdown.Menu:SetAlpha(0)
 	
@@ -1033,7 +1093,11 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		Dropdown.Menu:SetScaledHeight(((DROPDOWN_HEIGHT - 1) * Count) + 1)
 	end
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Dropdown
 end
@@ -1179,13 +1243,13 @@ local SliderOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
+GUI.Widgets.CreateSlider = function(self, side, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), DROPDOWN_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, DROPDOWN_HEIGHT)
 	Anchor.WidgetHeight = SLIDER_HEIGHT
 	
 	if prefix then
@@ -1200,9 +1264,9 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 		postfix = ""
 	end
 	
-	local EditBox = CreateFrame("Frame", nil, self)
+	local EditBox = CreateFrame("Frame", nil, Anchor)
 	EditBox:SetScaledSize(EDITBOX_WIDTH, EDITBOX_HEIGHT)
-	EditBox:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	EditBox:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	EditBox:SetBackdrop(vUI.BackdropAndBorder)
 	EditBox:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	EditBox:SetBackdropBorderColor(0, 0, 0)
@@ -1274,7 +1338,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.ID = id
 	
 	Slider.Text = Slider:CreateFontString(nil, "OVERLAY")
-	Slider.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Slider.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Slider.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Slider.Text:SetJustifyH("LEFT")
 	Slider.Text:SetShadowColor(0, 0, 0)
@@ -1322,7 +1386,11 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	
 	Slider:Show()
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Slider
 end
@@ -1825,18 +1893,18 @@ local ColorSelectionOnMouseUp = function(self)
 	end
 end
 
-GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hook)
+GUI.Widgets.CreateColorSelection = function(self, side, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, self)
-	Anchor:SetScaledSize(GROUP_WIDTH - (SPACING * 2), COLOR_HEIGHT)
+	Anchor:SetScaledSize(GROUP_WIDTH, COLOR_HEIGHT)
 	Anchor.WidgetHeight = COLOR_HEIGHT
 	
 	local Swatch = CreateFrame("Frame", nil, Anchor)
 	Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)
-	Swatch:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Swatch:SetScaledPoint("RIGHT", Anchor, -SPACING, 0)
 	Swatch:SetBackdrop(vUI.BackdropAndBorder)
 	Swatch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Swatch:SetBackdropBorderColor(0, 0, 0)
@@ -1847,7 +1915,7 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Swatch.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Swatch.Texture:SetVertexColor(HexToRGB(value))
 	
-	local Button = CreateFrame("Frame", nil, self)
+	local Button = CreateFrame("Frame", nil, Anchor)
 	Button:SetScaledSize(COLOR_WIDTH, COLOR_HEIGHT)
 	Button:SetScaledPoint("RIGHT", Swatch, "LEFT", -2, 0)
 	Button:SetBackdrop(vUI.BackdropAndBorder)
@@ -1889,14 +1957,18 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Button.MiddleText:SetText("#"..upper(value))
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
-	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Button.Text:SetScaledPoint("LEFT", Anchor, (LABEL_SPACING + 2), 0)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetShadowColor(0, 0, 0)
 	Button.Text:SetShadowOffset(1, -1)
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	tinsert(self.Widgets, Anchor)
+	if (lower(side) == "left") then
+		tinsert(self.LeftWidgets, Anchor)
+	else
+		tinsert(self.RightWidgets, Anchor)
+	end
 	
 	return Button
 end
@@ -1908,53 +1980,6 @@ end
 
 local ButtonOnLeave = function(self)
 	self.Text:SetTextColor(1, 1, 1)
-end
-
-local SortGroupWindows = function(self)
-	local NumLeftGroups = #self.LeftGroups
-	
-	if NumLeftGroups then
-		for i = 1, NumLeftGroups do
-			self.LeftGroups[i]:ClearAllPoints()
-			
-			if (i == 1) then
-				self.LeftGroups[i]:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
-			else
-				self.LeftGroups[i]:SetScaledPoint("TOP", self.LeftGroups[i-1], "BOTTOM", 0, -2)
-			end
-		end
-	end
-	
-	local NumRightGroups = #self.RightGroups
-	
-	if NumRightGroups then
-		for i = 1, NumRightGroups do
-			self.RightGroups[i]:ClearAllPoints()
-			
-			if (i == 1) then
-				self.RightGroups[i]:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
-			else
-				self.RightGroups[i]:SetScaledPoint("TOP", self.RightGroups[i-1], "BOTTOM", 0, -2)
-			end
-		end
-	end
-end
-
-local SortGroupWidgets = function(self)
-	local Height = SPACING
-	
-	for i = 1, #self.Widgets do
-		if (i == 1) then
-			self.Widgets[i]:SetScaledPoint("TOPLEFT", self.WidgetParent, SPACING, -2)
-		else
-			self.Widgets[i]:SetScaledPoint("TOPLEFT", self.Widgets[i-1], "BOTTOMLEFT", 0, -2)
-		end
-		
-		Height = Height + self.Widgets[i].WidgetHeight + 2
-	end
-	
-	self:SetScaledHeight(HEADER_HEIGHT + Height)
-	self.WidgetParent:SetScaledHeight(Height)
 end
 
 GUI.SortButtons = function(self)
@@ -1973,73 +1998,206 @@ GUI.SortButtons = function(self)
 	end
 end
 
-local CreateGroup = function(self, name, side)
-	local Key
+local Scroll = function(self)
+	local LeftFirst = false
+	local RightFirst = false
 	
-	if (lower(side) == "left") then
-		Key = "LeftGroups"
-	else
-		Key = "RightGroups"
+	for i = 1, #self.LeftWidgets do
+		self.LeftWidgets[i]:ClearAllPoints()
+		if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
+		--if (i >= self.Offset) and (i <= self.Offset + MAX_BUTTONS_SHOWN - 1) then
+			if (not LeftFirst) then
+				self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
+				LeftFirst = true
+			else
+				self.LeftWidgets[i]:SetScaledPoint("TOP", self.LeftWidgets[i-1], "BOTTOM", 0, -2)
+			end
+			
+			self.LeftWidgets[i]:Show()
+		else
+			self.LeftWidgets[i]:Hide()
+		end
+	end
+	--[[
+	for i = 1, #self.RightWidgets do
+		if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
+			if (not RightFirst) then
+				self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
+				RightFirst = true
+			else
+				self.RightWidgets[i]:SetScaledPoint("TOP", self.RightWidgets[i-1], "BOTTOM", 0, -2)
+			end
+			
+			self.RightWidgets[i]:Show()
+		else
+			self.RightWidgets[i]:Hide()
+		end
+	end]]
+end
+
+local SetOffsetByDelta = function(self, delta)
+	if (delta == 1) then -- up
+		self.Offset = self.Offset - 1
+		
+		if (self.Offset <= 1) then
+			self.Offset = 1
+		end
+	else -- down
+		self.Offset = self.Offset + 1
+		
+		if (self.Offset > (self.WidgetCount - (self:GetParent().WindowCount - 1))) then
+		--if (self.Offset > (self.WidgetCount - MAX_BUTTONS_SHOWN - 1)) then
+			self.Offset = self.Offset - 1
+		end
+	end
+end
+
+local WindowOnMouseWheel = function(self, delta)
+	self:SetOffsetByDelta(delta)
+	self:Scroll()
+	self.ScrollBar:SetValue(self.Offset)
+end
+
+local SetOffset = function(self, offset)
+	self.Offset = offset
+	
+	if (self.Offset <= 1) then
+		self.Offset = 1
+	elseif (self.Offset > (self.WidgetCount - self:GetParent().WindowCount - 1)) then
+	--elseif (self.Offset > (self.WidgetCount - MAX_BUTTONS_SHOWN - 1)) then
+		self.Offset = self.Offset - 1
 	end
 	
-	-- Frame
-	local Group = CreateFrame("Frame", nil, self)
-	Group:SetScaledSize(GROUP_WIDTH, GROUP_HEIGHT)
-	Group:SetScaledPoint("CENTER", self, 0, 0)
-	Group:SetBackdrop(vUI.BackdropAndBorder)
-	Group:SetBackdropColor(0.4, 0.4, 0.4)
-	Group:SetBackdropBorderColor(0, 0, 0)
+	self:Scroll()
+end
+
+local WindowScrollBarOnValueChanged = function(self)
+	local Value = Round(self:GetValue())
+	local Parent = self:GetParent()
+	Parent.Offset = Value
 	
-	-- Header
-	Group.Header = CreateFrame("Frame", nil, Group)
-	Group.Header:SetScaledSize(GROUP_WIDTH, HEADER_HEIGHT)
-	Group.Header:SetScaledPoint("TOPLEFT", Group, 0, 0)
-	Group.Header:SetBackdrop(vUI.BackdropAndBorder)
-	Group.Header:SetBackdropColor(0.3, 0.3, 0.3)
-	Group.Header:SetBackdropBorderColor(0, 0, 0)
+	Parent:Scroll()
+end
+
+local WindowScrollBarOnMouseWheel = function(self, delta)
+	WindowOnMouseWheel(self:GetParent(), delta)
+end
+
+local AddScrollBar = function(self)
+	local LeftMaxValue = (#self.LeftWidgets - (self:GetParent().WindowCount - 1))
+	local RightMaxValue = (#self.LeftWidgets - (self:GetParent().WindowCount - 1))
 	
-	Group.NewTexture = Group.Header:CreateTexture(nil, "OVERLAY")
-	Group.NewTexture:SetScaledPoint("TOPLEFT", Group.Header, 1, -1)
-	Group.NewTexture:SetScaledPoint("BOTTOMRIGHT", Group.Header, -1, 1)
-	Group.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	Group.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	local Max = max(LeftMaxValue, RightMaxValue)
 	
-	Group.Header.Text = Group.Header:CreateFontString(nil, "OVERLAY")
-	Group.Header.Text:SetScaledPoint("LEFT", Group.Header, HEADER_SPACING, 0)
-	Group.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
-	Group.Header.Text:SetJustifyH("LEFT")
-	Group.Header.Text:SetShadowColor(0, 0, 0)
-	Group.Header.Text:SetShadowOffset(1, -1)
-	Group.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..name.."|r")
+	self.WidgetCount = max(#self.LeftWidgets, #self.LeftWidgets)
+	self.MaxScroll = Max
 	
-	-- Widget parent
-	Group.WidgetParent = CreateFrame("Frame", nil, Group)
-	Group.WidgetParent:SetScaledSize(GROUP_WIDTH, GROUP_WIDGETHEIGHT)
-	Group.WidgetParent:SetScaledPoint("TOP", Group.Header, "BOTTOM", 0, 0)
-	Group.WidgetParent:SetBackdrop(vUI.BackdropAndBorder)
-	Group.WidgetParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	Group.WidgetParent:SetBackdropBorderColor(0, 0, 0, 0)
+	local ScrollBar = CreateFrame("Slider", nil, self)
+	ScrollBar:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
+	ScrollBar:SetScaledPoint("BOTTOMRIGHT", self, -SPACING, SPACING)
+	ScrollBar:SetScaledWidth(WIDGET_HEIGHT)
+	ScrollBar:SetThumbTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar:SetOrientation("VERTICAL")
+	ScrollBar:SetValueStep(1)
+	ScrollBar:SetBackdrop(vUI.BackdropAndBorder)
+	ScrollBar:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	ScrollBar:SetBackdropBorderColor(0, 0, 0)
+	ScrollBar:SetMinMaxValues(1, Max)
+	ScrollBar:SetValue(1)
+	ScrollBar:EnableMouseWheel(true)
+	ScrollBar:SetScript("OnMouseWheel", WindowScrollBarOnMouseWheel)
+	ScrollBar:SetScript("OnValueChanged", WindowScrollBarOnValueChanged)
 	
-	Group.Outline = CreateFrame("Frame", nil, Group)
-	Group.Outline:SetScaledPoint("TOPLEFT", Group.Header, 0, 0)
-	Group.Outline:SetScaledPoint("BOTTOMRIGHT", Group.WidgetParent, 0, 0)
-	Group.Outline:SetBackdrop(vUI.Outline)
-	Group.Outline:SetBackdropBorderColor(0, 0, 0)
+	ScrollBar.Window = self
 	
-	tinsert(self[Key], Group)
+	local Thumb = ScrollBar:GetThumbTexture() 
+	Thumb:SetScaledSize(WIDGET_HEIGHT, WIDGET_HEIGHT)
+	Thumb:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Thumb:SetVertexColor(0, 0, 0)
 	
-	for Name, Function in pairs(GUI.Widgets) do
-		Group[Name] = Function
+	ScrollBar.NewTexture = ScrollBar:CreateTexture(nil, "BORDER")
+	ScrollBar.NewTexture:SetScaledPoint("TOPLEFT", Thumb, 0, 0)
+	ScrollBar.NewTexture:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 0)
+	ScrollBar.NewTexture:SetTexture(Media:GetTexture("Blank"))
+	ScrollBar.NewTexture:SetVertexColor(0, 0, 0)
+	
+	ScrollBar.NewTexture2 = ScrollBar:CreateTexture(nil, "OVERLAY")
+	ScrollBar.NewTexture2:SetScaledPoint("TOPLEFT", ScrollBar.NewTexture, 1, -1)
+	ScrollBar.NewTexture2:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, -1, 1)
+	ScrollBar.NewTexture2:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	
+	ScrollBar.Progress = ScrollBar:CreateTexture(nil, "ARTWORK")
+	ScrollBar.Progress:SetScaledPoint("TOPLEFT", ScrollBar, 1, -1)
+	ScrollBar.Progress:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, "TOPRIGHT", -1, 0)
+	ScrollBar.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
+	
+	self:EnableMouseWheel(true)
+	self:SetScript("OnMouseWheel", WindowOnMouseWheel)
+	
+	self.Scroll = Scroll
+	self.SetOffset = SetOffset
+	self.SetOffsetByDelta = SetOffsetByDelta
+	self.ScrollBar = ScrollBar
+	
+	self:SetOffset(1)
+	
+	ScrollBar:Show()
+	
+	local LeftHeight = min((1 + (#self.LeftWidgets * (WIDGET_HEIGHT + 2))), (1 + (self:GetParent().WindowCount * (WIDGET_HEIGHT + 2))))
+	local RightHeight = min((1 + (#self.RightWidgets * (WIDGET_HEIGHT + 2))), (1 + (self:GetParent().WindowCount * (WIDGET_HEIGHT + 2))))
+	
+	self.LeftWidgetsBG:SetScaledHeight(LeftHeight)
+	self.RightWidgetsBG:SetScaledHeight(RightHeight)
+	
+	--[[for i = 1, #self.Widgets do
+		if self.Widgets[i].IsSection then
+			self.Widgets[i]:SetScaledWidth((WidgetListWidth - WidgetHeight) - (SPACING * 3))
+		end
+	end]]
+end
+
+local SortWindow = function(self)
+	local NumLeftWidgets = #self.LeftWidgets
+	local NumRightWidgets = #self.RightWidgets
+	local LeftHeight = 1
+	local RightHeight = 1
+	
+	if NumLeftWidgets then
+		for i = 1, NumLeftWidgets do
+			self.LeftWidgets[i]:ClearAllPoints()
+			
+			LeftHeight = LeftHeight + (WIDGET_HEIGHT + 2) -- Widget height + 2 is the spacing between each
+			
+			if (i == 1) then
+				self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
+			else
+				self.LeftWidgets[i]:SetScaledPoint("TOP", self.LeftWidgets[i-1], "BOTTOM", 0, -2)
+			end
+		end
 	end
 	
-	Group.SortGroupWidgets = SortGroupWidgets
+	if NumRightWidgets then
+		for i = 1, NumRightWidgets do
+			self.RightWidgets[i]:ClearAllPoints()
+			
+			RightHeight = RightHeight + (WIDGET_HEIGHT + 2)
+			
+			if (i == 1) then
+				self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
+			else
+				self.RightWidgets[i]:SetScaledPoint("TOP", self.RightWidgets[i-1], "BOTTOM", 0, -2)
+			end
+		end
+	end
 	
-	self:SortGroupWindows()
+	self.LeftWidgetsBG:SetScaledHeight(LeftHeight)
+	self.RightWidgetsBG:SetScaledHeight(RightHeight)
 	
-	-- Widgets
-	Group.Widgets = {}
-	
-	return Group
+	if (NumLeftWidgets > MAX_BUTTONS_SHOWN) or (NumRightWidgets > MAX_BUTTONS_SHOWN) then
+		AddScrollBar(self)
+	end
 end
 
 GUI.ShowWindow = function(self, name)
@@ -2055,17 +2213,7 @@ GUI.ShowWindow = function(self, name)
 	local Window = self.Windows[name]
 	
 	if (not Window.Sorted) then
-		if (#Window.LeftGroups > 0) then
-			for i = 1, #Window.LeftGroups do
-				Window.LeftGroups[i]:SortGroupWidgets()
-			end
-		end
-		
-		if (#Window.RightGroups > 0) then
-			for i = 1, #Window.RightGroups do
-				Window.RightGroups[i]:SortGroupWidgets()
-			end
-		end
+		Window:SortWindow()
 		
 		Window.Sorted = true
 	end
@@ -2094,6 +2242,12 @@ local WindowButtonOnMouseDown = function(self)
 end
 
 GUI.NewWindow = function(self, name, default)
+	if self.Windows[name] then
+		return self.Windows[name]
+	end
+	
+	self.WindowCount = self.WindowCount or 0
+	
 	-- Button
 	local Button = CreateFrame("Frame", nil, self)
 	Button:SetScaledSize(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
@@ -2130,7 +2284,7 @@ GUI.NewWindow = function(self, name, default)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("CENTER", Button, 0, -1)
-	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 16)
+	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 14)
 	Button.Text:SetJustifyH("CENTER")
 	Button.Text:SetShadowColor(0, 0, 0)
 	Button.Text:SetShadowOffset(1, -1)
@@ -2159,17 +2313,35 @@ GUI.NewWindow = function(self, name, default)
 	Window:SetBackdropBorderColor(0, 0, 0)
 	Window:Hide()
 	
+	Window.LeftWidgetsBG = CreateFrame("Frame", nil, Window)
+	Window.LeftWidgetsBG:SetScaledSize(GROUP_WIDTH, PARENT_HEIGHT)
+	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, SPACING, -SPACING)
+	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
+	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
+	Window.RightWidgetsBG:SetScaledSize(GROUP_WIDTH, PARENT_HEIGHT)
+	Window.RightWidgetsBG:SetScaledPoint("TOPRIGHT", Window, -SPACING, -SPACING)
+	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
+	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
+	
 	Window.Parent = self
 	Window.Button = Button
-	Window.LeftGroups = {}
-	Window.RightGroups = {}
+	Window.LeftWidgets = {}
+	Window.RightWidgets = {}
+	Window.SortWindow = SortWindow
 	
-	Window.CreateGroup = CreateGroup
-	Window.SortGroupWindows = SortGroupWindows
+	for Name, Function in pairs(self.Widgets) do
+		Window[Name] = Function
+	end
 	
 	self.Windows[name] = Window
 	
 	self:SortButtons()
+	
+	self.WindowCount = self.WindowCount + 1
 	
 	if default then
 		self.DefaultWindow = name
@@ -2233,7 +2405,7 @@ function GUI:Create()
 	self.Header.Text:SetJustifyH("CENTER")
 	self.Header.Text:SetShadowColor(0, 0, 0)
 	self.Header.Text:SetShadowOffset(1, -1)
-	self.Header.Text:SetTextColor(vUI:HexToRGB(Settings["ui-header-font-color"]))
+	self.Header.Text:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	self.Header.Text:SetText(format(Language["- vUI version %s -"], vUI.Version))
 	--self.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..format(Language["- |cff%svUI|r version %s -"], Settings["ui-widget-color"], vUI.Version).."|r")
 	
@@ -2385,42 +2557,36 @@ SlashCmdList["VUI"] = function()
 end
 
 GUI:AddOptions(function(self)
-	local TemplatesOptions = self:NewWindow(Language["Templates"], true)
+	local Window = self:NewWindow(Language["Templates"], true)
 	
-	local ConsoleGroup = TemplatesOptions:CreateGroup(Language["Console"], "Right")
+	Window:CreateHeader("Left", Language["Console"])
+	Window:CreateButton("Left", Language["Reload"], Language["Reload UI"], "", ReloadUI)
+	Window:CreateButton("Left", Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = {}; ReloadUI(); end)
+
+	Window:CreateHeader("Left", Language["Templates"])
+	Window:CreateDropdown("Left", "ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
 	
-	ConsoleGroup:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
-	ConsoleGroup:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = {}; ReloadUI(); end)
+	Window:CreateHeader("Right", Language["Buttons"])
+	Window:CreateColorSelection("Right", "ui-button-font-color", "81D4FA", Language["Text Color"], "")
+	Window:CreateColorSelection("Right", "ui-button-texture-color", "8E8E8E", Language["Texture Color"], "")
+	Window:CreateDropdown("Right", "ui-button-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Window:CreateDropdown("Right", "ui-button-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
-	local TemplateGroup = TemplatesOptions:CreateGroup(Language["Templates"], "Left")
+	Window:CreateHeader("Left", Language["Headers"])
+	Window:CreateColorSelection("Left", "ui-header-font-color", "81D4FA", Language["Text Color"], "")
+	Window:CreateColorSelection("Left", "ui-header-texture-color", "4D4D4D", Language["Texture Color"], "")
+	Window:CreateDropdown("Left", "ui-header-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Window:CreateDropdown("Left", "ui-header-font", "Roboto", Media:GetFontList(), Language["Header Font"], "", nil, "Font")
 	
-	TemplateGroup:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
+	Window:CreateHeader("Left", Language["Widgets"])
+	Window:CreateColorSelection("Left", "ui-widget-color", "F39C12", Language["Color"], "")
+	Window:CreateColorSelection("Left", "ui-widget-bright-color", "8E8E8E", Language["Bright Color"], "")
+	Window:CreateColorSelection("Left", "ui-widget-bg-color", "2B2B2B", Language["Background Color"], "")
+	Window:CreateColorSelection("Left", "ui-widget-font-color", "FFFFFF", Language["Label Color"], "")
+	Window:CreateDropdown("Left", "ui-widget-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Window:CreateDropdown("Left", "ui-widget-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
-	local ButtonsGroup = TemplatesOptions:CreateGroup(Language["Buttons"], "Right")
-	
-	ButtonsGroup:CreateColorSelection("ui-button-font-color", "81D4FA", Language["Text Color"], "")
-	ButtonsGroup:CreateColorSelection("ui-button-texture-color", "8E8E8E", Language["Texture Color"], "")
-	ButtonsGroup:CreateDropdown("ui-button-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	ButtonsGroup:CreateDropdown("ui-button-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
-	
-	local HeadersGroup = TemplatesOptions:CreateGroup(Language["Headers"], "Left")
-	
-	HeadersGroup:CreateColorSelection("ui-header-font-color", "81D4FA", Language["Text Color"], "")
-	HeadersGroup:CreateColorSelection("ui-header-texture-color", "4D4D4D", Language["Texture Color"], "")
-	HeadersGroup:CreateDropdown("ui-header-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	HeadersGroup:CreateDropdown("ui-header-font", "Roboto", Media:GetFontList(), Language["Header Font"], "", nil, "Font")
-	
-	local WidgetsGroup = TemplatesOptions:CreateGroup(Language["Widgets"], "Left")
-	
-	WidgetsGroup:CreateColorSelection("ui-widget-color", "F39C12", Language["Color"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-bright-color", "8E8E8E", Language["Bright Color"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-bg-color", "2B2B2B", Language["Background Color"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-font-color", "FFFFFF", Language["Label Color"], "")
-	WidgetsGroup:CreateDropdown("ui-widget-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	WidgetsGroup:CreateDropdown("ui-widget-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
-	
-	local WindowsGroup = TemplatesOptions:CreateGroup(Language["Windows"], "Left")
-	
-	WindowsGroup:CreateColorSelection("ui-window-bg-color", "404040", Language["Background Color"], "")
-	WindowsGroup:CreateColorSelection("ui-window-main-color", "424242", Language["Main Color"], "")
+	Window:CreateHeader("Left", Language["Windows"])
+	Window:CreateColorSelection("Left", "ui-window-bg-color", "404040", Language["Background Color"], "")
+	Window:CreateColorSelection("Left", "ui-window-main-color", "424242", Language["Main Color"], "")
 end)
