@@ -965,13 +965,13 @@ GUI:AddOptions(function(self)
 	
 	EnableGroup:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat"], "")
 	
-	local Opacity = ChatOptions:CreateGroup(Language["Opacity"], "Right")
+	local Opacity = ChatOptions:CreateGroup(Language["Opacity"], "Left")
 	
 	Opacity:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
 	
 	-- Add options to hyperlink things
 	
-	local LinksGroup = ChatOptions:CreateGroup(Language["Links"], "Left")
+	local LinksGroup = ChatOptions:CreateGroup(Language["Links"], "Right")
 	
 	LinksGroup:CreateCheckbox("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
 	LinksGroup:CreateCheckbox("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")

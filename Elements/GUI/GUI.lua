@@ -9,6 +9,7 @@ local tremove = table.remove
 local tsort = table.sort
 local match = string.match
 local upper = string.upper
+local lower = string.lower
 local sub = string.sub
 local floor = math.floor
 
@@ -1587,8 +1588,10 @@ local CreateSwatchWindow = function()
 		self:GetParent():Hide()
 	end)
 	
-	for i = 1, #Media.Colors do
-		for j = 1, #Media.Colors[i] do
+	local Palette = Media:GetPalette("Material")
+	
+	for i = 1, #Palette do
+		for j = 1, #Palette[i] do
 			local Swatch = CreateFrame("Frame", nil, SwatchWindow)
 			Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)
 			Swatch:SetBackdrop(vUI.BackdropAndBorder)
@@ -1597,7 +1600,7 @@ local CreateSwatchWindow = function()
 			Swatch:SetScript("OnMouseUp", ColorSwatchOnMouseUp)
 			Swatch:SetScript("OnEnter", ColorSwatchOnEnter)
 			Swatch:SetScript("OnLeave", ColorSwatchOnLeave)
-			Swatch.Value = Media.Colors[i][j]
+			Swatch.Value = Palette[i][j]
 			
 			Swatch.Texture = Swatch:CreateTexture(nil, "OVERLAY")
 			Swatch.Texture:SetScaledPoint("TOPLEFT", Swatch, 1, -1)
@@ -1833,7 +1836,7 @@ end
 local CreateGroup = function(self, name, side)
 	local Key
 	
-	if (side == "Left") then
+	if (lower(side) == "left") then
 		Key = "LeftGroups"
 	else
 		Key = "RightGroups"
@@ -2249,41 +2252,35 @@ GUI:AddOptions(function(self)
 	ConsoleGroup:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
 	ConsoleGroup:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = {}; ReloadUI(); end)
 	
-	local TemplateGroup = TemplatesOptions:CreateGroup(Language["Templates"], "Right")
+	local TemplateGroup = TemplatesOptions:CreateGroup(Language["Templates"], "Left")
 	
 	TemplateGroup:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
 	
-	local FontsGroup = TemplatesOptions:CreateGroup(Language["Fonts"], "Right")
+	local ButtonsGroup = TemplatesOptions:CreateGroup(Language["Buttons"], "Right")
 	
-	FontsGroup:CreateDropdown("ui-header-font", "Roboto", Media:GetFontList(), Language["Header Font"], "", nil, "Font")
-	FontsGroup:CreateDropdown("ui-button-font", "Roboto", Media:GetFontList(), Language["Button Font"], "", nil, "Font")
-	FontsGroup:CreateDropdown("ui-widget-font", "Roboto", Media:GetFontList(), Language["Widget Font"], "", nil, "Font")
-	
-	local TexturesGroup = TemplatesOptions:CreateGroup(Language["Textures"], "Right")
-	
-	TexturesGroup:CreateDropdown("ui-header-texture", "Ferous 27", Media:GetTextureList(), Language["Header Texture"], "", nil, "Texture")
-	TexturesGroup:CreateDropdown("ui-button-texture", "Ferous 27", Media:GetTextureList(), Language["Button Texture"], "", nil, "Texture")
-	TexturesGroup:CreateDropdown("ui-widget-texture", "Ferous 27", Media:GetTextureList(), Language["Widget Texture"], "", nil, "Texture")
+	ButtonsGroup:CreateColorSelection("ui-button-font-color", "81D4FA", Language["Text Color"], "")
+	ButtonsGroup:CreateColorSelection("ui-button-texture-color", "8E8E8E", Language["Texture Color"], "")
+	ButtonsGroup:CreateDropdown("ui-button-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	ButtonsGroup:CreateDropdown("ui-button-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
 	local HeadersGroup = TemplatesOptions:CreateGroup(Language["Headers"], "Left")
 	
-	HeadersGroup:CreateColorSelection("ui-header-font-color", "81D4FA", Language["Header Text"], "")
-	HeadersGroup:CreateColorSelection("ui-header-texture-color", "4D4D4D", Language["Header Texture"], "")
+	HeadersGroup:CreateColorSelection("ui-header-font-color", "81D4FA", Language["Text Color"], "")
+	HeadersGroup:CreateColorSelection("ui-header-texture-color", "4D4D4D", Language["Texture Color"], "")
+	HeadersGroup:CreateDropdown("ui-header-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	HeadersGroup:CreateDropdown("ui-header-font", "Roboto", Media:GetFontList(), Language["Header Font"], "", nil, "Font")
 	
 	local WidgetsGroup = TemplatesOptions:CreateGroup(Language["Widgets"], "Left")
 	
-	WidgetsGroup:CreateColorSelection("ui-widget-color", "F39C12", Language["Widget"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-bright-color", "8E8E8E", Language["Widget Bright"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-bg-color", "2B2B2B", Language["Widget Background"], "")
-	WidgetsGroup:CreateColorSelection("ui-widget-font-color", "FFFFFF", Language["Widget Label"], "")
+	WidgetsGroup:CreateColorSelection("ui-widget-color", "F39C12", Language["Color"], "")
+	WidgetsGroup:CreateColorSelection("ui-widget-bright-color", "8E8E8E", Language["Bright Color"], "")
+	WidgetsGroup:CreateColorSelection("ui-widget-bg-color", "2B2B2B", Language["Background Color"], "")
+	WidgetsGroup:CreateColorSelection("ui-widget-font-color", "FFFFFF", Language["Label Color"], "")
+	WidgetsGroup:CreateDropdown("ui-widget-texture", "Ferous 27", Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	WidgetsGroup:CreateDropdown("ui-widget-font", "Roboto", Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
 	local WindowsGroup = TemplatesOptions:CreateGroup(Language["Windows"], "Left")
 	
-	WindowsGroup:CreateColorSelection("ui-window-bg-color", "404040", Language["Window Background"], "")
-	WindowsGroup:CreateColorSelection("ui-window-main-color", "424242", Language["Window Main"], "")
-	
-	local ButtonsGroup = TemplatesOptions:CreateGroup(Language["Buttons"], "Left")
-	
-	ButtonsGroup:CreateColorSelection("ui-button-font-color", "81D4FA", Language["Button Text"], "")
-	ButtonsGroup:CreateColorSelection("ui-button-texture-color", "8E8E8E", Language["Button Texture"], "")
+	WindowsGroup:CreateColorSelection("ui-window-bg-color", "404040", Language["Background Color"], "")
+	WindowsGroup:CreateColorSelection("ui-window-main-color", "424242", Language["Main Color"], "")
 end)

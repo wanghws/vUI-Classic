@@ -9,6 +9,8 @@ local IsInGuild = IsInGuild
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 
+-- Use a button in GUI to request newer versions?
+
 local User = UnitName("player")
 local AddOnVersion = tonumber(vUI.Version)
 

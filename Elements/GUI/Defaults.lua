@@ -8,6 +8,9 @@ Settings["ui-display-welcome"] = true
 Settings["ui-display-dev-tools"] = false
 
 -- Media
+Settings["ui-palette"] = "Material" -- Media:GetPaletteList()
+Settings["ui-picker-format"] = "Hex" -- Hex/RGB/(HSV?)
+
 Settings["ui-template"] = "vUI"
 
 Settings["ui-header-font"] = "Roboto"
