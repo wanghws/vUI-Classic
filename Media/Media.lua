@@ -302,8 +302,8 @@ Media:SetTemplate("Slate", {
 
 --Gui.Template = "template"
  -- system where "template" options are available, so that you can use the overall theme, or a custom return value
--- Chaos
-Media:SetTemplate("Chaos", {
+-- Unnamed
+Media:SetTemplate("Unnamed", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
@@ -317,7 +317,7 @@ Media:SetTemplate("Chaos", {
 	["ui-window-bg-color"] = "3C3C3C",
 	["ui-window-main-color"] = "2C2C2C",
 	["ui-widget-color"] = "A2D471",
-	["ui-widget-bright-color"] = "757575",
+	["ui-widget-bright-color"] = "797D7F",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FAFAFA",
 	["ui-button-font-color"] = "A2D471",
