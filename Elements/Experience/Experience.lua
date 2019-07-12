@@ -403,7 +403,7 @@ GUI:AddOptions(function(self)
 	
 	local SizeGroup = ExperienceOptions:CreateGroup(Language["Size"], "Right")
 	
-	SizeGroup:CreateSlider("experience-width", Settings["experience-width"], 240, 500, 10, Language["Bar Width"], "", UpdateBarWidth)
+	SizeGroup:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
 	SizeGroup:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
 	local PositioningGroup = ExperienceOptions:CreateGroup(Language["Positioning"], "Right")

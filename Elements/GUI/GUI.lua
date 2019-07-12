@@ -1101,15 +1101,19 @@ local SliderOnMouseWheel = function(self, delta)
 end
 
 local EditBoxOnEnterPressed = function(self)
-	self.Value = tonumber(self:GetText())
+	local Value = tonumber(self:GetText())
+	
+	if (type(Value) ~= "number") then
+		return
+	end
+	
+	if (Value ~= self.Value) then
+		self.Slider:SetValue(Value)
+		SliderOnValueChanged(self.Slider)
+	end
 	
 	self:SetAutoFocus(false)
 	self:ClearFocus()
-	
-	if (type(Value) == "number") then
-		self.Slider:SetValue(self.Value)
-		SliderOnValueChanged(self.Slider)
-	end
 end
 
 local EditBoxOnMouseDown = function(self)
@@ -1128,7 +1132,9 @@ local EditBoxOnEditFocusLost = function(self)
 end
 
 local EditBoxOnChar = function(self)
-	if (type(tonumber(self:GetText())) ~= "number") then
+	local Value = tonumber(self:GetText())
+	
+	if (type(Value) ~= "number") then
 		self:SetText(self.Value)
 	end
 end
