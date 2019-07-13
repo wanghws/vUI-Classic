@@ -65,7 +65,7 @@ local GROUP_WIDGETHEIGHT = GROUP_HEIGHT - HEADER_HEIGHT + 1
 local MENU_BUTTON_WIDTH = BUTTON_LIST_WIDTH - (SPACING * 2)
 local MENU_BUTTON_HEIGHT = 20
 
-local MAX_BUTTONS_SHOWN = 16
+local MAX_WIDGETS_SHOWN = 16
 
 local WIDGET_HEIGHT = 20
 
@@ -1517,7 +1517,7 @@ local CreateSwatchWindow = function()
 		return
 	end
 	
-	local SwatchWindow = CreateFrame("Frame", nil, GUI)
+	local SwatchWindow = CreateFrame("Frame", "vUIColorPicker", GUI)
 	SwatchWindow:SetScaledSize(370, 270)
 	SwatchWindow:SetScaledPoint("CENTER", UIParent, 0, 81)
 	SwatchWindow:SetBackdrop(vUI.BackdropAndBorder)
@@ -1796,19 +1796,64 @@ local CreateSwatchWindow = function()
 		self:GetParent():Hide()
 	end)
 	
-	local Palette = Media:GetPalette("Material")
+	local Palette = Media:GetPalette("Material") -- Default palette. Plug in Settings["ui-color-palette"] later or something.
 	
-	for i = 1, #Palette do
-		for j = 1, #Palette[i] do
+	local MAX_SWATCHES_X = 20
+	local MAX_SWATCHES_Y = 10
+	
+	--[[
+		/run vUIColorPicker:SetColorPalette("Lite")
+		/run vUIColorPicker:SetColorPalette("Material")
+		/run vUIColorPicker:SetColorPalette("Large")
+	--]]
+	
+	SwatchWindow.SetColorPalette = function(self, name)
+		local Palette = Media:GetPalette(name)
+		local Swatch
+		
+		for i = 1, MAX_SWATCHES_Y do
+			for j = 1, MAX_SWATCHES_X do
+				Swatch = SwatchWindow.SwatchParent[i][j]
+				
+				if (Palette[i] and Palette[i][j]) then
+					Swatch.Value = Palette[i][j]
+					--Swatch:SetScript("OnMouseUp", ColorSwatchOnMouseUp)
+					--Swatch:SetScript("OnEnter", ColorSwatchOnEnter)
+					--Swatch:SetScript("OnLeave", ColorSwatchOnLeave)
+					Swatch:Show()
+				else
+					Swatch.Value = "BDBDBD"
+					--Swatch:SetScript("OnMouseUp", nil)
+					--Swatch:SetScript("OnEnter", nil)
+					--Swatch:SetScript("OnLeave", nil)
+					Swatch:Hide()
+				end
+				
+				Swatch.Texture:SetVertexColor(HexToRGB(Swatch.Value))
+			end
+		end
+	end
+	
+	for i = 1, MAX_SWATCHES_Y do
+		for j = 1, MAX_SWATCHES_X do
 			local Swatch = CreateFrame("Frame", nil, SwatchWindow)
 			Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)
 			Swatch:SetBackdrop(vUI.BackdropAndBorder)
 			Swatch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 			Swatch:SetBackdropBorderColor(0, 0, 0)
-			Swatch:SetScript("OnMouseUp", ColorSwatchOnMouseUp)
-			Swatch:SetScript("OnEnter", ColorSwatchOnEnter)
-			Swatch:SetScript("OnLeave", ColorSwatchOnLeave)
-			Swatch.Value = Palette[i][j]
+			
+			if (Palette[i] and Palette[i][j]) then
+				Swatch.Value = Palette[i][j]
+				Swatch:SetScript("OnMouseUp", ColorSwatchOnMouseUp)
+				Swatch:SetScript("OnEnter", ColorSwatchOnEnter)
+				Swatch:SetScript("OnLeave", ColorSwatchOnLeave)
+			else
+				Swatch.Value = "BDBDBD"
+				--Swatch:SetScript("OnMouseUp", nil)
+				--Swatch:SetScript("OnEnter", nil)
+				--Swatch:SetScript("OnLeave", nil)
+				Swatch:Hide()
+			end
 			
 			Swatch.Texture = Swatch:CreateTexture(nil, "OVERLAY")
 			Swatch.Texture:SetScaledPoint("TOPLEFT", Swatch, 1, -1)
@@ -1827,8 +1872,6 @@ local CreateSwatchWindow = function()
 			if (not SwatchWindow.SwatchParent[i]) then
 				SwatchWindow.SwatchParent[i] = {}
 			end
-			
-			tinsert(SwatchWindow.SwatchParent[i], Swatch)
 			
 			if (i == 1) then
 				if (j == 1) then
@@ -2007,7 +2050,7 @@ local Scroll = function(self)
 			self.LeftWidgets[i]:ClearAllPoints()
 			
 			if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
-			--if (i >= self.Offset) and (i <= self.Offset + MAX_BUTTONS_SHOWN - 1) then
+			--if (i >= self.Offset) and (i <= self.Offset + MAX_WIDGETS_SHOWN - 1) then
 				if (not LeftFirst) then
 					self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
 					LeftFirst = true
@@ -2025,7 +2068,7 @@ local Scroll = function(self)
 			self.RightWidgets[i]:ClearAllPoints()
 			
 			if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
-			--if (i >= self.Offset) and (i <= self.Offset + MAX_BUTTONS_SHOWN - 1) then
+			--if (i >= self.Offset) and (i <= self.Offset + MAX_WIDGETS_SHOWN - 1) then
 				if (not RightFirst) then
 					self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
 					RightFirst = true
@@ -2052,7 +2095,7 @@ local SetOffsetByDelta = function(self, delta)
 		self.Offset = self.Offset + 1
 		
 		if (self.Offset > (self.WidgetCount - (self:GetParent().WindowCount - 1))) then
-		--if (self.Offset > (self.WidgetCount - MAX_BUTTONS_SHOWN - 1)) then
+		--if (self.Offset > (self.WidgetCount - MAX_WIDGETS_SHOWN - 1)) then
 			self.Offset = self.Offset - 1
 		end
 	end
@@ -2070,7 +2113,7 @@ local SetOffset = function(self, offset)
 	if (self.Offset <= 1) then
 		self.Offset = 1
 	elseif (self.Offset > (self.WidgetCount - self:GetParent().WindowCount - 1)) then
-	--elseif (self.Offset > (self.WidgetCount - MAX_BUTTONS_SHOWN - 1)) then
+	--elseif (self.Offset > (self.WidgetCount - MAX_WIDGETS_SHOWN - 1)) then
 		self.Offset = self.Offset - 1
 	end
 	
@@ -2149,31 +2192,21 @@ local AddScrollBar = function(self)
 	
 	ScrollBar:Show()
 	
-	local LeftHeight = min((1 + (#self.LeftWidgets * (WIDGET_HEIGHT + 2))), (1 + (self:GetParent().WindowCount * (WIDGET_HEIGHT + 2))))
-	local RightHeight = min((1 + (#self.RightWidgets * (WIDGET_HEIGHT + 2))), (1 + (self:GetParent().WindowCount * (WIDGET_HEIGHT + 2))))
+	--[[local LeftHeight = min((1 + (#self.LeftWidgets * (WIDGET_HEIGHT + 2))), (1 + ((self:GetParent().WindowCount - 1) * (WIDGET_HEIGHT + 2))))
+	local RightHeight = min((1 + (#self.RightWidgets * (WIDGET_HEIGHT + 2))), (1 + ((self:GetParent().WindowCount - 1) * (WIDGET_HEIGHT + 2))))
 	
-	--self.LeftWidgetsBG:SetScaledHeight(LeftHeight)
-	--self.RightWidgetsBG:SetScaledHeight(RightHeight)
-	
-	--[[for i = 1, #self.Widgets do
-		if self.Widgets[i].IsSection then
-			self.Widgets[i]:SetScaledWidth((WidgetListWidth - WidgetHeight) - (SPACING * 3))
-		end
-	end]]
+	self.LeftWidgetsBG:SetScaledHeight(LeftHeight)
+	self.RightWidgetsBG:SetScaledHeight(RightHeight)]]
 end
 
 local SortWindow = function(self)
 	local NumLeftWidgets = #self.LeftWidgets
 	local NumRightWidgets = #self.RightWidgets
-	local LeftHeight = 1
-	local RightHeight = 1
 	
 	if NumLeftWidgets then
 		for i = 1, NumLeftWidgets do
 			self.LeftWidgets[i]:ClearAllPoints()
-			
-			LeftHeight = LeftHeight + (WIDGET_HEIGHT + 2) -- Widget height + 2 is the spacing between each
-			
+		
 			if (i == 1) then
 				self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
 			else
@@ -2186,8 +2219,6 @@ local SortWindow = function(self)
 		for i = 1, NumRightWidgets do
 			self.RightWidgets[i]:ClearAllPoints()
 			
-			RightHeight = RightHeight + (WIDGET_HEIGHT + 2)
-			
 			if (i == 1) then
 				self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
 			else
@@ -2196,10 +2227,7 @@ local SortWindow = function(self)
 		end
 	end
 	
-	--self.LeftWidgetsBG:SetScaledHeight(LeftHeight)
-	--self.RightWidgetsBG:SetScaledHeight(RightHeight)
-	
-	if (NumLeftWidgets > MAX_BUTTONS_SHOWN) or (NumRightWidgets > MAX_BUTTONS_SHOWN) then
+	if (NumLeftWidgets > MAX_WIDGETS_SHOWN) or (NumRightWidgets > MAX_WIDGETS_SHOWN) then
 		AddScrollBar(self)
 	end
 end
@@ -2310,8 +2338,9 @@ GUI.NewWindow = function(self, name, default)
 	
 	-- Window
 	local Window = CreateFrame("Frame", nil, self)
-	Window:SetScaledSize(PARENT_WIDTH, PARENT_HEIGHT)
+	Window:SetScaledWidth(PARENT_WIDTH)
 	Window:SetScaledPoint("BOTTOMRIGHT", self, -SPACING, SPACING)
+	Window:SetScaledPoint("TOPRIGHT", self.Header, "BOTTOMRIGHT", 0, -2)
 	Window:SetBackdrop(vUI.BackdropAndBorder)
 	Window:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window:SetBackdropBorderColor(0, 0, 0)
@@ -2351,6 +2380,7 @@ GUI.NewWindow = function(self, name, default)
 		self.DefaultWindow = name
 	end
 	
+	-- return left and right widget group too?
 	return Window
 end
 
@@ -2415,19 +2445,12 @@ function GUI:Create()
 	
 	-- Selection parent
 	self.SelectionParent = CreateFrame("Frame", nil, self)
-	self.SelectionParent:SetScaledSize(BUTTON_LIST_WIDTH, BUTTON_LIST_HEIGHT)
-	self.SelectionParent:SetScaledPoint("BOTTOMLEFT", GUI, SPACING, SPACING)
+	self.SelectionParent:SetScaledWidth(BUTTON_LIST_WIDTH)
+	self.SelectionParent:SetScaledPoint("BOTTOMLEFT", self, SPACING, SPACING)
+	self.SelectionParent:SetScaledPoint("TOPLEFT", self.Header, "BOTTOMLEFT", 0, -2)
 	self.SelectionParent:SetBackdrop(vUI.BackdropAndBorder)
 	self.SelectionParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	self.SelectionParent:SetBackdropBorderColor(0, 0, 0)
-	
-	-- Widget parent
-	self.GroupParent = CreateFrame("Frame", nil, self)
-	self.GroupParent:SetScaledSize(PARENT_WIDTH, PARENT_HEIGHT)
-	self.GroupParent:SetScaledPoint("BOTTOMRIGHT", self, -SPACING, SPACING)
-	self.GroupParent:SetBackdrop(vUI.BackdropAndBorder)
-	self.GroupParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
-	self.GroupParent:SetBackdropBorderColor(0, 0, 0)
 	
 	-- Close button
 	self.CloseButton = CreateFrame("Frame", nil, self.Header)
@@ -2497,6 +2520,11 @@ function GUI:VARIABLES_LOADED()
 	
 	self:Create()
 	self:RunQueue()
+	
+	-- Set the frame height
+	local Height = HEADER_HEIGHT + (self.WindowCount * WIDGET_HEIGHT) + ((self.WindowCount - 1) * SPACING) - 1
+	
+	self:SetScaledHeight(Height)
 	
 	-- Show the default window, if one was found
 	if self.DefaultWindow then

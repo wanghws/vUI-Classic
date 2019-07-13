@@ -192,6 +192,7 @@ Media:SetFont("Swansea", "Interface\\Addons\\vUI\\Media\\Fonts\\Swansea.ttf")
 Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 
+-- Palettes
 -- Yes, doing these did take forever. And it was so worth it.
 
 local Large = {} -- https://htmlcolorcodes.com/

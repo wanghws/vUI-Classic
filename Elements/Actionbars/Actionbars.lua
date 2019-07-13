@@ -190,35 +190,35 @@ local ShowGridAndSkin = function()
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 	end
 end
