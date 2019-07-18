@@ -14,7 +14,7 @@ local BAR_HEIGHT = 22
 local TabButtons = {}
 local TabNames = {"General", "Whispers", "Loot", "Trade"}
 local TabIDs = {1, 3, 4, 5}
-local ButtonWidth = (FRAME_WIDTH / 4) + 1
+local BUTTON_WIDTH = (FRAME_WIDTH / 4) + 1
 
 local SetHyperlink = ItemRefTooltip.SetHyperlink
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
@@ -22,10 +22,8 @@ local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 local ChatEdit_ParseText = ChatEdit_ParseText
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
-local Discord = "https://discord.gg/%s"
-
 local FormatDiscordHyperlink = function(id) -- /run print("https://discord.gg/1a2b3c")
-	local Link = format(Discord, id)
+	local Link = format("https://discord.gg/%s", id)
 	
 	return format("|cFF7289DA|Hdiscord:%s|h[%s: %s]|h|r", Link, Language["Discord"], id)
 end
@@ -344,7 +342,7 @@ local CreateChatFramePanels = function(self)
 		local TabID = TabIDs[i]
 		
 		local Button = CreateFrame("Frame", "vUI_CustomTab"..i, LeftChatFrameTop)
-		Button:SetScaledSize(ButtonWidth, 22)
+		Button:SetScaledSize(BUTTON_WIDTH, 22)
 		Button:SetFrameStrata("MEDIUM")
 		Button:SetBackdrop(vUI.BackdropAndBorder)
 		Button:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -371,7 +369,7 @@ local CreateChatFramePanels = function(self)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("LEFT", LeftChatFrameTop, 0, 0)
-			Button:SetScaledWidth(ButtonWidth - 1)
+			Button:SetScaledWidth(BUTTON_WIDTH - 1)
 		else
 			Button:SetScaledPoint("LEFT", TabButtons[i-1], "RIGHT", -1, 0)
 		end

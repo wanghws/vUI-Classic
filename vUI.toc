@@ -3,8 +3,8 @@
 ## Version: 1.01
 ## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
-## SavedVariables: vUISettings
-## SavedVariablesPerCharacter: vUISettingsPerCharacter
+## SavedVariables: vUIData, vUIProfiles
+## SavedVariablesPerCharacter: vUIDataPerCharacter
 
 Initialize.lua
 Media\Media.lua
@@ -22,6 +22,7 @@ Languages\zhCN.lua
 Languages\zhTW.lua
 Elements\Animation\Animation.lua
 Elements\GUI\Defaults.lua
+Elements\Profiles\Profiles.lua
 Elements\GUI\GUI.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua

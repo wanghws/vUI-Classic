@@ -9,7 +9,8 @@ local IsInGuild = IsInGuild
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 
--- Use a button in GUI to request newer versions?
+-- Use a button in GUI to request newer versions? -- Put a pretty hard throttle on the button too so it can't be smashed.
+-- vUI:print("If any version data is recieved, you will be prompted.")
 
 local User = UnitName("player")
 local AddOnVersion = tonumber(vUI.Version)
@@ -33,10 +34,8 @@ local GetRecentVersionTypes = function(compare)
 	local Major = 0
 	
 	for Version, Importance in pairs(RecentVersions) do
-		if (Version > compare) then
-			if (Importance == "Major") then
-				Major = Major + 1
-			end
+		if ((Version > compare) and (Importance == "Major")) then
+			Major = Major + 1
 		end
 	end
 	
@@ -93,7 +92,7 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	
 	-- You installed a newer version! Yay you. Yes, you.
 	if (AddOnVersion > StoredVersion) then
-		if WhatsNew[AddOnVersion] then
+		if (WhatsNew[AddOnVersion] and Settings["ui-display-whats-new"]) then
 			self.NewVersion = true -- Let PEW take over from here.
 		end
 	end
@@ -107,7 +106,11 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (prefix == "vUI-Version") and (match(sender, "(%S+)-%S+") ~= User) then
+	if (match(sender, "(%S+)-%S+") == User) then
+		return
+	end
+	
+	if (prefix == "vUI-Version") then
 		local SenderVersion = tonumber(message)
 		
 		if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
@@ -115,15 +118,15 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 			
 			SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
 		end
-	elseif (prefix == "vUI-Version-Detailed") and (match(sender, "(%S+)-%S+") ~= User) then -- Someone is sending us more detailed information because we were behind.
+	elseif (prefix == "vUI-Version-Detailed") then -- Someone is sending us more detailed information because we were behind.
 		local Version, Major = match(message, "(%S+):(%S+)")
 		
 		Major = tonumber(Major)
 		
 		if (Major > 0) then
-			vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
+			vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
 		else
-			vUI:SendAlert("New Version!", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
+			vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 		end
 		
 		self:UnregisterEvent(event)

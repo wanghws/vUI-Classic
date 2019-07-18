@@ -5,6 +5,7 @@ local select = select
 local sub = string.sub
 local format = format
 local floor = floor
+local ceil = ceil
 local type = type
 local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
@@ -16,9 +17,16 @@ local Core = {
 	[3] = {}, -- Language
 	[4] = {}, -- Media
 	[5] = {}, -- Settings
+	[6] = {}, -- Defaults
+	[7] = {}, -- Profiles
 }
 
-local Mult = 768 / GetScreenHeight() / ((GetCVar("useUiScale") and GetCVar("uiScale") or 0.71))
+local Resolution = select(GetCurrentResolution(), GetScreenResolutions())
+local ScreenHeight = string.match(Resolution, "%d+x(%d+)")
+local UIParentHeight = UIParent:GetHeight()
+local Height = GetScreenHeight()
+
+local Mult = 768 / Height / ((GetCVar("useUiScale") and GetCVar("uiScale") or 0.71))
 
 local Scale = function(num)
 	return Mult * floor(num / Mult + 0.5)
@@ -52,7 +60,7 @@ function vUI:RGBToHex(r, g, b)
 	return format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
-print = function(...)
+--[[print = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
 	
@@ -81,7 +89,7 @@ print = function(...)
 			DEFAULT_CHAT_FRAME:AddMessage(...)
 		end
 	end
-end
+end]]
 
 function vUI:print(...)
 	print("|cFF"..Core[5]["ui-widget-color"].."vUI|r:", ...)
@@ -89,7 +97,7 @@ end
 
 function Namespace:get(key)
 	if (not key) then
-		return Core[1], Core[2], Core[3], Core[4], Core[5]
+		return Core[1], Core[2], Core[3], Core[4], Core[5], Core[6], Core[7]
 	else
 		return Core[key]
 	end

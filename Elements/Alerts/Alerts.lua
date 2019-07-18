@@ -72,7 +72,7 @@ local FadeOutOnFinished = function(self)
 end
 
 local CloseOnMouseUp = function(self)
-	local Alert = self:GetParent():GetParent()
+	local Alert = self.Parent
 	
 	Alert:Hide()
 	Alert:SetAlpha(0)
@@ -92,7 +92,7 @@ local CreateAlertFrame = function()
 	local AlertFrame = CreateFrame("Frame", nil, UIParent)
 	AlertFrame:SetScaledSize(ALERT_WIDTH, (HEADER_HEIGHT + (LINE_HEIGHT * 2)))
 	AlertFrame:SetBackdrop(vUI.BackdropAndBorder)
-	AlertFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	AlertFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	AlertFrame:SetBackdropBorderColor(0, 0, 0)
 	AlertFrame:EnableMouse(true)
 	AlertFrame:SetAlpha(0)
@@ -180,6 +180,7 @@ local CreateAlertFrame = function()
 	AlertFrame.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
 	AlertFrame.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
 	AlertFrame.CloseButton:SetScript("OnMouseUp", CloseOnMouseUp)
+	AlertFrame.CloseButton.Parent = AlertFrame
 	
 	AlertFrame.CloseButton.Text = AlertFrame.CloseButton:CreateFontString(nil, "OVERLAY")
 	AlertFrame.CloseButton.Text:SetScaledPoint("CENTER", AlertFrame.CloseButton, 0, 0)
@@ -208,7 +209,7 @@ end
 
 local SendAlert = function(header, line1, line2, func, nofade)
 	local AlertFrame = GetAlertFrame()
-	print(func, nofade)
+	
 	if nofade then
 		AlertFrame.FadeIn:SetScript("OnFinished", nil)
 	else

@@ -2,6 +2,9 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 -- The most important file there is.
 
+-- Cinematic Mode with black lines on the top and bottom of the screen. Reposition the UI parent
+-- Notification system with a bell icon under the minimap or something. This is just a small log where it shows things like version handshakes, update news etc
+
 local Debug = '"%s" set to %s.'
 local floor = floor
 local format = format
@@ -73,16 +76,11 @@ GUI:AddOptions(function(self)
 	
 	Bar:GetScript("OnUpdate")(Bar, 1)
 	
-	
 	-- Testing
-	local Window = self:NewWindow("ActionBars")
-	local Window = self:NewWindow("Unitframes")
+	local Window = self:NewWindow("Action Bars")
+	local Window = self:NewWindow("Unit Frames")
 	local Window = self:NewWindow("Tooltips")
 	local Window = self:NewWindow("Misc.")
 	local Window = self:NewWindow("Info")
-	local Window = self:NewWindow("15")
-	local Window = self:NewWindow("16")
-	local Window = self:NewWindow("17")
-	local Window = self:NewWindow("18")
-	local Window = self:NewWindow("19")
+	local Window = self:NewWindow("Search")
 end)

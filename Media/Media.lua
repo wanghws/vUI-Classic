@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
 Media.Fonts = {}
 Media.Textures = {}
@@ -12,6 +12,7 @@ local TextureList = {}
 local FontList = {}
 local PaletteList = {}
 
+-- Fonts
 function Media:SetFont(name, path, silent)
 	if self.Fonts[name] then
 		return
@@ -36,6 +37,7 @@ function Media:GetFontList()
 	return FontList
 end
 
+-- Textures
 function Media:SetTexture(name, path, silent)
 	if self.Textures[name] then
 		return
@@ -60,6 +62,7 @@ function Media:GetTextureList()
 	return TextureList
 end
 
+-- Highlights
 function Media:SetHighlight(name, path, silent)
 	if self.Highlights[name] then
 		return
@@ -84,6 +87,7 @@ function Media:GetHighlightList()
 	return HighlightList
 end
 
+-- Templates
 function Media:SetTemplate(name, info, silent)
 	if self.Templates[name] then
 		return
@@ -120,12 +124,19 @@ function Media:ApplyTemplate(name)
 		return vUI:print(format('No template exists with the name "%s"', name))
 	end
 	
-	for id, value in pairs(self.Templates[name]) do
-		vUISettings[id] = value
-		Settings[id] = value
+	local Key = vUIData["ui-profile"] or "Default"
+	
+	if (vUIProfiles and vUIProfiles[Key]) then
+		for ID, Value in pairs(self.Templates[name]) do
+			vUIProfiles[Key][ID] = Value
+			Settings[ID] = Value
+		end
 	end
+	
+	-- Maybe also allow a function argument, to be called when the template is loaded
 end
 
+-- Palettes
 function Media:SetPalette(name, t, silent)
 	if self.Palettes[name] then
 		return
@@ -142,7 +153,7 @@ function Media:GetPalette(name)
 	if self.Palettes[name] then
 		return self.Palettes[name]
 	else
-		return self.Palettes["Material"]
+		return self.Palettes["Default"]
 	end
 end
 
@@ -154,7 +165,7 @@ end
 
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")
-Media:SetTexture("Bettina", "Interface\\AddOns\\vUI\\Media\\Textures\\Bettina.tga", true)
+Media:SetTexture("Bettina", "Interface\\AddOns\\vUI\\Media\\Textures\\Bettina.tga")
 Media:SetTexture("Ferous", "Interface\\AddOns\\vUI\\Media\\Textures\\Ferous.tga")
 Media:SetTexture("Halycon", "Interface\\AddOns\\vUI\\Media\\Textures\\Halycon.tga")
 Media:SetTexture("Kola", "Interface\\AddOns\\vUI\\Media\\Textures\\Kola.tga")
@@ -192,13 +203,14 @@ Media:SetFont("Swansea", "Interface\\Addons\\vUI\\Media\\Fonts\\Swansea.ttf")
 Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 
+-- Palettes
 -- Yes, doing these did take forever. And it was so worth it.
 
 local Large = {} -- https://htmlcolorcodes.com/
 
 Large[1] = {"F9EBEA", "FDEDEC", "F5EEF8", "F4ECF7", "EAF2F8", "EBF5FB", "E8F8F5", "E8F6F3", "E9F7EF","EAFAF1", "FEF9E7", "FEF5E7", "FDF2E9", "FBEEE6", "FDFEFE", "F8F9F9", "F4F6F6", "F2F4F4", "EBEDEF", "EAECEE"}
 Large[2] = {"F2D7D5", "FADBD8", "EBDEF0", "E8DAEF", "D4E6F1", "D6EAF8", "D1F2EB", "D0ECE7", "D4EFDF", "D5F5E3", "FCF3CF", "FDEBD0", "FAE5D3", "F6DDCC", "FBFCFC", "F2F3F4", "EAEDED", "E5E8E8", "D6DBDF", "D5D8DC"}
-Large[3] = {"#E6B0AA", "F5B7B1", "D7BDE2", "D2B4DE", "A9CCE3", "AED6F1", "A3E4D7", "A2D9CE", "A9DFBF", "ABEBC6", "F9E79F", "FAD7A0", "F5CBA7", "EDBB99", "F7F9F9", "E5E7E9", "D5DBDB", "CCD1D1", "AEB6BF", "ABB2B9"}
+Large[3] = {"E6B0AA", "F5B7B1", "D7BDE2", "D2B4DE", "A9CCE3", "AED6F1", "A3E4D7", "A2D9CE", "A9DFBF", "ABEBC6", "F9E79F", "FAD7A0", "F5CBA7", "EDBB99", "F7F9F9", "E5E7E9", "D5DBDB", "CCD1D1", "AEB6BF", "ABB2B9"}
 Large[4] = {"D98880", "F1948A", "C39BD3", "BB8FCE", "7FB3D5", "85C1E9", "76D7C4", "73C6B6", "7DCEA0", "82E0AA", "F7DC6F", "F8C471", "F0B27A", "E59866", "F4F6F7", "D7DBDD", "BFC9CA", "B2BABB", "85929E", "808B96"}
 Large[5] = {"CD6155", "EC7063", "AF7AC5", "A569BD", "5499C7", "5DADE2", "48C9B0", "45B39D", "52BE80", "58D68D", "F4D03F", "F5B041", "EB984E", "DC7633", "F0F3F4", "D7DBDD", "BFC9CA", "B2BABB", "85929E", "808B96"}
 Large[6] = {"C0392B", "E74C3C", "9B59B6", "8E44AD", "2980B9", "3498DB", "1ABC9C", "16A085", "27AE60", "2ECC71", "F1C40F", "F39C12", "E67E22", "D35400", "ECF0F1", "BDC3C7", "95A5A6", "7F8C8D", "34495E", "2C3E50"}
@@ -209,20 +221,20 @@ Large[10] = {"641E16", "78281F", "512E5F", "4A235A", "154360", "1B4F72", "0E6251
 
 Media:SetPalette("Large", Large)
 
-local Material = {} -- https://www.materialui.co/colors
+local Default = {} -- https://www.materialui.co/colors
 
-Material[1] = {"FFEBEE", "FCE4EC", "F3E5F5", "EDE7F6", "E8EAF6", "E3F2FD", "E1F5FE", "E0F7FA", "E0F2F1", "E8F5E9", "F1F8E9", "F9FBE7", "FFFDE7", "FFF8E1", "FFF3E0", "FBE9E7", "EFEBE9", "FAFAFA", "ECEFF1"}
-Material[2] = {"FFCDD2", "F8BBD0", "E1BEE7", "D1C4E9", "C5CAE9", "BBDEFB", "B3E5FC", "B2EBF2", "B2DFDB", "C8E6C9", "DCEDC8", "F0F4C3", "FFF9C4", "FFECB3", "FFE0B2", "FFCCBC", "D7CCC8", "F5F5F5", "CFD8DC"}
-Material[3] = {"EF9A9A", "F48FB1", "CE93D8", "B39DDB", "9FA8DA", "90CAF9", "81D4FA", "80DEEA", "80CBC4", "A5D6A7", "C5E1A5", "E6EE9C", "FFF59D", "FFE082", "FFCC80", "FFAB91", "BCAAA4", "EEEEEE", "B0BEC5"}
-Material[4] = {"E57373", "F06292", "BA68C8", "9575CD", "7986CB", "64B5F6", "4FC3F7", "4DD0E1", "4DB6AC", "81C784", "AED581", "DCE775", "FFF176", "FFD54F", "FFB74D", "FF8A65", "A1887F", "E0E0E0", "90A4AE"}
-Material[5] = {"EF5350", "EC407A", "AB47BC", "7E57C2", "5C6BC0", "42A5F5", "29B6F6", "26C6DA", "26A69A", "66BB6A", "9CCC65", "D4E157", "FFEE58", "FFCA28", "FFA726", "FF7043", "8D6E63", "BDBDBD", "78909C"}
-Material[6] = {"F44336", "E91E63", "9C27B0", "673AB7", "3F51B5", "2196F3", "03A9F4", "00BCD4", "009688", "4CAF50", "8BC34A", "CDDC39", "FFEB3B", "FFC107", "FF9800", "FF5722", "795548", "9E9E9E", "607D8B"}
-Material[7] = {"E53935", "D81B60", "8E24AA", "5E35B1", "3949AB", "1E88E5", "039BE5", "00ACC1", "00897B", "43A047", "7CB342", "C0CA33", "FDD835", "FFB300", "FB8C00", "F4511E", "6D4C41", "757575", "546E7A"}
-Material[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D1", "0097A7", "00796B", "388E3C", "689F38", "AFB42B", "FBC02D", "FFA000", "F57C00", "E64A19", "5D4037", "616161", "455A64"}
-Material[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
-Material[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
+Default[1] = {"FFEBEE", "FCE4EC", "F3E5F5", "EDE7F6", "E8EAF6", "E3F2FD", "E1F5FE", "E0F7FA", "E0F2F1", "E8F5E9", "F1F8E9", "F9FBE7", "FFFDE7", "FFF8E1", "FFF3E0", "FBE9E7", "EFEBE9", "FAFAFA", "ECEFF1"}
+Default[2] = {"FFCDD2", "F8BBD0", "E1BEE7", "D1C4E9", "C5CAE9", "BBDEFB", "B3E5FC", "B2EBF2", "B2DFDB", "C8E6C9", "DCEDC8", "F0F4C3", "FFF9C4", "FFECB3", "FFE0B2", "FFCCBC", "D7CCC8", "F5F5F5", "CFD8DC"}
+Default[3] = {"EF9A9A", "F48FB1", "CE93D8", "B39DDB", "9FA8DA", "90CAF9", "81D4FA", "80DEEA", "80CBC4", "A5D6A7", "C5E1A5", "E6EE9C", "FFF59D", "FFE082", "FFCC80", "FFAB91", "BCAAA4", "EEEEEE", "B0BEC5"}
+Default[4] = {"E57373", "F06292", "BA68C8", "9575CD", "7986CB", "64B5F6", "4FC3F7", "4DD0E1", "4DB6AC", "81C784", "AED581", "DCE775", "FFF176", "FFD54F", "FFB74D", "FF8A65", "A1887F", "E0E0E0", "90A4AE"}
+Default[5] = {"EF5350", "EC407A", "AB47BC", "7E57C2", "5C6BC0", "42A5F5", "29B6F6", "26C6DA", "26A69A", "66BB6A", "9CCC65", "D4E157", "FFEE58", "FFCA28", "FFA726", "FF7043", "8D6E63", "BDBDBD", "78909C"}
+Default[6] = {"F44336", "E91E63", "9C27B0", "673AB7", "3F51B5", "2196F3", "03A9F4", "00BCD4", "009688", "4CAF50", "8BC34A", "CDDC39", "FFEB3B", "FFC107", "FF9800", "FF5722", "795548", "9E9E9E", "607D8B"}
+Default[7] = {"E53935", "D81B60", "8E24AA", "5E35B1", "3949AB", "1E88E5", "039BE5", "00ACC1", "00897B", "43A047", "7CB342", "C0CA33", "FDD835", "FFB300", "FB8C00", "F4511E", "6D4C41", "757575", "546E7A"}
+Default[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D1", "0097A7", "00796B", "388E3C", "689F38", "AFB42B", "FBC02D", "FFA000", "F57C00", "E64A19", "5D4037", "616161", "455A64"}
+Default[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
+Default[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
 
-Media:SetPalette("Material", Material)
+Media:SetPalette("Default", Default)
 
 local Lite = {}
 
@@ -231,6 +243,15 @@ Lite[2] = {"EE4D4D", "FF884D", "FFC44D", "8BC94D", "4DDBC4", "4DC4FF", "5E94FF",
 Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
 
 Media:SetPalette("Lite", Lite)
+
+local Flat = {} -- https://flatuicolors.com/palette/defo
+
+Flat[1] = {"1ABC9C", "2ECC71", "3498DB", "9B59B6", "34495E", "BD3525"} -- "FF8DCF"
+Flat[2] = {"16A085", "27AE60", "2980B9", "8E44AD", "2C3E50", "96281B"} -- "D679B4"
+Flat[3] = {"F1C40F", "E67E22", "E74C3C", "ECF0F1", "95A5A6", "948279"}
+Flat[4] = {"F39C12", "D35400", "C0392B", "BDC3C7", "7F8C8D", "615D59"}
+
+Media:SetPalette("Flat", Flat)
 
 -- Templates
 
@@ -300,8 +321,6 @@ Media:SetTemplate("Slate", {
 	["ui-button-texture-color"] = "78909C",
 })
 
---Gui.Template = "template"
- -- system where "template" options are available, so that you can use the overall theme, or a custom return value
 -- Unnamed
 Media:SetTemplate("Unnamed", {
 	["ui-widget-font"] = "Roboto",
