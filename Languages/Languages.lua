@@ -1,4 +1,4 @@
-local Language = select(2, ...):get(3)
+local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Default = GetLocale()
 local Locale
@@ -8,8 +8,11 @@ if (Default == "enGB") then
 end
 
 local index = function(t, key)
-	if (vUISettings and vUISettings["ui-language"]) then
-		Locale = vUISettings["ui-language"]
+	--local Key = vUIData and vUIData["ui-profile"] or "Default"
+	
+	--if (vUIProfiles and vUIProfiles[Key] and vUIProfiles[Key]["ui-language"]) then
+	if (Settings and Settings["ui-language"]) then
+		Locale = Settings["ui-language"]
 	else
 		Locale = Default
 	end

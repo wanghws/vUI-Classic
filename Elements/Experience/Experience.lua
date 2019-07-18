@@ -416,6 +416,7 @@ GUI:AddOptions(function(self)
 	
 	GeneralWindow:CreateHeader("Left", Language["Welcome"])
 	GeneralWindow:CreateCheckbox("Left", "ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
+	GeneralWindow:CreateCheckbox("Left", "ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
 	GeneralWindow:CreateCheckbox("Left", "ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
 	GeneralWindow:CreateHeader("Right", Language["Language"])

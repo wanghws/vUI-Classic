@@ -10,8 +10,8 @@ local SPACING = 2
 local BOTTOM_WIDTH = ((BUTTON_SIZE * 12) + (SPACING * 14))
 local BOTTOM_HEIGHT = ((BUTTON_SIZE * 2) + (SPACING * 4))
 
-local SIDE_WIDTH = ((BUTTON_SIZE * 3) + (SPACING * 4))
-local SIDE_HEIGHT = ((BUTTON_SIZE * 12) + (SPACING * 13))
+local SIDE_WIDTH = ((BUTTON_SIZE * 3) + (SPACING * 5))
+local SIDE_HEIGHT = ((BUTTON_SIZE * 12) + (SPACING * 14))
 
 local Num = NUM_ACTIONBAR_BUTTONS
 
@@ -190,35 +190,35 @@ local ShowGridAndSkin = function()
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		ActionButton_ShowGrid(Button)
+		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 	end
 end
@@ -332,6 +332,72 @@ local CreateBar2 = function()
 	end
 end
 
+local CreateBar3 = function()
+	local ActionBar3 = CreateFrame("Frame", "vUIActionBar3", UIParent, "SecureHandlerStateTemplate")
+	ActionBar3:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	ActionBar3:SetScaledPoint("RIGHT", vUISideActionBarsPanel, -(SPACING + 1), 0)
+	ActionBar3:SetFrameStrata("MEDIUM")
+	
+	MultiBarRight:SetParent(ActionBar3)
+	
+	for i = 1, Num do
+		local Button = _G["MultiBarRightButton"..i]
+		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
+		Button:ClearAllPoints()
+		--Button:SetParent(ActionBar3)
+		
+		if (i == 1) then
+			Button:SetScaledPoint("TOP", ActionBar3, 0, 0)
+		else
+			Button:SetScaledPoint("TOP", _G["MultiBarRightButton"..i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+end
+
+local CreateBar4 = function()
+	local ActionBar4 = CreateFrame("Frame", "vUIActionBar4", UIParent, "SecureHandlerStateTemplate")
+	ActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	ActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
+	ActionBar4:SetFrameStrata("MEDIUM")
+	
+	MultiBarLeft:SetParent(ActionBar4)
+	
+	for i = 1, Num do
+		local Button = _G["MultiBarLeftButton"..i]
+		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
+		Button:ClearAllPoints()
+		--Button:SetParent(ActionBar4)
+		
+		if (i == 1) then
+			Button:SetScaledPoint("TOP", ActionBar4, 0, 0)
+		else
+			Button:SetScaledPoint("TOP", _G["MultiBarLeftButton"..i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+end
+
+local CreateBar5 = function()
+	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", UIParent, "SecureHandlerStateTemplate")
+	ActionBar5:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	ActionBar5:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	ActionBar5:SetFrameStrata("MEDIUM")
+	
+	MultiBarBottomRight:SetParent(ActionBar5)
+	
+	for i = 1, Num do
+		local Button = _G["MultiBarBottomRightButton"..i]
+		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
+		Button:ClearAllPoints()
+		--Button:SetParent(ActionBar5)
+		
+		if (i == 1) then
+			Button:SetScaledPoint("TOP", ActionBar5, 0, 0)
+		else
+			Button:SetScaledPoint("TOP", _G["MultiBarBottomRightButton"..i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+end
+
 local CreateBarPanels = function()
 	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
 	BottomPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
@@ -355,6 +421,9 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBarPanels()
 	CreateBar1()
 	CreateBar2()
+	CreateBar3()
+	CreateBar4()
+	CreateBar5()
 	
 	self:UnregisterEvent(event)
 end)
