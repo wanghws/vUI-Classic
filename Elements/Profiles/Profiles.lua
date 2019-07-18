@@ -3,7 +3,7 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 local Default = "%s-%s"
 local User = UnitName("player")
 local Realm = GetRealmName()
-local ProfileNames = {}
+Profiles.List = {}
 
 local pairs = pairs
 
@@ -14,7 +14,7 @@ end
 function Profiles:ImportProfiles()
 	if vUIProfiles then
 		for Name in pairs(vUIProfiles) do
-			ProfileNames[Name] = Name
+			self.List[Name] = Name
 		end
 	end
 end
@@ -29,19 +29,13 @@ function Profiles:NewProfile(name)
 	end
 	
 	if vUIProfiles[name] then
-		ProfileNames[name] = name
+		self.List[name] = name
 		
 		return vUIProfiles[name]
 	end
 	
 	vUIProfiles[name] = {}
-	
-	--[[ Don't shove Defaults into the profile here. In fact don't even store values unless they ~= Defaults[ID]
-	for ID, Value in pairs(Defaults) do
-		vUIProfiles[name][ID] = Value
-	end]]
-	
-	ProfileNames[name] = name
+	self.List[name] = name
 	
 	return vUIProfiles[name]
 end
@@ -55,7 +49,7 @@ function Profiles:GetProfile(name)
 end
 
 function Profiles:GetProfileList()
-	return ProfileNames
+	return self.List
 end
 
 function Profiles:DeleteProfile(name)
