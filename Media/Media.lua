@@ -128,7 +128,12 @@ function Media:ApplyTemplate(name)
 	
 	if (vUIProfiles and vUIProfiles[Key]) then
 		for ID, Value in pairs(self.Templates[name]) do
-			vUIProfiles[Key][ID] = Value
+			if (Value ~= Defaults[ID]) then -- Only saving a value if it's different than default
+				vUIProfiles[Key][ID] = Value
+			else
+				vUIProfiles[Key][ID] = nil
+			end
+			
 			Settings[ID] = Value
 		end
 	end
@@ -243,16 +248,14 @@ Lite[2] = {"EE4D4D", "FF884D", "FFC44D", "8BC94D", "4DDBC4", "4DC4FF", "5E94FF",
 Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
 
 Media:SetPalette("Lite", Lite)
+--[[
+local Flat = {}
 
-local Flat = {} -- https://flatuicolors.com/palette/defo
-
-Flat[1] = {"1ABC9C", "2ECC71", "3498DB", "9B59B6", "34495E", "BD3525"} -- "FF8DCF"
-Flat[2] = {"16A085", "27AE60", "2980B9", "8E44AD", "2C3E50", "96281B"} -- "D679B4"
-Flat[3] = {"F1C40F", "E67E22", "E74C3C", "ECF0F1", "95A5A6", "948279"}
-Flat[4] = {"F39C12", "D35400", "C0392B", "BDC3C7", "7F8C8D", "615D59"}
+Flat[1] = {"BD3525", "E74C3C", "E67E22", "F1C40F", "2ECC71", "1ABC9C", "3498DB", "34495E", "9B59B6", "FF8DCF", "ECF0F1", "95A5A6", "948279"}
+Flat[2] = {"96281B", "C0392B", "D35400", "F39C12", "27AE60", "16A085", "2980B9", "2C3E50", "8E44AD", "D679B4", "BDC3C7", "7F8C8D", "615D59"}
 
 Media:SetPalette("Flat", Flat)
-
+]]
 -- Templates
 
 -- vUI Default

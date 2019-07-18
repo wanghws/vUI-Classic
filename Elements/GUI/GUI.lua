@@ -85,7 +85,11 @@ local SetVariable = function(id, value)
 	end
 	
 	if vUIData["ui-profile"] then
-		vUIProfiles[vUIData["ui-profile"]][id] = value
+		if (value ~= Defaults[id]) then -- Only saving a value if it's different than default
+			vUIProfiles[vUIData["ui-profile"]][id] = value
+		else
+			vUIProfiles[vUIData["ui-profile"]][id] = nil
+		end
 	end
 	
 	Settings[id] = value

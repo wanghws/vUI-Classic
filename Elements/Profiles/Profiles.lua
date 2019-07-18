@@ -5,6 +5,8 @@ local User = UnitName("player")
 local Realm = GetRealmName()
 local ProfileNames = {}
 
+local pairs = pairs
+
 local GetLastModified = function()
 	
 end
@@ -34,10 +36,10 @@ function Profiles:NewProfile(name)
 	
 	vUIProfiles[name] = {}
 	
-	-- Don't shove Defaults into the profile here. In fact don't even store values unless they ~= Defaults[ID]
+	--[[ Don't shove Defaults into the profile here. In fact don't even store values unless they ~= Defaults[ID]
 	for ID, Value in pairs(Defaults) do
 		vUIProfiles[name][ID] = Value
-	end
+	end]]
 	
 	ProfileNames[name] = name
 	
@@ -83,11 +85,9 @@ function Profiles:ApplyProfile(name)
 		return
 	end
 	
-	-- Merge the profile with Defaults here, and then pass THAT through the pairs loop below.
+	local Values = self:MergeWithDefaults(name)
 	
-	-- local Values = self:MergeWithDefaults(vUIProfiles[name])
-	
-	for ID, Value in pairs(vUIProfiles[name]) do
+	for ID, Value in pairs(Values) do
 		Settings[ID] = Value
 	end
 	
