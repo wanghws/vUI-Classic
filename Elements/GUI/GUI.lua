@@ -23,6 +23,8 @@ GUI.Widgets = {}
 	
 	- Debug window of the GUI. With info like ui scale, resolution, windowed, language, etc etc
 	
+	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
+	
 	To do:
 	- Make GUI:NewWindow() return 2 values, both widget anchors. These can have the :CreateWidget methods so that you don't call Left/Right in each widget init
 	

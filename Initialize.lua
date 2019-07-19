@@ -62,7 +62,9 @@ function vUI:RGBToHex(r, g, b)
 	return format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
---[[print = function(...)
+-- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+
+print = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
 	
@@ -91,7 +93,7 @@ end
 			DEFAULT_CHAT_FRAME:AddMessage(...)
 		end
 	end
-end]]
+end
 
 function vUI:print(...)
 	print("|cFF"..Core[5]["ui-widget-color"].."vUI|r:", ...)

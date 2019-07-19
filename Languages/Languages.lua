@@ -14,7 +14,7 @@ local index = function(t, key)
 		Locale = Default
 	end
 	
-	if t[Locale][key] then
+	if (t[Locale] and t[Locale][key]) then
 		return t[Locale][key]
 	else
 		return key

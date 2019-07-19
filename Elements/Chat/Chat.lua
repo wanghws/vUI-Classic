@@ -37,7 +37,7 @@ local FormatEmailHyperlink = function(address) -- /run print("user@gmail.com")
 end
 
 -- This can be b.net or discord, so just calling it a "friend tag" for now.
-local FormatFriendHyperlink = function(tag) -- /run print("Player#1111") -- /run print("Hydrazine#1152") -- /run print("Hydra#2948") 
+local FormatFriendHyperlink = function(tag) -- /run print("Player#1111") -- /run print("Hydrazine#1152") -- /run print("Hydra#2948")
 	return format("|cFF00AAFF|Hfriend:%s|h[%s]|h|r", tag, tag)
 end
 
@@ -830,7 +830,7 @@ vUI_ChatInstall = function() -- /run vUI_ChatInstall()
 	ReloadUI()
 end
 
--- Is this a stupid joke? Laziness? Is it supposed to be funny? Annoying.
+-- Fix Shaman
 RAID_CLASS_COLORS["SHAMAN"].r = 0
 RAID_CLASS_COLORS["SHAMAN"].g = 0.44
 RAID_CLASS_COLORS["SHAMAN"].b = 0.87
@@ -935,7 +935,7 @@ SendChatMessage = function(msg, chatType, language, channel)
 		if EditBox then
 			EditBox:ClearFocus()
 			ChatEdit_ResetChatTypeToSticky(EditBox)
-			ChatEdit_ResetChatType(EditBox)
+			--ChatEdit_ResetChatType(EditBox)
 		end
 	else
 		OldSendChatMessage(msg, chatType, language, channel)

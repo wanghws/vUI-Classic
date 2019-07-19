@@ -114,6 +114,12 @@ local SkinButton = function(button, pet)
 	button.Backdrop:SetBackdropColor(0, 0, 0)
 	button.Backdrop:SetFrameLevel(button:GetFrameLevel() - 1)
 	
+	button.Backdrop.Texture = button.Backdrop:CreateTexture(nil, "BACKDROP")
+	button.Backdrop.Texture:SetScaledPoint("TOPLEFT", button.Backdrop, 1, -1)
+	button.Backdrop.Texture:SetScaledPoint("BOTTOMRIGHT", button.Backdrop, -1, 1)
+	button.Backdrop.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	button.Backdrop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bg-color"]))
+	
 	if (button.SetHighlightTexture and not button.Hover) then
 		local Hover = button:CreateTexture(nil, "OVERLAY", button)
 		Hover:SetTexture(Media:GetTexture("Blank"))
