@@ -648,6 +648,119 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	return Switch
 end
 
+-- Input
+local INPUT_WIDTH = 130
+
+local InputOnEnterPressed = function(self)
+	local Value = self:GetText()
+	
+	if (not match(Value, "%S")) then
+		self:SetAutoFocus(false)
+		self:ClearFocus()
+		
+		return
+	end
+	
+	self:SetText("")
+	
+	self:SetAutoFocus(false)
+	self:ClearFocus()
+	
+	if self.Hook then
+		self.Hook(Value, self.ID)
+	end
+end
+
+local InputOnMouseDown = function(self)
+	self:SetAutoFocus(true)
+end
+
+local InputOnEditFocusLost = function(self)
+	--self:SetText(self.Prefix..self.Value..self.Postfix)
+end
+
+local InputOnChar = function(self)
+	--[[local Value = tonumber(self:GetText())
+	
+	if (type(Value) ~= "number") then
+		self:SetText(self.Value)
+	end]]
+end
+
+local InputOnEnter = function(self)
+	self.Parent.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
+end
+
+local InputOnLeave = function(self)
+	self.Parent.Highlight:SetAlpha(0)
+end
+
+GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
+	if (Settings[id] ~= nil) then
+		value = Settings[id]
+	end
+	
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.ID = id
+	Anchor.Text = label
+	
+	local Input = CreateFrame("Frame", nil, Anchor)
+	Input:SetScaledSize(INPUT_WIDTH, WIDGET_HEIGHT)
+	Input:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Input:SetBackdrop(vUI.BackdropAndBorder)
+	Input:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	Input:SetBackdropBorderColor(0, 0, 0)
+	
+	Input.Texture = Input:CreateTexture(nil, "ARTWORK")
+	Input.Texture:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Texture:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Input.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	
+	Input.Highlight = Input:CreateTexture(nil, "OVERLAY")
+	Input.Highlight:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Highlight:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Highlight:SetTexture(Media:GetTexture("Blank"))
+	Input.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	Input.Highlight:SetAlpha(0)
+	
+	Input.Box = CreateFrame("EditBox", nil, Input)
+	Input.Box:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
+	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
+	Input.Box:SetJustifyH("LEFT")
+	Input.Box:SetAutoFocus(false)
+	Input.Box:EnableKeyboard(true)
+	Input.Box:EnableMouse(true)
+	Input.Box:SetShadowColor(0, 0, 0)
+	Input.Box:SetShadowOffset(1, -1)
+	Input.Box:SetText(value)
+	Input.Box.ID = id
+	Input.Box.Hook = hook
+	Input.Box.Parent = Input
+	
+	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
+	Input.Box:SetScript("OnEscapePressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
+	Input.Box:SetScript("OnChar", InputOnChar)
+	Input.Box:SetScript("OnEnter", InputOnEnter)
+	Input.Box:SetScript("OnLeave", InputOnLeave)
+	
+	Input.Text = Input:CreateFontString(nil, "OVERLAY")
+	Input.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Input.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Input.Text:SetJustifyH("LEFT")
+	Input.Text:SetShadowColor(0, 0, 0)
+	Input.Text:SetShadowOffset(1, -1)
+	Input.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Input
+end
+
 -- Dropdown
 local DROPDOWN_WIDTH = 130
 local DROPDOWN_HEIGHT = 20
@@ -2731,11 +2844,23 @@ local UpdateProfile = function(value)
 	end
 end
 
+local CreateProfile = function(value)
+	Profiles:NewProfile(value)
+end
+
+local DeleteProfile = function(value)
+	Profiles:DeleteProfile(value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow(Language["Profiles"])
 	
 	Left:CreateHeader(Language["Profiles"])
 	Left:CreateDropdown("ui-profile", vUIData["ui-profile"], Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	
+	Left:CreateHeader(Language["Modify"])
+	Left:CreateInput("profile-key", Profiles:GetDefaultUserKey(), "Create New Profile", "", CreateProfile)
+	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
 	
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
@@ -2743,6 +2868,12 @@ GUI:AddOptions(function(self)
 	
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
+	
+	print(Profiles:GetNumProfiles())
+	print(Name)
+	print(Profile["profile-created"])
+	print(Profile["profile-last-modified"])
+	print(Profiles:CountChangedValues(Name))
 	
 	Right:CreateHeader(Language["Info"])
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())

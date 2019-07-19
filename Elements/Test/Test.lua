@@ -42,9 +42,9 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("test-switch-3", false, "Switch Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
 	
 	Left:CreateHeader(Language["Colors"])
-	Left:CreateColorSelection("test-color-1", "B0BEC5", "Color Selection Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
-	Left:CreateColorSelection("test-color-2", "607D8B", "Color Selection Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
-	Left:CreateColorSelection("test-color-3", "263238", "Color Selection Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
+	Left:CreateColorSelection("test-color-1", "B0BEC5", "Color Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
+	Left:CreateColorSelection("test-color-2", "607D8B", "Color Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
+	Left:CreateColorSelection("test-color-3", "263238", "Color Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
 	
 	Left:CreateHeader(Language["StatusBars"])
 	
@@ -86,6 +86,11 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Test Line 2", "Hello World 2")
 	Right:CreateDoubleLine("Test Line 3", "Hello World 3")
 	
+	Left:CreateHeader(Language["Inputs"])
+	Left:CreateInput("test-input-1", vUI.User, "Test Input 1", nil, function(v) print(v) end)
+	Left:CreateInput("test-input-2", vUI.User, "Test Input 2", nil, function(v) print(v) end)
+	Left:CreateInput("test-input-3", vUI.User, "Test Input 3", nil, function(v) print(v) end)
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 	
@@ -97,7 +102,7 @@ GUI:AddOptions(function(self)
 end)
 
 GUI:AddOptions(function(self)
-	local Left = self:NewWindow("Info")
+	local Left, Right = self:NewWindow("Info")
 	
 	Left:CreateHeader("UI Information")
 	Left:CreateDoubleLine("Version", vUI.Version)
@@ -107,8 +112,8 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("Template", Settings["ui-template"])
 	Left:CreateDoubleLine("Locale", vUI.Locale)
 	
-	Left:CreateHeader("User Information")
-	Left:CreateDoubleLine("User", vUI.User)
-	Left:CreateDoubleLine("Class", vUI.Class)
-	Left:CreateDoubleLine("Realm", vUI.Realm)
+	Right:CreateHeader("User Information")
+	Right:CreateDoubleLine("User", vUI.User)
+	Right:CreateDoubleLine("Class", vUI.Class)
+	Right:CreateDoubleLine("Realm", vUI.Realm)
 end)

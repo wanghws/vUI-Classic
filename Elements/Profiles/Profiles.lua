@@ -36,6 +36,10 @@ function Profiles:GetNumProfiles()
 	return Count
 end
 
+function Profiles:GetDefaultUserKey()
+	return format(DefaultKey, vUI.User, vUI.Realm)
+end
+
 function Profiles:SetLastModified(name)
 	local Profile = self:GetProfile(name)
 	
@@ -86,6 +90,7 @@ function Profiles:NewProfile(name)
 	
 	vUIProfiles[name] = {}
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
+	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
 	self.List[name] = name
 	
 	return vUIProfiles[name]
@@ -106,6 +111,9 @@ end
 function Profiles:DeleteProfile(name)
 	if vUIProfiles[name] then
 		vUIProfiles[name] = nil
+		self.List[name] = nil
+		vUIData["ui-profile"] = "Default" -- Find an existing profile
+		
 		vUI:print(format('Deleted profile "%s".', name))
 	else
 		vUI:print(format('No profile exists with the name "%s".', name))
@@ -130,9 +138,9 @@ function Profiles:MergeWithDefaults(name)
 end
 
 function Profiles:ApplyProfile(name)
-	if (not vUIProfiles[name]) then
+	--[[if (not vUIProfiles[name]) then -- I think we're protected against this, and will manage default if needed?
 		return
-	end
+	end]]
 	
 	local Values = self:MergeWithDefaults(name)
 	
