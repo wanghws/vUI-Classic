@@ -81,7 +81,7 @@ end
 
 -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 
-local Delimiter = " "
+vUI.Delimiter = " "
 
 print = function(...)
 	local NumArgs = select("#", ...)
@@ -92,7 +92,7 @@ print = function(...)
 			if (i == 1) then
 				String = tostring(select(i, ...))
 			else
-				String = String..Delimiter..tostring(select(i, ...))
+				String = String..vUI.Delimiter..tostring(select(i, ...))
 			end
 		end
 		
