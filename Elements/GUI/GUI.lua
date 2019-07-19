@@ -26,8 +26,6 @@ GUI.Widgets = {}
 	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
 	
 	To do:
-	- Make GUI:NewWindow() return 2 values, both widget anchors. These can have the :CreateWidget methods so that you don't call Left/Right in each widget init
-	
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	
@@ -155,6 +153,49 @@ local PairsByKeys = function(t)
 end
 
 -- Widgets
+
+-- Line
+GUI.Widgets.CreateLine = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	
+	local Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Text:SetJustifyH("LEFT")
+	Text:SetShadowColor(0, 0, 0)
+	Text:SetShadowOffset(1, -1)
+	Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Text
+end
+
+GUI.Widgets.CreateDoubleLine = function(self, left, right)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	
+	local Left = Anchor:CreateFontString(nil, "OVERLAY")
+	Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Left:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Left:SetJustifyH("LEFT")
+	Left:SetShadowColor(0, 0, 0)
+	Left:SetShadowOffset(1, -1)
+	Left:SetText("|cFF"..Settings["ui-widget-font-color"]..left.."|r")
+	
+	local Right = Anchor:CreateFontString(nil, "OVERLAY")
+	Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
+	Right:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Right:SetJustifyH("RIGHT")
+	Right:SetShadowColor(0, 0, 0)
+	Right:SetShadowOffset(1, -1)
+	Right:SetText("|cFF"..Settings["ui-widget-font-color"]..right.."|r")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Text
+end
 
 -- Header
 GUI.Widgets.CreateHeader = function(self, text)
@@ -2634,4 +2675,8 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Profiles"])
 	Left:CreateDropdown("ui-profile", vUIData["ui-profile"], Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	
+	Right:CreateHeader("What is a profile?")
+	Right:CreateLine("Profiles store your settings so that you can easily")
+	Right:CreateLine("and quickly change between preset configurations")
 end)
