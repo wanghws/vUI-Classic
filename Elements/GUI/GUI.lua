@@ -84,11 +84,15 @@ local SetVariable = function(id, value)
 		return
 	end
 	
-	if vUIData["ui-profile"] then
+	local Name = Profiles:GetActiveProfileName()
+	
+	if Name then
 		if (value ~= Defaults[id]) then -- Only saving a value if it's different than default
-			vUIProfiles[vUIData["ui-profile"]][id] = value
+			vUIProfiles[Name][id] = value
+			
+			Profiles:SetLastModified(Name)
 		else
-			vUIProfiles[vUIData["ui-profile"]][id] = nil
+			vUIProfiles[Name][id] = nil
 		end
 	end
 	
@@ -2709,4 +2713,14 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
 	Right:CreateLine("and quickly change between configurations.")
+	
+	local Name = Profiles:GetActiveProfileName()
+	local Profile = Profiles:GetProfile(Name)
+	
+	Right:CreateHeader(Language["Info"])
+	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())
+	Right:CreateDoubleLine("Current Profile:", Name)
+	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
+	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
+	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
 end)
