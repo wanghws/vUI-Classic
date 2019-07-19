@@ -265,7 +265,7 @@ local CreateBar1 = function()
 	
 	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", UIParent, "SecureHandlerStateTemplate")
 	ActionBar1:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
-	ActionBar1:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, 0, SPACING + 1)
+	ActionBar1:SetScaledPoint("BOTTOMLEFT", vUIBottomActionBarsPanel, (SPACING + 1), (SPACING + 1))
 	ActionBar1:SetFrameStrata("MEDIUM")
 	
 	Rogue = "[bonusbar:1] 7;"
@@ -304,10 +304,11 @@ local CreateBar1 = function()
 		if (i == 1) then
 			Button:SetScaledPoint("LEFT", 0, 0)
 		else
-			Button:SetScaledPoint("LEFT", _G["ActionButton"..i-1], "RIGHT", SPACING, 0)
+			Button:SetScaledPoint("LEFT", ActionBar1[i-1], "RIGHT", SPACING, 0)
 		end
 		
-		ActionBar1["Button"..i] = Button
+		--ActionBar1["Button"..i] = Button
+		ActionBar1[i] = Button
 	end
 	
 	UpdateBar1()
@@ -319,7 +320,7 @@ end
 local CreateBar2 = function()
 	local ActionBar2 = CreateFrame("Frame", "vUIActionBar2", UIParent, "SecureHandlerStateTemplate")
 	ActionBar2:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
-	ActionBar2:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
+	ActionBar2:SetScaledPoint("TOPLEFT", vUIBottomActionBarsPanel, (SPACING + 1), -(SPACING + 1))
 	ActionBar2:SetFrameStrata("MEDIUM")
 	
 	MultiBarBottomLeft:SetParent(ActionBar2)
@@ -333,8 +334,10 @@ local CreateBar2 = function()
 		if (i == 1) then
 			Button:SetScaledPoint("LEFT", ActionBar2, 0, 0)
 		else
-			Button:SetScaledPoint("LEFT", _G["MultiBarBottomLeftButton"..i-1], "RIGHT", SPACING, 0)
+			Button:SetScaledPoint("LEFT", ActionBar2[i-1], "RIGHT", SPACING, 0)
 		end
+		
+		ActionBar2[i] = Button
 	end
 end
 
@@ -355,15 +358,17 @@ local CreateBar3 = function()
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar3, 0, 0)
 		else
-			Button:SetScaledPoint("TOP", _G["MultiBarRightButton"..i-1], "BOTTOM", 0, -SPACING)
+			Button:SetScaledPoint("TOP", ActionBar3[i-1], "BOTTOM", 0, -SPACING)
 		end
+		
+		ActionBar3[i] = Button
 	end
 end
 
 local CreateBar4 = function()
 	local ActionBar4 = CreateFrame("Frame", "vUIActionBar4", UIParent, "SecureHandlerStateTemplate")
 	ActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
-	ActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
+	--ActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
 	ActionBar4:SetFrameStrata("MEDIUM")
 	
 	MultiBarLeft:SetParent(ActionBar4)
@@ -377,15 +382,17 @@ local CreateBar4 = function()
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar4, 0, 0)
 		else
-			Button:SetScaledPoint("TOP", _G["MultiBarLeftButton"..i-1], "BOTTOM", 0, -SPACING)
+			Button:SetScaledPoint("TOP", ActionBar4[i-1], "BOTTOM", 0, -SPACING)
 		end
+		
+		ActionBar4[i] = Button
 	end
 end
 
 local CreateBar5 = function()
 	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", UIParent, "SecureHandlerStateTemplate")
 	ActionBar5:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
-	ActionBar5:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	--ActionBar5:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	ActionBar5:SetFrameStrata("MEDIUM")
 	
 	MultiBarBottomRight:SetParent(ActionBar5)
@@ -399,8 +406,10 @@ local CreateBar5 = function()
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar5, 0, 0)
 		else
-			Button:SetScaledPoint("TOP", _G["MultiBarBottomRightButton"..i-1], "BOTTOM", 0, -SPACING)
+			Button:SetScaledPoint("TOP", ActionBar5[i-1], "BOTTOM", 0, -SPACING)
 		end
+		
+		ActionBar5[i] = Button
 	end
 end
 
@@ -422,6 +431,57 @@ local CreateBarPanels = function()
 	SidePanel:SetFrameStrata("LOW")
 end
 
+local SetClassicStyle = function()
+	local Bar = vUIActionBar5
+	
+	Bar:ClearAllPoints()
+	Bar:SetScaledPoint("TOPRIGHT", vUIBottomActionBarsPanel, -(SPACING + 1), -(SPACING + 1))
+	Bar:SetScaledWidth((BUTTON_SIZE * 6) + (SPACING * 5))
+	Bar:SetScaledHeight((BUTTON_SIZE * 2) + SPACING)
+	
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	
+	vUIBottomActionBarsPanel:SetScaledSize((BOTTOM_WIDTH + (BOTTOM_WIDTH / 2)) - SPACING, BOTTOM_HEIGHT)
+	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), SIDE_HEIGHT)
+	
+	for i = 1, Num do
+		Bar[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			Bar[i]:SetScaledPoint("BOTTOMLEFT", Bar, 0, 0)
+		elseif (i == 7) then
+			Bar[i]:SetScaledPoint("TOPLEFT", Bar, 0, 0)
+		else
+			Bar[i]:SetScaledPoint("LEFT", Bar[i-1], "RIGHT", SPACING, 0)
+		end
+	end
+end
+
+local SetCompactStyle = function()
+	local Bar = vUIActionBar5
+	
+	Bar:ClearAllPoints()
+	Bar:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	Bar:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
+	
+	vUIBottomActionBarsPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
+	vUISideActionBarsPanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
+	
+	for i = 1, Num do
+		Bar[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			Bar[i]:SetScaledPoint("TOP", Bar, 0, 0)
+		else
+			Bar[i]:SetScaledPoint("TOP", Bar[i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+end
+
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBarPanels()
@@ -431,5 +491,28 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBar4()
 	CreateBar5()
 	
+	local Layout = Settings["action-bars-layout"]
+	
+	if (Layout == "COMPACT") then
+		SetCompactStyle()
+	elseif (Layout == "CLASSIC") then
+		SetClassicStyle()
+	end
+	
 	self:UnregisterEvent(event)
+end)
+
+local SetActionBarLayout = function(value)
+	if (value == "COMPACT") then
+		SetCompactStyle()
+	elseif (value == "CLASSIC") then
+		SetClassicStyle()
+	end
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:NewWindow(Language["Action Bars"])
+	
+	Left:CreateHeader(Language["Layouts"])
+	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)
 end)

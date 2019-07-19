@@ -77,7 +77,6 @@ GUI:AddOptions(function(self)
 	Bar:GetScript("OnUpdate")(Bar, 1)
 	
 	-- Testing
-	self:NewWindow("Action Bars")
 	self:NewWindow("Unit Frames")
 	self:NewWindow("Tooltips")
 	self:NewWindow("Misc.")

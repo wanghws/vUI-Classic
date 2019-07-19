@@ -39,6 +39,9 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
+-- Action Bars
+Defaults["action-bars-layout"] = "COMPACT"
+
 -- Chat
 Defaults["chat-enable"] = true
 Defaults["chat-bg-opacity"] = 70
