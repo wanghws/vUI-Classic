@@ -8,9 +8,9 @@ local GetZonePVPInfo = GetZonePVPInfo
 local GetSubZoneText = GetSubZoneText
 local GetZoneText = GetZoneText
 
-local FadeInTime = 0.4
-local HoldTime = 1.6
-local FadeOutTime = 1.4
+local FADE_IN_TIME = 0.4
+local FADE_OUT_TIME = 1.4
+local HOLD_TIME = 1.6
 
 local CustomZoneText = CreateFrame("Frame")
 
@@ -23,17 +23,17 @@ CustomZoneTextFrame.Group = CreateAnimationGroup(CustomZoneTextFrame)
 
 CustomZoneTextFrame.FadeIn = CustomZoneTextFrame.Group:CreateAnimation("fade")
 CustomZoneTextFrame.FadeIn:SetEasing("in")
-CustomZoneTextFrame.FadeIn:SetDuration(FadeInTime)
+CustomZoneTextFrame.FadeIn:SetDuration(FADE_IN_TIME)
 CustomZoneTextFrame.FadeIn:SetChange(1)
 CustomZoneTextFrame.FadeIn:SetScript("OnPlay", function(self) self.Parent:Show() end)
 
 CustomZoneTextFrame.Sleep = CustomZoneTextFrame.Group:CreateAnimation("sleep")
-CustomZoneTextFrame.Sleep:SetDuration(HoldTime)
+CustomZoneTextFrame.Sleep:SetDuration(HOLD_TIME)
 CustomZoneTextFrame.Sleep:SetOrder(2)
 
 CustomZoneTextFrame.FadeOut = CustomZoneTextFrame.Group:CreateAnimation("fade")
 CustomZoneTextFrame.FadeOut:SetEasing("out")
-CustomZoneTextFrame.FadeOut:SetDuration(FadeOutTime)
+CustomZoneTextFrame.FadeOut:SetDuration(FADE_OUT_TIME)
 CustomZoneTextFrame.FadeOut:SetChange(0)
 CustomZoneTextFrame.FadeOut:SetOrder(3)
 CustomZoneTextFrame.FadeOut:SetScript("OnFinished", function(self) self.Parent:Hide() end)
@@ -47,17 +47,17 @@ CustomSubZoneTextFrame.Group = CreateAnimationGroup(CustomSubZoneTextFrame)
 
 CustomSubZoneTextFrame.FadeIn = CustomSubZoneTextFrame.Group:CreateAnimation("fade")
 CustomSubZoneTextFrame.FadeIn:SetEasing("in")
-CustomSubZoneTextFrame.FadeIn:SetDuration(FadeInTime)
+CustomSubZoneTextFrame.FadeIn:SetDuration(FADE_IN_TIME)
 CustomSubZoneTextFrame.FadeIn:SetChange(1)
 CustomSubZoneTextFrame.FadeIn:SetScript("OnPlay", function(self) self.Parent:Show() end)
 
 CustomSubZoneTextFrame.Sleep = CustomSubZoneTextFrame.Group:CreateAnimation("sleep")
-CustomSubZoneTextFrame.Sleep:SetDuration(HoldTime)
+CustomSubZoneTextFrame.Sleep:SetDuration(HOLD_TIME)
 CustomSubZoneTextFrame.Sleep:SetOrder(2)
 
 CustomSubZoneTextFrame.FadeOut = CustomSubZoneTextFrame.Group:CreateAnimation("fade")
 CustomSubZoneTextFrame.FadeOut:SetEasing("out")
-CustomSubZoneTextFrame.FadeOut:SetDuration(FadeOutTime)
+CustomSubZoneTextFrame.FadeOut:SetDuration(FADE_OUT_TIME)
 CustomSubZoneTextFrame.FadeOut:SetChange(0)
 CustomSubZoneTextFrame.FadeOut:SetOrder(3)
 CustomSubZoneTextFrame.FadeOut:SetScript("OnFinished", function(self) self.Parent:Hide() end)

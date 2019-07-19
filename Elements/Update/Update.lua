@@ -12,7 +12,6 @@ local IsInRaid = IsInRaid
 -- Use a button in GUI to request newer versions? -- Put a pretty hard throttle on the button too so it can't be smashed.
 -- vUI:print("If any version data is recieved, you will be prompted.")
 
-local User = UnitName("player")
 local AddOnVersion = tonumber(vUI.Version)
 
 local Update = CreateFrame("Frame")
@@ -106,7 +105,7 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (match(sender, "(%S+)-%S+") == User) then
+	if (match(sender, "(%S+)-%S+") == vUI.User) then
 		return
 	end
 	

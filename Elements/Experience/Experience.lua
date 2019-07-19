@@ -388,43 +388,43 @@ local UpdateUIScale = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Window = self:NewWindow(Language["Experience"])
+	local Left, Right = self:NewWindow(Language["Experience"])
 	
-	Window:CreateHeader("Left", Language["Enable"])
-	Window:CreateCheckbox("Left", "experience-enable", true, Language["Enable Experience"], "")
+	Left:CreateHeader(Language["Enable"])
+	Left:CreateCheckbox("experience-enable", true, Language["Enable Experience"], "")
 	
-	Window:CreateHeader("Left", Language["Styling"])
-	Window:CreateCheckbox("Left", "experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
-	Window:CreateCheckbox("Left", "experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "", UpdateDisplayProgress)
-	Window:CreateCheckbox("Left", "experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "", UpdateDisplayPercent)
-	Window:CreateCheckbox("Left", "experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
+	Left:CreateHeader(Language["Styling"])
+	Left:CreateCheckbox("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
+	Left:CreateCheckbox("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "", UpdateDisplayProgress)
+	Left:CreateCheckbox("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "", UpdateDisplayPercent)
+	Left:CreateCheckbox("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
 	
-	Window:CreateHeader("Right", Language["Size"])
-	Window:CreateSlider("Right", "experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
-	Window:CreateSlider("Right", "experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
+	Right:CreateHeader(Language["Size"])
+	Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
+	Right:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
-	Window:CreateHeader("Right", Language["Positioning"])
-	Window:CreateDropdown("Right", "experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
+	Right:CreateHeader(Language["Positioning"])
+	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
 	
-	Window:CreateHeader("Right", Language["Visibility"])
+	Right:CreateHeader(Language["Visibility"])
 	
-	Window:CreateDropdown("Right", "experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
-	Window:CreateDropdown("Right", "experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
+	Right:CreateDropdown("experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
+	Right:CreateDropdown("experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
 	
 	-- TEMPORARY -- Debug/Test
-	local GeneralWindow = self:NewWindow(Language["General"])
+	local GeneralLeft, GeneralRight = self:NewWindow(Language["General"])
 	
-	GeneralWindow:CreateHeader("Left", Language["Welcome"])
-	GeneralWindow:CreateCheckbox("Left", "ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
-	GeneralWindow:CreateCheckbox("Left", "ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
-	GeneralWindow:CreateCheckbox("Left", "ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
+	GeneralLeft:CreateHeader(Language["Welcome"])
+	GeneralLeft:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
+	GeneralLeft:CreateCheckbox("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
+	GeneralLeft:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
-	GeneralWindow:CreateHeader("Right", Language["Language"])
-	GeneralWindow:CreateDropdown("Right", "ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
-	GeneralWindow:CreateButton("Right", Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
+	GeneralRight:CreateHeader(Language["Language"])
+	GeneralRight:CreateDropdown("ui-language", GetLocale(), Languages, Language["UI Language"], "", ReloadUI)
+	GeneralRight:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
-	GeneralWindow:CreateHeader("Right", Language["Scale"])
-	GeneralWindow:CreateSlider("Right", "ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
+	GeneralRight:CreateHeader(Language["Scale"])
+	GeneralRight:CreateSlider("ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]

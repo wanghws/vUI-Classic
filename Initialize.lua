@@ -34,6 +34,8 @@ end
 
 -- Some Data
 vUI.Version = GetAddOnMetadata("vUI", "Version")
+vUI.User = UnitName("player")
+vUI.Realm = GetRealmName()
 
 vUI.Backdrop = {
 	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",

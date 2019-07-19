@@ -957,17 +957,17 @@ local UpdateOpacity = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Window = self:NewWindow(Language["Chat"])
+	local Left, Right = self:NewWindow(Language["Chat"])
 	
-	Window:CreateHeader("Left", Language["Enable"])
-	Window:CreateCheckbox("Left", "chat-enable", Settings["chat-enable"], Language["Enable Chat"], "")
+	Left:CreateHeader(Language["Enable"])
+	Left:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat"], "")
 	
-	Window:CreateHeader("Left", Language["Opacity"])
-	Window:CreateSlider("Left", "chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
+	Left:CreateHeader(Language["Opacity"])
+	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
 	
-	Window:CreateHeader("Right", Language["Links"])
-	Window:CreateCheckbox("Right","chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
-	Window:CreateCheckbox("Right","chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")
-	Window:CreateCheckbox("Right","chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
-	Window:CreateCheckbox("Right","chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
+	Right:CreateHeader(Language["Links"])
+	Right:CreateCheckbox("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
+	Right:CreateCheckbox("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")
+	Right:CreateCheckbox("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
+	Right:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
 end)

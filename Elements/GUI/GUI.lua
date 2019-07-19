@@ -155,7 +155,7 @@ end
 -- Widgets
 
 -- Header
-GUI.Widgets.CreateHeader = function(self, side, text)
+GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -182,11 +182,7 @@ GUI.Widgets.CreateHeader = function(self, side, text)
 	Header.Text:SetShadowOffset(1, -1)
 	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Header
 end
@@ -218,7 +214,7 @@ local ButtonWidgetOnLeave = function(self)
 	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
-GUI.Widgets.CreateButton = function(self, side, value, label, tooltip, hook)
+GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
@@ -265,11 +261,7 @@ GUI.Widgets.CreateButton = function(self, side, value, label, tooltip, hook)
 	Button.Text:SetShadowOffset(1, -1)
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Button
 end
@@ -277,7 +269,7 @@ end
 -- StatusBar
 local STATUSBAR_WIDTH = 100
 
-GUI.Widgets.CreateStatusBar = function(self, side, value, minvalue, maxvalue, label, tooltip, hook)
+GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
@@ -337,11 +329,7 @@ GUI.Widgets.CreateStatusBar = function(self, side, value, minvalue, maxvalue, la
 	Bar.Text:SetShadowOffset(1, -1)
 	Bar.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Bar
 end
@@ -373,7 +361,7 @@ local CheckboxOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateCheckbox = function(self, side, id, value, label, tooltip, hook)
+GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -449,11 +437,7 @@ GUI.Widgets.CreateCheckbox = function(self, side, id, value, label, tooltip, hoo
 		Checkbox.Texture:SetAlpha(0)
 	end
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Checkbox
 end
@@ -510,7 +494,7 @@ local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateSwitch = function(self, side, id, value, label, tooltip, hook)
+GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -585,11 +569,7 @@ GUI.Widgets.CreateSwitch = function(self, side, id, value, label, tooltip, hook)
 		Switch.Thumb:SetScaledPoint("LEFT", Switch, 0, 0)
 	end
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Switch
 end
@@ -846,7 +826,7 @@ local AddDropdownScrollBar = function(self)
 	self:SetScaledHeight(((WIDGET_HEIGHT - 1) * DROPDOWN_MAX_SHOWN) + 1)
 end
 
-GUI.Widgets.CreateDropdown = function(self, side, id, value, values, label, tooltip, hook, custom)
+GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -1097,11 +1077,7 @@ GUI.Widgets.CreateDropdown = function(self, side, id, value, values, label, tool
 		Dropdown.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * Count) + 1)
 	end
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Dropdown
 end
@@ -1244,7 +1220,7 @@ local SliderOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-GUI.Widgets.CreateSlider = function(self, side, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
+GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -1387,11 +1363,7 @@ GUI.Widgets.CreateSlider = function(self, side, id, value, minvalue, maxvalue, s
 	
 	Slider:Show()
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Slider
 end
@@ -1936,7 +1908,7 @@ local ColorSelectionOnMouseUp = function(self)
 	end
 end
 
-GUI.Widgets.CreateColorSelection = function(self, side, id, value, label, tooltip, hook)
+GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -2008,11 +1980,7 @@ GUI.Widgets.CreateColorSelection = function(self, side, id, value, label, toolti
 	Button.Text:SetShadowOffset(1, -1)
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
-	if (lower(side) == "left") then
-		tinsert(self.LeftWidgets, Anchor)
-	else
-		tinsert(self.RightWidgets, Anchor)
-	end
+	tinsert(self.Widgets, Anchor)
 	
 	return Button
 end
@@ -2339,8 +2307,6 @@ GUI.NewWindow = function(self, name, default)
 	Window:SetScaledWidth(PARENT_WIDTH)
 	Window:SetScaledPoint("BOTTOMRIGHT", self, -SPACING, SPACING)
 	Window:SetScaledPoint("TOPRIGHT", self.Header, "BOTTOMRIGHT", 0, -2)
-	--Window:SetBackdrop(vUI.BackdropAndBorder)
-	--Window:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window:SetBackdropBorderColor(0, 0, 0)
 	Window:Hide()
 	
@@ -2352,11 +2318,6 @@ GUI.NewWindow = function(self, name, default)
 	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
-	--[[Window.LeftWidgetsBG.Fill = Window.LeftWidgetsBG:CreateTexture(nil, "BACKGROUND")
-	Window.LeftWidgetsBG.Fill:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, SPACING, -SPACING)
-	Window.LeftWidgetsBG.Fill:SetScaledPoint("BOTTOMRIGHT", Window.LeftWidgetsBG, -SPACING, SPACING)
-	Window.LeftWidgetsBG.Fill:SetColorTexture(HexToRGB(Settings["ui-window-bg-color"]))]]
-	
 	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
 	Window.RightWidgetsBG:SetScaledWidth(GROUP_WIDTH + (SPACING * 2))
 	Window.RightWidgetsBG:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, "TOPRIGHT", 2, 0)
@@ -2365,33 +2326,18 @@ GUI.NewWindow = function(self, name, default)
 	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
-	--[[Window.RightWidgetsBG.Fill = Window.RightWidgetsBG:CreateTexture(nil, "BACKGROUND")
-	Window.RightWidgetsBG.Fill:SetScaledPoint("TOPLEFT", Window.RightWidgetsBG, SPACING, -SPACING)
-	Window.RightWidgetsBG.Fill:SetScaledPoint("BOTTOMRIGHT", Window.RightWidgetsBG, -SPACING, SPACING)
-	Window.RightWidgetsBG.Fill:SetColorTexture(HexToRGB(Settings["ui-window-bg-color"]))]]
-	
-	--[[Window.LeftWidgetsBG = CreateFrame("Frame", nil, Window)
-	Window.LeftWidgetsBG:SetScaledSize(GROUP_WIDTH, PARENT_HEIGHT)
-	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, SPACING, -SPACING)
-	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
-	
-	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
-	Window.RightWidgetsBG:SetScaledSize(GROUP_WIDTH, PARENT_HEIGHT)
-	Window.RightWidgetsBG:SetScaledPoint("TOPRIGHT", Window, -SPACING, -SPACING)
-	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)]]
-	
 	Window.Parent = self
 	Window.Button = Button
 	Window.LeftWidgets = {}
 	Window.RightWidgets = {}
 	Window.SortWindow = SortWindow
 	
+	Window.LeftWidgetsBG.Widgets = Window.LeftWidgets
+	Window.RightWidgetsBG.Widgets = Window.RightWidgets
+	
 	for Name, Function in pairs(self.Widgets) do
-		Window[Name] = Function
+		Window.LeftWidgetsBG[Name] = Function
+		Window.RightWidgetsBG[Name] = Function
 	end
 	
 	self.Windows[name] = Window
@@ -2405,7 +2351,7 @@ GUI.NewWindow = function(self, name, default)
 	end
 	
 	-- return left and right widget group too?
-	return Window
+	return Window.LeftWidgetsBG, Window.RightWidgetsBG
 end
 
 GUI.GetWindow = function(self, name)
@@ -2623,38 +2569,38 @@ SlashCmdList["VUI"] = function()
 end
 
 GUI:AddOptions(function(self)
-	local Window = self:NewWindow(Language["Templates"], true)
-
-	Window:CreateHeader("Left", Language["Templates"])
-	Window:CreateDropdown("Left", "ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
+	local Left, Right = self:NewWindow(Language["Templates"], true)
 	
-	Window:CreateHeader("Right", Language["Console"])
-	Window:CreateButton("Right", Language["Reload"], Language["Reload UI"], "", ReloadUI)
-	Window:CreateButton("Right", Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = nil; ReloadUI(); end)
+	Left:CreateHeader(Language["Templates"])
+	Left:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
 	
-	Window:CreateHeader("Right", Language["Windows"])
-	Window:CreateColorSelection("Right", "ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")
-	Window:CreateColorSelection("Right", "ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
+	Right:CreateHeader(Language["Console"])
+	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
+	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = nil; ReloadUI(); end)
 	
-	Window:CreateHeader("Right", Language["Buttons"])
-	Window:CreateColorSelection("Right", "ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
-	Window:CreateColorSelection("Right", "ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
-	Window:CreateDropdown("Right", "ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	Window:CreateDropdown("Right", "ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	Right:CreateHeader(Language["Windows"])
+	Right:CreateColorSelection("ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")
+	Right:CreateColorSelection("ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
 	
-	Window:CreateHeader("Left", Language["Headers"])
-	Window:CreateColorSelection("Left", "ui-header-font-color", Settings["ui-header-font-color"], Language["Text Color"], "")
-	Window:CreateColorSelection("Left", "ui-header-texture-color", Settings["ui-header-texture-color"], Language["Texture Color"], "")
-	Window:CreateDropdown("Left", "ui-header-texture", Settings["ui-header-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	Window:CreateDropdown("Left", "ui-header-font", Settings["ui-header-font"], Media:GetFontList(), Language["Header Font"], "", nil, "Font")
+	Right:CreateHeader(Language["Buttons"])
+	Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
+	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
+	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
-	Window:CreateHeader("Left", Language["Widgets"])
-	Window:CreateColorSelection("Left", "ui-widget-color", Settings["ui-widget-color"], Language["Color"], "")
-	Window:CreateColorSelection("Left", "ui-widget-bright-color", Settings["ui-widget-bright-color"], Language["Bright Color"], "")
-	Window:CreateColorSelection("Left", "ui-widget-bg-color", Settings["ui-widget-bg-color"], Language["Background Color"], "")
-	Window:CreateColorSelection("Left", "ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
-	Window:CreateDropdown("Left", "ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	Window:CreateDropdown("Left", "ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	Left:CreateHeader(Language["Headers"])
+	Left:CreateColorSelection("ui-header-font-color", Settings["ui-header-font-color"], Language["Text Color"], "")
+	Left:CreateColorSelection("ui-header-texture-color", Settings["ui-header-texture-color"], Language["Texture Color"], "")
+	Left:CreateDropdown("ui-header-texture", Settings["ui-header-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Left:CreateDropdown("ui-header-font", Settings["ui-header-font"], Media:GetFontList(), Language["Header Font"], "", nil, "Font")
+	
+	Left:CreateHeader(Language["Widgets"])
+	Left:CreateColorSelection("ui-widget-color", Settings["ui-widget-color"], Language["Color"], "")
+	Left:CreateColorSelection("ui-widget-bright-color", Settings["ui-widget-bright-color"], Language["Bright Color"], "")
+	Left:CreateColorSelection("ui-widget-bg-color", Settings["ui-widget-bg-color"], Language["Background Color"], "")
+	Left:CreateColorSelection("ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
+	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 end)
 
 local UpdateProfile = function(value)
@@ -2666,8 +2612,8 @@ local UpdateProfile = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Window = self:NewWindow(Language["Profiles"])
+	local Left, Right = self:NewWindow(Language["Profiles"])
 	
-	Window:CreateHeader("Left", Language["Profiles"])
-	Window:CreateDropdown("Left", "ui-profile", vUIData["ui-profile"], Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	Left:CreateHeader(Language["Profiles"])
+	Left:CreateDropdown("ui-profile", vUIData["ui-profile"], Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 end)
