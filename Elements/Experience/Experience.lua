@@ -204,8 +204,6 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 		return
 	end
 	
-	--self:SetScaledSize(Settings["experience-width"], Settings["experience-height"])
-	--self:SetScaledPoint("TOP", UIParent, 0, -13)
 	self:SetFrameStrata("MEDIUM")
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
@@ -237,7 +235,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.BarBG:SetScaledPoint("TOPLEFT", self.HeaderBG, "TOPRIGHT", 2, 0)
 	self.BarBG:SetScaledPoint("BOTTOMRIGHT", self, 0, 0)
 	self.BarBG:SetBackdrop(vUI.BackdropAndBorder)
-	self.BarBG:SetBackdropColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	self.BarBG:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	self.BarBG:SetBackdropBorderColor(0, 0, 0)
 	self.BarBG:SetFrameStrata("MEDIUM")
 	
@@ -245,7 +243,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Texture:SetScaledPoint("TOPLEFT", self.BarBG, 1, -1)
 	self.Texture:SetScaledPoint("BOTTOMRIGHT", self.BarBG, -1, 1)
 	self.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
 	self.BGAll = CreateFrame("Frame", nil, self)
 	self.BGAll:SetScaledPoint("TOPLEFT", self.HeaderBG, -3, 3)
@@ -298,14 +296,12 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Flash.Out:SetChange(0)
 	
 	--local RR, RG, RB = vUI:HexToRGB("00B4FF")
-	local RR, RG, RB = R, G, B
-	--local RR, RG, RB = vUI:HexToRGB(Settings["ui-widget-bg-color"])
 	
 	self.Bar.Rested = CreateFrame("StatusBar", nil, self.Bar)
 	self.Bar.Rested:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	self.Bar.Rested:SetFrameLevel(5)
 	self.Bar.Rested:SetAllPoints(self.Bar)
-	self.Bar.Rested:SetStatusBarColor(RR, RG, RB)
+	self.Bar.Rested:SetStatusBarColor(R, G, B)
 	self.Bar.Rested:SetFrameStrata("MEDIUM")
 	self.Bar.Rested:SetAlpha(0.5)
 	
