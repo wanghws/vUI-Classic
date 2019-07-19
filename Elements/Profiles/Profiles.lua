@@ -1,10 +1,8 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
-local Default = "%s-%s"
-local User = UnitName("player")
-local Realm = GetRealmName()
 Profiles.List = {}
 
+local DefaultKey = "%s-%s"
 local pairs = pairs
 
 local GetLastModified = function()
@@ -25,7 +23,7 @@ function Profiles:NewProfile(name)
 	end
 	
 	if (not name) then
-		name = format(Default, User, Realm)
+		name = format(DefaultKey, vUI.User, vUI.Realm)
 	end
 	
 	if vUIProfiles[name] then
@@ -55,6 +53,9 @@ end
 function Profiles:DeleteProfile(name)
 	if vUIProfiles[name] then
 		vUIProfiles[name] = nil
+		vUI:print(format('Deleted profile "%s".', name))
+	else
+		vUI:print(format('No profile exists with the name "%s".', name))
 	end
 end
 

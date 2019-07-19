@@ -36,6 +36,11 @@ end
 vUI.Version = GetAddOnMetadata("vUI", "Version")
 vUI.User = UnitName("player")
 vUI.Realm = GetRealmName()
+vUI.Locale = GetLocale()
+
+if (vUI.Locale == "enGB") then
+	vUI.Locale = "enUS"
+end
 
 vUI.Backdrop = {
 	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",

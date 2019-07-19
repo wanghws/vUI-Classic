@@ -1375,10 +1375,10 @@ local COLOR_WIDTH = 80
 local SWATCH_SIZE = 20
 
 local ColorSwatchOnMouseUp = function(self)
-	GUI.SwatchWindow.Transition:SetChange(HexToRGB(self.Value))
-	GUI.SwatchWindow.Transition:Play()
-	GUI.SwatchWindow.NewHexText:SetText("#"..self.Value)
-	GUI.SwatchWindow.Selected = self.Value
+	GUI.ColorPicker.Transition:SetChange(HexToRGB(self.Value))
+	GUI.ColorPicker.Transition:Play()
+	GUI.ColorPicker.NewHexText:SetText("#"..self.Value)
+	GUI.ColorPicker.Selected = self.Value
 end
 
 local ColorSwatchOnEnter = function(self)
@@ -1389,17 +1389,17 @@ local ColorSwatchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
-local SwatchWindowAccept = function(self)
+local ColorPickerAccept = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	local Active = self:GetParent().Active
 	
-	if GUI.SwatchWindow.Selected then
-		Active.Transition:SetChange(HexToRGB(GUI.SwatchWindow.Selected))
+	if GUI.ColorPicker.Selected then
+		Active.Transition:SetChange(HexToRGB(GUI.ColorPicker.Selected))
 		Active.Transition:Play()
 		
-		Active.MiddleText:SetText("#"..upper(GUI.SwatchWindow.Selected))
-		Active.Value = GUI.SwatchWindow.Selected
+		Active.MiddleText:SetText("#"..upper(GUI.ColorPicker.Selected))
+		Active.Value = GUI.ColorPicker.Selected
 		
 		SetVariable(Active.ID, Active.Value)
 		
@@ -1408,20 +1408,20 @@ local SwatchWindowAccept = function(self)
 		end
 	end
 	
-	GUI.SwatchWindow.FadeOut:Play()
+	GUI.ColorPicker.FadeOut:Play()
 end
 
-local SwatchWindowCancel = function(self)
+local ColorPickerCancel = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
-	GUI.SwatchWindow.FadeOut:Play()
+	GUI.ColorPicker.FadeOut:Play()
 end
 
-local SwatchWindowOnEnter = function(self)
+local ColorPickerOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
 end
 
-local SwatchWindowOnLeave = function(self)
+local ColorPickerOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
@@ -1443,19 +1443,18 @@ local SwatchEditBoxOnEditFocusLost = function(self)
 	if (Value and match(Value, "%x%x%x%x%x%x")) then
 		self:SetText("#"..Value)
 		
-		GUI.SwatchWindow.Transition:SetChange(HexToRGB(Value))
-		GUI.SwatchWindow.Transition:Play()
-		GUI.SwatchWindow.Selected = Value
+		GUI.ColorPicker.Transition:SetChange(HexToRGB(Value))
+		GUI.ColorPicker.Selected = Value
 	else
-		--vUI:print(format('Invalid hex code "%s". Default to white.', Value))
-		print(format('Invalid hex code "%s". Default to white.', Value))
+		vUI:print(format('Invalid hex code "%s".', Value))
 		
-		self:SetText("#FFFFFF")
+		self:SetText("#" .. GUI.ColorPicker.Active.Value)
 		
-		GUI.SwatchWindow.Transition:SetChange(1, 1, 1)
-		GUI.SwatchWindow.Transition:Play()
-		GUI.SwatchWindow.Selected = "FFFFFF"
+		GUI.ColorPicker.Transition:SetChange(HexToRGB(GUI.ColorPicker.Active.Value))
+		GUI.ColorPicker.Selected = GUI.ColorPicker.Active.Value
 	end
+	
+	GUI.ColorPicker.Transition:Play()
 end
 
 local SwatchEditBoxOnChar = function(self)
@@ -1487,286 +1486,286 @@ local SwatchButtonOnMouseDown = function(self)
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
-local CreateSwatchWindow = function()
-	if GUI.SwatchWindow then
+local CreateColorPicker = function()
+	if GUI.ColorPicker then
 		return
 	end
 	
-	local SwatchWindow = CreateFrame("Frame", "vUIColorPicker", GUI)
-	SwatchWindow:SetScaledSize(389, 270)
-	SwatchWindow:SetScaledPoint("CENTER", UIParent, 0, 81)
-	SwatchWindow:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
-	SwatchWindow:SetBackdropBorderColor(0, 0, 0)
-	SwatchWindow:SetFrameStrata("HIGH")
-	SwatchWindow:Hide()
-	SwatchWindow:SetAlpha(0)
-	SwatchWindow:SetMovable(true)
-	SwatchWindow:EnableMouse(true)
-	SwatchWindow:RegisterForDrag("LeftButton")
-	SwatchWindow:SetScript("OnDragStart", SwatchWindow.StartMoving)
-	SwatchWindow:SetScript("OnDragStop", SwatchWindow.StopMovingOrSizing)
+	local ColorPicker = CreateFrame("Frame", "vUIColorPicker", GUI)
+	ColorPicker:SetScaledSize(389, 270)
+	ColorPicker:SetScaledPoint("CENTER", UIParent, 0, 81)
+	ColorPicker:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	ColorPicker:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker:SetFrameStrata("HIGH")
+	ColorPicker:Hide()
+	ColorPicker:SetAlpha(0)
+	ColorPicker:SetMovable(true)
+	ColorPicker:EnableMouse(true)
+	ColorPicker:RegisterForDrag("LeftButton")
+	ColorPicker:SetScript("OnDragStart", ColorPicker.StartMoving)
+	ColorPicker:SetScript("OnDragStop", ColorPicker.StopMovingOrSizing)
 	
 	-- Header
-	SwatchWindow.Header = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.Header:SetScaledHeight(HEADER_HEIGHT)
-	SwatchWindow.Header:SetScaledPoint("TOPLEFT", SwatchWindow, 2, -2)
-	SwatchWindow.Header:SetScaledPoint("TOPRIGHT", SwatchWindow, 0, -2)
-	SwatchWindow.Header:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.Header:SetBackdropColor(0, 0, 0)
-	SwatchWindow.Header:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.Header = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.Header:SetScaledHeight(HEADER_HEIGHT)
+	ColorPicker.Header:SetScaledPoint("TOPLEFT", ColorPicker, 2, -2)
+	ColorPicker.Header:SetScaledPoint("TOPRIGHT", ColorPicker, 0, -2)
+	ColorPicker.Header:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.Header:SetBackdropColor(0, 0, 0)
+	ColorPicker.Header:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.HeaderTexture = SwatchWindow.Header:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.HeaderTexture:SetScaledPoint("TOPLEFT", SwatchWindow.Header, 1, -1)
-	SwatchWindow.HeaderTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Header, -1, 1)
-	SwatchWindow.HeaderTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	SwatchWindow.HeaderTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	ColorPicker.HeaderTexture = ColorPicker.Header:CreateTexture(nil, "OVERLAY")
+	ColorPicker.HeaderTexture:SetScaledPoint("TOPLEFT", ColorPicker.Header, 1, -1)
+	ColorPicker.HeaderTexture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Header, -1, 1)
+	ColorPicker.HeaderTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	ColorPicker.HeaderTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
-	SwatchWindow.Header.Text = SwatchWindow.Header:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.Header.Text:SetScaledPoint("LEFT", SwatchWindow.Header, HEADER_SPACING, -1)
-	SwatchWindow.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
-	SwatchWindow.Header.Text:SetJustifyH("LEFT")
-	SwatchWindow.Header.Text:SetShadowColor(0, 0, 0)
-	SwatchWindow.Header.Text:SetShadowOffset(1, -1)
-	SwatchWindow.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Select a color".."|r")
+	ColorPicker.Header.Text = ColorPicker.Header:CreateFontString(nil, "OVERLAY")
+	ColorPicker.Header.Text:SetScaledPoint("LEFT", ColorPicker.Header, HEADER_SPACING, -1)
+	ColorPicker.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	ColorPicker.Header.Text:SetJustifyH("LEFT")
+	ColorPicker.Header.Text:SetShadowColor(0, 0, 0)
+	ColorPicker.Header.Text:SetShadowOffset(1, -1)
+	ColorPicker.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Select a color".."|r")
 	
 	-- Selection parent
-	SwatchWindow.SwatchParent = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.SwatchParent:SetScaledPoint("TOPLEFT", SwatchWindow.Header, "BOTTOMLEFT", 0, -2)
-	SwatchWindow.SwatchParent:SetScaledPoint("BOTTOMRIGHT", SwatchWindow, 0, 3)
-	SwatchWindow.SwatchParent:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.SwatchParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
-	SwatchWindow.SwatchParent:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.SwatchParent = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.SwatchParent:SetScaledPoint("TOPLEFT", ColorPicker.Header, "BOTTOMLEFT", 0, -2)
+	ColorPicker.SwatchParent:SetScaledPoint("BOTTOMRIGHT", ColorPicker, 0, 3)
+	ColorPicker.SwatchParent:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.SwatchParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	ColorPicker.SwatchParent:SetBackdropBorderColor(0, 0, 0)
 	
 	-- Close button
-	SwatchWindow.Header.CloseButton = CreateFrame("Frame", nil, SwatchWindow.Header)
-	SwatchWindow.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
-	SwatchWindow.Header.CloseButton:SetScaledPoint("RIGHT", SwatchWindow.Header, 0, 0)
-	SwatchWindow.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
-	SwatchWindow.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
-	SwatchWindow.Header.CloseButton:SetScript("OnMouseUp", function() SwatchWindow.FadeOut:Play() end)
+	ColorPicker.Header.CloseButton = CreateFrame("Frame", nil, ColorPicker.Header)
+	ColorPicker.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
+	ColorPicker.Header.CloseButton:SetScaledPoint("RIGHT", ColorPicker.Header, 0, 0)
+	ColorPicker.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
+	ColorPicker.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
+	ColorPicker.Header.CloseButton:SetScript("OnMouseUp", function() ColorPicker.FadeOut:Play() end)
 	
-	SwatchWindow.Header.CloseButton.Text = SwatchWindow.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
-	SwatchWindow.Header.CloseButton.Text:SetScaledPoint("CENTER", SwatchWindow.Header.CloseButton, 0, 0)
-	SwatchWindow.Header.CloseButton.Text:SetFont(Media:GetFont("PT Sans"), 18)
-	SwatchWindow.Header.CloseButton.Text:SetJustifyH("CENTER")
-	SwatchWindow.Header.CloseButton.Text:SetShadowColor(0, 0, 0)
-	SwatchWindow.Header.CloseButton.Text:SetShadowOffset(1, -1)
-	SwatchWindow.Header.CloseButton.Text:SetText("×")
+	ColorPicker.Header.CloseButton.Text = ColorPicker.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
+	ColorPicker.Header.CloseButton.Text:SetScaledPoint("CENTER", ColorPicker.Header.CloseButton, 0, 0)
+	ColorPicker.Header.CloseButton.Text:SetFont(Media:GetFont("PT Sans"), 18)
+	ColorPicker.Header.CloseButton.Text:SetJustifyH("CENTER")
+	ColorPicker.Header.CloseButton.Text:SetShadowColor(0, 0, 0)
+	ColorPicker.Header.CloseButton.Text:SetShadowOffset(1, -1)
+	ColorPicker.Header.CloseButton.Text:SetText("×")
 	
 	-- Current
-	SwatchWindow.Current = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.Current:SetScaledSize(119, 20)
-	SwatchWindow.Current:SetScaledPoint("TOPLEFT", SwatchWindow.SwatchParent, "BOTTOMLEFT", 3, 45)
-	SwatchWindow.Current:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.Current:SetBackdropColor(0, 0, 0)
-	SwatchWindow.Current:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.Current = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.Current:SetScaledSize(119, 20)
+	ColorPicker.Current:SetScaledPoint("TOPLEFT", ColorPicker.SwatchParent, "BOTTOMLEFT", 3, 45)
+	ColorPicker.Current:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.Current:SetBackdropColor(0, 0, 0)
+	ColorPicker.Current:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.CurrentTexture = SwatchWindow.Current:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.CurrentTexture:SetScaledPoint("TOPLEFT", SwatchWindow.Current, 1, -1)
-	SwatchWindow.CurrentTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Current, -1, 1)
-	SwatchWindow.CurrentTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	SwatchWindow.CurrentTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	ColorPicker.CurrentTexture = ColorPicker.Current:CreateTexture(nil, "OVERLAY")
+	ColorPicker.CurrentTexture:SetScaledPoint("TOPLEFT", ColorPicker.Current, 1, -1)
+	ColorPicker.CurrentTexture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Current, -1, 1)
+	ColorPicker.CurrentTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	ColorPicker.CurrentTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
-	SwatchWindow.CurrentText = SwatchWindow.Current:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.CurrentText:SetScaledPoint("CENTER", SwatchWindow.Current, HEADER_SPACING, -1)
-	SwatchWindow.CurrentText:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	SwatchWindow.CurrentText:SetJustifyH("CENTER")
-	SwatchWindow.CurrentText:SetShadowColor(0, 0, 0)
-	SwatchWindow.CurrentText:SetShadowOffset(1, -1)
-	SwatchWindow.CurrentText:SetText(Language["Current"])
-	SwatchWindow.CurrentText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
+	ColorPicker.CurrentText = ColorPicker.Current:CreateFontString(nil, "OVERLAY")
+	ColorPicker.CurrentText:SetScaledPoint("CENTER", ColorPicker.Current, HEADER_SPACING, -1)
+	ColorPicker.CurrentText:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	ColorPicker.CurrentText:SetJustifyH("CENTER")
+	ColorPicker.CurrentText:SetShadowColor(0, 0, 0)
+	ColorPicker.CurrentText:SetShadowOffset(1, -1)
+	ColorPicker.CurrentText:SetText(Language["Current"])
+	ColorPicker.CurrentText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	
-	SwatchWindow.CurrentHex = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.CurrentHex:SetScaledSize(97, 20)
-	SwatchWindow.CurrentHex:SetScaledPoint("TOPLEFT", SwatchWindow.Current, "BOTTOMLEFT", 0, -2)
-	SwatchWindow.CurrentHex:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.CurrentHex:SetBackdropColor(0, 0, 0)
-	SwatchWindow.CurrentHex:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.CurrentHex = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.CurrentHex:SetScaledSize(97, 20)
+	ColorPicker.CurrentHex:SetScaledPoint("TOPLEFT", ColorPicker.Current, "BOTTOMLEFT", 0, -2)
+	ColorPicker.CurrentHex:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.CurrentHex:SetBackdropColor(0, 0, 0)
+	ColorPicker.CurrentHex:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.CurrentHexTexture = SwatchWindow.CurrentHex:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.CurrentHexTexture:SetScaledPoint("TOPLEFT", SwatchWindow.CurrentHex, 1, -1)
-	SwatchWindow.CurrentHexTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.CurrentHex, -1, 1)
-	SwatchWindow.CurrentHexTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	SwatchWindow.CurrentHexTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	ColorPicker.CurrentHexTexture = ColorPicker.CurrentHex:CreateTexture(nil, "OVERLAY")
+	ColorPicker.CurrentHexTexture:SetScaledPoint("TOPLEFT", ColorPicker.CurrentHex, 1, -1)
+	ColorPicker.CurrentHexTexture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.CurrentHex, -1, 1)
+	ColorPicker.CurrentHexTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ColorPicker.CurrentHexTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	SwatchWindow.CurrentHexText = SwatchWindow.CurrentHex:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.CurrentHexText:SetScaledPoint("CENTER", SwatchWindow.CurrentHex, 0, 0)
-	SwatchWindow.CurrentHexText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	SwatchWindow.CurrentHexText:SetJustifyH("CENTER")
-	SwatchWindow.CurrentHexText:SetShadowColor(0, 0, 0)
-	SwatchWindow.CurrentHexText:SetShadowOffset(1, -1)
+	ColorPicker.CurrentHexText = ColorPicker.CurrentHex:CreateFontString(nil, "OVERLAY")
+	ColorPicker.CurrentHexText:SetScaledPoint("CENTER", ColorPicker.CurrentHex, 0, 0)
+	ColorPicker.CurrentHexText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	ColorPicker.CurrentHexText:SetJustifyH("CENTER")
+	ColorPicker.CurrentHexText:SetShadowColor(0, 0, 0)
+	ColorPicker.CurrentHexText:SetShadowOffset(1, -1)
 	
-	SwatchWindow.CompareCurrentParent = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.CompareCurrentParent:SetScaledSize(20, 20)
-	SwatchWindow.CompareCurrentParent:SetScaledPoint("LEFT", SwatchWindow.CurrentHex, "RIGHT", 2, 0)
-	SwatchWindow.CompareCurrentParent:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.CompareCurrentParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	SwatchWindow.CompareCurrentParent:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.CompareCurrentParent = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.CompareCurrentParent:SetScaledSize(20, 20)
+	ColorPicker.CompareCurrentParent:SetScaledPoint("LEFT", ColorPicker.CurrentHex, "RIGHT", 2, 0)
+	ColorPicker.CompareCurrentParent:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.CompareCurrentParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	ColorPicker.CompareCurrentParent:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.CompareCurrent = SwatchWindow.CompareCurrentParent:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.CompareCurrent:SetScaledPoint("TOPLEFT", SwatchWindow.CompareCurrentParent, 1, -1)
-	SwatchWindow.CompareCurrent:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.CompareCurrentParent, -1, 1)
-	SwatchWindow.CompareCurrent:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ColorPicker.CompareCurrent = ColorPicker.CompareCurrentParent:CreateTexture(nil, "OVERLAY")
+	ColorPicker.CompareCurrent:SetScaledPoint("TOPLEFT", ColorPicker.CompareCurrentParent, 1, -1)
+	ColorPicker.CompareCurrent:SetScaledPoint("BOTTOMRIGHT", ColorPicker.CompareCurrentParent, -1, 1)
+	ColorPicker.CompareCurrent:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	-- New
-	SwatchWindow.New = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.New:SetScaledSize(119, 20)
-	SwatchWindow.New:SetScaledPoint("TOPLEFT", SwatchWindow.Current, "TOPRIGHT", 2, 0)
-	SwatchWindow.New:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.New:SetBackdropColor(0, 0, 0)
-	SwatchWindow.New:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.New = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.New:SetScaledSize(119, 20)
+	ColorPicker.New:SetScaledPoint("TOPLEFT", ColorPicker.Current, "TOPRIGHT", 2, 0)
+	ColorPicker.New:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.New:SetBackdropColor(0, 0, 0)
+	ColorPicker.New:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.NewTexture = SwatchWindow.New:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.NewTexture:SetScaledPoint("TOPLEFT", SwatchWindow.New, 1, -1)
-	SwatchWindow.NewTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.New, -1, 1)
-	SwatchWindow.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	SwatchWindow.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	ColorPicker.NewTexture = ColorPicker.New:CreateTexture(nil, "OVERLAY")
+	ColorPicker.NewTexture:SetScaledPoint("TOPLEFT", ColorPicker.New, 1, -1)
+	ColorPicker.NewTexture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.New, -1, 1)
+	ColorPicker.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	ColorPicker.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
-	SwatchWindow.NewText = SwatchWindow.New:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.NewText:SetScaledPoint("CENTER", SwatchWindow.New, 0, -1)
-	SwatchWindow.NewText:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	SwatchWindow.NewText:SetJustifyH("CENTER")
-	SwatchWindow.NewText:SetShadowColor(0, 0, 0)
-	SwatchWindow.NewText:SetShadowOffset(1, -1)
-	SwatchWindow.NewText:SetText(Language["New"])
-	SwatchWindow.NewText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
+	ColorPicker.NewText = ColorPicker.New:CreateFontString(nil, "OVERLAY")
+	ColorPicker.NewText:SetScaledPoint("CENTER", ColorPicker.New, 0, -1)
+	ColorPicker.NewText:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	ColorPicker.NewText:SetJustifyH("CENTER")
+	ColorPicker.NewText:SetShadowColor(0, 0, 0)
+	ColorPicker.NewText:SetShadowOffset(1, -1)
+	ColorPicker.NewText:SetText(Language["New"])
+	ColorPicker.NewText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	
-	SwatchWindow.NewHex = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.NewHex:SetScaledSize(97, 20)
-	SwatchWindow.NewHex:SetScaledPoint("TOPRIGHT", SwatchWindow.New, "BOTTOMRIGHT", 0, -2)
-	SwatchWindow.NewHex:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.NewHex:SetBackdropColor(0, 0, 0)
-	SwatchWindow.NewHex:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.NewHex = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.NewHex:SetScaledSize(97, 20)
+	ColorPicker.NewHex:SetScaledPoint("TOPRIGHT", ColorPicker.New, "BOTTOMRIGHT", 0, -2)
+	ColorPicker.NewHex:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.NewHex:SetBackdropColor(0, 0, 0)
+	ColorPicker.NewHex:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.NewHexTexture = SwatchWindow.NewHex:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.NewHexTexture:SetScaledPoint("TOPLEFT", SwatchWindow.NewHex, 1, -1)
-	SwatchWindow.NewHexTexture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.NewHex, -1, 1)
-	SwatchWindow.NewHexTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	SwatchWindow.NewHexTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	ColorPicker.NewHexTexture = ColorPicker.NewHex:CreateTexture(nil, "OVERLAY")
+	ColorPicker.NewHexTexture:SetScaledPoint("TOPLEFT", ColorPicker.NewHex, 1, -1)
+	ColorPicker.NewHexTexture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.NewHex, -1, 1)
+	ColorPicker.NewHexTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ColorPicker.NewHexTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	SwatchWindow.NewHexText = CreateFrame("EditBox", nil, SwatchWindow.NewHex)
-	SwatchWindow.NewHexText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	SwatchWindow.NewHexText:SetScaledPoint("TOPLEFT", SwatchWindow.NewHex, SPACING, -2)
-	SwatchWindow.NewHexText:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.NewHex, -SPACING, 2)
-	SwatchWindow.NewHexText:SetJustifyH("CENTER")
-	SwatchWindow.NewHexText:SetMaxLetters(7)
-	SwatchWindow.NewHexText:SetAutoFocus(false)
-	SwatchWindow.NewHexText:EnableKeyboard(true)
-	SwatchWindow.NewHexText:EnableMouse(true)
-	SwatchWindow.NewHexText:SetShadowColor(0, 0, 0)
-	SwatchWindow.NewHexText:SetShadowOffset(1, -1)
-	SwatchWindow.NewHexText:SetText("#FFFFFF")
-	SwatchWindow.NewHexText:SetHighlightColor(0, 0, 0)
-	SwatchWindow.NewHexText:SetScript("OnEscapePressed", SwatchEditBoxOnEscapePressed)
-	SwatchWindow.NewHexText:SetScript("OnEnterPressed", SwatchEditBoxOnEnterPressed)
-	SwatchWindow.NewHexText:SetScript("OnEditFocusLost", SwatchEditBoxOnEditFocusLost)
-	SwatchWindow.NewHexText:SetScript("OnEditFocusGained", SwatchEditBoxOnEditFocusGained)
-	SwatchWindow.NewHexText:SetScript("OnChar", SwatchEditBoxOnChar)
+	ColorPicker.NewHexText = CreateFrame("EditBox", nil, ColorPicker.NewHex)
+	ColorPicker.NewHexText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	ColorPicker.NewHexText:SetScaledPoint("TOPLEFT", ColorPicker.NewHex, SPACING, -2)
+	ColorPicker.NewHexText:SetScaledPoint("BOTTOMRIGHT", ColorPicker.NewHex, -SPACING, 2)
+	ColorPicker.NewHexText:SetJustifyH("CENTER")
+	ColorPicker.NewHexText:SetMaxLetters(7)
+	ColorPicker.NewHexText:SetAutoFocus(false)
+	ColorPicker.NewHexText:EnableKeyboard(true)
+	ColorPicker.NewHexText:EnableMouse(true)
+	ColorPicker.NewHexText:SetShadowColor(0, 0, 0)
+	ColorPicker.NewHexText:SetShadowOffset(1, -1)
+	ColorPicker.NewHexText:SetText("#FFFFFF")
+	ColorPicker.NewHexText:SetHighlightColor(0, 0, 0)
+	ColorPicker.NewHexText:SetScript("OnEscapePressed", SwatchEditBoxOnEscapePressed)
+	ColorPicker.NewHexText:SetScript("OnEnterPressed", SwatchEditBoxOnEnterPressed)
+	ColorPicker.NewHexText:SetScript("OnEditFocusLost", SwatchEditBoxOnEditFocusLost)
+	ColorPicker.NewHexText:SetScript("OnEditFocusGained", SwatchEditBoxOnEditFocusGained)
+	ColorPicker.NewHexText:SetScript("OnChar", SwatchEditBoxOnChar)
 	
-	SwatchWindow.CompareNewParent = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.CompareNewParent:SetScaledSize(20, 20)
-	SwatchWindow.CompareNewParent:SetScaledPoint("RIGHT", SwatchWindow.NewHex, "LEFT", -2, 0)
-	SwatchWindow.CompareNewParent:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.CompareNewParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	SwatchWindow.CompareNewParent:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.CompareNewParent = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.CompareNewParent:SetScaledSize(20, 20)
+	ColorPicker.CompareNewParent:SetScaledPoint("RIGHT", ColorPicker.NewHex, "LEFT", -2, 0)
+	ColorPicker.CompareNewParent:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.CompareNewParent:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	ColorPicker.CompareNewParent:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.CompareNew = SwatchWindow.CompareNewParent:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.CompareNew:SetScaledSize(SwatchWindow.CompareNewParent:GetWidth() - 2, 19)
-	SwatchWindow.CompareNew:SetScaledPoint("TOPLEFT", SwatchWindow.CompareNewParent, 1, -1)
-	SwatchWindow.CompareNew:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.CompareNewParent, -1, 1)
-	SwatchWindow.CompareNew:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ColorPicker.CompareNew = ColorPicker.CompareNewParent:CreateTexture(nil, "OVERLAY")
+	ColorPicker.CompareNew:SetScaledSize(ColorPicker.CompareNewParent:GetWidth() - 2, 19)
+	ColorPicker.CompareNew:SetScaledPoint("TOPLEFT", ColorPicker.CompareNewParent, 1, -1)
+	ColorPicker.CompareNew:SetScaledPoint("BOTTOMRIGHT", ColorPicker.CompareNewParent, -1, 1)
+	ColorPicker.CompareNew:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	SwatchWindow.Transition = CreateAnimationGroup(SwatchWindow.CompareNew):CreateAnimation("Color")
-	SwatchWindow.Transition:SetColorType("vertex")
-	SwatchWindow.Transition:SetEasing("in")
-	SwatchWindow.Transition:SetDuration(0.15)
+	ColorPicker.Transition = CreateAnimationGroup(ColorPicker.CompareNew):CreateAnimation("Color")
+	ColorPicker.Transition:SetColorType("vertex")
+	ColorPicker.Transition:SetEasing("in")
+	ColorPicker.Transition:SetDuration(0.15)
 	
 	-- Accept
-	SwatchWindow.Accept = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.Accept:SetScaledSize(120, 20)
-	SwatchWindow.Accept:SetScaledPoint("TOPLEFT", SwatchWindow.New, "TOPRIGHT", 2, 0)
-	SwatchWindow.Accept:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.Accept:SetBackdropColor(0, 0, 0)
-	SwatchWindow.Accept:SetBackdropBorderColor(0, 0, 0)
-	SwatchWindow.Accept:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
-	SwatchWindow.Accept:SetScript("OnMouseUp", SwatchWindowAccept)
-	SwatchWindow.Accept:SetScript("OnEnter", SwatchWindowOnEnter)
-	SwatchWindow.Accept:SetScript("OnLeave", SwatchWindowOnLeave)
+	ColorPicker.Accept = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.Accept:SetScaledSize(120, 20)
+	ColorPicker.Accept:SetScaledPoint("TOPLEFT", ColorPicker.New, "TOPRIGHT", 2, 0)
+	ColorPicker.Accept:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.Accept:SetBackdropColor(0, 0, 0)
+	ColorPicker.Accept:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.Accept:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
+	ColorPicker.Accept:SetScript("OnMouseUp", ColorPickerAccept)
+	ColorPicker.Accept:SetScript("OnEnter", ColorPickerOnEnter)
+	ColorPicker.Accept:SetScript("OnLeave", ColorPickerOnLeave)
 	
-	SwatchWindow.Accept.Texture = SwatchWindow.Accept:CreateTexture(nil, "ARTWORK")
-	SwatchWindow.Accept.Texture:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, 1, -1)
-	SwatchWindow.Accept.Texture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Accept, -1, 1)
-	SwatchWindow.Accept.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
-	SwatchWindow.Accept.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	ColorPicker.Accept.Texture = ColorPicker.Accept:CreateTexture(nil, "ARTWORK")
+	ColorPicker.Accept.Texture:SetScaledPoint("TOPLEFT", ColorPicker.Accept, 1, -1)
+	ColorPicker.Accept.Texture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Accept, -1, 1)
+	ColorPicker.Accept.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
+	ColorPicker.Accept.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
-	SwatchWindow.Accept.Highlight = SwatchWindow.Accept:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.Accept.Highlight:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, 1, -1)
-	SwatchWindow.Accept.Highlight:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Accept, -1, 1)
-	SwatchWindow.Accept.Highlight:SetTexture(Media:GetTexture("Blank"))
-	SwatchWindow.Accept.Highlight:SetVertexColor(1, 1, 1, 0.4)
-	SwatchWindow.Accept.Highlight:SetAlpha(0)
+	ColorPicker.Accept.Highlight = ColorPicker.Accept:CreateTexture(nil, "OVERLAY")
+	ColorPicker.Accept.Highlight:SetScaledPoint("TOPLEFT", ColorPicker.Accept, 1, -1)
+	ColorPicker.Accept.Highlight:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Accept, -1, 1)
+	ColorPicker.Accept.Highlight:SetTexture(Media:GetTexture("Blank"))
+	ColorPicker.Accept.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	ColorPicker.Accept.Highlight:SetAlpha(0)
 	
-	SwatchWindow.AcceptText = SwatchWindow.Accept:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.AcceptText:SetScaledPoint("CENTER", SwatchWindow.Accept, 0, 0)
-	SwatchWindow.AcceptText:SetFont(Media:GetFont(Settings["ui-button-font"]), 12)
-	SwatchWindow.AcceptText:SetJustifyH("CENTER")
-	SwatchWindow.AcceptText:SetShadowColor(0, 0, 0)
-	SwatchWindow.AcceptText:SetShadowOffset(1, -1)
-	SwatchWindow.AcceptText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Accept"].."|r")
+	ColorPicker.AcceptText = ColorPicker.Accept:CreateFontString(nil, "OVERLAY")
+	ColorPicker.AcceptText:SetScaledPoint("CENTER", ColorPicker.Accept, 0, 0)
+	ColorPicker.AcceptText:SetFont(Media:GetFont(Settings["ui-button-font"]), 12)
+	ColorPicker.AcceptText:SetJustifyH("CENTER")
+	ColorPicker.AcceptText:SetShadowColor(0, 0, 0)
+	ColorPicker.AcceptText:SetShadowOffset(1, -1)
+	ColorPicker.AcceptText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Accept"].."|r")
 	
 	-- Cancel
-	SwatchWindow.Cancel = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.Cancel:SetScaledSize(120, 20)
-	SwatchWindow.Cancel:SetScaledPoint("TOPLEFT", SwatchWindow.Accept, "BOTTOMLEFT", 0, -2)
-	SwatchWindow.Cancel:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.Cancel:SetBackdropColor(0, 0, 0)
-	SwatchWindow.Cancel:SetBackdropBorderColor(0, 0, 0)
-	SwatchWindow.Cancel:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
-	SwatchWindow.Cancel:SetScript("OnMouseUp", SwatchWindowCancel)
-	SwatchWindow.Cancel:SetScript("OnEnter", SwatchWindowOnEnter)
-	SwatchWindow.Cancel:SetScript("OnLeave", SwatchWindowOnLeave)
+	ColorPicker.Cancel = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.Cancel:SetScaledSize(120, 20)
+	ColorPicker.Cancel:SetScaledPoint("TOPLEFT", ColorPicker.Accept, "BOTTOMLEFT", 0, -2)
+	ColorPicker.Cancel:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.Cancel:SetBackdropColor(0, 0, 0)
+	ColorPicker.Cancel:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.Cancel:SetScript("OnMouseDown", SwatchButtonOnMouseDown)
+	ColorPicker.Cancel:SetScript("OnMouseUp", ColorPickerCancel)
+	ColorPicker.Cancel:SetScript("OnEnter", ColorPickerOnEnter)
+	ColorPicker.Cancel:SetScript("OnLeave", ColorPickerOnLeave)
 	
-	SwatchWindow.Cancel.Texture = SwatchWindow.Cancel:CreateTexture(nil, "ARTWORK")
-	SwatchWindow.Cancel.Texture:SetScaledPoint("TOPLEFT", SwatchWindow.Cancel, 1, -1)
-	SwatchWindow.Cancel.Texture:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Cancel, -1, 1)
-	SwatchWindow.Cancel.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
-	SwatchWindow.Cancel.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
+	ColorPicker.Cancel.Texture = ColorPicker.Cancel:CreateTexture(nil, "ARTWORK")
+	ColorPicker.Cancel.Texture:SetScaledPoint("TOPLEFT", ColorPicker.Cancel, 1, -1)
+	ColorPicker.Cancel.Texture:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Cancel, -1, 1)
+	ColorPicker.Cancel.Texture:SetTexture(Media:GetTexture(Settings["ui-button-texture"]))
+	ColorPicker.Cancel.Texture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
-	SwatchWindow.Cancel.Highlight = SwatchWindow.Cancel:CreateTexture(nil, "OVERLAY")
-	SwatchWindow.Cancel.Highlight:SetScaledPoint("TOPLEFT", SwatchWindow.Cancel, 1, -1)
-	SwatchWindow.Cancel.Highlight:SetScaledPoint("BOTTOMRIGHT", SwatchWindow.Cancel, -1, 1)
-	SwatchWindow.Cancel.Highlight:SetTexture(Media:GetTexture("Blank"))
-	SwatchWindow.Cancel.Highlight:SetVertexColor(1, 1, 1, 0.4)
-	SwatchWindow.Cancel.Highlight:SetAlpha(0)
+	ColorPicker.Cancel.Highlight = ColorPicker.Cancel:CreateTexture(nil, "OVERLAY")
+	ColorPicker.Cancel.Highlight:SetScaledPoint("TOPLEFT", ColorPicker.Cancel, 1, -1)
+	ColorPicker.Cancel.Highlight:SetScaledPoint("BOTTOMRIGHT", ColorPicker.Cancel, -1, 1)
+	ColorPicker.Cancel.Highlight:SetTexture(Media:GetTexture("Blank"))
+	ColorPicker.Cancel.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	ColorPicker.Cancel.Highlight:SetAlpha(0)
 	
-	SwatchWindow.CancelText = SwatchWindow.Cancel:CreateFontString(nil, "OVERLAY")
-	SwatchWindow.CancelText:SetScaledPoint("CENTER", SwatchWindow.Cancel, 0, 0)
-	SwatchWindow.CancelText:SetFont(Media:GetFont(Settings["ui-button-font"]), 12)
-	SwatchWindow.CancelText:SetJustifyH("CENTER")
-	SwatchWindow.CancelText:SetShadowColor(0, 0, 0)
-	SwatchWindow.CancelText:SetShadowOffset(1, -1)
-	SwatchWindow.CancelText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Cancel"].."|r")
+	ColorPicker.CancelText = ColorPicker.Cancel:CreateFontString(nil, "OVERLAY")
+	ColorPicker.CancelText:SetScaledPoint("CENTER", ColorPicker.Cancel, 0, 0)
+	ColorPicker.CancelText:SetFont(Media:GetFont(Settings["ui-button-font"]), 12)
+	ColorPicker.CancelText:SetJustifyH("CENTER")
+	ColorPicker.CancelText:SetShadowColor(0, 0, 0)
+	ColorPicker.CancelText:SetShadowOffset(1, -1)
+	ColorPicker.CancelText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Cancel"].."|r")
 	
-	SwatchWindow.BG = CreateFrame("Frame", nil, SwatchWindow)
-	SwatchWindow.BG:SetScaledPoint("TOPLEFT", SwatchWindow.Header, -3, 3)
-	SwatchWindow.BG:SetScaledPoint("BOTTOMRIGHT", SwatchWindow, 3, 0)
-	SwatchWindow.BG:SetBackdrop(vUI.BackdropAndBorder)
-	SwatchWindow.BG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
-	SwatchWindow.BG:SetBackdropBorderColor(0, 0, 0)
+	ColorPicker.BG = CreateFrame("Frame", nil, ColorPicker)
+	ColorPicker.BG:SetScaledPoint("TOPLEFT", ColorPicker.Header, -3, 3)
+	ColorPicker.BG:SetScaledPoint("BOTTOMRIGHT", ColorPicker, 3, 0)
+	ColorPicker.BG:SetBackdrop(vUI.BackdropAndBorder)
+	ColorPicker.BG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	ColorPicker.BG:SetBackdropBorderColor(0, 0, 0)
 	
-	SwatchWindow.Fade = CreateAnimationGroup(SwatchWindow)
+	ColorPicker.Fade = CreateAnimationGroup(ColorPicker)
 	
-	SwatchWindow.FadeIn = SwatchWindow.Fade:CreateAnimation("Fade")
-	SwatchWindow.FadeIn:SetEasing("in")
-	SwatchWindow.FadeIn:SetDuration(0.15)
-	SwatchWindow.FadeIn:SetChange(1)
+	ColorPicker.FadeIn = ColorPicker.Fade:CreateAnimation("Fade")
+	ColorPicker.FadeIn:SetEasing("in")
+	ColorPicker.FadeIn:SetDuration(0.15)
+	ColorPicker.FadeIn:SetChange(1)
 	
-	SwatchWindow.FadeOut = SwatchWindow.Fade:CreateAnimation("Fade")
-	SwatchWindow.FadeOut:SetEasing("out")
-	SwatchWindow.FadeOut:SetDuration(0.15)
-	SwatchWindow.FadeOut:SetChange(0)
-	SwatchWindow.FadeOut:SetScript("OnFinished", function(self)
+	ColorPicker.FadeOut = ColorPicker.Fade:CreateAnimation("Fade")
+	ColorPicker.FadeOut:SetEasing("out")
+	ColorPicker.FadeOut:SetDuration(0.15)
+	ColorPicker.FadeOut:SetChange(0)
+	ColorPicker.FadeOut:SetScript("OnFinished", function(self)
 		self:GetParent():Hide()
 	end)
 	
@@ -1781,7 +1780,7 @@ local CreateSwatchWindow = function()
 		/run vUIColorPicker:SetColorPalette("Large")
 	--]]
 	
-	SwatchWindow.SetColorPalette = function(self, name)
+	ColorPicker.SetColorPalette = function(self, name)
 		local Palette = Media:GetPalette(name)
 		local Swatch
 		
@@ -1810,7 +1809,7 @@ local CreateSwatchWindow = function()
 	
 	for i = 1, MAX_SWATCHES_Y do
 		for j = 1, MAX_SWATCHES_X do
-			local Swatch = CreateFrame("Frame", nil, SwatchWindow)
+			local Swatch = CreateFrame("Frame", nil, ColorPicker)
 			Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)
 			Swatch:SetBackdrop(vUI.BackdropAndBorder)
 			Swatch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
@@ -1843,36 +1842,36 @@ local CreateSwatchWindow = function()
 			Swatch.Highlight:SetBackdropBorderColor(1, 1, 1)
 			Swatch.Highlight:SetAlpha(0)
 			
-			if (not SwatchWindow.SwatchParent[i]) then
-				SwatchWindow.SwatchParent[i] = {}
+			if (not ColorPicker.SwatchParent[i]) then
+				ColorPicker.SwatchParent[i] = {}
 			end
 			
 			if (i == 1) then
 				if (j == 1) then
-					Swatch:SetScaledPoint("TOPLEFT", SwatchWindow.SwatchParent, 3, -3)
+					Swatch:SetScaledPoint("TOPLEFT", ColorPicker.SwatchParent, 3, -3)
 				else
-					Swatch:SetScaledPoint("LEFT", SwatchWindow.SwatchParent[i][j-1], "RIGHT", -1, 0)
+					Swatch:SetScaledPoint("LEFT", ColorPicker.SwatchParent[i][j-1], "RIGHT", -1, 0)
 				end
 			else
 				if (j == 1) then
-					Swatch:SetScaledPoint("TOPLEFT", SwatchWindow.SwatchParent[i-1][1], "BOTTOMLEFT", 0, 1)
+					Swatch:SetScaledPoint("TOPLEFT", ColorPicker.SwatchParent[i-1][1], "BOTTOMLEFT", 0, 1)
 				else
-					Swatch:SetScaledPoint("LEFT", SwatchWindow.SwatchParent[i][j-1], "RIGHT", -1, 0)
+					Swatch:SetScaledPoint("LEFT", ColorPicker.SwatchParent[i][j-1], "RIGHT", -1, 0)
 				end
 			end
 			
-			SwatchWindow.SwatchParent[i][j] = Swatch
+			ColorPicker.SwatchParent[i][j] = Swatch
 		end
 	end
 	
-	GUI.SwatchWindow = SwatchWindow
+	GUI.ColorPicker = ColorPicker
 end
 
 local SetSwatchObject = function(active)
-	GUI.SwatchWindow.Active = active
+	GUI.ColorPicker.Active = active
 	
-	GUI.SwatchWindow.CompareCurrent:SetVertexColor(HexToRGB(active.Value))
-	GUI.SwatchWindow.CurrentHexText:SetText("#"..active.Value)
+	GUI.ColorPicker.CompareCurrent:SetVertexColor(HexToRGB(active.Value))
+	GUI.ColorPicker.CurrentHexText:SetText("#"..active.Value)
 end
 
 local ColorSelectionOnEnter = function(self)
@@ -1884,29 +1883,29 @@ local ColorSelectionOnLeave = function(self)
 end
 
 local ColorSelectionOnMouseUp = function(self)
-	if (not GUI.SwatchWindow) then
-		CreateSwatchWindow()
+	if (not GUI.ColorPicker) then
+		CreateColorPicker()
 	end
 	
-	if GUI.SwatchWindow:IsShown() then
-		if (self ~= GUI.SwatchWindow.Active) then
+	if GUI.ColorPicker:IsShown() then
+		if (self ~= GUI.ColorPicker.Active) then
 			SetSwatchObject(self)
 			
-			GUI.SwatchWindow.NewHexText:SetText("#FFFFFF")
-			GUI.SwatchWindow.CompareNew:SetVertexColor(1, 1, 1)
-			GUI.SwatchWindow.Selected = "FFFFFF"
+			GUI.ColorPicker.NewHexText:SetText("#FFFFFF")
+			GUI.ColorPicker.CompareNew:SetVertexColor(1, 1, 1)
+			GUI.ColorPicker.Selected = "FFFFFF"
 		else
-			GUI.SwatchWindow.FadeOut:Play()
+			GUI.ColorPicker.FadeOut:Play()
 		end
 	else
 		SetSwatchObject(self)
 		
-		GUI.SwatchWindow.NewHexText:SetText("#FFFFFF")
-		GUI.SwatchWindow.CompareNew:SetVertexColor(1, 1, 1)
-		GUI.SwatchWindow.Selected = "FFFFFF"
+		GUI.ColorPicker.NewHexText:SetText("#FFFFFF")
+		GUI.ColorPicker.CompareNew:SetVertexColor(1, 1, 1)
+		GUI.ColorPicker.Selected = "FFFFFF"
 		
-		GUI.SwatchWindow:Show()
-		GUI.SwatchWindow.FadeIn:Play()
+		GUI.ColorPicker:Show()
+		GUI.ColorPicker.FadeIn:Play()
 	end
 end
 
@@ -2435,8 +2434,8 @@ function GUI:Create()
 	self.CloseButton:SetScript("OnMouseUp", function()
 		self.FadeOut:Play()
 		
-		if (self.SwatchWindow and self.SwatchWindow:GetAlpha() > 0) then
-			self.SwatchWindow.FadeOut:Play()
+		if (self.ColorPicker and self.ColorPicker:GetAlpha() > 0) then
+			self.ColorPicker.FadeOut:Play()
 		end
 	end)
 	
@@ -2556,8 +2555,8 @@ GUI.Toggle = function(self)
 	else
 		self.FadeOut:Play()
 		
-		if (self.SwatchWindow and self.SwatchWindow:GetAlpha() > 0) then
-			self.SwatchWindow.FadeOut:Play()
+		if (self.ColorPicker and self.ColorPicker:GetAlpha() > 0) then
+			self.ColorPicker.FadeOut:Play()
 		end
 		
 		CloseLastDropdown()
