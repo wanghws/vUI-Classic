@@ -67,7 +67,21 @@ function vUI:RGBToHex(r, g, b)
 	return format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
+local min = math.min
+local max = math.max
+
+function vUI:RGBToHSV(r, g, b)
+	local R = r / 255
+	local G = g / 255
+	local B = b / 255
+	
+	local Min = min(R, G, B)
+	local Max = max(R, G, B)
+end
+
 -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+
+local Delimiter = " "
 
 print = function(...)
 	local NumArgs = select("#", ...)
@@ -78,17 +92,15 @@ print = function(...)
 			if (i == 1) then
 				String = tostring(select(i, ...))
 			else
-				String = String.." "..tostring(select(i, ...)) -- if I want a delimiter option, then ", "
+				String = String..Delimiter..tostring(select(i, ...))
 			end
 		end
 		
 		if vUI.FormatLinks then
 			String = vUI.FormatLinks(String)
-			
-			DEFAULT_CHAT_FRAME:AddMessage(String)
-		else
-			DEFAULT_CHAT_FRAME:AddMessage(String)
 		end
+		
+		DEFAULT_CHAT_FRAME:AddMessage(String)
 	else
 		if vUI.FormatLinks then
 			String = vUI.FormatLinks(tostring(...))
