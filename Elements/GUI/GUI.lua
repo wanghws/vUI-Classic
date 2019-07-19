@@ -1222,6 +1222,32 @@ local SliderOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
+local SliderEnable = function(self)
+	self:EnableMouse(true)
+	self:EnableMouseWheel(true)
+	
+	self.EditBox:EnableKeyboard(true)
+	self.EditBox:EnableMouse(true)
+	self.EditBox:EnableMouseWheel(true)
+	
+	self.EditBox:SetTextColor(1, 1, 1)
+	self.Progress:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
+	self.Disabled = false
+end
+
+local SliderDisable = function(self)
+	self:EnableMouse(false)
+	self:EnableMouseWheel(false)
+	
+	self.EditBox:EnableKeyboard(false)
+	self.EditBox:EnableMouse(false)
+	self.EditBox:EnableMouseWheel(false)
+	
+	self.EditBox:SetTextColor(0.65, 0.65, 0.65)
+	self.Progress:SetVertexColor(0.65, 0.65, 0.65)
+	self.Disabled = true
+end
+
 GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -1310,6 +1336,8 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider:SetScript("OnValueChanged", SliderOnValueChanged)
 	Slider:SetScript("OnEnter", SliderOnEnter)
 	Slider:SetScript("OnLeave", SliderOnLeave)
+	Slider.Enable = SliderEnable
+	Slider.Disable = SliderDisable
 	Slider.Prefix = prefix or ""
 	Slider.Postfix = postfix or ""
 	Slider.EditBox = EditBox.Box
@@ -1330,7 +1358,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.TrackTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Slider.TrackTexture:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	
-	local Thumb = Slider:GetThumbTexture() 
+	local Thumb = Slider:GetThumbTexture()
 	Thumb:SetScaledSize(8, WIDGET_HEIGHT)
 	Thumb:SetTexture(Media:GetTexture("Blank"))
 	Thumb:SetVertexColor(0, 0, 0)

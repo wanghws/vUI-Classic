@@ -16,6 +16,9 @@ local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", UIParent)
 
+local WidthWidget
+local HeightWidget
+
 local Comma = function(number)
 	if (not number) then
 		return
@@ -145,6 +148,14 @@ local UpdateBarPosition = function(value)
 		ExperienceBar.Bar.Spark:SetScaledHeight(Settings["experience-height"])
 		
 		vUIChatFrameBottom:Show()
+		
+		if (WidthWidget and WidthWidget.Disabled) then
+			WidthWidget:Enable()
+		end
+		
+		if (HeightWidget and HeightWidget.Disabled) then
+			HeightWidget:Enable()
+		end
 	elseif (value == "CHATFRAME") then
 		vUIChatFrameBottom:Hide()
 		
@@ -157,6 +168,14 @@ local UpdateBarPosition = function(value)
 		
 		ExperienceBar.HeaderBG:SetScaledHeight(Height)
 		ExperienceBar.Bar.Spark:SetScaledHeight(Height)
+		
+		if (WidthWidget and not WidthWidget.Disabled) then
+			WidthWidget:Disable()
+		end
+		
+		if (HeightWidget and not HeightWidget.Disabled) then
+			HeightWidget:Disable()
+		end
 	end
 end
 
@@ -408,8 +427,8 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
 	
 	Right:CreateHeader(Language["Size"])
-	Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
-	Right:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
+	WidthWidget = Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
+	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
 	Right:CreateHeader(Language["Positioning"])
 	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
