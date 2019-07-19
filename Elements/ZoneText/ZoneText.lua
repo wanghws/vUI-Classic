@@ -98,17 +98,17 @@ local SetZoneText = function(show)
 		PVPText = PVPArenaText
 	end
 	
-	if ( PVPType == "sanctuary" ) then
+	if (PVPType == "sanctuary") then
 		PVPText:SetText(SANCTUARY_TERRITORY)
 		PVPText:SetTextColor(0.41, 0.8, 0.94)
 		ZoneText:SetTextColor(0.41, 0.8, 0.94)
 		SubZoneText:SetTextColor(0.41, 0.8, 0.94)
-	elseif ( PVPType == "arena" ) then
+	elseif (PVPType == "arena") then
 		PVPText:SetText(FREE_FOR_ALL_TERRITORY)
 		PVPText:SetTextColor(1.0, 0.1, 0.1)
 		ZoneText:SetTextColor(1.0, 0.1, 0.1)
 		SubZoneText:SetTextColor(1.0, 0.1, 0.1)
-	elseif ( PVPType == "friendly" ) then
+	elseif (PVPType == "friendly") then
 		if (Faction and Faction ~= "") then
 			PVPText:SetFormattedText(FACTION_CONTROLLED_TERRITORY, Faction)
 			PVPText:SetTextColor(0.1, 1.0, 0.1)

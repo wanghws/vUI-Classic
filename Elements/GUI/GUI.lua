@@ -2421,6 +2421,36 @@ GUI.GetWindow = function(self, name)
 	end
 end
 
+GUI.GetWidgetByWindow = function(name, id)
+	if self.Windows[name] then
+		local Window = self.Windows[name]
+		
+		for i = 1, #Window.LeftWidgets do
+			if (Window.LeftWidgets[i].ID == id) then
+				return Window.LeftWidgets[i]
+			end
+		end
+		
+		for i = 1, #Window.RightWidgets do
+			if (Window.LeftWidgets[i].ID == id) then
+				return Window.LeftWidgets[i]
+			end
+		end
+	end
+end
+
+GUI.GetWidget = function(id)
+	local Found
+	
+	for Name in pairs(self.Windows) do
+		Found = self:GetWidgetByWindow(Name, id)
+	end
+	
+	if Found then
+		return Found
+	end
+end
+
 GUI.AddOptions = function(self, func)
 	if (type(func) == "function") then
 		tinsert(self.Queue, func)
@@ -2678,5 +2708,5 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
-	Right:CreateLine("and quickly change between preset configurations")
+	Right:CreateLine("and quickly change between configurations.")
 end)

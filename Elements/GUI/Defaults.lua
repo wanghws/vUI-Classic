@@ -40,7 +40,10 @@ Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
 -- Action Bars
+Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "COMPACT"
+Defaults["action-bars-show-hotkeys"] = true
+Defaults["action-bars-button-size"] = 32
 
 -- Chat
 Defaults["chat-enable"] = true

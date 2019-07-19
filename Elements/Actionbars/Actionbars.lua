@@ -4,6 +4,8 @@ if (0 == 1) then
 	return
 end
 
+-- Some of the settings callbacks still need checks for if Experience or Action Bars are enabled
+
 local BUTTON_SIZE = 32
 local SPACING = 2
 
@@ -441,8 +443,7 @@ local SetClassicStyle = function()
 	
 	Bar:ClearAllPoints()
 	Bar:SetScaledPoint("TOPRIGHT", vUIBottomActionBarsPanel, -(SPACING + 1), -(SPACING + 1))
-	Bar:SetScaledWidth((BUTTON_SIZE * 6) + (SPACING * 5))
-	Bar:SetScaledHeight((BUTTON_SIZE * 2) + SPACING)
+	Bar:SetScaledSize((BUTTON_SIZE * 6) + (SPACING * 5), (BUTTON_SIZE * 2) + SPACING)
 	
 	vUIActionBar4:ClearAllPoints()
 	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
@@ -495,26 +496,6 @@ local SetCompactStyle = function()
 	end
 end
 
-ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
-ActionBars:SetScript("OnEvent", function(self, event)
-	CreateBarPanels()
-	CreateBar1()
-	CreateBar2()
-	CreateBar3()
-	CreateBar4()
-	CreateBar5()
-	
-	local Layout = Settings["action-bars-layout"]
-	
-	if (Layout == "COMPACT") then
-		SetCompactStyle()
-	elseif (Layout == "CLASSIC") then
-		SetClassicStyle()
-	end
-	
-	self:UnregisterEvent(event)
-end)
-
 local SetActionBarLayout = function(value)
 	if (value == "COMPACT") then
 		SetCompactStyle()
@@ -523,8 +504,59 @@ local SetActionBarLayout = function(value)
 	end
 end
 
+local SetButtonSize = function(value)
+	for i = 1, Num do
+		vUIActionBar1[i]:SetScaledSize(value)
+		vUIActionBar2[i]:SetScaledSize(value)
+		vUIActionBar3[i]:SetScaledSize(value)
+		vUIActionBar4[i]:SetScaledSize(value)
+		vUIActionBar5[i]:SetScaledSize(value)
+	end
+	
+	vUIActionBar1:SetScaledSize(((value * 12) + (SPACING * 11)), value)
+	vUIActionBar2:SetScaledSize(((value * 12) + (SPACING * 11)), value)
+	vUIActionBar3:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
+	vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
+	
+	if (Settings["action-bars-layout"] == "COMPACT") then
+		vUIActionBar5:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
+		
+		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 2) + (SPACING * 4)))
+		vUISideActionBarsPanel:SetScaledSize(((value * 3) + (SPACING * 5)), ((value * 12) + (SPACING * 14)))
+	elseif (Settings["action-bars-layout"] == "CLASSIC") then
+		vUIActionBar5:SetScaledSize((value * 6) + (SPACING * 5), (value * 2) + SPACING)
+		
+		vUISideActionBarsPanel:SetScaledSize(((value * 2) + (SPACING * 4)), ((value * 12) + (SPACING * 14)))
+		vUIBottomActionBarsPanel:SetScaledSize((((value * 12) + (SPACING * 14))) * 1.5 - SPACING, ((value * 2) + (SPACING * 4)))
+	end
+end
+
+ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
+ActionBars:SetScript("OnEvent", function(self, event)
+	if (not Settings["action-bars-enable"]) then
+		return
+	end
+	
+	CreateBarPanels()
+	CreateBar1()
+	CreateBar2()
+	CreateBar3()
+	CreateBar4()
+	CreateBar5()
+	
+	SetActionBarLayout(Settings["action-bars-layout"])
+	
+	self:UnregisterEvent(event)
+end)
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow(Language["Action Bars"])
+	
+	Left:CreateHeader(Language["Enable"])
+	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module")
+	
+	Right:CreateHeader(Language["Sizing"])
+	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)

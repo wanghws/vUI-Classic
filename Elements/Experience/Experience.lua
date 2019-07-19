@@ -450,7 +450,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow(Language["Experience"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("experience-enable", true, Language["Enable Experience"], "")
+	Left:CreateCheckbox("experience-enable", true, Language["Enable Experience Module"], "")
 	
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateCheckbox("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
