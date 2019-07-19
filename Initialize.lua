@@ -35,6 +35,7 @@ end
 -- Some Data
 vUI.Version = GetAddOnMetadata("vUI", "Version")
 vUI.User = UnitName("player")
+vUI.Class = UnitClass("player")
 vUI.Realm = GetRealmName()
 vUI.Locale = GetLocale()
 
