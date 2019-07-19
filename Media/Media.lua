@@ -331,7 +331,7 @@ Media:SetTemplate("Slate", {
 	["ui-button-texture-color"] = "78909C",
 })
 
--- Unnamed
+--[[ Unnamed
 Media:SetTemplate("Unnamed", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
@@ -351,10 +351,10 @@ Media:SetTemplate("Unnamed", {
 	["ui-widget-font-color"] = "FAFAFA",
 	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
-})
+})]]
 
--- Malice
-Media:SetTemplate("Malice", {
+-- Chaos
+Media:SetTemplate("Chaos", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Expressway",
 	["ui-button-font"] = "Expressway",
@@ -363,14 +363,14 @@ Media:SetTemplate("Malice", {
 	["ui-widget-texture"] = "Ferous 27",
 	["ui-button-texture"] = "Ferous",
 	
-	["ui-header-font-color"] = "F0F3F4",
+	["ui-header-font-color"] = "EEEEEE",
 	["ui-header-texture-color"] = "414141",
 	["ui-window-bg-color"] = "414141",
 	["ui-window-main-color"] = "2B2B2B",
-	["ui-widget-color"] = "CD6155",
+	["ui-widget-color"] = "7986CB",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "414141",
-	["ui-widget-font-color"] = "FAFAFA",
-	["ui-button-font-color"] = "CD6155",
+	["ui-widget-font-color"] = "EEEEEE",
+	["ui-button-font-color"] = "7986CB",
 	["ui-button-texture-color"] = "414141",
 })
