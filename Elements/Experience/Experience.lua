@@ -164,11 +164,10 @@ local UpdateBarPosition = function(value)
 	elseif (value == "CHATFRAME") then
 		vUIChatFrameBottom:Hide()
 		
-		local Width = vUIChatFrameBottom:GetWidth()
 		local Height = vUIChatFrameBottom:GetHeight()
 		
 		ExperienceBar.BGAll:Hide()
-		ExperienceBar:SetScaledSize(Width, Height)
+		ExperienceBar:SetScaledSize(vUIChatFrameBottom:GetWidth(), Height)
 		ExperienceBar:SetScaledPoint("CENTER", vUIChatFrameBottom, 0, 0)
 		
 		ExperienceBar.HeaderBG:SetScaledHeight(Height)
@@ -187,6 +186,8 @@ local UpdateBarPosition = function(value)
 			HeightWidget:Disable()
 		end
 	elseif (value == "CLASSIC") then
+		vUIChatFrameBottom:Show()
+		
 		ExperienceBar.BGAll:Show()
 		ExperienceBar:SetScaledHeight(Settings["experience-height"])
 		ExperienceBar:SetScaledPoint("BOTTOM", UIParent, 0, 13)
@@ -459,7 +460,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Size"])
 	WidthWidget = Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
-	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
+	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 6, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
 	Right:CreateHeader(Language["Positioning"])
 	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
