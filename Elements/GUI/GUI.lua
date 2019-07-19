@@ -1373,6 +1373,8 @@ end
 -- Color
 local COLOR_WIDTH = 80
 local SWATCH_SIZE = 20
+local MAX_SWATCHES_X = 20
+local MAX_SWATCHES_Y = 10
 
 local ColorSwatchOnMouseUp = function(self)
 	GUI.ColorPicker.Transition:SetChange(HexToRGB(self.Value))
@@ -1655,7 +1657,7 @@ local CreateColorPicker = function()
 	ColorPicker.NewHexText:EnableMouse(true)
 	ColorPicker.NewHexText:SetShadowColor(0, 0, 0)
 	ColorPicker.NewHexText:SetShadowOffset(1, -1)
-	ColorPicker.NewHexText:SetText("#FFFFFF")
+	ColorPicker.NewHexText:SetText("")
 	ColorPicker.NewHexText:SetHighlightColor(0, 0, 0)
 	ColorPicker.NewHexText:SetScript("OnEscapePressed", SwatchEditBoxOnEscapePressed)
 	ColorPicker.NewHexText:SetScript("OnEnterPressed", SwatchEditBoxOnEnterPressed)
@@ -1771,15 +1773,6 @@ local CreateColorPicker = function()
 	
 	local Palette = Media:GetPalette(Settings["ui-picker-palette"])
 	
-	local MAX_SWATCHES_X = 20
-	local MAX_SWATCHES_Y = 10
-	
-	--[[
-		/run vUIColorPicker:SetColorPalette("Lite")
-		/run vUIColorPicker:SetColorPalette("Default")
-		/run vUIColorPicker:SetColorPalette("Large")
-	--]]
-	
 	ColorPicker.SetColorPalette = function(self, name)
 		local Palette = Media:GetPalette(name)
 		local Swatch
@@ -1872,6 +1865,10 @@ local SetSwatchObject = function(active)
 	
 	GUI.ColorPicker.CompareCurrent:SetVertexColor(HexToRGB(active.Value))
 	GUI.ColorPicker.CurrentHexText:SetText("#"..active.Value)
+	
+	GUI.ColorPicker.NewHexText:SetText("")
+	GUI.ColorPicker.CompareNew:SetVertexColor(1, 1, 1)
+	GUI.ColorPicker.Selected = active.Value
 end
 
 local ColorSelectionOnEnter = function(self)
@@ -1890,19 +1887,11 @@ local ColorSelectionOnMouseUp = function(self)
 	if GUI.ColorPicker:IsShown() then
 		if (self ~= GUI.ColorPicker.Active) then
 			SetSwatchObject(self)
-			
-			GUI.ColorPicker.NewHexText:SetText("#FFFFFF")
-			GUI.ColorPicker.CompareNew:SetVertexColor(1, 1, 1)
-			GUI.ColorPicker.Selected = "FFFFFF"
 		else
 			GUI.ColorPicker.FadeOut:Play()
 		end
 	else
 		SetSwatchObject(self)
-		
-		GUI.ColorPicker.NewHexText:SetText("#FFFFFF")
-		GUI.ColorPicker.CompareNew:SetVertexColor(1, 1, 1)
-		GUI.ColorPicker.Selected = "FFFFFF"
 		
 		GUI.ColorPicker:Show()
 		GUI.ColorPicker.FadeIn:Play()
