@@ -416,7 +416,6 @@ end
 local CreateBarPanels = function()
 	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
 	BottomPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
-	BottomPanel:SetScaledPoint("BOTTOM", UIParent, 0, 12)
 	BottomPanel:SetBackdrop(vUI.BackdropAndBorder)
 	BottomPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
@@ -424,11 +423,17 @@ local CreateBarPanels = function()
 	
 	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent)
 	SidePanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
-	SidePanel:SetScaledPoint("RIGHT", UIParent, -12, 0)
+	SidePanel:SetScaledPoint("RIGHT", UIParent, -10, 0)
 	SidePanel:SetBackdrop(vUI.BackdropAndBorder)
 	SidePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	SidePanel:SetBackdropBorderColor(0, 0, 0)
 	SidePanel:SetFrameStrata("LOW")
+	
+	if (Settings["experience-position"] == "CLASSIC") then
+		BottomPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
+	else
+		BottomPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+	end
 end
 
 local SetClassicStyle = function()
@@ -456,6 +461,10 @@ local SetClassicStyle = function()
 			Bar[i]:SetScaledPoint("LEFT", Bar[i-1], "RIGHT", SPACING, 0)
 		end
 	end
+	
+	if (Settings["experience-position"] == "CLASSIC") then
+		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
+	end
 end
 
 local SetCompactStyle = function()
@@ -479,6 +488,10 @@ local SetCompactStyle = function()
 		else
 			Bar[i]:SetScaledPoint("TOP", Bar[i-1], "BOTTOM", 0, -SPACING)
 		end
+	end
+	
+	if (Settings["experience-position"] == "CLASSIC") then
+		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
 	end
 end
 

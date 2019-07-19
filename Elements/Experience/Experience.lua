@@ -149,6 +149,11 @@ local UpdateBarPosition = function(value)
 		
 		vUIChatFrameBottom:Show()
 		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+		end
+		
 		if (WidthWidget and WidthWidget.Disabled) then
 			WidthWidget:Enable()
 		end
@@ -169,12 +174,38 @@ local UpdateBarPosition = function(value)
 		ExperienceBar.HeaderBG:SetScaledHeight(Height)
 		ExperienceBar.Bar.Spark:SetScaledHeight(Height)
 		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+		end
+		
 		if (WidthWidget and not WidthWidget.Disabled) then
 			WidthWidget:Disable()
 		end
 		
 		if (HeightWidget and not HeightWidget.Disabled) then
 			HeightWidget:Disable()
+		end
+	elseif (value == "CLASSIC") then
+		ExperienceBar.BGAll:Show()
+		ExperienceBar:SetScaledHeight(Settings["experience-height"])
+		ExperienceBar:SetScaledPoint("BOTTOM", UIParent, 0, 13)
+		ExperienceBar.HeaderBG:SetScaledHeight(Settings["experience-height"])
+		ExperienceBar.Bar.Spark:SetScaledHeight(Settings["experience-height"])
+		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", ExperienceBar, "TOP", 0, 5)
+			
+			ExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - 6)
+		end
+		
+		if (WidthWidget and not WidthWidget.Disabled) then
+			WidthWidget:Disable()
+		end
+		
+		if (HeightWidget and HeightWidget.Disabled) then
+			HeightWidget:Enable()
 		end
 	end
 end
@@ -431,7 +462,7 @@ GUI:AddOptions(function(self)
 	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 10, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
 	Right:CreateHeader(Language["Positioning"])
-	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME"}, Language["Set Position"], "", UpdateBarPosition)
+	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
 	
 	Right:CreateHeader(Language["Visibility"])
 	
