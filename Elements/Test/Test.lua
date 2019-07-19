@@ -76,6 +76,19 @@ GUI:AddOptions(function(self)
 	
 	Bar:GetScript("OnUpdate")(Bar, 1)
 	
+	Right:CreateHeader(Language["Lines"])
+	Right:CreateLine("Test Line 1")
+	Right:CreateLine("Test Line 2")
+	Right:CreateLine("Test Line 3")
+	
+	Right:CreateHeader(Language["Double Lines"])
+	Right:CreateDoubleLine("Test Line 1", "Hello World 1")
+	Right:CreateDoubleLine("Test Line 2", "Hello World 2")
+	Right:CreateDoubleLine("Test Line 3", "Hello World 3")
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
+	
 	-- Testing
 	self:NewWindow("Unit Frames")
 	self:NewWindow("Tooltips")

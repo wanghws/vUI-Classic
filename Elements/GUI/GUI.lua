@@ -29,6 +29,8 @@ GUI.Widgets = {}
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	
+	ProfileInput -- do I need a unique input for this?
+	
 	- I can likely do 2 lined widgets by just creating 2 anchors and inserting them so that the scroll system still handles them just fine.
 	
 	Input label blah blah
@@ -228,6 +230,31 @@ GUI.Widgets.CreateHeader = function(self, text)
 	Header.Text:SetShadowColor(0, 0, 0)
 	Header.Text:SetShadowOffset(1, -1)
 	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Header
+end
+
+-- Footer
+GUI.Widgets.CreateFooter = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	-- Footer
+	local Footer = CreateFrame("Frame", nil, Anchor)
+	Footer:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Footer:SetScaledPoint("CENTER", Anchor, 0, 0)
+	Footer:SetBackdrop(vUI.BackdropAndBorder)
+	Footer:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Footer:SetBackdropBorderColor(0, 0, 0)
+	
+	Footer.NewTexture = Footer:CreateTexture(nil, "OVERLAY")
+	Footer.NewTexture:SetScaledPoint("TOPLEFT", Footer, 1, -1)
+	Footer.NewTexture:SetScaledPoint("BOTTOMRIGHT", Footer, -1, 1)
+	Footer.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Footer.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -1365,7 +1392,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box:SetScript("OnEnter", EditBoxOnEnter)
 	EditBox.Box:SetScript("OnLeave", EditboxOnLeave)
 	
-	local Slider = CreateFrame("Slider", nil, self)
+	local Slider = CreateFrame("Slider", nil, Anchor)
 	Slider:SetScaledPoint("RIGHT", EditBox, "LEFT", -2, 0)
 	Slider:SetScaledSize(SLIDER_WIDTH, WIDGET_HEIGHT)
 	Slider:SetThumbTexture(Media:GetTexture("Blank"))
