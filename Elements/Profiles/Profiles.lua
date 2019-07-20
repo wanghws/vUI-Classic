@@ -12,10 +12,8 @@ local Filter = {
 }
 
 local GetCurrentDate = function()
-	--local Date = date("%Y-%m-%d")
-	local Date = date("%Y-%m-%d %I:%M %p")
-	
-	return Date
+	--return date("%Y-%m-%d")
+	return date("%Y-%m-%d %I:%M %p")
 end
 
 function Profiles:ImportProfiles()
@@ -97,12 +95,10 @@ function Profiles:CreateProfile(name)
 		name = self:GetDefaultProfileKey()
 	end
 	
-	if (not vUIProfileData[vUI.Realm][vUI.User]) then
-		vUIProfileData[vUI.Realm][vUI.User] = name
-	end
-	
 	if vUIProfiles[name] then
 		self.List[name] = name
+		
+		vUIProfileData[vUI.Realm][vUI.User] = name
 		
 		return vUIProfiles[name]
 	end
@@ -110,8 +106,7 @@ function Profiles:CreateProfile(name)
 	vUIProfiles[name] = {}
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
 	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
-	
-	self:SetActiveProfile(name)
+	vUIProfileData[vUI.Realm][vUI.User] = name
 	
 	self.List[name] = name
 	
@@ -130,8 +125,26 @@ function Profiles:GetProfileList()
 	return self.List
 end
 
-function Profiles:GetMostUsedProfile()
-	-- return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
+function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
+	local Temp = {}
+	
+	for Realm, Value in pairs(vUIProfileData) do
+		for Player, ProfileName in pairs(Value) do
+			Temp[ProfileName] = (Temp[ProfileName] or 0) + 1
+		end
+	end
+	
+	local HighestValue = 0
+	local HighestName
+	
+	for Name, Value in pairs(Temp) do
+		if (Value > HighestValue) then
+			HighestValue = Value
+			HighestName = Name
+		end
+	end
+	
+	return HighestName
 end
 
 function Profiles:DeleteProfile(name)
@@ -139,9 +152,14 @@ function Profiles:DeleteProfile(name)
 		vUIProfiles[name] = nil
 		self.List[name] = nil
 		
-		if (vUIProfileData and vUIProfileData[vUI.Realm]) then
-			if (vUIProfileData[vUI.Realm][vUI.User] == name) then -- We just erased our profile. Fix it. Actually fix other characters using this profile too =/
-				--ifvUIProfileData[vUI.Realm][vUI.User] = "Default" -- Find an existing profile
+		local Default = self:GetMostUsedProfile()
+		
+		-- If we just wiped out a profile that characters were using, reroute them to a different profile for the time being.
+		for Realm, Value in pairs(vUIProfileData) do
+			for Player, ProfileName in pairs(Values) do
+				if (ProfileName == name) then
+					vUIProfileData[Realm][Player] = Default
+				end
 			end
 		end
 		
@@ -152,7 +170,6 @@ function Profiles:DeleteProfile(name)
 end
 
 function Profiles:MergeWithDefaults(name)
-	local Profile = self:GetProfile(name)
 	local Values = {}
 	
 	-- Collect default values
@@ -161,7 +178,7 @@ function Profiles:MergeWithDefaults(name)
 	end
 	
 	-- And apply stored values
-	for ID, Value in pairs(Profile) do
+	for ID, Value in pairs(self:GetProfile(name)) do
 		Values[ID] = Value
 	end
 	

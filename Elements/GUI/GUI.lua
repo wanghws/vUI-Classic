@@ -2744,14 +2744,12 @@ end
 function GUI:VARIABLES_LOADED()
 	if (not vUIProfileData) then -- No profile data exists, create a default
 		Profiles:CreateProfile("Default")
+	elseif (not vUIProfileData[vUI.Realm][vUI.User]) then
+		vUIProfileData[vUI.Realm][vUI.User] = Profiles:GetMostUsedProfile()
 	end
 	
-	local Name = Profiles:GetActiveProfileName()
-	
-	Profiles:GetActiveProfileName()
-	
 	Profiles:ImportProfiles()
-	Profiles:ApplyProfile(Name)
+	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
 	
 	-- Load the GUI
 	self:Create()
@@ -2882,11 +2880,13 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
+	Left:CreateInput("profile-key", "|cFF666666"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
 	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
 	
 	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
 	Left:CreateButton("Delete", "", "") -- Scoop text out of the delete input and process it
+	
+	Left:CreateLine("-- Add a merge section too")
 	
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
@@ -2897,8 +2897,12 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Info"])
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())
+	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
 	Right:CreateDoubleLine("Current Profile:", Name)
 	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
 	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
 	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)
