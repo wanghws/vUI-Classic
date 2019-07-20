@@ -117,29 +117,19 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Class", vUI.Class)
 	Right:CreateDoubleLine("Realm", vUI.Realm)
 	
-	local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
+	--[[local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 	local LibCompress = LibStub:GetLibrary("LibCompress")
 	
 	if AceSerializer then
-		--AceSerializer:Embed(vUI)
-		
 		local Profile = Profiles:GetActiveProfile()
 		
 		local Result = AceSerializer:Serialize(Profile)
-		
 		local Compressed = LibCompress:Compress(Result)
-		
-		print(Compressed)
-		
 		local Encoded = LibCompress:Encode7bit(Compressed)
 		
-		print(Encoded)
-		
 		local Decoded = LibCompress:Decode7bit(Encoded)
-		
-		print(Decoded)
-		
-		local Success, Value = AceSerializer:Deserialize(Decoded)
+		local Decompressed = LibCompress:Decompress(Decoded)
+		local Success, Value = AceSerializer:Deserialize(Decompressed)
 		
 		if Success then
 			print("Woah, we did it.", Value["ui-display-dev-tools"])
@@ -148,5 +138,5 @@ GUI:AddOptions(function(self)
 		else
 			print(Value) -- Error
 		end
-	end
+	end]]
 end)

@@ -198,3 +198,94 @@ function Profiles:ApplyProfile(name)
 	
 	vUIProfileData[vUI.Realm][vUI.User] = name
 end
+
+local UpdateProfile = function(value)
+	if (value ~= Profiles:GetActiveProfileName()) then
+		Profiles:SetActiveProfile(value)
+		
+		ReloadUI()
+	end
+end
+
+local CreateProfile = function(value)
+	Profiles:CreateProfile(value)
+end
+
+local DeleteProfile = function(value)
+	Profiles:DeleteProfile(value)
+end
+
+local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
+local LibCompress = LibStub:GetLibrary("LibCompress")
+
+function Profiles:GetEncoded()
+	local Result = AceSerializer:Serialize(self:GetActiveProfile())
+	local Compressed = LibCompress:Compress(Result)
+	local Encoded = LibCompress:Encode7bit(Compressed)
+	
+	return Encoded
+end
+
+local UpdateProfileString = function()
+	Profile = Profiles:GetActiveProfile()
+	
+	local Result = AceSerializer:Serialize(Profile)
+	local Compressed = LibCompress:Compress(Result)
+	local Encoded = LibCompress:Encode7bit(Compressed)
+	
+	local Decoded = LibCompress:Decode7bit(Encoded)
+	local Decompressed = LibCompress:Decompress(Decoded)
+	local Success, Value = AceSerializer:Deserialize(Decompressed)
+	
+	if Success then
+		print("Woah, we did it.", Value["ui-display-dev-tools"])
+		
+		-- Merge values into settings
+	else
+		print(Value) -- Error
+	end
+end
+
+local Temp = function()
+	vUI:print("Dump this in a window:")
+	
+	print(Profiles:GetEncoded())
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:NewWindow(Language["Profiles"])
+	
+	Left:CreateHeader(Language["Profiles"])
+	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	
+	Left:CreateHeader(Language["Modify"])
+	Left:CreateInput("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
+	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
+	
+	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
+	Left:CreateButton("Delete", "", "") -- Scoop text out of the delete input and process it
+	
+	local String = Profiles:GetEncoded()
+	
+	Left:CreateHeader("Sharing Is Caring")
+	Left:CreateButton("Export", "Export Current Profile", "", Temp)
+	Left:CreateButton("Import", "Import A Profile", "")
+	
+	Right:CreateHeader("What is a profile?")
+	Right:CreateLine("Profiles store your settings so that you can easily")
+	Right:CreateLine("and quickly change between configurations.")
+	
+	local Name = Profiles:GetActiveProfileName()
+	local Profile = Profiles:GetProfile(Name)
+	
+	Right:CreateHeader(Language["Info"])
+	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())
+	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
+	Right:CreateDoubleLine("Current Profile:", Name)
+	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
+	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
+	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
+end)

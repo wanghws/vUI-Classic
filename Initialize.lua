@@ -21,6 +21,14 @@ local Core = {
 	[7] = {}, -- Profiles
 }
 
+Core[2].Queue = {}
+
+Core[2].AddOptions = function(self, func)
+	if (type(func) == "function") then
+		tinsert(self.Queue, func)
+	end
+end
+
 local Resolution = select(GetCurrentResolution(), GetScreenResolutions())
 local ScreenHeight = string.match(Resolution, "%d+x(%d+)")
 local UIParentHeight = UIParent:GetHeight()

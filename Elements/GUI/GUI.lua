@@ -2617,12 +2617,6 @@ GUI.GetWidget = function(id)
 	end
 end
 
-GUI.AddOptions = function(self, func)
-	if (type(func) == "function") then
-		tinsert(self.Queue, func)
-	end
-end
-
 -- Frame
 function GUI:Create()
 	-- This just makes the animation look better. That's all. ಠ_ಠ
@@ -2705,7 +2699,6 @@ end
 -- Groups
 GUI.Buttons = {}
 GUI.Windows = {}
-GUI.Queue = {}
 
 GUI.Fade = CreateAnimationGroup(GUI)
 
@@ -2855,54 +2848,4 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
-end)
-
-local UpdateProfile = function(value)
-	if (value ~= Profiles:GetActiveProfileName()) then
-		Profiles:SetActiveProfile(value)
-		
-		ReloadUI()
-	end
-end
-
-local CreateProfile = function(value)
-	Profiles:CreateProfile(value)
-end
-
-local DeleteProfile = function(value)
-	Profiles:DeleteProfile(value)
-end
-
-GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Profiles"])
-	
-	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
-	
-	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
-	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
-	
-	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
-	Left:CreateButton("Delete", "", "") -- Scoop text out of the delete input and process it
-	
-	Left:CreateLine("-- Add a merge section too")
-	
-	Right:CreateHeader("What is a profile?")
-	Right:CreateLine("Profiles store your settings so that you can easily")
-	Right:CreateLine("and quickly change between configurations.")
-	
-	local Name = Profiles:GetActiveProfileName()
-	local Profile = Profiles:GetProfile(Name)
-	
-	Right:CreateHeader(Language["Info"])
-	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())
-	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
-	Right:CreateDoubleLine("Current Profile:", Name)
-	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
-	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
-	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
