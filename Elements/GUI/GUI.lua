@@ -2883,7 +2883,10 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Modify"])
 	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
+	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
+	
 	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
+	Left:CreateButton("Delete", "", "") -- Scoop text out of the delete input and process it
 	
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
