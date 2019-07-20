@@ -654,6 +654,8 @@ local INPUT_WIDTH = 130
 local InputOnEnterPressed = function(self)
 	local Value = self:GetText()
 	
+	self.Parent.Fade:Play()
+	
 	if (not match(Value, "%S")) then
 		self:SetAutoFocus(false)
 		self:ClearFocus()
@@ -718,6 +720,13 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Input.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	
+	Input.Flash = Input:CreateTexture(nil, "OVERLAY")
+	Input.Flash:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Flash:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Flash:SetTexture(Media:GetTexture("RenHorizonUp"))
+	Input.Flash:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
+	Input.Flash:SetAlpha(0)
+	
 	Input.Highlight = Input:CreateTexture(nil, "OVERLAY")
 	Input.Highlight:SetScaledPoint("TOPLEFT", Input, 1, -1)
 	Input.Highlight:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
@@ -755,6 +764,19 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Text:SetShadowColor(0, 0, 0)
 	Input.Text:SetShadowOffset(1, -1)
 	Input.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
+	
+	Input.Fade = CreateAnimationGroup(Input.Flash)
+	
+	Input.FadeIn = Input.Fade:CreateAnimation("Fade")
+	Input.FadeIn:SetEasing("in")
+	Input.FadeIn:SetDuration(0.15)
+	Input.FadeIn:SetChange(SELECTED_HIGHLIGHT_ALPHA)
+	
+	Input.FadeOut = Input.Fade:CreateAnimation("Fade")
+	Input.FadeOut:SetOrder(2)
+	Input.FadeOut:SetEasing("out")
+	Input.FadeOut:SetDuration(0.15)
+	Input.FadeOut:SetChange(0)
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -2715,20 +2737,21 @@ end
 __vUIReset = function() -- /run __vUIReset()
 	vUIProfiles = nil
 	vUIData = nil
+	vUIProfileData = nil
 	ReloadUI()
 end
 
 function GUI:VARIABLES_LOADED()
-	if (not vUIData) then
-		vUIData = {}
-		
-		Profiles:NewProfile("Default")
+	if (not vUIProfileData) then -- No profile data exists, create a default
+		Profiles:CreateProfile("Default")
 	end
 	
-	local Key = vUIData["ui-profile"] or "Default"
+	local Name = Profiles:GetActiveProfileName()
+	
+	Profiles:GetActiveProfileName()
 	
 	Profiles:ImportProfiles()
-	Profiles:ApplyProfile(Key)
+	Profiles:ApplyProfile(Name)
 	
 	-- Load the GUI
 	self:Create()
@@ -2837,15 +2860,15 @@ GUI:AddOptions(function(self)
 end)
 
 local UpdateProfile = function(value)
-	if (value ~= vUIData["ui-profile"]) then
-		vUIData["ui-profile"] = value
+	if (value ~= Profiles:GetActiveProfileName()) then
+		Profiles:SetActiveProfile(value)
 		
 		ReloadUI()
 	end
 end
 
 local CreateProfile = function(value)
-	Profiles:NewProfile(value)
+	Profiles:CreateProfile(value)
 end
 
 local DeleteProfile = function(value)
@@ -2856,10 +2879,10 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow(Language["Profiles"])
 	
 	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", vUIData["ui-profile"], Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", Profiles:GetDefaultUserKey(), "Create New Profile", "", CreateProfile)
+	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
 	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
 	
 	Right:CreateHeader("What is a profile?")
@@ -2868,12 +2891,6 @@ GUI:AddOptions(function(self)
 	
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
-	
-	print(Profiles:GetNumProfiles())
-	print(Name)
-	print(Profile["profile-created"])
-	print(Profile["profile-last-modified"])
-	print(Profiles:CountChangedValues(Name))
 	
 	Right:CreateHeader(Language["Info"])
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())

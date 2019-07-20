@@ -12,8 +12,8 @@ local Filter = {
 }
 
 local GetCurrentDate = function()
-	local Date = date("%Y-%m-%d")
-	--local Now2 = date("%a, %b %d")
+	--local Date = date("%Y-%m-%d")
+	local Date = date("%Y-%m-%d %I:%M %p")
 	
 	return Date
 end
@@ -36,7 +36,7 @@ function Profiles:GetNumProfiles()
 	return Count
 end
 
-function Profiles:GetDefaultUserKey()
+function Profiles:GetDefaultProfileKey()
 	return format(DefaultKey, vUI.User, vUI.Realm)
 end
 
@@ -46,16 +46,26 @@ function Profiles:SetLastModified(name)
 	Profile["profile-last-modified"] = GetCurrentDate()
 end
 
-function Profiles:GetActiveProfileName()
-	if (vUIData and vUIData["ui-profile"]) then
-		return vUIData["ui-profile"]
+function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
+	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
+		if vUIProfileData[vUI.Realm][vUI.User] then
+			return vUIProfileData[vUI.Realm][vUI.User]
+		end
 	end
 end
 
 function Profiles:GetActiveProfile()
-	if (vUIData and vUIData["ui-profile"]) then
-		if vUIProfiles[vUIData["ui-profile"]] then
-			return vUIProfiles[vUIData["ui-profile"]]
+	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
+		if vUIProfileData[vUI.Realm][vUI.User] then
+			return self:GetProfile(vUIProfileData[vUI.Realm][vUI.User])
+		end
+	end
+end
+
+function Profiles:SetActiveProfile(name)
+	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
+		if vUIProfileData[vUI.Realm][vUI.User] then
+			vUIProfileData[vUI.Realm][vUI.User] = name
 		end
 	end
 end
@@ -73,13 +83,22 @@ function Profiles:CountChangedValues(name)
 	return Count
 end
 
-function Profiles:NewProfile(name)
+function Profiles:CreateProfile(name)
 	if (not vUIProfiles) then
 		vUIProfiles = {}
 	end
 	
+	if (not vUIProfileData) then
+		vUIProfileData = {}
+		vUIProfileData[vUI.Realm] = {}
+	end
+	
 	if (not name) then
-		name = format(DefaultKey, vUI.User, vUI.Realm)
+		name = self:GetDefaultProfileKey()
+	end
+	
+	if (not vUIProfileData[vUI.Realm][vUI.User]) then
+		vUIProfileData[vUI.Realm][vUI.User] = name
 	end
 	
 	if vUIProfiles[name] then
@@ -91,6 +110,9 @@ function Profiles:NewProfile(name)
 	vUIProfiles[name] = {}
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
 	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
+	
+	self:SetActiveProfile(name)
+	
 	self.List[name] = name
 	
 	return vUIProfiles[name]
@@ -108,11 +130,20 @@ function Profiles:GetProfileList()
 	return self.List
 end
 
+function Profiles:GetMostUsedProfile()
+	-- return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
+end
+
 function Profiles:DeleteProfile(name)
 	if vUIProfiles[name] then
 		vUIProfiles[name] = nil
 		self.List[name] = nil
-		vUIData["ui-profile"] = "Default" -- Find an existing profile
+		
+		if (vUIProfileData and vUIProfileData[vUI.Realm]) then
+			if (vUIProfileData[vUI.Realm][vUI.User] == name) then -- We just erased our profile. Fix it. Actually fix other characters using this profile too =/
+				--ifvUIProfileData[vUI.Realm][vUI.User] = "Default" -- Find an existing profile
+			end
+		end
 		
 		vUI:print(format('Deleted profile "%s".', name))
 	else
@@ -121,8 +152,8 @@ function Profiles:DeleteProfile(name)
 end
 
 function Profiles:MergeWithDefaults(name)
-	local Values = {}
 	local Profile = self:GetProfile(name)
+	local Values = {}
 	
 	-- Collect default values
 	for ID, Value in pairs(Defaults) do
@@ -148,5 +179,5 @@ function Profiles:ApplyProfile(name)
 		Settings[ID] = Value
 	end
 	
-	vUIData["ui-profile"] = name
+	vUIProfileData[vUI.Realm][vUI.User] = name
 end

@@ -124,14 +124,14 @@ function Media:ApplyTemplate(name)
 		return vUI:print(format('No template exists with the name "%s"', name))
 	end
 	
-	local Key = vUIData["ui-profile"] or "Default"
+	local Profile = Profiles:GetActiveProfile()
 	
-	if (vUIProfiles and vUIProfiles[Key]) then
+	if Profile then
 		for ID, Value in pairs(self.Templates[name]) do
 			if (Value ~= Defaults[ID]) then -- Only saving a value if it's different than default
-				vUIProfiles[Key][ID] = Value
+				Profile[ID] = Value
 			else
-				vUIProfiles[Key][ID] = nil
+				Profile[ID] = nil
 			end
 			
 			Settings[ID] = Value
@@ -317,14 +317,14 @@ Media:SetTemplate("Slate", {
 	
 	["ui-header-texture"] = "Kola",
 	["ui-widget-texture"] = "Kola",
-	["ui-button-texture"] = "Ferous 27",
+	["ui-button-texture"] = "Kola",
 	
 	["ui-header-font-color"] = "FAFAFA",
 	["ui-header-texture-color"] = "78909C",
 	["ui-window-bg-color"] = "37474F",
 	["ui-window-main-color"] = "263238",
 	["ui-widget-color"] = "BBDEFB",
-	["ui-widget-bright-color"] = "263238",
+	["ui-widget-bright-color"] = "CFD8DC",
 	["ui-widget-bg-color"] = "37474F",
 	["ui-widget-font-color"] = "FFFFFF",
 	["ui-button-font-color"] = "FAFAFA",
