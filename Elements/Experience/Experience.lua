@@ -67,7 +67,7 @@ local UpdateXP = function(self, first)
 		self.Bar.Spark:SetAlpha(0)
 	end
 	
-	if (Rested > 0) and (self.Bar.Rested.Spark:GetAlpha() < 1) then
+	if Rested and (Rested > 0) and (self.Bar.Rested.Spark:GetAlpha() < 1) then
 		self.Bar.Rested.Spark:SetAlpha(1)
 	elseif (self.Bar.Rested.Spark:GetAlpha() > 0) then
 		self.Bar.Rested.Spark:SetAlpha(0)

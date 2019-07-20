@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
 -- The most important file there is.
 
@@ -116,4 +116,37 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("User", vUI.User)
 	Right:CreateDoubleLine("Class", vUI.Class)
 	Right:CreateDoubleLine("Realm", vUI.Realm)
+	
+	local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
+	local LibCompress = LibStub:GetLibrary("LibCompress")
+	
+	if AceSerializer then
+		--AceSerializer:Embed(vUI)
+		
+		local Profile = Profiles:GetActiveProfile()
+		
+		local Result = AceSerializer:Serialize(Profile)
+		
+		local Compressed = LibCompress:Compress(Result)
+		
+		print(Compressed)
+		
+		local Encoded = LibCompress:Encode7bit(Compressed)
+		
+		print(Encoded)
+		
+		local Decoded = LibCompress:Decode7bit(Encoded)
+		
+		print(Decoded)
+		
+		local Success, Value = AceSerializer:Deserialize(Decoded)
+		
+		if Success then
+			print("Woah, we did it.", Value["ui-display-dev-tools"])
+			
+			-- Merge values into settings
+		else
+			print(Value) -- Error
+		end
+	end
 end)

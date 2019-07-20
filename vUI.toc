@@ -22,6 +22,9 @@ Languages\zhTW.lua
 Elements\Animation\Animation.lua
 Elements\GUI\Defaults.lua
 Elements\Profiles\Profiles.lua
+Elements\Serialize\LibStub.lua
+Elements\Serialize\AceSerializer-3.0.lua
+Elements\Serialize\LibCompress.lua
 Elements\GUI\GUI.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua
