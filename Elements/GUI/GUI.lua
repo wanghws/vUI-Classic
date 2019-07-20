@@ -2880,7 +2880,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", "|cFF666666"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
+	Left:CreateInput("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
 	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
 	
 	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
