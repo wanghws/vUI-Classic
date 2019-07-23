@@ -210,7 +210,7 @@ Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.tt
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 
 -- Palettes
--- Yes, doing these did take forever. And it was so worth it.
+-- Yes, doing these did take forever. And yes it was so worth it.
 
 local Large = {} -- https://htmlcolorcodes.com/
 
@@ -336,7 +336,7 @@ Media:SetTemplate("Slate", {
 	["ui-window-main-color"] = "263238",
 	
 	["ui-widget-color"] = "BBDEFB",
-	["ui-widget-bright-color"] = "CFD8DC",
+	["ui-widget-bright-color"] = "BDBDBD",
 	["ui-widget-bg-color"] = "37474F",
 	["ui-widget-font-color"] = "FFFFFF",
 	

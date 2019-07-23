@@ -82,6 +82,20 @@ function Profiles:CountChangedValues(name)
 	return Count
 end
 
+function Profiles:CreateProfileData()
+	if (not vUIProfileData) then -- No profile data exists, create a default
+		self:CreateProfile("Default")
+	end
+	
+	if (not vUIProfileData[vUI.Realm]) then
+		vUIProfileData[vUI.Realm] = {}
+	end
+	
+	if (not vUIProfileData[vUI.Realm][vUI.User]) then
+		vUIProfileData[vUI.Realm][vUI.User] = self:GetMostUsedProfile()
+	end
+end
+
 function Profiles:CreateProfile(name)
 	if (not vUIProfiles) then
 		vUIProfiles = {}
@@ -96,10 +110,12 @@ function Profiles:CreateProfile(name)
 		name = self:GetDefaultProfileKey()
 	end
 	
+	if (not vUIProfileData[vUI.Realm][vUI.User]) then
+		vUIProfileData[vUI.Realm][vUI.User] = name
+	end
+	
 	if vUIProfiles[name] then
 		self.List[name] = name
-		
-		--vUIProfileData[vUI.Realm][vUI.User] = name
 		
 		return vUIProfiles[name]
 	end
@@ -133,15 +149,14 @@ end
 
 function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
 	local Temp = {}
+	local HighestValue = 0
+	local HighestName
 	
 	for Realm, Value in pairs(vUIProfileData) do
 		for Player, ProfileName in pairs(Value) do
 			Temp[ProfileName] = (Temp[ProfileName] or 0) + 1
 		end
 	end
-	
-	local HighestValue = 0
-	local HighestName
 	
 	for Name, Value in pairs(Temp) do
 		if (Value > HighestValue) then
@@ -269,28 +284,6 @@ local UpdateProfileString = function()
 	else
 		print(Value) -- Error
 	end
-end
-
-local LineMax = 25
-
-local sub = string.sub
-local len = string.len
-local concat = table.concat
-
-local ConvertToLines = function(str)
-	local Lines = {}
-	local Subbed
-	local Remaining = str
-	local TotalLines = 0
-	
-	while (len(Remaining) > 0) do
-		Subbed = sub(Remaining, 1, LineMax)
-		Remaining = sub(Remaining, LineMax, len(Remaining))
-		
-		Lines[#Lines + 1] = Subbed
-	end
-	
-	return Lines
 end
 
 local ShowProfileWindow = function()

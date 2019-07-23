@@ -88,6 +88,13 @@ function vUI:RGBToHSV(r, g, b)
 	local Max = max(R, G, B)
 end
 
+function vUI:Reset() -- /run vUI:Reset()
+	-- Create a prompt unless dev
+	vUIProfiles = nil
+	vUIProfileData = nil
+	ReloadUI()
+end
+
 -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 
 vUI.Delimiter = " "

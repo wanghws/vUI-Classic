@@ -748,6 +748,10 @@ local AnimMethods = {
 		Reset = function(self)
 			self.Timer = 0
 		end,
+		
+		Finish = function(self)
+			self:Stop()
+		end,
 	},
 }
 

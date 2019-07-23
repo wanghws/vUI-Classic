@@ -2675,6 +2675,32 @@ local WindowButtonOnMouseDown = function(self)
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
+local Storage = {
+	["button"] = CreateButton,
+	["color"] = CreateColorSelection,
+	["dropdown"] = CreateDropdown,
+	["header"] = CreateHeader,
+	["footer"] = CreateFooter,
+	["line"] = CreateLine,
+	["doubleline"] = CreateDoubleLine,
+	["slider"] = CreateSlider,
+	["input"] = CreateInput,
+	["inputwithbutton"] = CreateInputWithButton,
+	["checkbox"] = CreateCheckbox,
+	["switch"] = CreateSwitch,
+	["statusbar"] = CreateStatusBar,
+}
+
+local CreateWidget = function(self, name, ...)
+	local WidgetType = lower(name)
+	
+	if Storage[WidgetType] then
+		Storage[WidgetType](...)
+	else
+		vUI:print("Invalid widget type: " .. WidgetType)
+	end
+end
+
 GUI.NewWindow = function(self, name, default)
 	if self.Windows[name] then
 		return self.Windows[name]
@@ -2751,7 +2777,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
@@ -2759,7 +2785,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.RightWidgetsBG:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, "TOPRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window.LeftWidgetsBG, "BOTTOMRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Parent = self
@@ -2767,6 +2793,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.LeftWidgets = {}
 	Window.RightWidgets = {}
 	Window.SortWindow = SortWindow
+	Window.CreateWidget = CreateWidget
 	
 	Window.LeftWidgetsBG.Widgets = Window.LeftWidgets
 	Window.RightWidgetsBG.Widgets = Window.RightWidgets
@@ -2938,19 +2965,8 @@ function GUI:RunQueue()
 	end
 end
 
-__vUIReset = function() -- /run __vUIReset()
-	vUIProfiles = nil
-	vUIProfileData = nil
-	ReloadUI()
-end
-
 function GUI:VARIABLES_LOADED()
-	if (not vUIProfileData) then -- No profile data exists, create a default
-		Profiles:CreateProfile("Default")
-	elseif (not vUIProfileData[vUI.Realm][vUI.User]) then
-		vUIProfileData[vUI.Realm][vUI.User] = Profiles:GetMostUsedProfile()
-	end
-	
+	Profiles:CreateProfileData()
 	Profiles:ImportProfiles()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
 	
