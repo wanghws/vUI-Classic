@@ -310,7 +310,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInputWithButton("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create", "Create New Profile", "", CreateProfile)
+	Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
 	Left:CreateInputWithButton("profile-delete", "", "Delete", "Delete Profile", "", DeleteProfile)
 
 	--local String = Profiles:GetEncoded()

@@ -2940,7 +2940,6 @@ end
 
 __vUIReset = function() -- /run __vUIReset()
 	vUIProfiles = nil
-	vUIData = nil
 	vUIProfileData = nil
 	ReloadUI()
 end
@@ -2954,6 +2953,12 @@ function GUI:VARIABLES_LOADED()
 	
 	Profiles:ImportProfiles()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
+	
+	--[[
+		if EnableTemplates then
+			Merge templates with Settings, otherwise use default settings?
+		end
+	--]]
 	
 	-- Load the GUI
 	self:Create()

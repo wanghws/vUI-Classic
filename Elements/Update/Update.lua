@@ -4,7 +4,6 @@ local tonumber = tonumber
 local match = string.match
 local SendAddonMessage = C_ChatInfo.SendAddonMessage
 local UnitInBattleground = UnitInBattleground
-local UnitName = UnitName
 local IsInGuild = IsInGuild
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
