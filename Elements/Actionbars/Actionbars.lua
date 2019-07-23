@@ -124,7 +124,7 @@ local SkinButton = function(button, pet)
 	
 	if (button.SetHighlightTexture and not button.Hover) then
 		local Hover = button:CreateTexture(nil, "OVERLAY", button)
-		Hover:SetTexture(Media:GetTexture("Blank"))
+		Hover:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Hover:SetVertexColor(1, 1, 1, 0.3)
 		Hover:SetScaledPoint("TOPLEFT", button, 1, -1)
 		Hover:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
@@ -135,7 +135,7 @@ local SkinButton = function(button, pet)
 	
 	if (button.SetPushedTexture and not button.Pushed) then
 		local Pushed = button:CreateTexture(nil, "OVERLAY", button)
-		Pushed:SetTexture(Media:GetTexture("Blank"))
+		Pushed:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Pushed:SetVertexColor(0.9, 0.8, 0.1, 0.3)
 		Pushed:SetScaledPoint("TOPLEFT", button, 1, -1)
 		Pushed:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
@@ -146,7 +146,7 @@ local SkinButton = function(button, pet)
 	
 	if (button.SetCheckedTexture and not button.Checked) then
 		local Checked = button:CreateTexture(nil, "OVERLAY", button)
-		Checked:SetTexture(Media:GetTexture("Blank"))
+		Checked:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Checked:SetVertexColor(0, 1, 0, 0.3)
 		Checked:SetScaledPoint("TOPLEFT", button, 1, -1)
 		Checked:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
@@ -156,7 +156,7 @@ local SkinButton = function(button, pet)
 	end
 	
 	local Range = button:CreateTexture(nil, "OVERLAY", button)
-	Range:SetTexture(Media:GetTexture("Blank"))
+	Range:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 	Range:SetVertexColor(0.7, 0, 0)
 	Range:SetScaledPoint("TOPLEFT", button, 1, -1)
 	Range:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
@@ -531,6 +531,38 @@ local SetButtonSize = function(value)
 	end
 end
 
+local SetHighlightTexture = function(value)
+	local Texture = Media:GetTexture(value)
+	
+	for i = 1, Num do
+		vUIActionBar1[i].Hover:SetTexture(Texture)
+		vUIActionBar1[i].Pushed:SetTexture(Texture)
+		vUIActionBar1[i].Checked:SetTexture(Texture)
+		vUIActionBar1[i].Range:SetTexture(Texture)
+		--vUIActionBar1[i]:SetPushedTexture(Pushed)
+		
+		vUIActionBar2[i].Hover:SetTexture(Texture)
+		vUIActionBar2[i].Pushed:SetTexture(Texture)
+		vUIActionBar2[i].Checked:SetTexture(Texture)
+		vUIActionBar2[i].Range:SetTexture(Texture)
+		
+		vUIActionBar3[i].Hover:SetTexture(Texture)
+		vUIActionBar3[i].Pushed:SetTexture(Texture)
+		vUIActionBar3[i].Checked:SetTexture(Texture)
+		vUIActionBar3[i].Range:SetTexture(Texture)
+		
+		vUIActionBar4[i].Hover:SetTexture(Texture)
+		vUIActionBar4[i].Pushed:SetTexture(Texture)
+		vUIActionBar4[i].Checked:SetTexture(Texture)
+		vUIActionBar4[i].Range:SetTexture(Texture)
+		
+		vUIActionBar5[i].Hover:SetTexture(Texture)
+		vUIActionBar5[i].Pushed:SetTexture(Texture)
+		vUIActionBar5[i].Checked:SetTexture(Texture)
+		vUIActionBar5[i].Range:SetTexture(Texture)
+	end
+end
+
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
 	if (not Settings["action-bars-enable"]) then
@@ -560,4 +592,10 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)
+	
+	Left:CreateHeader(Language["Highlights"])
+	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "", SetHighlightTexture, "Texture")
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)

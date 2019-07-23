@@ -135,7 +135,7 @@ function Profiles:GetProfile(name)
 	if vUIProfiles[name] then
 		return vUIProfiles[name]
 	else
-		return vUIProfiles["Default"]
+		return self:GetMoseUsedProfile()
 	end
 end
 
@@ -177,7 +177,7 @@ function Profiles:DeleteProfile(name)
 		
 		-- If we just wiped out a profile that characters were using, reroute them to a different profile for the time being.
 		for Realm, Value in pairs(vUIProfileData) do
-			for Player, ProfileName in pairs(Values) do
+			for Player, ProfileName in pairs(Value) do
 				if (ProfileName == name) then
 					vUIProfileData[Realm][Player] = Default
 				end
@@ -187,6 +187,10 @@ function Profiles:DeleteProfile(name)
 		vUI:print(format('Deleted profile "%s".', name))
 	else
 		vUI:print(format('No profile exists with the name "%s".', name))
+	end
+	
+	if (self:GetProfileCount() == 0) then
+		self:CreateProfile("Default") -- If we just deleted our last profile, make a new default.
 	end
 end
 
@@ -304,11 +308,11 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Modify"])
 	Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
-	Left:CreateInputWithButton("profile-delete", "", "Delete", "Delete Profile", "", DeleteProfile)
-
+	Left:CreateInputWithButton("profile-delete", Profiles:GetDefaultProfileKey(), "Delete", "Delete Profile", "", DeleteProfile)
+	
 	--local String = Profiles:GetEncoded()
 	
-	Left:CreateHeader("Sharing Is Caring")
+	Left:CreateHeader("Sharing is caring")
 	Left:CreateButton("Export", "Export Current Profile", "", ShowProfileWindow)
 	Left:CreateButton("Import", "Import A Profile", "")
 	

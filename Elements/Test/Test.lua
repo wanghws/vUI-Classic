@@ -108,7 +108,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("Version", vUI.Version)
 	Left:CreateDoubleLine("UI Scale", Settings["ui-scale"].."%")
 	Left:CreateDoubleLine("Resolution", select(GetCurrentResolution(), GetScreenResolutions()))
-	Left:CreateDoubleLine("Profile", vUIData and vUIData["ui-profile"] or "Default")
+	Left:CreateDoubleLine("Profile", Profiles:GetActiveProfileName())
 	Left:CreateDoubleLine("Template", Settings["ui-template"])
 	Left:CreateDoubleLine("Locale", vUI.Locale)
 	
@@ -117,26 +117,6 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Class", vUI.Class)
 	Right:CreateDoubleLine("Realm", vUI.Realm)
 	
-	--[[local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
-	local LibCompress = LibStub:GetLibrary("LibCompress")
-	
-	if AceSerializer then
-		local Profile = Profiles:GetActiveProfile()
-		
-		local Result = AceSerializer:Serialize(Profile)
-		local Compressed = LibCompress:Compress(Result)
-		local Encoded = LibCompress:Encode7bit(Compressed)
-		
-		local Decoded = LibCompress:Decode7bit(Encoded)
-		local Decompressed = LibCompress:Decompress(Decoded)
-		local Success, Value = AceSerializer:Deserialize(Decompressed)
-		
-		if Success then
-			print("Woah, we did it.", Value["ui-display-dev-tools"])
-			
-			-- Merge values into settings
-		else
-			print(Value) -- Error
-		end
-	end]]
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)

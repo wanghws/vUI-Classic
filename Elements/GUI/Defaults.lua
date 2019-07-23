@@ -3,7 +3,7 @@ local Defaults = select(2, ...):get(6)
 -- These are just default values. Use the GUI to change settings.
 
 -- UI
-Defaults["ui-scale"] = 71
+Defaults["ui-scale"] = 71.11111
 Defaults["ui-display-welcome"] = true
 Defaults["ui-display-dev-tools"] = false
 Defaults["ui-display-whats-new"] = true
@@ -44,6 +44,7 @@ Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "COMPACT"
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-button-size"] = 32
+Defaults["action-bars-button-highlight"] = "Blank"
 
 -- Chat
 Defaults["chat-enable"] = true

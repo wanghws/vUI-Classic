@@ -170,4 +170,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Size"])
 	Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "doesn't matter", UpdateMinimapSize)
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)

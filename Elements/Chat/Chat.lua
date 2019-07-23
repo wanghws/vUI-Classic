@@ -970,4 +970,7 @@ GUI:AddOptions(function(self)
 	Right:CreateCheckbox("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "")
 	Right:CreateCheckbox("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
 	Right:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)

@@ -470,6 +470,9 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
 	Right:CreateDropdown("experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
 	
+	Left:CreateFooter()
+	Right:CreateFooter()
+	
 	-- TEMPORARY -- Debug/Test
 	local GeneralLeft, GeneralRight = self:NewWindow(Language["General"])
 	
@@ -484,6 +487,9 @@ GUI:AddOptions(function(self)
 	
 	GeneralRight:CreateHeader(Language["Scale"])
 	GeneralRight:CreateSlider("ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
+	
+	GeneralLeft:CreateFooter()
+	GeneralRight:CreateFooter()
 	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]

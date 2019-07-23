@@ -200,7 +200,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 end
 
 -- Header
-GUI.Widgets.CreateHeader = function(self, text)
+--[[GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -230,9 +230,60 @@ GUI.Widgets.CreateHeader = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
+end]]
+
+GUI.Widgets.CreateHeader = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Text:SetScaledPoint("CENTER", Anchor, HEADER_SPACING, 0)
+	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Anchor.Text:SetJustifyH("CENTER")
+	Anchor.Text:SetShadowColor(0, 0, 0)
+	Anchor.Text:SetShadowOffset(1, -1)
+	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
+	Anchor.Reference:SetAllPoints(Anchor.Text)
+	
+	-- Header Left Line
+	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
+	HeaderLeft:SetScaledHeight(4)
+	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
+	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Reference, "LEFT", -SPACING, 0)
+	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
+	
+	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
+	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
+	HeaderLeft.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderLeft, -1, 1)
+	HeaderLeft.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderLeft.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	-- Header Right Line
+	local HeaderRight = CreateFrame("Frame", nil, Anchor)
+	HeaderRight:SetScaledHeight(4)
+	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	HeaderRight:SetScaledPoint("LEFT", Anchor.Reference, "RIGHT", SPACING, 0)
+	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderRight:SetBackdropBorderColor(0, 0, 0)
+	
+	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
+	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
+	HeaderRight.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderRight, -1, 1)
+	HeaderRight.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderRight.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Header
 end
 
--- Footer
+--[[ Footer
 GUI.Widgets.CreateFooter = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -251,6 +302,31 @@ GUI.Widgets.CreateFooter = function(self, text)
 	Footer.NewTexture:SetScaledPoint("BOTTOMRIGHT", Footer, -1, 1)
 	Footer.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	Footer.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Header
+end]]
+
+GUI.Widgets.CreateFooter = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	-- Header Left Line
+	local Line = CreateFrame("Frame", nil, Anchor)
+	Line:SetScaledHeight(4)
+	Line:SetScaledPoint("LEFT", Anchor, 0, 0)
+	Line:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Line:SetBackdrop(vUI.BackdropAndBorder)
+	Line:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Line:SetBackdropBorderColor(0, 0, 0)
+	
+	Line.NewTexture = Line:CreateTexture(nil, "OVERLAY")
+	Line.NewTexture:SetScaledPoint("TOPLEFT", Line, 1, -1)
+	Line.NewTexture:SetScaledPoint("BOTTOMRIGHT", Line, -1, 1)
+	Line.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Line.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -647,6 +723,11 @@ end
 -- Input
 local INPUT_WIDTH = 130
 
+local InputOnEscapePressed = function(self)
+	self:SetAutoFocus(false)
+	self:ClearFocus()
+end
+
 local InputOnEnterPressed = function(self)
 	local Value = self:GetText()
 	
@@ -746,7 +827,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Box.Parent = Input
 	
 	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
-	Input.Box:SetScript("OnEscapePressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
 	Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
 	Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
 	Input.Box:SetScript("OnChar", InputOnChar)
@@ -785,6 +866,8 @@ local InputButtonOnMouseUp = function(self)
 	InputOnEnterPressed(self.Input)
 end
 
+local INPUT_BUTTON_WIDTH = (GROUP_WIDTH / 2) - (SPACING / 2)
+
 GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -794,9 +877,22 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
 	
-	local Button = CreateFrame("Frame", nil, Anchor)
-	Button:SetScaledSize(BUTTON_WIDTH, WIDGET_HEIGHT)
-	Button:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	local Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Text:SetJustifyH("LEFT")
+	Text:SetShadowColor(0, 0, 0)
+	Text:SetShadowOffset(1, -1)
+	Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
+	
+	local Anchor2 = CreateFrame("Frame", nil, self)
+	Anchor2:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor2.ID = id
+	Anchor2.Text = label
+	
+	local Button = CreateFrame("Frame", nil, Anchor2)
+	Button:SetScaledSize(INPUT_BUTTON_WIDTH, WIDGET_HEIGHT)
+	Button:SetScaledPoint("RIGHT", Anchor2, 0, 0)
 	Button:SetBackdrop(vUI.BackdropAndBorder)
 	Button:SetBackdropColor(0.17, 0.17, 0.17)
 	Button:SetBackdropBorderColor(0, 0, 0)
@@ -827,22 +923,9 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	Button.MiddleText:SetShadowOffset(1, -1)
 	Button.MiddleText:SetText(button)
 	
-	Button.Text = Button:CreateFontString(nil, "OVERLAY")
-	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
-	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Button.Text:SetJustifyH("LEFT")
-	Button.Text:SetShadowColor(0, 0, 0)
-	Button.Text:SetShadowOffset(1, -1)
-	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
-	
-	local Anchor2 = CreateFrame("Frame", nil, self)
-	Anchor2:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
-	Anchor2.ID = id
-	Anchor2.Text = label
-	
 	local Input = CreateFrame("Frame", nil, Anchor2)
-	Input:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
-	Input:SetScaledPoint("RIGHT", Anchor2, 0, 0)
+	Input:SetScaledSize(INPUT_BUTTON_WIDTH, WIDGET_HEIGHT)
+	Input:SetScaledPoint("LEFT", Anchor2, 0, 0)
 	Input:SetBackdrop(vUI.BackdropAndBorder)
 	Input:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	Input:SetBackdropBorderColor(0, 0, 0)
@@ -888,7 +971,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	Button.Input = Input.Box
 	
 	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
-	Input.Box:SetScript("OnEscapePressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
 	Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
 	Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
 	Input.Box:SetScript("OnChar", InputOnChar)
@@ -3080,4 +3163,7 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
 end)
