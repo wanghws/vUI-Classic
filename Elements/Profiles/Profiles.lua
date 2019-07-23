@@ -293,26 +293,14 @@ local ConvertToLines = function(str)
 	return Lines
 end
 
-local Temp = function()
-	vUI:print("Dump this in a window:")
+local ShowProfileWindow = function()
 	local Encoded = Profiles:GetEncoded()
-	
-	local Lines = ConvertToLines(Encoded)
-	--local Text = concat(Lines, "", 1, #Lines)
-	
-	--print(string.len(Lines[1]))
-	
-	print(Encoded)
-	
 	local Window = GUI:CreateProfileWindow()
 	
 	Window.Input:SetText(Encoded)
 	Window.Input:HighlightText()
-
-	GUI:ToggleProfileWindow()
-	Window.Input:Show()
 	
-	Lines = nil
+	GUI:ToggleProfileWindow()
 end
 
 GUI:AddOptions(function(self)
@@ -328,7 +316,7 @@ GUI:AddOptions(function(self)
 	--local String = Profiles:GetEncoded()
 	
 	Left:CreateHeader("Sharing Is Caring")
-	Left:CreateButton("Export", "Export Current Profile", "", Temp)
+	Left:CreateButton("Export", "Export Current Profile", "", ShowProfileWindow)
 	Left:CreateButton("Import", "Import A Profile", "")
 	
 	Right:CreateHeader("What is a profile?")

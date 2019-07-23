@@ -275,18 +275,21 @@ Media:SetTemplate("vUI", {
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
 	
-	["ui-header-texture"] = "Ferous",
 	["ui-widget-texture"] = "Ferous",
+	["ui-header-texture"] = "Ferous",
 	["ui-button-texture"] = "Ferous",
 	
 	["ui-header-font-color"] = "FFE6C0",
 	["ui-header-texture-color"] = "616161",
+	
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "2B2B2B",
+	
 	["ui-widget-color"] = "FFCE54",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FFFFFF",
+	
 	["ui-button-font-color"] = "FFCE54",
 	["ui-button-texture-color"] = "616161",
 })
@@ -297,18 +300,21 @@ Media:SetTemplate("Midnight", {
 	["ui-header-font"] = "Prototype",
 	["ui-button-font"] = "Prototype",
 	
-	["ui-header-texture"] = "pHishTex12",
 	["ui-widget-texture"] = "pHishTex12",
+	["ui-header-texture"] = "pHishTex12",
 	["ui-button-texture"] = "pHishTex12",
 	
 	["ui-header-font-color"] = "EFEBE9",
 	["ui-header-texture-color"] = "37474F",
+	
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "263238",
+	
 	["ui-widget-color"] = "81D4FA",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "263238",
 	["ui-widget-font-color"] = "FAFAFA",
+	
 	["ui-button-font-color"] = "81D4FA",
 	["ui-button-texture-color"] = "757575",
 })
@@ -319,18 +325,21 @@ Media:SetTemplate("Slate", {
 	["ui-header-font"] = "PT Sans",
 	["ui-button-font"] = "PT Sans",
 	
-	["ui-header-texture"] = "Kola",
 	["ui-widget-texture"] = "Kola",
+	["ui-header-texture"] = "Kola",
 	["ui-button-texture"] = "Kola",
 	
 	["ui-header-font-color"] = "FAFAFA",
 	["ui-header-texture-color"] = "78909C",
+	
 	["ui-window-bg-color"] = "37474F",
 	["ui-window-main-color"] = "263238",
+	
 	["ui-widget-color"] = "BBDEFB",
 	["ui-widget-bright-color"] = "CFD8DC",
 	["ui-widget-bg-color"] = "37474F",
 	["ui-widget-font-color"] = "FFFFFF",
+	
 	["ui-button-font-color"] = "FAFAFA",
 	["ui-button-texture-color"] = "78909C",
 })
@@ -341,18 +350,21 @@ Media:SetTemplate("Unnamed", {
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
 	
-	["ui-header-texture"] = "pHishTex12",
 	["ui-widget-texture"] = "pHishTex12",
+	["ui-header-texture"] = "pHishTex12",
 	["ui-button-texture"] = "pHishTex12",
 	
 	["ui-header-font-color"] = "E8EAF6",
 	["ui-header-texture-color"] = "3C3C3C",
+	
 	["ui-window-bg-color"] = "3C3C3C",
 	["ui-window-main-color"] = "2C2C2C",
+	
 	["ui-widget-color"] = "A2D471",
 	["ui-widget-bright-color"] = "797D7F",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FAFAFA",
+	
 	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
 })]]
@@ -363,18 +375,21 @@ Media:SetTemplate("Chaos", {
 	["ui-header-font"] = "Expressway",
 	["ui-button-font"] = "Expressway",
 	
-	["ui-header-texture"] = "Ferous 27",
 	["ui-widget-texture"] = "Ferous 27",
+	["ui-header-texture"] = "Ferous 27",
 	["ui-button-texture"] = "Ferous",
 	
 	["ui-header-font-color"] = "EEEEEE",
 	["ui-header-texture-color"] = "414141",
+	
 	["ui-window-bg-color"] = "414141",
 	["ui-window-main-color"] = "2B2B2B",
+	
 	["ui-widget-color"] = "7986CB",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "414141",
 	["ui-widget-font-color"] = "EEEEEE",
+	
 	["ui-button-font-color"] = "7986CB",
 	["ui-button-texture-color"] = "414141",
 })
