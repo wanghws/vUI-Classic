@@ -29,14 +29,10 @@ GUI.Widgets = {}
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	
-	ProfileInput -- do I need a unique input for this?
-	
-	- I can likely do 2 lined widgets by just creating 2 anchors and inserting them so that the scroll system still handles them just fine.
-	
-	Input label blah blah
-	[      editbox on line below      ]
+	Input.Imprint = a string that shows when the editbox is empty, a suggestion, or default value.
 	
 	- Widget methods
+	- If template == "None" then disable the page
 	
 	widget:SetWarning(true) -- to determine if the widget should pop up a warning before proceeding
 	widget:RequiresReload(true) -- to determine if the widget should pop up a warning before proceeding
@@ -781,6 +777,221 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	tinsert(self.Widgets, Anchor)
 	
 	return Input
+end
+
+local InputButtonOnMouseUp = function(self)
+	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	
+	InputOnEnterPressed(self.Input)
+end
+
+GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, tooltip, hook)
+	if (Settings[id] ~= nil) then
+		value = Settings[id]
+	end
+	
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.Text = label
+	
+	local Button = CreateFrame("Frame", nil, Anchor)
+	Button:SetScaledSize(BUTTON_WIDTH, WIDGET_HEIGHT)
+	Button:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	Button:SetBackdrop(vUI.BackdropAndBorder)
+	Button:SetBackdropColor(0.17, 0.17, 0.17)
+	Button:SetBackdropBorderColor(0, 0, 0)
+	Button:SetScript("OnMouseUp", InputButtonOnMouseUp)
+	Button:SetScript("OnMouseDown", ButtonOnMouseDown)
+	Button:SetScript("OnEnter", ButtonWidgetOnEnter)
+	Button:SetScript("OnLeave", ButtonWidgetOnLeave)
+	Button.Tooltip = tooltip
+	
+	Button.Texture = Button:CreateTexture(nil, "BORDER")
+	Button.Texture:SetScaledPoint("TOPLEFT", Button, 1, -1)
+	Button.Texture:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
+	Button.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Button.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
+	
+	Button.Highlight = Button:CreateTexture(nil, "ARTWORK")
+	Button.Highlight:SetScaledPoint("TOPLEFT", Button, 1, -1)
+	Button.Highlight:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
+	Button.Highlight:SetTexture(Media:GetTexture("Blank"))
+	Button.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	Button.Highlight:SetAlpha(0)
+	
+	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
+	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
+	Button.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Button.MiddleText:SetJustifyH("CENTER")
+	Button.MiddleText:SetShadowColor(0, 0, 0)
+	Button.MiddleText:SetShadowOffset(1, -1)
+	Button.MiddleText:SetText(button)
+	
+	Button.Text = Button:CreateFontString(nil, "OVERLAY")
+	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Button.Text:SetJustifyH("LEFT")
+	Button.Text:SetShadowColor(0, 0, 0)
+	Button.Text:SetShadowOffset(1, -1)
+	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
+	
+	local Anchor2 = CreateFrame("Frame", nil, self)
+	Anchor2:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor2.ID = id
+	Anchor2.Text = label
+	
+	local Input = CreateFrame("Frame", nil, Anchor2)
+	Input:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Input:SetScaledPoint("RIGHT", Anchor2, 0, 0)
+	Input:SetBackdrop(vUI.BackdropAndBorder)
+	Input:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	Input:SetBackdropBorderColor(0, 0, 0)
+	
+	Input.Texture = Input:CreateTexture(nil, "ARTWORK")
+	Input.Texture:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Texture:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Input.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	
+	Input.Flash = Input:CreateTexture(nil, "OVERLAY")
+	Input.Flash:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Flash:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Flash:SetTexture(Media:GetTexture("RenHorizonUp"))
+	Input.Flash:SetVertexColor(HexToRGB(Settings["ui-widget-color"]))
+	Input.Flash:SetAlpha(0)
+	
+	Input.Highlight = Input:CreateTexture(nil, "OVERLAY")
+	Input.Highlight:SetScaledPoint("TOPLEFT", Input, 1, -1)
+	Input.Highlight:SetScaledPoint("BOTTOMRIGHT", Input, -1, 1)
+	Input.Highlight:SetTexture(Media:GetTexture("Blank"))
+	Input.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	Input.Highlight:SetAlpha(0)
+	
+	Input.Box = CreateFrame("EditBox", nil, Input)
+	Input.Box:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
+	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
+	Input.Box:SetJustifyH("LEFT")
+	Input.Box:SetAutoFocus(false)
+	Input.Box:EnableKeyboard(true)
+	Input.Box:EnableMouse(true)
+	Input.Box:SetMultiLine(true)
+	Input.Box:SetMaxLetters(9999)
+	Input.Box:SetShadowColor(0, 0, 0)
+	Input.Box:SetShadowOffset(1, -1)
+	Input.Box:SetText(value)
+	Input.Box.ID = id
+	Input.Box.Hook = hook
+	Input.Box.Parent = Input
+	
+	Input.Button = Button
+	Button.Input = Input.Box
+	
+	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
+	Input.Box:SetScript("OnEscapePressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
+	Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
+	Input.Box:SetScript("OnChar", InputOnChar)
+	Input.Box:SetScript("OnEnter", InputOnEnter)
+	Input.Box:SetScript("OnLeave", InputOnLeave)
+	
+	Input.Fade = CreateAnimationGroup(Input.Flash)
+	
+	Input.FadeIn = Input.Fade:CreateAnimation("Fade")
+	Input.FadeIn:SetEasing("in")
+	Input.FadeIn:SetDuration(0.15)
+	Input.FadeIn:SetChange(SELECTED_HIGHLIGHT_ALPHA)
+	
+	Input.FadeOut = Input.Fade:CreateAnimation("Fade")
+	Input.FadeOut:SetOrder(2)
+	Input.FadeOut:SetEasing("out")
+	Input.FadeOut:SetDuration(0.15)
+	Input.FadeOut:SetChange(0)
+	
+	tinsert(self.Widgets, Anchor)
+	tinsert(self.Widgets, Anchor2)
+	
+	return Input
+end
+
+GUI.ToggleProfileWindow = function(self)
+	if (not self.ProfileWindow) then
+		self:CreateProfileWindow()
+	end
+	
+	if self.ProfileWindow:IsShown() then
+		self.ProfileWindow:Hide()
+	else
+		self.ProfileWindow:Show()
+	end
+end
+
+GUI.SetProfileWindowText = function(self, text)
+	if self.ProfileWindow then
+		self.ProfileWindow.Input:SetText()
+		self.ProfileWindow.Input:SetCursorPosition(0)
+	end
+end
+
+local ProfileWindowOnEnterPressed = function(self)
+	self:SetAutoFocus(false)
+	self:ClearFocus()
+end
+
+local ProfileWindowOnMouseDown = function(self)
+	self:SetAutoFocus(true)
+	self:HighlightText()
+end
+
+local ProfileWindowOnEditFocusLost = function(self)
+	--self:SetText(self.Prefix..self.Value..self.Postfix)
+end
+
+GUI.CreateProfileWindow = function(self)
+	if self.ProfileWindow then
+		return self.ProfileWindow
+	end
+	
+	local Window = CreateFrame("Frame", nil, self)
+	Window:SetScaledSize(300, 300)
+	Window:SetScaledPoint("CENTER", UIParent, 0, 0)
+	Window:SetBackdrop(vUI.BackdropAndBorder)
+	Window:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window:SetBackdropBorderColor(0, 0, 0)
+	Window:SetFrameStrata("DIALOG")
+	Window:Hide()
+	
+	Window.Inner = CreateFrame("Frame", nil, Window)
+	Window.Inner:SetScaledPoint("TOPLEFT", Window, 3, -3)
+	Window.Inner:SetScaledPoint("BOTTOMRIGHT", Window, -3, 3)
+	Window.Inner:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Inner:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	Window.Inner:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.Input = CreateFrame("EditBox", nil, Window.Inner)
+	Window.Input:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Window.Input:SetScaledPoint("TOPLEFT", Window.Inner, 3, -3)
+	Window.Input:SetScaledPoint("BOTTOMRIGHT", Window.Inner, -3, 3)
+	Window.Input:SetFrameStrata("DIALOG")
+	Window.Input:SetFrameLevel(99)
+	Window.Input:SetJustifyH("LEFT")
+	Window.Input:SetAutoFocus(false)
+	Window.Input:EnableKeyboard(true)
+	Window.Input:EnableMouse(true)
+	Window.Input:SetMultiLine(true)
+	Window.Input:SetMaxLetters(255)
+	Window.Input:SetShadowColor(0, 0, 0)
+	Window.Input:SetShadowOffset(1, -1)
+	Window.Input:SetCursorPosition(0)
+	
+	Window.Input:SetScript("OnEnterPressed", ProfileWindowOnEnterPressed)
+	Window.Input:SetScript("OnEscapePressed", ProfileWindowOnEnterPressed)
+	Window.Input:SetScript("OnMouseDown", ProfileWindowOnMouseDown)
+	Window.Input:SetScript("OnEditFocusLost", ProfileWindowOnEditFocusLost)
+	
+	self.ProfileWindow = Window
+	
+	return Window
 end
 
 -- Dropdown

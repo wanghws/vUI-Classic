@@ -8,6 +8,7 @@ Profiles.List = {}
 
 local Filter = {
 	["profile-created"] = true,
+	["profile-created-by"] = true,
 	["profile-last-modified"] = true,
 }
 
@@ -24,7 +25,7 @@ function Profiles:ImportProfiles()
 	end
 end
 
-function Profiles:GetNumProfiles()
+function Profiles:GetProfileCount()
 	local Count = 0
 	
 	for Name in pairs(self.List) do
@@ -98,13 +99,14 @@ function Profiles:CreateProfile(name)
 	if vUIProfiles[name] then
 		self.List[name] = name
 		
-		vUIProfileData[vUI.Realm][vUI.User] = name
+		--vUIProfileData[vUI.Realm][vUI.User] = name
 		
 		return vUIProfiles[name]
 	end
 	
 	vUIProfiles[name] = {}
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
+	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
 	vUIProfileData[vUI.Realm][vUI.User] = name
 	
@@ -123,6 +125,10 @@ end
 
 function Profiles:GetProfileList()
 	return self.List
+end
+
+function Profiles:IsUsedBy(name)
+	
 end
 
 function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
@@ -197,6 +203,8 @@ function Profiles:ApplyProfile(name)
 	end
 	
 	vUIProfileData[vUI.Realm][vUI.User] = name
+	
+	Values = nil
 end
 
 local UpdateProfile = function(value)
@@ -217,11 +225,28 @@ end
 
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 local LibCompress = LibStub:GetLibrary("LibCompress")
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
+
+local Debug = true
 
 function Profiles:GetEncoded()
-	local Result = AceSerializer:Serialize(self:GetActiveProfile())
+	--[[local Result = AceSerializer:Serialize(self:GetActiveProfile())
 	local Compressed = LibCompress:Compress(Result)
 	local Encoded = LibCompress:Encode7bit(Compressed)
+	
+	return Encoded]]
+	
+	local Serialized = AceSerializer:Serialize(self:GetActiveProfile())
+	local Compressed = LibDeflate:CompressDeflate(Serialized)
+	
+	local Encoded = ""
+	
+	if Debug then
+		Encoded = Encoded..LibDeflate:EncodeForPrint(Compressed)
+	else
+		--Encoded = Encoded..LibDeflate:EncodeForWoWAddonChannel(Compressed)
+		Encoded = Encoded..LibDeflate:EncodeForWoWChatChannel(Compressed)
+	end
 	
 	return Encoded
 end
@@ -246,10 +271,48 @@ local UpdateProfileString = function()
 	end
 end
 
+local LineMax = 25
+
+local sub = string.sub
+local len = string.len
+local concat = table.concat
+
+local ConvertToLines = function(str)
+	local Lines = {}
+	local Subbed
+	local Remaining = str
+	local TotalLines = 0
+	
+	while (len(Remaining) > 0) do
+		Subbed = sub(Remaining, 1, LineMax)
+		Remaining = sub(Remaining, LineMax, len(Remaining))
+		
+		Lines[#Lines + 1] = Subbed
+	end
+	
+	return Lines
+end
+
 local Temp = function()
 	vUI:print("Dump this in a window:")
+	local Encoded = Profiles:GetEncoded()
 	
-	print(Profiles:GetEncoded())
+	local Lines = ConvertToLines(Encoded)
+	--local Text = concat(Lines, "", 1, #Lines)
+	
+	--print(string.len(Lines[1]))
+	
+	print(Encoded)
+	
+	local Window = GUI:CreateProfileWindow()
+	
+	Window.Input:SetText(Encoded)
+	Window.Input:HighlightText()
+
+	GUI:ToggleProfileWindow()
+	Window.Input:Show()
+	
+	Lines = nil
 end
 
 GUI:AddOptions(function(self)
@@ -259,13 +322,10 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create New Profile", "", CreateProfile)
-	Left:CreateButton("Create", "", "") -- Scoop text out of the delete input and process it
-	
-	Left:CreateInput("profile-delete", "", "Delete Profile", "", DeleteProfile)
-	Left:CreateButton("Delete", "", "") -- Scoop text out of the delete input and process it
-	
-	local String = Profiles:GetEncoded()
+	Left:CreateInputWithButton("profile-key", "|cFF808080"..Profiles:GetDefaultProfileKey().."|r", "Create", "Create New Profile", "", CreateProfile)
+	Left:CreateInputWithButton("profile-delete", "", "Delete", "Delete Profile", "", DeleteProfile)
+
+	--local String = Profiles:GetEncoded()
 	
 	Left:CreateHeader("Sharing Is Caring")
 	Left:CreateButton("Export", "Export Current Profile", "", Temp)
@@ -278,13 +338,18 @@ GUI:AddOptions(function(self)
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
 	
+	if (not Profile["profile-created-by"]) then
+		Profile["profile-created-by"] = UNKNOWN
+	end
+	
 	Right:CreateHeader(Language["Info"])
-	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetNumProfiles())
-	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
 	Right:CreateDoubleLine("Current Profile:", Name)
+	Right:CreateDoubleLine("Created By:", Profile["profile-created-by"])
 	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
 	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
 	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
+	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
+	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

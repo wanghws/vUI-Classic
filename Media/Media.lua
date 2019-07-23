@@ -6,11 +6,11 @@ Media.Highlights = {}
 Media.Templates = {}
 Media.Palettes = {}
 
-local TemplateList = {}
-local HighlightList = {}
-local TextureList = {}
-local FontList = {}
-local PaletteList = {}
+Media.FontList = {}
+Media.TextureList = {}
+Media.HighlightList = {}
+Media.TemplateList = {}
+Media.PaletteList = {}
 
 -- Fonts
 function Media:SetFont(name, path, silent)
@@ -21,7 +21,7 @@ function Media:SetFont(name, path, silent)
 	self.Fonts[name] = path
 	
 	if (not silent) then
-		FontList[name] = path
+		self.FontList[name] = path
 	end
 end
 
@@ -34,7 +34,7 @@ function Media:GetFont(name)
 end
 
 function Media:GetFontList()
-	return FontList
+	return self.FontList
 end
 
 -- Textures
@@ -46,7 +46,7 @@ function Media:SetTexture(name, path, silent)
 	self.Textures[name] = path
 	
 	if (not silent) then
-		TextureList[name] = path
+		self.TextureList[name] = path
 	end
 end
 
@@ -59,7 +59,7 @@ function Media:GetTexture(name)
 end
 
 function Media:GetTextureList()
-	return TextureList
+	return self.TextureList
 end
 
 -- Highlights
@@ -71,7 +71,7 @@ function Media:SetHighlight(name, path, silent)
 	self.Highlights[name] = path
 	
 	if (not silent) then
-		HighlightList[name] = path
+		self.HighlightList[name] = path
 	end
 end
 
@@ -84,7 +84,7 @@ function Media:GetHighlight(name)
 end
 
 function Media:GetHighlightList()
-	return HighlightList
+	return self.HighlightList
 end
 
 -- Templates
@@ -103,7 +103,7 @@ function Media:SetTemplate(name, info, silent)
 	self.Templates[name] = info
 	
 	if (not silent) then
-		TemplateList[Key] = name
+		self.TemplateList[Key] = name
 	end
 end
 
@@ -116,7 +116,7 @@ function Media:GetTemplate(name)
 end
 
 function Media:GetTemplateList()
-	return TemplateList
+	return self.TemplateList
 end
 
 function Media:ApplyTemplate(name)
@@ -150,7 +150,7 @@ function Media:SetPalette(name, t, silent)
 	self.Palettes[name] = t
 	
 	if (not silent) then
-		PaletteList[name] = t
+		self.PaletteList[name] = t
 	end
 end
 
@@ -163,7 +163,7 @@ function Media:GetPalette(name)
 end
 
 function Media:GetPaletteList()
-	return PaletteList
+	return self.PaletteList
 end
 
 -- Some pre-loaded goodness.
@@ -265,6 +265,9 @@ Rapid[9] = {"FFCCCC", "FFE5CC", "FFFFCC", "E5FFCC", "CCFFCC", "CCFFE5", "CCFFFF"
 Media:SetPalette("Rapid", Rapid)
 
 -- Templates
+
+-- None
+Media:SetTemplate("None", {})
 
 -- vUI Default
 Media:SetTemplate("vUI", {
