@@ -3,6 +3,7 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 local DefaultKey = "%s-%s"
 local pairs = pairs
 local date = date
+local match = string.match
 
 --[[
 	To do:
@@ -22,14 +23,29 @@ local Filter = {
 	["profile-last-modified"] = true,
 }
 
+-- Some settings shouldn't be sent to others
 local DontTransmit = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
 }
 
 local GetCurrentDate = function()
-	--return date("%Y-%m-%d")
 	return date("%Y-%m-%d %I:%M %p")
+end
+
+-- If the date given is today, change "2019-07-24 2:06 PM" to "Today 2:06 PM"
+local IsToday = function(s)
+	local Date, Time = match(s, "(%d+%-%d+%-%d+)%s(.+)")
+	
+	if (not Date or not Time) then
+		return s
+	end
+	
+	if (Date == date("%Y-%m-%d")) then
+		s = format("%s %s", Language["Today"], Time)
+	end
+	
+	return s
 end
 
 function Profiles:ImportProfiles()
@@ -156,7 +172,7 @@ function Profiles:CreateProfile(name)
 	
 	vUIProfiles[name] = {}
 	
-	-- Some metadata
+	-- Some metadata just for some additional information
 	vUIProfiles[name]["profile-name"] = name
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
@@ -319,8 +335,9 @@ function Profiles:GetDecoded(encoded)
 	end
 end
 
-local UpdateProfileString = function()
-	Profile = Profiles:GetActiveProfile()
+-- Test
+local TestProfileString = function()
+	local Profile = Profiles:GetActiveProfile()
 	
 	local Result = AceSerializer:Serialize(Profile)
 	local Compressed = LibCompress:Compress(Result)
@@ -331,12 +348,16 @@ local UpdateProfileString = function()
 	local Success, Value = AceSerializer:Deserialize(Decompressed)
 	
 	if Success then
-		print("Woah, we did it.", Value["ui-display-dev-tools"])
+		print("Success", Value["ui-display-dev-tools"])
 		
 		-- Merge values into settings
 	else
 		print(Value) -- Error
 	end
+end
+
+__testSerialize = function() -- /run __testSerialize()
+	TestProfileString()
 end
 
 local ShowExportWindow = function()
@@ -380,8 +401,8 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Info"])
 	Right:CreateDoubleLine("Current Profile:", Name)
 	Right:CreateDoubleLine("Created By:", Profile["profile-created-by"])
-	Right:CreateDoubleLine("Created On:", Profile["profile-created"])
-	Right:CreateDoubleLine("Last Modified:", Profile["profile-last-modified"])
+	Right:CreateDoubleLine("Created On:", IsToday(Profile["profile-created"]))
+	Right:CreateDoubleLine("Last Modified:", IsToday(Profile["profile-last-modified"]))
 	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
 	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
