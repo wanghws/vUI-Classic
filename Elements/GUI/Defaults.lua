@@ -45,6 +45,8 @@ Defaults["action-bars-layout"] = "COMPACT"
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-button-size"] = 32
 Defaults["action-bars-button-highlight"] = "Blank"
+Defaults["action-bars-show-bottom"] = true
+Defaults["action-bars-show-right"] = true
 
 -- Chat
 Defaults["chat-enable"] = true

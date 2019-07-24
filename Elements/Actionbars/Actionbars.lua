@@ -587,6 +587,10 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module")
 	
+	Left:CreateHeader(Language["Backdrops"])
+	Left:CreateCheckbox("action-bars-show-bottom", Settings["action-bars-show-bottom"], "Show Bottom backdrop", "")
+	Left:CreateCheckbox("action-bars-show-right", Settings["action-bars-show-right"], "Show Right backdrop", "")
+	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
 	

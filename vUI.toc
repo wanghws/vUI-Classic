@@ -23,6 +23,7 @@ Elements\Animation\Animation.lua
 Elements\GUI\Defaults.lua
 Elements\Serialize\LibStub.lua
 Elements\Serialize\LibDeflate\lib.xml
+Elements\Serialize\LibBase64-1.0.lua
 Elements\Serialize\AceSerializer-3.0.lua
 Elements\Serialize\LibCompress.lua
 Elements\Profiles\Profiles.lua

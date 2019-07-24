@@ -174,6 +174,23 @@ GUI.Widgets.CreateLine = function(self, text)
 	return Text
 end
 
+GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	
+	--[[local Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Text:SetJustifyH("LEFT")
+	Text:SetShadowColor(0, 0, 0)
+	Text:SetShadowOffset(1, -1)
+	Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
+	
+	tinsert(self.Widgets, Anchor)]]
+	
+	return Text
+end
+
 GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -238,9 +255,10 @@ GUI.Widgets.CreateHeader = function(self, text)
 	Anchor.IsHeader = true
 	
 	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
-	Anchor.Text:SetScaledPoint("CENTER", Anchor, HEADER_SPACING, 0)
+	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
+	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
 	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
-	Anchor.Text:SetJustifyH("CENTER")
+	Anchor.Text:SetJustifyH("LEFT")
 	Anchor.Text:SetShadowColor(0, 0, 0)
 	Anchor.Text:SetShadowOffset(1, -1)
 	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
@@ -997,55 +1015,105 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	return Input
 end
 
-GUI.ToggleProfileWindow = function(self)
-	if (not self.ProfileWindow) then
-		self:CreateProfileWindow()
+GUI.ToggleExportWindow = function(self)
+	if (not self.ExportWindow) then
+		self:CreateExportWindow()
 	end
 	
-	if self.ProfileWindow:IsShown() then
-		self.ProfileWindow:Hide()
+	if self.ExportWindow:IsShown() then
+		self.ExportWindow:Hide()
 	else
-		self.ProfileWindow:Show()
+		self.ExportWindow:Show()
 	end
 end
 
-GUI.SetProfileWindowText = function(self, text)
-	if self.ProfileWindow then
-		self.ProfileWindow.Input:SetText()
-		self.ProfileWindow.Input:SetCursorPosition(0)
+GUI.SetExportWindowText = function(self, text)
+	if (type(text) ~= "string") then
+		return
+	end
+	
+	if (not match(text, "%S")) then
+		return
+	end
+	
+	if self.ExportWindow then
+		self.ExportWindow.Input:SetText(text)
+		--self.ExportWindow.Input:SetCursorPosition()
+		self.ExportWindow.Input:HighlightText()
+		self.ExportWindow.Input:SetAutoFocus(true)
 	end
 end
 
-local ProfileWindowOnEnterPressed = function(self)
+local ExportWindowOnEnterPressed = function(self)
 	self:SetAutoFocus(false)
 	self:ClearFocus()
 end
 
-local ProfileWindowOnMouseDown = function(self)
-	self:SetAutoFocus(true)
+local ExportWindowOnMouseDown = function(self)
 	self:HighlightText()
+	self:SetAutoFocus(true)
 end
 
-local ProfileWindowOnEditFocusLost = function(self)
-	--self:SetText(self.Prefix..self.Value..self.Postfix)
-end
-
-GUI.CreateProfileWindow = function(self)
-	if self.ProfileWindow then
-		return self.ProfileWindow
+GUI.CreateExportWindow = function(self)
+	if self.ExportWindow then
+		return self.ExportWindow
 	end
 	
 	local Window = CreateFrame("Frame", nil, self)
-	Window:SetScaledSize(300, 300)
+	Window:SetScaledSize(300, 220)
 	Window:SetScaledPoint("CENTER", UIParent, 0, 0)
 	Window:SetBackdrop(vUI.BackdropAndBorder)
 	Window:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window:SetBackdropBorderColor(0, 0, 0)
 	Window:SetFrameStrata("DIALOG")
+	Window:SetMovable(true)
+	Window:EnableMouse(true)
+	Window:RegisterForDrag("LeftButton")
+	Window:SetScript("OnDragStart", Window.StartMoving)
+	Window:SetScript("OnDragStop", Window.StopMovingOrSizing)
 	Window:Hide()
 	
+	-- Header
+	Window.Header = CreateFrame("Frame", nil, Window)
+	Window.Header:SetScaledHeight(HEADER_HEIGHT)
+	Window.Header:SetScaledPoint("TOPLEFT", Window, SPACING, -SPACING)
+	Window.Header:SetScaledPoint("TOPRIGHT", Window, -SPACING, -SPACING)
+	Window.Header:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Header:SetBackdropColor(0, 0, 0)
+	Window.Header:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.HeaderTexture = Window.Header:CreateTexture(nil, "OVERLAY")
+	Window.HeaderTexture:SetScaledPoint("TOPLEFT", Window.Header, 1, -1)
+	Window.HeaderTexture:SetScaledPoint("BOTTOMRIGHT", Window.Header, -1, 1)
+	Window.HeaderTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Window.HeaderTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	Window.Header.Text = Window.Header:CreateFontString(nil, "OVERLAY")
+	Window.Header.Text:SetScaledPoint("LEFT", Window.Header, HEADER_SPACING, -1)
+	Window.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Window.Header.Text:SetJustifyH("LEFT")
+	Window.Header.Text:SetShadowColor(0, 0, 0)
+	Window.Header.Text:SetShadowOffset(1, -1)
+	Window.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Export string".."|r")
+	
+	-- Close button
+	Window.Header.CloseButton = CreateFrame("Frame", nil, Window.Header)
+	Window.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
+	Window.Header.CloseButton:SetScaledPoint("RIGHT", Window.Header, 0, 0)
+	Window.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
+	Window.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
+	Window.Header.CloseButton:SetScript("OnMouseUp", function() GUI.ExportWindow:Hide() end)
+	
+	Window.Header.CloseButton.Text = Window.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
+	Window.Header.CloseButton.Text:SetScaledPoint("CENTER", Window.Header.CloseButton, 0, 0)
+	Window.Header.CloseButton.Text:SetFont(Media:GetFont("PT Sans"), 18)
+	Window.Header.CloseButton.Text:SetJustifyH("CENTER")
+	Window.Header.CloseButton.Text:SetShadowColor(0, 0, 0)
+	Window.Header.CloseButton.Text:SetShadowOffset(1, -1)
+	Window.Header.CloseButton.Text:SetText("×")
+	
 	Window.Inner = CreateFrame("Frame", nil, Window)
-	Window.Inner:SetScaledPoint("TOPLEFT", Window, 3, -3)
+	Window.Inner:SetScaledPoint("TOPLEFT", Window.Header, "BOTTOMLEFT", 0, -2)
 	Window.Inner:SetScaledPoint("BOTTOMRIGHT", Window, -3, 3)
 	Window.Inner:SetBackdrop(vUI.BackdropAndBorder)
 	Window.Inner:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
@@ -1067,12 +1135,141 @@ GUI.CreateProfileWindow = function(self)
 	Window.Input:SetShadowOffset(1, -1)
 	Window.Input:SetCursorPosition(0)
 	
-	Window.Input:SetScript("OnEnterPressed", ProfileWindowOnEnterPressed)
-	Window.Input:SetScript("OnEscapePressed", ProfileWindowOnEnterPressed)
-	Window.Input:SetScript("OnMouseDown", ProfileWindowOnMouseDown)
-	Window.Input:SetScript("OnEditFocusLost", ProfileWindowOnEditFocusLost)
+	Window.Input:SetScript("OnEnterPressed", ExportWindowOnEnterPressed)
+	Window.Input:SetScript("OnEscapePressed", ExportWindowOnEnterPressed)
+	Window.Input:SetScript("OnMouseDown", ExportWindowOnMouseDown)
 	
-	self.ProfileWindow = Window
+	self.ExportWindow = Window
+	
+	return Window
+end
+
+GUI.ToggleImportWindow = function(self)
+	if (not self.ImportWindow) then
+		self:CreateImportWindow()
+	end
+	
+	if self.ImportWindow:IsShown() then
+		self.ImportWindow:Hide()
+	else
+		self.ImportWindow:Show()
+		self.ImportWindow.Input:SetAutoFocus(true)
+	end
+end
+
+local ImportWindowOnEnterPressed = function(self)
+	local Text = self:GetText()
+	
+	if (not match(Text, "%S+")) then
+		self:SetAutoFocus(false)
+		self:ClearFocus()
+		
+		return
+	end
+	
+	local Profile = Profiles:GetDecoded(Text)
+	
+	if Profile then
+		print('something?')
+		Profiles:AddProfile(Profile)
+	end
+	
+	self:SetText("")
+	self:SetAutoFocus(false)
+	self:ClearFocus()
+end
+
+local ImportWindowOnMouseDown = function(self)
+	self:HighlightText()
+	self:SetAutoFocus(true)
+end
+
+GUI.CreateImportWindow = function(self)
+	if self.ImportWindow then
+		return self.ImportWindow
+	end
+	
+	local Window = CreateFrame("Frame", nil, self)
+	Window:SetScaledSize(300, 220)
+	Window:SetScaledPoint("CENTER", UIParent, 0, 0)
+	Window:SetBackdrop(vUI.BackdropAndBorder)
+	Window:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window:SetBackdropBorderColor(0, 0, 0)
+	Window:SetFrameStrata("DIALOG")
+	Window:SetMovable(true)
+	Window:EnableMouse(true)
+	Window:RegisterForDrag("LeftButton")
+	Window:SetScript("OnDragStart", Window.StartMoving)
+	Window:SetScript("OnDragStop", Window.StopMovingOrSizing)
+	Window:Hide()
+	
+	-- Header
+	Window.Header = CreateFrame("Frame", nil, Window)
+	Window.Header:SetScaledHeight(HEADER_HEIGHT)
+	Window.Header:SetScaledPoint("TOPLEFT", Window, SPACING, -SPACING)
+	Window.Header:SetScaledPoint("TOPRIGHT", Window, -SPACING, -SPACING)
+	Window.Header:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Header:SetBackdropColor(0, 0, 0)
+	Window.Header:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.HeaderTexture = Window.Header:CreateTexture(nil, "OVERLAY")
+	Window.HeaderTexture:SetScaledPoint("TOPLEFT", Window.Header, 1, -1)
+	Window.HeaderTexture:SetScaledPoint("BOTTOMRIGHT", Window.Header, -1, 1)
+	Window.HeaderTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Window.HeaderTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	Window.Header.Text = Window.Header:CreateFontString(nil, "OVERLAY")
+	Window.Header.Text:SetScaledPoint("LEFT", Window.Header, HEADER_SPACING, -1)
+	Window.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Window.Header.Text:SetJustifyH("LEFT")
+	Window.Header.Text:SetShadowColor(0, 0, 0)
+	Window.Header.Text:SetShadowOffset(1, -1)
+	Window.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Import string".."|r")
+	
+	-- Close button
+	Window.Header.CloseButton = CreateFrame("Frame", nil, Window.Header)
+	Window.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
+	Window.Header.CloseButton:SetScaledPoint("RIGHT", Window.Header, 0, 0)
+	Window.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
+	Window.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
+	Window.Header.CloseButton:SetScript("OnMouseUp", function() GUI.ImportWindow:Hide() end)
+	
+	Window.Header.CloseButton.Text = Window.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
+	Window.Header.CloseButton.Text:SetScaledPoint("CENTER", Window.Header.CloseButton, 0, 0)
+	Window.Header.CloseButton.Text:SetFont(Media:GetFont("PT Sans"), 18)
+	Window.Header.CloseButton.Text:SetJustifyH("CENTER")
+	Window.Header.CloseButton.Text:SetShadowColor(0, 0, 0)
+	Window.Header.CloseButton.Text:SetShadowOffset(1, -1)
+	Window.Header.CloseButton.Text:SetText("×")
+	
+	Window.Inner = CreateFrame("Frame", nil, Window)
+	Window.Inner:SetScaledPoint("TOPLEFT", Window.Header, "BOTTOMLEFT", 0, -2)
+	Window.Inner:SetScaledPoint("BOTTOMRIGHT", Window, -3, 3)
+	Window.Inner:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Inner:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	Window.Inner:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.Input = CreateFrame("EditBox", nil, Window.Inner)
+	Window.Input:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Window.Input:SetScaledPoint("TOPLEFT", Window.Inner, 3, -3)
+	Window.Input:SetScaledPoint("BOTTOMRIGHT", Window.Inner, -3, 3)
+	Window.Input:SetFrameStrata("DIALOG")
+	Window.Input:SetFrameLevel(99)
+	Window.Input:SetJustifyH("LEFT")
+	Window.Input:SetAutoFocus(false)
+	Window.Input:EnableKeyboard(true)
+	Window.Input:EnableMouse(true)
+	Window.Input:SetMultiLine(true)
+	Window.Input:SetMaxLetters(255)
+	Window.Input:SetShadowColor(0, 0, 0)
+	Window.Input:SetShadowOffset(1, -1)
+	Window.Input:SetCursorPosition(0)
+	
+	Window.Input:SetScript("OnEnterPressed", ImportWindowOnEnterPressed)
+	Window.Input:SetScript("OnEscapePressed", ImportWindowOnEnterPressed)
+	Window.Input:SetScript("OnMouseDown", ImportWindowOnMouseDown)
+	
+	self.ImportWindow = Window
 	
 	return Window
 end
@@ -1120,7 +1317,7 @@ local DropdownButtonOnMouseUp = function(self)
 		SetArrowDown(self)
 	else
 		for i = 1, #self.Menu do
-			if self.Parent.CustomType then
+			if self.Parent.SpecificType then
 				if (self.Menu[i].Key == self.Parent.Value) then
 					self.Menu[i].Selected:Show()
 				else
@@ -1156,7 +1353,7 @@ local MenuItemOnMouseUp = function(self)
 	
 	self.Highlight:SetAlpha(0)
 	
-	if self.GrandParent.CustomType then
+	if self.GrandParent.SpecificType then
 		SetVariable(self.ID, self.Key)
 		
 		self.GrandParent.Value = self.Key
@@ -1174,9 +1371,9 @@ local MenuItemOnMouseUp = function(self)
 		end
 	end
 	
-	if (self.GrandParent.CustomType == "Texture") then
+	if (self.GrandParent.SpecificType == "Texture") then
 		self.GrandParent.Texture:SetTexture(Media:GetTexture(self.Key))
-	elseif (self.GrandParent.CustomType == "Font") then
+	elseif (self.GrandParent.SpecificType == "Font") then
 		self.GrandParent.Current:SetFont(Media:GetFont(self.Key), 12)
 	end
 	
@@ -1329,7 +1526,7 @@ local AddDropdownScrollBar = function(self)
 	self:SetScaledHeight(((WIDGET_HEIGHT - 1) * DROPDOWN_MAX_SHOWN) + 1)
 end
 
-GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, custom)
+GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, specific)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
 	end
@@ -1350,7 +1547,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Value = value
 	Dropdown.Hook = hook
 	Dropdown.Tooltip = tooltip
-	Dropdown.CustomType = custom
+	Dropdown.SpecificType = specific
 	
 	Dropdown.Texture = Dropdown:CreateTexture(nil, "ARTWORK")
 	Dropdown.Texture:SetScaledPoint("TOPLEFT", Dropdown, 1, -1)
@@ -1532,13 +1729,13 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		MenuItem.Text:SetShadowOffset(1, -1)
 		MenuItem.Text:SetText(Key)
 		
-		if (custom == "Texture") then
+		if (specific == "Texture") then
 			MenuItem.Texture:SetTexture(Media:GetTexture(Key))
-		elseif (custom == "Font") then
+		elseif (specific == "Font") then
 			MenuItem.Text:SetFont(Media:GetFont(Key), 12)
 		end
 		
-		if custom then
+		if specific then
 			if (MenuItem.Key == MenuItem.GrandParent.Value) then
 				MenuItem.Selected:Show()
 				MenuItem.GrandParent.Current:SetText(Key)
@@ -1565,9 +1762,9 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		LastMenuItem = MenuItem
 	end
 	
-	if (custom == "Texture") then
+	if (specific == "Texture") then
 		Dropdown.Texture:SetTexture(Media:GetTexture(value))
-	elseif (custom == "Font") then
+	elseif (specific == "Font") then
 		Dropdown.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 		Dropdown.Current:SetFont(Media:GetFont(Settings[id]), 12)
 	else
@@ -2011,6 +2208,10 @@ local SwatchEditBoxOnEditFocusGained = function(self)
 	self:HighlightText()
 end
 
+local SwatchEditBoxOnMouseDown = function(self)
+	self:SetAutoFocus(true)
+end
+
 local SwatchButtonOnMouseDown = function(self)
 	local R, G, B = HexToRGB(Settings["ui-button-texture-color"])
 	
@@ -2188,6 +2389,7 @@ local CreateColorPicker = function()
 	ColorPicker.NewHexText:SetShadowOffset(1, -1)
 	ColorPicker.NewHexText:SetText("")
 	ColorPicker.NewHexText:SetHighlightColor(0, 0, 0)
+	ColorPicker.NewHexText:SetScript("OnMouseDown", SwatchEditBoxOnMouseDown)
 	ColorPicker.NewHexText:SetScript("OnEscapePressed", SwatchEditBoxOnEscapePressed)
 	ColorPicker.NewHexText:SetScript("OnEnterPressed", SwatchEditBoxOnEnterPressed)
 	ColorPicker.NewHexText:SetScript("OnEditFocusLost", SwatchEditBoxOnEditFocusLost)
@@ -2860,7 +3062,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
@@ -2868,7 +3070,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.RightWidgetsBG:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, "TOPRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window.LeftWidgetsBG, "BOTTOMRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
 	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Parent = self
@@ -3033,7 +3235,7 @@ GUI.FadeOut:SetEasing("out")
 GUI.FadeOut:SetDuration(0.15)
 GUI.FadeOut:SetChange(0)
 GUI.FadeOut:SetScript("OnFinished", function(self)
-	self:GetParent():Hide()
+	self.Parent:Hide()
 end)
 
 function GUI:RunQueue()

@@ -82,9 +82,9 @@ GUI:AddOptions(function(self)
 	Right:CreateLine("Test Line 3")
 	
 	Right:CreateHeader(Language["Double Lines"])
-	Right:CreateDoubleLine("Test Line 1", "Hello World 1")
-	Right:CreateDoubleLine("Test Line 2", "Hello World 2")
-	Right:CreateDoubleLine("Test Line 3", "Hello World 3")
+	Right:CreateDoubleLine("Left Line 1", "Right Line 1")
+	Right:CreateDoubleLine("Left Line 2", "Right Line 2")
+	Right:CreateDoubleLine("Left Line 3", "Right Line 3")
 	
 	Left:CreateHeader(Language["Inputs"])
 	Left:CreateInput("test-input-1", vUI.User, "Test Input 1", nil, function(v) print(v) end)

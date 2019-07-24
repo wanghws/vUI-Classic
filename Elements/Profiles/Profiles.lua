@@ -4,12 +4,27 @@ local DefaultKey = "%s-%s"
 local pairs = pairs
 local date = date
 
+--[[
+	To do:
+	
+	Profiles:ClearEmptyProfiles()
+	Profiles:ClearUnusedProfiles()
+	Profiles:Rename(from, to)
+	Profiles:SetMetadata(name, meta, value) Profiles:SetMetadata("Default", "profile-created-by", "Nickname")
+--]]
+
 Profiles.List = {}
 
 local Filter = {
+	["profile-name"] = true,
 	["profile-created"] = true,
 	["profile-created-by"] = true,
 	["profile-last-modified"] = true,
+}
+
+local DontTransmit = {
+	["ui-scale"] = true,
+	["ui-language"] = true,
 }
 
 local GetCurrentDate = function()
@@ -96,6 +111,25 @@ function Profiles:CreateProfileData()
 	end
 end
 
+function Profiles:AddProfile(profile)
+	if (type(profile) ~= "table") then
+		return
+	end
+	
+	local Name = profile["profile-name"]
+	
+	-- Do I overwrite the imported profiles metadata with new stuff for the player?
+	
+	if (Name and not vUIProfiles[Name]) then
+		vUIProfiles[Name] = profile
+		self.List[Name] = Name
+		
+		vUI:SendAlert(Language["Import successful"], format(Language["New profile: %s"], Name))
+	else
+		vUI:print(format('A profile already exists with the name "%s."', Name))
+	end
+end
+
 function Profiles:CreateProfile(name)
 	if (not vUIProfiles) then
 		vUIProfiles = {}
@@ -121,9 +155,13 @@ function Profiles:CreateProfile(name)
 	end
 	
 	vUIProfiles[name] = {}
+	
+	-- Some metadata
+	vUIProfiles[name]["profile-name"] = name
 	vUIProfiles[name]["profile-created"] = GetCurrentDate()
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
+	
 	vUIProfileData[vUI.Realm][vUI.User] = name
 	
 	self.List[name] = name
@@ -135,7 +173,15 @@ function Profiles:GetProfile(name)
 	if vUIProfiles[name] then
 		return vUIProfiles[name]
 	else
-		return self:GetMoseUsedProfile()
+		local Default = self:GetMostUsedProfile()
+		
+		if (not Default) then
+			local Profile = self:CreateProfile("Default")
+			
+			return Profile
+		elseif (Default and vUIProfiles[Default]) then
+			return vUIProfiles[Default]
+		end
 	end
 end
 
@@ -165,7 +211,7 @@ function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback
 		end
 	end
 	
-	return HighestName
+	return HighestName, vUIProfileData[HighestName]
 end
 
 function Profiles:DeleteProfile(name)
@@ -196,6 +242,7 @@ end
 
 function Profiles:MergeWithDefaults(name)
 	local Values = {}
+	local Profile = self:GetProfile(name)
 	
 	-- Collect default values
 	for ID, Value in pairs(Defaults) do
@@ -203,8 +250,10 @@ function Profiles:MergeWithDefaults(name)
 	end
 	
 	-- And apply stored values
-	for ID, Value in pairs(self:GetProfile(name)) do
-		Values[ID] = Value
+	if Profile then
+		for ID, Value in pairs(Profile) do
+			Values[ID] = Value
+		end
 	end
 	
 	return Values
@@ -244,30 +293,30 @@ end
 
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 local LibCompress = LibStub:GetLibrary("LibCompress")
+local Encoder = LibCompress:GetAddonEncodeTable()
 local LibDeflate = LibStub:GetLibrary("LibDeflate")
-
-local Debug = true
+local LibBase64 = LibStub:GetLibrary("LibBase64-1.0")
+local LibDeflateConfig = {level = 9}
 
 function Profiles:GetEncoded()
-	--[[local Result = AceSerializer:Serialize(self:GetActiveProfile())
-	local Compressed = LibCompress:Compress(Result)
-	local Encoded = LibCompress:Encode7bit(Compressed)
-	
-	return Encoded]]
-	
-	local Serialized = AceSerializer:Serialize(self:GetActiveProfile())
-	local Compressed = LibDeflate:CompressDeflate(Serialized)
-	
-	local Encoded = ""
-	
-	if Debug then
-		Encoded = Encoded..LibDeflate:EncodeForPrint(Compressed)
-	else
-		--Encoded = Encoded..LibDeflate:EncodeForWoWAddonChannel(Compressed)
-		Encoded = Encoded..LibDeflate:EncodeForWoWChatChannel(Compressed)
-	end
+	local Profile = self:GetActiveProfile()
+	local Serialized = AceSerializer:Serialize(Profile)
+	local Compressed = LibCompress:Compress(Serialized)
+	local Encoded = Encoder:Encode(Compressed)
 	
 	return Encoded
+end
+
+function Profiles:GetDecoded(encoded)
+	local Decoded = Encoder:Decode(encoded)
+	local Decompressed = LibCompress:Decompress(Decoded)
+	local Message, Deserialized = AceSerializer:Deserialize(Decompressed)
+	
+	if (not Message) then
+		vUI:print("Failure deserializing.")
+	else
+		return Deserialized
+	end
 end
 
 local UpdateProfileString = function()
@@ -275,9 +324,9 @@ local UpdateProfileString = function()
 	
 	local Result = AceSerializer:Serialize(Profile)
 	local Compressed = LibCompress:Compress(Result)
-	local Encoded = LibCompress:Encode7bit(Compressed)
+	local Encoded = Encoder:Encode(Compressed)
 	
-	local Decoded = LibCompress:Decode7bit(Encoded)
+	local Decoded = Encoder:Decode(Encoded)
 	local Decompressed = LibCompress:Decompress(Decoded)
 	local Success, Value = AceSerializer:Deserialize(Decompressed)
 	
@@ -290,14 +339,17 @@ local UpdateProfileString = function()
 	end
 end
 
-local ShowProfileWindow = function()
-	local Encoded = Profiles:GetEncoded()
-	local Window = GUI:CreateProfileWindow()
+local ShowExportWindow = function()
+	local Readable = Profiles:GetEncoded()
 	
-	Window.Input:SetText(Encoded)
-	Window.Input:HighlightText()
-	
-	GUI:ToggleProfileWindow()
+	GUI:CreateExportWindow()
+	GUI:SetExportWindowText(Readable)
+	GUI:ToggleExportWindow()
+end
+
+local ShowImportWindow = function()
+	GUI:CreateImportWindow()
+	GUI:ToggleImportWindow()
 end
 
 GUI:AddOptions(function(self)
@@ -310,11 +362,9 @@ GUI:AddOptions(function(self)
 	Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
 	Left:CreateInputWithButton("profile-delete", Profiles:GetDefaultProfileKey(), "Delete", "Delete Profile", "", DeleteProfile)
 	
-	--local String = Profiles:GetEncoded()
-	
 	Left:CreateHeader("Sharing is caring")
-	Left:CreateButton("Export", "Export Current Profile", "", ShowProfileWindow)
-	Left:CreateButton("Import", "Import A Profile", "")
+	Left:CreateButton("Import", "Import A Profile", "", ShowImportWindow)
+	Left:CreateButton("Export", "Export Current Profile", "", ShowExportWindow)
 	
 	Right:CreateHeader("What is a profile?")
 	Right:CreateLine("Profiles store your settings so that you can easily")
@@ -323,7 +373,7 @@ GUI:AddOptions(function(self)
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
 	
-	if (not Profile["profile-created-by"]) then
+	if (Profile and not Profile["profile-created-by"]) then
 		Profile["profile-created-by"] = UNKNOWN
 	end
 	
