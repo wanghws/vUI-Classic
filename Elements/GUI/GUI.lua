@@ -160,6 +160,7 @@ GUI.Widgets.CreateLine = function(self, text)
 	
 	local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Text:SetJustifyH("LEFT")
 	Text:SetShadowColor(0, 0, 0)
@@ -194,6 +195,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	
 	local Left = Anchor:CreateFontString(nil, "OVERLAY")
 	Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Left:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Left:SetJustifyH("LEFT")
 	Left:SetShadowColor(0, 0, 0)
@@ -202,6 +204,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	
 	local Right = Anchor:CreateFontString(nil, "OVERLAY")
 	Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
+	Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Right:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Right:SetJustifyH("RIGHT")
 	Right:SetShadowColor(0, 0, 0)
@@ -235,6 +238,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	
 	Header.Text = Header:CreateFontString(nil, "OVERLAY")
 	Header.Text:SetScaledPoint("LEFT", Header, HEADER_SPACING, 0)
+	Header.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
 	Header.Text:SetJustifyH("LEFT")
 	Header.Text:SetShadowColor(0, 0, 0)
@@ -254,6 +258,7 @@ end
 	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
 	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
+	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
 	Anchor.Text:SetJustifyH("LEFT")
 	Anchor.Text:SetShadowColor(0, 0, 0)
@@ -325,6 +330,7 @@ end]]
 	
 	Header.Text = Header:CreateFontString(nil, "OVERLAY")
 	Header.Text:SetScaledPoint("LEFT", Header, 7, 0)
+	Header.Text:SetScaledSize(GROUP_WIDTH - 13, WIDGET_HEIGHT)
 	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
 	Header.Text:SetJustifyH("LEFT")
 	Header.Text:SetShadowColor(0, 0, 0)
@@ -446,6 +452,7 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
+	Button.MiddleText:SetScaledSize(BUTTON_WIDTH - 6, WIDGET_HEIGHT)
 	Button.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetShadowColor(0, 0, 0)
@@ -454,6 +461,7 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Button.Text:SetScaledSize(GROUP_WIDTH - BUTTON_WIDTH - 6, WIDGET_HEIGHT)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetShadowColor(0, 0, 0)
@@ -514,6 +522,7 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	
 	Bar.MiddleText = Bar:CreateFontString(nil, "ARTWORK")
 	Bar.MiddleText:SetScaledPoint("CENTER", Bar, "CENTER", 0, 0)
+	Bar.MiddleText:SetScaledSize(STATUSBAR_WIDTH - 6, WIDGET_HEIGHT)
 	Bar.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Bar.MiddleText:SetJustifyH("CENTER")
 	Bar.MiddleText:SetShadowColor(0, 0, 0)
@@ -522,6 +531,7 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	
 	Bar.Text = Bar:CreateFontString(nil, "OVERLAY")
 	Bar.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Bar.Text:SetScaledSize(GROUP_WIDTH - STATUSBAR_WIDTH - 6, WIDGET_HEIGHT)
 	Bar.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Bar.Text:SetJustifyH("LEFT")
 	Bar.Text:SetShadowColor(0, 0, 0)
@@ -605,6 +615,7 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	
 	Checkbox.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Checkbox.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Checkbox.Text:SetScaledSize(GROUP_WIDTH - CHECKBOX_WIDTH - 6, WIDGET_HEIGHT)
 	Checkbox.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Checkbox.Text:SetJustifyH("LEFT")
 	Checkbox.Text:SetShadowColor(0, 0, 0)
@@ -643,6 +654,7 @@ end
 
 -- Switch
 local SWITCH_WIDTH = 50
+local SWITCH_TRAVEL = SWITCH_WIDTH - WIDGET_HEIGHT
 
 local SwitchOnMouseUp = function(self)
 	if self.Move:IsPlaying() then
@@ -653,11 +665,11 @@ local SwitchOnMouseUp = function(self)
 	
 	if self.Value then
 		self.Thumb:SetScaledPoint("RIGHT", self, 0, 0)
-		self.Move:SetOffset(-30, 0)
+		self.Move:SetOffset(-SWITCH_TRAVEL, 0)
 		self.Value = false
 	else
 		self.Thumb:SetScaledPoint("LEFT", self, 0, 0)
-		self.Move:SetOffset(30, 0)
+		self.Move:SetOffset(SWITCH_TRAVEL, 0)
 		self.Value = true
 	end
 	
@@ -745,6 +757,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	
 	Switch.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Switch.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Switch.Text:SetScaledSize(GROUP_WIDTH - SWITCH_WIDTH - 6, WIDGET_HEIGHT)
 	Switch.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Switch.Text:SetJustifyH("LEFT")
 	Switch.Text:SetShadowColor(0, 0, 0)
@@ -889,6 +902,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	
 	Input.Text = Input:CreateFontString(nil, "OVERLAY")
 	Input.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Input.Text:SetScaledSize(GROUP_WIDTH - INPUT_WIDTH - 6, WIDGET_HEIGHT)
 	Input.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Input.Text:SetJustifyH("LEFT")
 	Input.Text:SetShadowColor(0, 0, 0)
@@ -932,6 +946,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	
 	local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Text:SetJustifyH("LEFT")
 	Text:SetShadowColor(0, 0, 0)
@@ -1591,6 +1606,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	
 	Dropdown.Current = Dropdown:CreateFontString(nil, "ARTWORK")
 	Dropdown.Current:SetScaledPoint("LEFT", Dropdown, HEADER_SPACING, 0)
+	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
 	Dropdown.Current:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Dropdown.Current:SetJustifyH("LEFT")
 	Dropdown.Current:SetScaledWidth(DROPDOWN_WIDTH - 4)
@@ -1617,6 +1633,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	
 	Dropdown.Text = Dropdown:CreateFontString(nil, "OVERLAY")
 	Dropdown.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Dropdown.Text:SetScaledSize(GROUP_WIDTH - DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
 	Dropdown.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Dropdown.Text:SetJustifyH("LEFT")
 	Dropdown.Text:SetScaledWidth(DROPDOWN_WIDTH - 4)
@@ -1758,6 +1775,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		
 		MenuItem.Text = MenuItem:CreateFontString(nil, "OVERLAY")
 		MenuItem.Text:SetScaledPoint("LEFT", MenuItem, 5, 0)
+		MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 10, WIDGET_HEIGHT)
 		MenuItem.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 		MenuItem.Text:SetJustifyH("LEFT")
 		MenuItem.Text:SetShadowColor(0, 0, 0)
@@ -2079,6 +2097,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	
 	Slider.Text = Slider:CreateFontString(nil, "OVERLAY")
 	Slider.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Slider.Text:SetScaledSize(GROUP_WIDTH - SLIDER_WIDTH - EDITBOX_WIDTH - 6, WIDGET_HEIGHT)
 	Slider.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Slider.Text:SetJustifyH("LEFT")
 	Slider.Text:SetShadowColor(0, 0, 0)
@@ -2626,6 +2645,10 @@ local CreateColorPicker = function()
 	GUI.ColorPicker = ColorPicker
 end
 
+__SetColorPicker = function(p) -- /run __SetColorPicker("Default")
+	GUI.ColorPicker:SetColorPalette(p)
+end
+
 local SetSwatchObject = function(active)
 	GUI.ColorPicker.Active = active
 	
@@ -2722,6 +2745,7 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
+	Button.MiddleText:SetScaledSize(COLOR_WIDTH - 6, WIDGET_HEIGHT)
 	Button.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetShadowColor(0, 0, 0)
@@ -2730,6 +2754,7 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
+	Button.Text:SetScaledSize(GROUP_WIDTH - COLOR_WIDTH - SWATCH_SIZE - 6, WIDGET_HEIGHT)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetShadowColor(0, 0, 0)
@@ -3064,6 +3089,7 @@ GUI.NewWindow = function(self, name, default)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("CENTER", Button, 0, -1)
+	Button.Text:SetScaledSize(MENU_BUTTON_WIDTH - 6, MENU_BUTTON_HEIGHT)
 	Button.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 14)
 	Button.Text:SetJustifyH("CENTER")
 	Button.Text:SetShadowColor(0, 0, 0)
@@ -3212,6 +3238,7 @@ function GUI:Create()
 	
 	self.Header.Text = self.Header:CreateFontString(nil, "OVERLAY")
 	self.Header.Text:SetScaledPoint("CENTER", self.Header, 0, -1)
+	self.Header.Text:SetScaledSize(HEADER_WIDTH - 6, HEADER_HEIGHT)
 	self.Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 16)
 	self.Header.Text:SetJustifyH("CENTER")
 	self.Header.Text:SetShadowColor(0, 0, 0)
@@ -3287,7 +3314,7 @@ end
 
 function GUI:VARIABLES_LOADED()
 	Profiles:CreateProfileData()
-	Profiles:ImportProfiles()
+	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
 	
 	--[[

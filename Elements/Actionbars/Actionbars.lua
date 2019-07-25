@@ -73,9 +73,11 @@ local SkinButton = function(button, pet)
 	if button.Name then
 		button.Name:ClearAllPoints()
 		button.Name:SetScaledPoint("BOTTOMLEFT", button, 2, 2)
+		button.Name:SetScaledWidth(button:GetWidth() - 4)
 		button.Name:SetFont(Settings["ui-widget-font"], 12)
+		button.Name.SetFont = function() end
 		button.Name:SetJustifyH("LEFT")
-		button.Name:SetShadowColor(0, 0, 0, 1)
+		button.Name:SetShadowColor(0, 0, 0)
 		button.Name:SetShadowOffset(1, -1)
 	end
 	
