@@ -22,8 +22,6 @@ Languages\zhTW.lua
 Elements\Animation\Animation.lua
 Elements\GUI\Defaults.lua
 Elements\Serialize\LibStub.lua
-Elements\Serialize\LibDeflate\lib.xml
-Elements\Serialize\LibBase64-1.0.lua
 Elements\Serialize\AceSerializer-3.0.lua
 Elements\Serialize\LibCompress.lua
 Elements\Profiles\Profiles.lua
@@ -36,5 +34,6 @@ Elements\Tooltips\Tooltips.lua
 Elements\Minimap\Minimap.lua
 Elements\ZoneText\ZoneText.lua
 Elements\Alerts\Alerts.lua
+Elements\Popup\Popup.lua
 Elements\Update\Update.lua
 Elements\Test\Test.lua

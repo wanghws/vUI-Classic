@@ -5,6 +5,9 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 -- Cinematic Mode with black lines on the top and bottom of the screen. Reposition the UI parent
 -- Notification system with a bell icon under the minimap or something. This is just a small log where it shows things like version handshakes, update news etc
 
+-- To do: A bag slot visualizer (Yes, like FFXIV)
+-- black square, 2x2 pixels inside, colored by what's in the slot if occupied, 0.3 opacity if it's an empty slot.
+
 local Debug = '"%s" set to %s.'
 local floor = floor
 local format = format
@@ -12,7 +15,7 @@ local tostring = tostring
 
 local GetFramerate = GetFramerate
 
--- This is currently just a test page to text how GUI controls work, and debug them.
+-- This is currently just a test page to see how GUI controls work, and debug them.
 GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow("Test")
 	

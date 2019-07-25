@@ -20,24 +20,21 @@ GUI.Widgets = {}
 	Thoughts:
 	
 	- Test different resolutions and find the pixel perfect scale for each. Then either set or suggest the scale
-	
-	- Debug window of the GUI. With info like ui scale, resolution, windowed, language, etc etc
-	
 	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
 	
 	To do:
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
-	
 	Input.Imprint = a string that shows when the editbox is empty, a suggestion, or default value.
 	
-	- Widget methods
 	- If template == "None" then disable the page
 	
+	- Widget methods
 	widget:SetWarning(true) -- to determine if the widget should pop up a warning before proceeding
 	widget:RequiresReload(true) -- to determine if the widget should pop up a warning before proceeding
 	widget:Disable()
 	widget:Enable()
+	
 --]]
 
 -- Constants
@@ -72,13 +69,13 @@ local SELECTED_HIGHLIGHT_ALPHA = 0.3
 local MOUSEOVER_HIGHLIGHT_ALPHA = 0.1
 local LAST_ACTIVE_DROPDOWN
 
-local Ignore = {
+GUI.Ignore = {
 	["ui-profile"] = true,
 }
 
 -- Functions
 local SetVariable = function(id, value)
-	if Ignore[id] then
+	if GUI.Ignore[id] then
 		return
 	end
 	
@@ -188,7 +185,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	
 	tinsert(self.Widgets, Anchor)]]
 	
-	return Text
+	--return
 end
 
 GUI.Widgets.CreateDoubleLine = function(self, left, right)
@@ -217,7 +214,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 end
 
 -- Header
---[[GUI.Widgets.CreateHeader = function(self, text)
+GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -247,9 +244,9 @@ end
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end]]
+end
 
-GUI.Widgets.CreateHeader = function(self, text)
+--[[GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -299,9 +296,47 @@ GUI.Widgets.CreateHeader = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end
+end]]
 
---[[ Footer
+--[[GUI.Widgets.CreateHeader = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	-- Header
+	local Header = CreateFrame("Frame", nil, Anchor)
+	Header:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Header:SetScaledPoint("CENTER", Anchor, 0, 0)
+	Header:SetBackdrop(vUI.BackdropAndBorder)
+	Header:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Header:SetBackdropBorderColor(0, 0, 0)
+	
+	Header.NewTexture = Header:CreateTexture(nil, "OVERLAY")
+	Header.NewTexture:SetScaledPoint("TOPLEFT", Header, 1, -1)
+	Header.NewTexture:SetScaledPoint("BOTTOMRIGHT", Header, -1, 1)
+	Header.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Header.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	Header.NewTexture2 = Header:CreateTexture(nil, "OVERLAY")
+	Header.NewTexture2:SetScaledSize(2, WIDGET_HEIGHT - 2)
+	Header.NewTexture2:SetScaledPoint("LEFT", Header, 1, 0)
+	Header.NewTexture2:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Header.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-header-font-color"]))
+	
+	Header.Text = Header:CreateFontString(nil, "OVERLAY")
+	Header.Text:SetScaledPoint("LEFT", Header, 7, 0)
+	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Header.Text:SetJustifyH("LEFT")
+	Header.Text:SetShadowColor(0, 0, 0)
+	Header.Text:SetShadowOffset(1, -1)
+	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Header
+end]]
+
+-- Footer
 GUI.Widgets.CreateFooter = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -324,9 +359,9 @@ GUI.Widgets.CreateFooter = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end]]
+end
 
-GUI.Widgets.CreateFooter = function(self, text)
+--[[GUI.Widgets.CreateFooter = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -349,7 +384,7 @@ GUI.Widgets.CreateFooter = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end
+end]]
 
 -- Button
 local BUTTON_WIDTH = 130
@@ -2865,7 +2900,7 @@ local AddScrollBar = function(self)
 	ScrollBar.Progress = ScrollBar:CreateTexture(nil, "ARTWORK")
 	ScrollBar.Progress:SetScaledPoint("TOPLEFT", ScrollBar, 1, -1)
 	ScrollBar.Progress:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, "TOPRIGHT", -1, 0)
-	ScrollBar.Progress:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	ScrollBar.Progress:SetTexture(Media:GetTexture("Blank"))
 	ScrollBar.Progress:SetVertexColor(R * 0.65, G * 0.65, B * 0.65)
 	
 	self:EnableMouseWheel(true)
@@ -3340,7 +3375,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Console"])
 	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
-	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUISettings = nil; ReloadUI(); end)
+	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUIProfileData = nil; vUIProfiles = nil; ReloadUI(); end)
 	
 	Right:CreateHeader(Language["Windows"])
 	Right:CreateColorSelection("ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")

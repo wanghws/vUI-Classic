@@ -230,6 +230,20 @@ function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback
 	return HighestName, vUIProfileData[HighestName]
 end
 
+function Profiles:GetNumServedBy(name)
+	local Count = 0
+	
+	for Realm, Value in pairs(vUIProfileData) do
+		for Player, ProfileName in pairs(Value) do
+			if (ProfileName == name) then
+				Count = Count + 1
+			end
+		end
+	end
+	
+	return Count
+end
+
 function Profiles:DeleteProfile(name)
 	if vUIProfiles[name] then
 		vUIProfiles[name] = nil
@@ -310,9 +324,6 @@ end
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 local LibCompress = LibStub:GetLibrary("LibCompress")
 local Encoder = LibCompress:GetAddonEncodeTable()
-local LibDeflate = LibStub:GetLibrary("LibDeflate")
-local LibBase64 = LibStub:GetLibrary("LibBase64-1.0")
-local LibDeflateConfig = {level = 9}
 
 function Profiles:GetEncoded()
 	local Profile = self:GetActiveProfile()
@@ -404,6 +415,9 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Created On:", IsToday(Profile["profile-created"]))
 	Right:CreateDoubleLine("Last Modified:", IsToday(Profile["profile-last-modified"]))
 	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
+	Right:CreateDoubleLine("Serving Characters:", Profiles:GetNumServedBy(Name))
+	
+	Right:CreateHeader(Language["General"])
 	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
 	

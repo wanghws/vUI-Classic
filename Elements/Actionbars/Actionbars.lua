@@ -1,9 +1,5 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
-if (0 == 1) then
-	return
-end
-
 -- Some of the settings callbacks still need checks for if Experience or Action Bars are enabled
 
 local BUTTON_SIZE = 32
@@ -35,17 +31,9 @@ local SkinButton = function(button, pet)
 		return
 	end
 	
-	local ButtonFloatingBG = _G[button:GetName() .. "FloatingBG"]
-	
-	--[[if button.Flash then
-		button.Flash:SetTexture("")
-	end]]
+	local FloatingBG = _G[button:GetName() .. "FloatingBG"]
 	
 	button:SetNormalTexture("")
-	
-	--[[if not pet then
-		ActionButton_ShowGrid(button)
-	end]]
 	
 	if button.Border then
 		button.Border:SetTexture(nil)
@@ -53,28 +41,28 @@ local SkinButton = function(button, pet)
 	end
 	
 	if button.icon then
-		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 		button.icon:ClearAllPoints()
 		button.icon:SetScaledPoint("TOPLEFT", button, 1, -1)
 		button.icon:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
+		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	end
 	
 	if button.HotKey then
-		if (not HKOn) then
+		--[[if (not HKOn) then
 			button.HotKey:Hide()
 			button.HotKey.Show = function() end
-		end
+		end]]
 		
-		button.HotKey:SetFont(Settings["ui-widget-font"], 12)
 		button.HotKey:ClearAllPoints()
-		button.HotKey:SetScaledPoint("TOPRIGHT", button, -2, -2)
-		button.HotKey:SetJustifyH("RIGHT")
+		button.HotKey:SetScaledPoint("TOPLEFT", button, 2, -2)
+		button.HotKey:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+		button.HotKey:SetJustifyH("LEFT")
 		button.HotKey:SetShadowColor(0, 0, 0)
 		button.HotKey:SetShadowOffset(1, -1)
 		button.HotKey:SetTextColor(1, 1, 1)
 		button.HotKey.SetTextColor = function() end
 		
-		--button.HotKey:SetText("|cffFFFFFF" .. button.HotKey:GetText() .. "|r")
+		button.HotKey:SetText("|cffFFFFFF" .. button.HotKey:GetText() .. "|r")
 		
 		button.HotKey.OST = button.HotKey.SetText
 		button.HotKey.SetText = function(self, text)
@@ -83,8 +71,12 @@ local SkinButton = function(button, pet)
 	end
 	
 	if button.Name then
-		button.Name:Hide()
-		button.Name.Show = function() end
+		button.Name:ClearAllPoints()
+		button.Name:SetScaledPoint("BOTTOMLEFT", button, 2, 2)
+		button.Name:SetFont(Settings["ui-widget-font"], 12)
+		button.Name:SetJustifyH("LEFT")
+		button.Name:SetShadowColor(0, 0, 0, 1)
+		button.Name:SetShadowOffset(1, -1)
 	end
 	
 	if (not button.CountBG) then
@@ -97,16 +89,16 @@ local SkinButton = function(button, pet)
 	end
 	
 	if button.Count then
-		button.Count:SetFont(Settings["ui-widget-font"], 12)
 		button.Count:ClearAllPoints()
-		button.Count:SetScaledPoint("BOTTOMRIGHT", button, -3, 1)
+		button.Count:SetScaledPoint("TOPRIGHT", button, -2, -2)
+		button.Count:SetFont(Settings["ui-widget-font"], 12)
 		button.Count:SetJustifyH("RIGHT")
 		button.Count:SetShadowColor(0, 0, 0, 1)
 		button.Count:SetShadowOffset(1, -1)
 	end
 	
-	if ButtonFloatingBG then
-		Kill(ButtonFloatingBG)
+	if FloatingBG then
+		Kill(FloatingBG)
 	end
 	
 	button.Backdrop = CreateFrame("Frame", nil, button)
@@ -423,6 +415,10 @@ local CreateBarPanels = function()
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
 	BottomPanel:SetFrameStrata("LOW")
 	
+	if (not Settings["action-bars-show-bottom"]) then
+		BottomPanel:SetAlpha(0)
+	end
+	
 	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent)
 	SidePanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
 	SidePanel:SetScaledPoint("RIGHT", UIParent, -10, 0)
@@ -430,6 +426,10 @@ local CreateBarPanels = function()
 	SidePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	SidePanel:SetBackdropBorderColor(0, 0, 0)
 	SidePanel:SetFrameStrata("LOW")
+	
+	if (not Settings["action-bars-show-side"]) then
+		SidePanel:SetAlpha(0)
+	end
 	
 	if (Settings["experience-position"] == "CLASSIC") then
 		BottomPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
@@ -581,6 +581,22 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	self:UnregisterEvent(event)
 end)
 
+local UpdateShowBottom = function(value)
+	if value then
+		vUIBottomActionBarsPanel:SetAlpha(1)
+	else
+		vUIBottomActionBarsPanel:SetAlpha(0)
+	end
+end
+
+local UpdateShowSide = function(value)
+	if value then
+		vUISideActionBarsPanel:SetAlpha(1)
+	else
+		vUISideActionBarsPanel:SetAlpha(0)
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:NewWindow(Language["Action Bars"])
 	
@@ -588,11 +604,15 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module")
 	
 	Left:CreateHeader(Language["Backdrops"])
-	Left:CreateCheckbox("action-bars-show-bottom", Settings["action-bars-show-bottom"], "Show Bottom backdrop", "")
-	Left:CreateCheckbox("action-bars-show-right", Settings["action-bars-show-right"], "Show Right backdrop", "")
+	Left:CreateCheckbox("action-bars-show-bottom", Settings["action-bars-show-bottom"], "Show Bottom Backdrop", "", UpdateShowBottom)
+	Left:CreateCheckbox("action-bars-show-side", Settings["action-bars-show-side"], "Show Side Backdrop", "", UpdateShowSide)
 	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
+	
+	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "")
+	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "")
+	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count", "")
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)
