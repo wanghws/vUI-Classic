@@ -2,14 +2,22 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 -- Some of the settings callbacks still need checks for if Experience or Action Bars are enabled
 
+-- 3 bottom bars, 2 right bars layout
+-- Start on pet bar.
+
 local BUTTON_SIZE = 32
 local SPACING = 2
+
+local PET_BUTTON_SIZE = 26
 
 local BOTTOM_WIDTH = ((BUTTON_SIZE * 12) + (SPACING * 14))
 local BOTTOM_HEIGHT = ((BUTTON_SIZE * 2) + (SPACING * 4))
 
 local SIDE_WIDTH = ((BUTTON_SIZE * 3) + (SPACING * 5))
 local SIDE_HEIGHT = ((BUTTON_SIZE * 12) + (SPACING * 14))
+
+local PET_WIDTH = ((BUTTON_SIZE * 1) + (SPACING * 3))
+local PET_HEIGHT = ((PET_BUTTON_SIZE * 12) + (SPACING * 14))
 
 local Num = NUM_ACTIONBAR_BUTTONS
 
@@ -428,6 +436,15 @@ local CreateBarPanels = function()
 	SidePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	SidePanel:SetBackdropBorderColor(0, 0, 0)
 	SidePanel:SetFrameStrata("LOW")
+	
+	local PetPanel = CreateFrame("Frame", "vUIPetActionBarsPanel", UIParent)
+	PetPanel:SetScaledSize(PET_WIDTH, PET_HEIGHT)
+	PetPanel:SetScaledPoint("RIGHT", SidePanel, "LEFT", -SPACING, 0)
+	PetPanel:SetBackdrop(vUI.BackdropAndBorder)
+	PetPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	PetPanel:SetBackdropBorderColor(0, 0, 0)
+	PetPanel:SetFrameStrata("LOW")
+	PetPanel:Hide()
 	
 	if (not Settings["action-bars-show-side"]) then
 		SidePanel:SetAlpha(0)

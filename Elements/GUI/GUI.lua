@@ -1469,6 +1469,10 @@ local MenuItemOnMouseUp = function(self)
 	self.GrandParent.Current:SetText(self.Key)
 end
 
+local DropdownUpdate = function(self)
+	
+end
+
 local DropdownOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
 end
@@ -3478,7 +3482,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Templates"], true)
 	
 	Left:CreateHeader(Language["Templates"])
-	Left:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
+	Left:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Headers"])
 	Left:CreateColorSelection("ui-header-font-color", Settings["ui-header-font-color"], Language["Text Color"], "")
@@ -3496,7 +3500,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Console"])
 	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
-	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUIProfileData = nil; vUIProfiles = nil; ReloadUI(); end)
+	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUIProfileData = nil; vUIProfiles = nil; ReloadUI(); end):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Windows"])
 	Right:CreateColorSelection("ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")

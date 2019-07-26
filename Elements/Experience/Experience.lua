@@ -482,7 +482,7 @@ GUI:AddOptions(function(self)
 	GeneralLeft:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
 	GeneralRight:CreateHeader(Language["Language"])
-	GeneralRight:CreateDropdown("ui-language", vUI.Locale, Languages, Language["UI Language"], "", ReloadUI)
+	GeneralRight:CreateDropdown("ui-language", vUI.Locale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	GeneralRight:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
 	GeneralRight:CreateHeader(Language["Scale"])

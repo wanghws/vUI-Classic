@@ -342,19 +342,25 @@ function Profiles:DeleteEmptyProfiles()
 	vUI:print(format("Deleted %s empty profiles.", Deleted))
 end
 
-function Profiles:DeleteUnusedProfiles()
+function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles()
 	local Counts = {}
 	local Deleted = 0
 	
+	self:UpdateProfileList()
+	
+	for Name in pairs(self.List) do
+		Counts[Name] = 0
+	end
+	
 	for Realm, Value in pairs(vUIProfileData) do
 		for Player, ProfileName in pairs(Value) do
-			Counts[ProfileName] = (Counts[ProfileName] or 0) + 1
+			Counts[ProfileName] = Counts[ProfileName] + 1
 		end
 	end
 	
 	for Name, Total in pairs(Counts) do
 		if (Total == 0) then
-			self:Delete(Name)
+			self:DeleteProfile(Name)
 			
 			Deleted = Deleted + 1
 		end
@@ -365,10 +371,10 @@ function Profiles:DeleteUnusedProfiles()
 	vUI:print(format("Deleted %s unused profiles.", Deleted))
 end
 
--- /run vUI:get(7):RenameProfile("Default", "vUI")
-function Profiles:RenameProfile(from, to)
-	local FromProfile = self:GetProfile(from)
-	local ToProfile = self:GetProfile(to)
+-- /run vUI:get(7):RenameProfile("Default", "Prometheus")
+function Profiles:RenameProfile(from, to) -- Tested, working
+	local FromProfile = vUIProfiles[from]
+	local ToProfile = vUIProfiles[to]
 	
 	if (not FromProfile) then
 		return
@@ -399,7 +405,7 @@ function Profiles:RenameProfile(from, to)
 	vUI:print(format('Profile "%s" has been renamed to "%s".', from, to))
 end
 
-function Profiles:SetMetadata(name, meta, value) -- Profiles:SetMetadata("Default", "profile-created-by", "Nickname")
+function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata("Default", "profile-created-by", "Hydra")
 	if vUIProfiles[name] then
 		if self.Metadata[meta] then
 			vUIProfiles[name][meta] = value
@@ -474,10 +480,10 @@ __testSerialize = function() -- /run __testSerialize()
 end
 
 local ShowExportWindow = function()
-	local Readable = Profiles:GetEncoded()
+	local Encoded = Profiles:GetEncoded()
 	
 	GUI:CreateExportWindow()
-	GUI:SetExportWindowText(Readable)
+	GUI:SetExportWindowText(Encoded)
 	GUI:ToggleExportWindow()
 end
 
@@ -490,7 +496,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
 	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
+	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Modify"])
 	Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
