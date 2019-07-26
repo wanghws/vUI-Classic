@@ -600,7 +600,7 @@ local UpdateShowSide = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Action Bars"])
+	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module")

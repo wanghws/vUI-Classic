@@ -17,7 +17,7 @@ local GetFramerate = GetFramerate
 
 -- This is currently just a test page to see how GUI controls work, and debug them.
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow("Test")
+	local Left, Right = self:CreateWindow("Test")
 	
 	Left:CreateHeader(Language["Checkboxes"])
 	Left:CreateCheckbox("test-checkbox-1", true, "Checkbox Demo", "Enable something", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
@@ -98,14 +98,14 @@ GUI:AddOptions(function(self)
 	Right:CreateFooter()
 	
 	-- Testing
-	self:NewWindow("Unit Frames")
-	self:NewWindow("Tooltips")
-	self:NewWindow("Misc.")
-	self:NewWindow("Search")
+	self:CreateWindow("Unit Frames")
+	self:CreateWindow("Tooltips")
+	self:CreateWindow("Misc.")
+	self:CreateWindow("Search")
 end)
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow("Info")
+	local Left, Right = self:CreateWindow("Info")
 	
 	Left:CreateHeader("UI Information")
 	Left:CreateDoubleLine("Version", vUI.Version)

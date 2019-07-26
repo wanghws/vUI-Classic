@@ -447,7 +447,7 @@ local UpdateUIScale = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Experience"])
+	local Left, Right = self:CreateWindow(Language["Experience"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("experience-enable", true, Language["Enable Experience Module"], "")
@@ -474,7 +474,7 @@ GUI:AddOptions(function(self)
 	Right:CreateFooter()
 	
 	-- TEMPORARY -- Debug/Test
-	local GeneralLeft, GeneralRight = self:NewWindow(Language["General"])
+	local GeneralLeft, GeneralRight = self:CreateWindow(Language["General"])
 	
 	GeneralLeft:CreateHeader(Language["Welcome"])
 	GeneralLeft:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")

@@ -79,14 +79,14 @@ end
 -- /run vUISettings.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
 Update["VARIABLES_LOADED"] = function(self, event)
 	if (not vUISettings) then
-		vUISettings = {}
+		vUIData = {}
 	end
 	
-	if (not vUISettings.Version) then
-		vUISettings.Version = AddOnVersion
+	if (not vUIData.Version) then
+		vUIData.Version = AddOnVersion
 	end
 	
-	local StoredVersion = vUISettings.Version
+	local StoredVersion = vUIData.Version
 	
 	-- You installed a newer version! Yay you. Yes, you.
 	if (AddOnVersion > StoredVersion) then
@@ -97,7 +97,7 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	
 	-- Store a new version if needed.
 	if (StoredVersion ~= AddOnVersion) then
-		vUISettings.Version = AddOnVersion
+		vUIData.Version = AddOnVersion
 	end
 	
 	self:UnregisterEvent(event)

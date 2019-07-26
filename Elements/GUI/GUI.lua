@@ -22,6 +22,8 @@ GUI.Widgets = {}
 	- Test different resolutions and find the pixel perfect scale for each. Then either set or suggest the scale
 	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
 	
+	-- Templates Enable option. If Templates are enabled then it will apply those colors, otherwise use a default. I'll need a system to determine which to retrieve though... bad idea maybe.
+	
 	To do:
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
@@ -43,7 +45,7 @@ local GUI_HEIGHT = 406
 local SPACING = 3
 
 local HEADER_WIDTH = GUI_WIDTH - (SPACING * 2)
-local HEADER_HEIGHT = 22
+local HEADER_HEIGHT = 20
 local HEADER_SPACING = 5
 
 local BUTTON_LIST_WIDTH = 126
@@ -428,7 +430,7 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button:SetScaledSize(BUTTON_WIDTH, WIDGET_HEIGHT)
 	Button:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Button:SetBackdrop(vUI.BackdropAndBorder)
-	Button:SetBackdropColor(0.17, 0.17, 0.17)
+	Button:SetBackdropColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	Button:SetBackdropBorderColor(0, 0, 0)
 	Button:SetScript("OnMouseUp", ButtonOnMouseUp)
 	Button:SetScript("OnMouseDown", ButtonOnMouseDown)
@@ -3046,7 +3048,12 @@ local CreateWidget = function(self, name, ...)
 	end
 end
 
-GUI.NewWindow = function(self, name, default)
+-- local Table, Count = Window:GetNonDefault()
+local GetNonDefault = function(self)
+
+end
+
+GUI.CreateWindow = function(self, name, default)
 	if self.Windows[name] then
 		return self.Windows[name]
 	end
@@ -3114,7 +3121,7 @@ GUI.NewWindow = function(self, name, default)
 	local Window = CreateFrame("Frame", nil, self)
 	Window:SetScaledWidth(PARENT_WIDTH)
 	Window:SetScaledPoint("BOTTOMRIGHT", self, -SPACING, SPACING)
-	Window:SetScaledPoint("TOPRIGHT", self.Header, "BOTTOMRIGHT", 0, -2)
+	Window:SetScaledPoint("TOPRIGHT", self.CloseButton, "BOTTOMRIGHT", 0, -2)
 	Window:SetBackdropBorderColor(0, 0, 0)
 	Window:Hide()
 	
@@ -3123,7 +3130,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.LeftWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
@@ -3131,7 +3138,7 @@ GUI.NewWindow = function(self, name, default)
 	Window.RightWidgetsBG:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, "TOPRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window.LeftWidgetsBG, "BOTTOMRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-bg-color"]))
+	Window.RightWidgetsBG:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Parent = self
@@ -3190,15 +3197,19 @@ GUI.GetWidgetByWindow = function(name, id)
 end
 
 GUI.GetWidget = function(id)
-	local Found
+	local Widget
 	
 	for Name in pairs(self.Windows) do
-		Found = self:GetWidgetByWindow(Name, id)
+		Widget = self:GetWidgetByWindow(Name, id)
 	end
 	
-	if Found then
-		return Found
+	if Widget then
+		return Widget
 	end
+end
+
+GUI.UpdateWidget = function(id, ...)
+	-- Get the widget, add :Update() methods, and pass the vararg through it with the relevant information.
 end
 
 -- Frame
@@ -3224,7 +3235,7 @@ function GUI:Create()
 	
 	-- Header
 	self.Header = CreateFrame("Frame", nil, self)
-	self.Header:SetScaledSize(HEADER_WIDTH, HEADER_HEIGHT)
+	self.Header:SetScaledSize(HEADER_WIDTH - (HEADER_HEIGHT - 2) - SPACING - 1, HEADER_HEIGHT)
 	self.Header:SetScaledPoint("TOPLEFT", self, SPACING, -SPACING)
 	self.Header:SetBackdrop(vUI.BackdropAndBorder)
 	self.Header:SetBackdropColor(0, 0, 0, 0)
@@ -3257,11 +3268,12 @@ function GUI:Create()
 	self.SelectionParent:SetBackdropBorderColor(0, 0, 0)
 	
 	-- Close button
-	self.CloseButton = CreateFrame("Frame", nil, self.Header)
-	self.CloseButton:SetScaledSize(HEADER_HEIGHT - 2, HEADER_HEIGHT - 2)
-	self.CloseButton:SetScaledPoint("RIGHT", self.Header, -1, 0)
-	self.CloseButton:SetBackdrop(vUI.Backdrop)
+	self.CloseButton = CreateFrame("Frame", nil, self)
+	self.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
+	self.CloseButton:SetScaledPoint("TOPRIGHT", self, -SPACING, -SPACING)
+	self.CloseButton:SetBackdrop(vUI.BackdropAndBorder)
 	self.CloseButton:SetBackdropColor(0, 0, 0, 0)
+	self.CloseButton:SetBackdropBorderColor(0, 0, 0)
 	self.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
 	self.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
 	self.CloseButton:SetScript("OnMouseUp", function()
@@ -3271,6 +3283,12 @@ function GUI:Create()
 			self.ColorPicker.FadeOut:Play()
 		end
 	end)
+	
+	self.CloseButton.Texture = self.CloseButton:CreateTexture(nil, "ARTWORK")
+	self.CloseButton.Texture:SetScaledPoint("TOPLEFT", self.CloseButton, 1, -1)
+	self.CloseButton.Texture:SetScaledPoint("BOTTOMRIGHT", self.CloseButton, -1, 1)
+	self.CloseButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	self.CloseButton.Texture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	self.CloseButton.Text = self.CloseButton:CreateFontString(nil, "OVERLAY")
 	self.CloseButton.Text:SetScaledPoint("CENTER", self.CloseButton, 0, 0)
@@ -3395,24 +3413,10 @@ SlashCmdList["VUI"] = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Templates"], true)
+	local Left, Right = self:CreateWindow(Language["Templates"], true)
 	
 	Left:CreateHeader(Language["Templates"])
 	Left:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end)
-	
-	Right:CreateHeader(Language["Console"])
-	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
-	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUIProfileData = nil; vUIProfiles = nil; ReloadUI(); end)
-	
-	Right:CreateHeader(Language["Windows"])
-	Right:CreateColorSelection("ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")
-	Right:CreateColorSelection("ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
-	
-	Right:CreateHeader(Language["Buttons"])
-	Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
-	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
-	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
-	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
 	Left:CreateHeader(Language["Headers"])
 	Left:CreateColorSelection("ui-header-font-color", Settings["ui-header-font-color"], Language["Text Color"], "")
@@ -3427,6 +3431,20 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	
+	Right:CreateHeader(Language["Console"])
+	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
+	Right:CreateButton(Language["Delete"], Language["Delete Saved Variables"], "", function() vUIProfileData = nil; vUIProfiles = nil; ReloadUI(); end)
+	
+	Right:CreateHeader(Language["Windows"])
+	Right:CreateColorSelection("ui-window-bg-color", Settings["ui-window-bg-color"], Language["Background Color"], "")
+	Right:CreateColorSelection("ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
+	
+	Right:CreateHeader(Language["Buttons"])
+	Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
+	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
+	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
+	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

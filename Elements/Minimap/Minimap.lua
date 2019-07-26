@@ -163,7 +163,7 @@ Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Frame:SetScript("OnEvent", OnEvent)
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Minimap"])
+	local Left, Right = self:CreateWindow(Language["Minimap"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "bloop.")

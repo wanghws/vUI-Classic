@@ -957,7 +957,7 @@ local UpdateOpacity = function(value)
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Chat"])
+	local Left, Right = self:CreateWindow(Language["Chat"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "")

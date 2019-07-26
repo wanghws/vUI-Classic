@@ -3,7 +3,7 @@
 ## Version: 1.01
 ## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
-## SavedVariables: vUIProfileData, vUIProfiles
+## SavedVariables: vUIProfileData, vUIProfiles, vUIData
 
 Initialize.lua
 Media\Media.lua

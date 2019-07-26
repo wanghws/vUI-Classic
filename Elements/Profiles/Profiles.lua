@@ -5,18 +5,9 @@ local pairs = pairs
 local date = date
 local match = string.match
 
---[[
-	To do:
-	
-	Profiles:ClearEmptyProfiles()
-	Profiles:ClearUnusedProfiles()
-	Profiles:Rename(from, to)
-	Profiles:SetMetadata(name, meta, value) Profiles:SetMetadata("Default", "profile-created-by", "Nickname")
---]]
-
 Profiles.List = {}
 
-local Filter = {
+Profiles.Metadata = {
 	["profile-name"] = true,
 	["profile-created"] = true,
 	["profile-created-by"] = true,
@@ -24,7 +15,7 @@ local Filter = {
 }
 
 -- Some settings shouldn't be sent to others
-local DontTransmit = {
+Profiles.DontTransmit = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
 	
@@ -123,7 +114,7 @@ function Profiles:CountChangedValues(name)
 	local Count = 0
 	
 	for ID, Value in pairs(Profile) do
-		if (not Filter[ID]) then
+		if (not self.Metadata[ID]) then
 			Count = Count + 1
 		end
 	end
@@ -217,6 +208,8 @@ function Profiles:GetProfile(name)
 			return vUIProfiles[Default]
 		end
 	end
+	
+	return vUI:print("Please report that this case happened: Profiles:GetProfile()")
 end
 
 function Profiles:GetProfileList()
@@ -250,16 +243,19 @@ end
 
 function Profiles:GetNumServedBy(name)
 	local Count = 0
+	local Total = 0
 	
 	for Realm, Value in pairs(vUIProfileData) do
 		for Player, ProfileName in pairs(Value) do
 			if (ProfileName == name) then
 				Count = Count + 1
 			end
+			
+			Total = Total + 1
 		end
 	end
 	
-	return Count
+	return Count, (Count == Total)
 end
 
 function Profiles:DeleteProfile(name)
@@ -321,6 +317,94 @@ function Profiles:ApplyProfile(name)
 	vUIProfileData[vUI.Realm][vUI.User] = name
 	
 	Values = nil
+end
+
+function Profiles:DeleteEmptyProfiles()
+	local Count = 0
+	local Deleted = 0
+	
+	for Name, Value in pairs(vUIProfiles) do
+		Count = 0
+		
+		for ID in pairs(Value) do
+			if (not self.Metadata[ID]) then
+				Count = Count + 1
+			end
+		end
+		
+		if (Count == 0) then
+			self:DeleteProfile(Name)
+			
+			Deleted = Deleted + 1
+		end
+	end
+	
+	vUI:print(format("Deleted %s empty profiles.", Deleted))
+end
+
+function Profiles:DeleteUnusedProfiles()
+	local Counts = {}
+	local Deleted = 0
+	
+	for Realm, Value in pairs(vUIProfileData) do
+		for Player, ProfileName in pairs(Value) do
+			Counts[ProfileName] = (Counts[ProfileName] or 0) + 1
+		end
+	end
+	
+	for Name, Total in pairs(Counts) do
+		if (Total == 0) then
+			self:Delete(Name)
+			
+			Deleted = Deleted + 1
+		end
+	end
+	
+	Counts = nil
+	
+	vUI:print(format("Deleted %s unused profiles.", Deleted))
+end
+
+-- /run vUI:get(7):RenameProfile("Default", "vUI")
+function Profiles:RenameProfile(from, to)
+	local FromProfile = self:GetProfile(from)
+	local ToProfile = self:GetProfile(to)
+	
+	if (not FromProfile) then
+		return
+	elseif ToProfile then
+		vUI:print(format('A profile already exists with the name "%s".', to))
+		
+		return
+	end
+	
+	vUIProfiles[to] = FromProfile
+	vUIProfiles[to]["profile-name"] = to
+	
+	vUIProfiles[from] = nil
+	self.List[from] = nil
+	self.List[to] = to
+	
+	-- Reroute characters who used this profile
+	for Realm, Value in pairs(vUIProfileData) do
+		for Player, ProfileName in pairs(Value) do
+			if (ProfileName == from) then
+				vUIProfileData[Realm][Player] = to
+			end
+		end
+	end
+	
+	-- Update dropdown menu if needed
+	
+	vUI:print(format('Profile "%s" has been renamed to "%s".', from, to))
+end
+
+function Profiles:SetMetadata(name, meta, value) -- Profiles:SetMetadata("Default", "profile-created-by", "Nickname")
+	if vUIProfiles[name] then
+		if self.Metadata[meta] then
+			vUIProfiles[name][meta] = value
+		end
+	end
 end
 
 local UpdateProfile = function(value)
@@ -403,7 +487,7 @@ local ShowImportWindow = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:NewWindow(Language["Profiles"])
+	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
 	Left:CreateHeader(Language["Profiles"])
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile)
@@ -422,6 +506,11 @@ GUI:AddOptions(function(self)
 	
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
+	local NumServed, IsAll = Profiles:GetNumServedBy(Name)
+	
+	if IsAll then
+		NumServed = format("%d (%s)", NumServed, Language["All"])
+	end
 	
 	if (Profile and not Profile["profile-created-by"]) then
 		Profile["profile-created-by"] = UNKNOWN
@@ -433,7 +522,7 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Created On:", IsToday(Profile["profile-created"]))
 	Right:CreateDoubleLine("Last Modified:", IsToday(Profile["profile-last-modified"]))
 	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
-	Right:CreateDoubleLine("Serving Characters:", Profiles:GetNumServedBy(Name))
+	Right:CreateDoubleLine("Serving Characters:", NumServed)
 	
 	Right:CreateHeader(Language["General"])
 	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
