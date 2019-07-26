@@ -187,7 +187,7 @@ function Profiles:CreateProfile(name)
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
 	
-	vUIProfileData[vUI.Realm][vUI.User] = name
+	--vUIProfileData[vUI.Realm][vUI.User] = name
 	
 	self.List[name] = name
 	
@@ -281,6 +281,12 @@ function Profiles:DeleteProfile(name)
 	
 	if (self:GetProfileCount() == 0) then
 		self:CreateProfile("Default") -- If we just deleted our last profile, make a new default.
+		
+		for Realm, Value in pairs(vUIProfileData) do
+			for Player, ProfileName in pairs(Value) do
+				vUIProfileData[Realm][Player] = "Default"
+			end
+		end
 	end
 end
 
@@ -319,7 +325,7 @@ function Profiles:ApplyProfile(name)
 	Values = nil
 end
 
-function Profiles:DeleteEmptyProfiles()
+function Profiles:DeleteEmptyProfiles() -- /run vUI:get(7):DeleteEmptyProfiles()
 	local Count = 0
 	local Deleted = 0
 	
@@ -371,8 +377,7 @@ function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles
 	vUI:print(format("Deleted %s unused profiles.", Deleted))
 end
 
--- /run vUI:get(7):RenameProfile("Default", "Prometheus")
-function Profiles:RenameProfile(from, to) -- Tested, working
+function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("Default", "vUI")
 	local FromProfile = vUIProfiles[from]
 	local ToProfile = vUIProfiles[to]
 	

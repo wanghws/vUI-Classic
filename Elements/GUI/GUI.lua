@@ -399,7 +399,7 @@ local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
 	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel")
 	elseif self.Hook then
 		self.Hook()
 	end
@@ -565,7 +565,7 @@ local CheckboxOnMouseUp = function(self)
 	SetVariable(self.ID, self.Value)
 	
 	if (self.ReloadFlag) then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, self.Value, self.ID)
 	elseif self.Hook then
 		self.Hook(self.Value, self.ID)
 	end
@@ -694,7 +694,7 @@ local SwitchOnMouseUp = function(self)
 	SetVariable(self.ID, self.Value)
 	
 	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, self.Value, self.ID)
 	elseif self.Hook then
 		self.Hook(self.Value, self.ID)
 	end
@@ -837,7 +837,7 @@ local InputOnEnterPressed = function(self)
 	self:ClearFocus()
 	
 	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, Value, self.ID)
 	elseif self.Hook then
 		self.Hook(Value, self.ID)
 	end
@@ -1444,7 +1444,7 @@ local MenuItemOnMouseUp = function(self)
 		self.GrandParent.Value = self.Key
 		
 		if self.GrandParent.ReloadFlag then
-			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.GrandParent.Hook, "Cancel", nil, self.Key, self.ID)
 		elseif self.GrandParent.Hook then
 			self.GrandParent.Hook(self.Key, self.ID)
 		end
@@ -1454,7 +1454,7 @@ local MenuItemOnMouseUp = function(self)
 		self.GrandParent.Value = self.Value
 		
 		if self.GrandParent.ReloadFlag then
-			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.GrandParent.Hook, "Cancel", nil, self.Value, self.ID)
 		elseif self.GrandParent.Hook then
 			self.GrandParent.Hook(self.Value, self.ID)
 		end
@@ -1656,10 +1656,9 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	
 	Dropdown.Current = Dropdown:CreateFontString(nil, "ARTWORK")
 	Dropdown.Current:SetScaledPoint("LEFT", Dropdown, HEADER_SPACING, 0)
-	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
+	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 20, WIDGET_HEIGHT)
 	Dropdown.Current:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Dropdown.Current:SetJustifyH("LEFT")
-	Dropdown.Current:SetScaledWidth(DROPDOWN_WIDTH - 4)
 	Dropdown.Current:SetShadowColor(0, 0, 0)
 	Dropdown.Current:SetShadowOffset(1, -1)
 	
@@ -1908,7 +1907,7 @@ local SliderOnValueChanged = function(self)
 	SetVariable(self.ID, Value)
 	
 	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, Value, self.ID)
 	elseif self.Hook then
 		self.Hook(Value, self.ID)
 	end
@@ -2245,7 +2244,7 @@ local ColorPickerAccept = function(self)
 		SetVariable(Active.ID, Active.Value)
 		
 		if Active.ReloadFlag then
-			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", Active.Hook, "Cancel", nil, Active.Value, Active.ID)
 		elseif Active.Hook then
 			Active.Hook(Active.Value, Active.ID)
 		end

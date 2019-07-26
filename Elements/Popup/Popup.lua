@@ -9,10 +9,8 @@ local BUTTON_WIDTH = ((POPUP_WIDTH - 6) / 2) - 1
 local Button1OnMouseUp = function(self)
 	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
 	
-	print(self.Callback)
-	
 	if self.Callback then
-		self.Callback()
+		self.Callback(self.Arg1, self.Arg2)
 	end
 	
 	self:GetParent():Hide()
@@ -22,7 +20,7 @@ local Button2OnMouseUp = function(self)
 	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
 	
 	if self.Callback then
-		self.Callback()
+		self.Callback(self.Arg1, self.Arg2)
 	end
 	
 	self:GetParent():Hide()
@@ -163,7 +161,7 @@ Popup.CreatePopupFrame = function(self)
 	self.Created = true
 end
 
-Popup.Display = function(self, header, body, accept, acceptfunc, cancel, cancelfunc)
+Popup.Display = function(self, header, body, accept, acceptfunc, cancel, cancelfunc, arg1, arg2)
 	if (not self.Created) then
 		self:CreatePopupFrame()
 	end
@@ -177,6 +175,12 @@ Popup.Display = function(self, header, body, accept, acceptfunc, cancel, cancelf
 	
 	self.Button2.Text:SetText(cancel)
 	self.Button2.Callback = cancelfunc and cancelfunc or nil
+	
+	self.Button1.Arg1 = arg1
+	self.Button1.Arg2 = arg2
+	
+	self.Button2.Arg1 = arg1
+	self.Button2.Arg2 = arg2
 	
 	self:Show()
 end
