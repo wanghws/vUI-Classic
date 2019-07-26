@@ -166,7 +166,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Minimap"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "bloop.")
+	Left:CreateCheckbox("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "bloop."):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Size"])
 	Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "doesn't matter", UpdateMinimapSize)

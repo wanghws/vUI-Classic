@@ -6,16 +6,32 @@ local POPUP_WIDTH = 320
 local POPUP_HEIGHT = 100
 local BUTTON_WIDTH = ((POPUP_WIDTH - 6) / 2) - 1
 
-local ButtonOnMouseUp = function(self)
+local Button1OnMouseUp = function(self)
 	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
+	
+	print(self.Callback)
+	
+	if self.Callback then
+		self.Callback()
+	end
+	
+	self:GetParent():Hide()
+end
+
+local Button2OnMouseUp = function(self)
+	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
+	
+	if self.Callback then
+		self.Callback()
+	end
+	
+	self:GetParent():Hide()
 end
 
 local ButtonOnMouseDown = function(self)
 	local R, G, B = vUI:HexToRGB(Settings["ui-button-texture-color"])
 	
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
-	
-	self:GetParent():Hide()
 end
 
 local ButtonOnEnter = function(self)
@@ -83,7 +99,7 @@ Popup.CreatePopupFrame = function(self)
 	self.Button1:SetBackdrop(vUI.BackdropAndBorder)
 	self.Button1:SetBackdropColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
 	self.Button1:SetBackdropBorderColor(0, 0, 0)
-	self.Button1:SetScript("OnMouseUp", ButtonOnMouseUp)
+	self.Button1:SetScript("OnMouseUp", Button1OnMouseUp)
 	self.Button1:SetScript("OnMouseDown", ButtonOnMouseDown)
 	self.Button1:SetScript("OnEnter", ButtonOnEnter)
 	self.Button1:SetScript("OnLeave", ButtonOnLeave)
@@ -117,7 +133,7 @@ Popup.CreatePopupFrame = function(self)
 	self.Button2:SetBackdrop(vUI.BackdropAndBorder)
 	self.Button2:SetBackdropColor(vUI:HexToRGB(Settings["ui-button-texture-color"]))
 	self.Button2:SetBackdropBorderColor(0, 0, 0)
-	self.Button2:SetScript("OnMouseUp", ButtonOnMouseUp)
+	self.Button2:SetScript("OnMouseUp", Button2OnMouseUp)
 	self.Button2:SetScript("OnMouseDown", ButtonOnMouseDown)
 	self.Button2:SetScript("OnEnter", ButtonOnEnter)
 	self.Button2:SetScript("OnLeave", ButtonOnLeave)
@@ -152,31 +168,19 @@ Popup.Display = function(self, header, body, accept, acceptfunc, cancel, cancelf
 		self:CreatePopupFrame()
 	end
 	
-	if header then
-		self.Header.Text:SetText(header)
-	end
+	self.Header.Text:SetText(header)
 	
-	if body then
-		self.Body.Text:SetText(body)
-	end
+	self.Body.Text:SetText(body)
 	
-	if accept then
-		self.Button1.Text:SetText(accept)
-	end
+	self.Button1.Text:SetText(accept)
+	self.Button1.Callback = acceptfunc and acceptfunc or nil
 	
-	if acceptfunc then
-		self.AcceptFunc = acceptfunc
-	end
+	self.Button2.Text:SetText(cancel)
+	self.Button2.Callback = cancelfunc and cancelfunc or nil
 	
-	if cancel then
-		self.Button2.Text:SetText(cancel)
-	end
-	
-	if cancelfunc then
-		self.CancelFunc = cancelfunc
-	end
+	self:Show()
 end
 
-vUI.DisplayPopup = function(self, ...)
+function vUI:DisplayPopup(...)
 	Popup:Display(...)
 end

@@ -32,8 +32,6 @@ GUI.Widgets = {}
 	- If template == "None" then disable the page
 	
 	- Widget methods
-	widget:SetWarning(true) -- to determine if the widget should pop up a warning before proceeding
-	widget:RequiresReload(true) -- to determine if the widget should pop up a warning before proceeding
 	widget:Disable()
 	widget:Enable()
 	
@@ -400,7 +398,9 @@ local BUTTON_WIDTH = 130
 local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	if self.Hook then
+	if self.ReloadFlag then
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+	elseif self.Hook then
 		self.Hook()
 	end
 end
@@ -421,6 +421,10 @@ local ButtonWidgetOnLeave = function(self)
 	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
+local ButtonRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+end
+
 GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -438,6 +442,7 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button:SetScript("OnLeave", ButtonWidgetOnLeave)
 	Button.Hook = hook
 	Button.Tooltip = tooltip
+	Button.RequiresReload = ButtonRequiresReload
 	
 	Button.Texture = Button:CreateTexture(nil, "BORDER")
 	Button.Texture:SetScaledPoint("TOPLEFT", Button, 1, -1)
@@ -559,7 +564,9 @@ local CheckboxOnMouseUp = function(self)
 	
 	SetVariable(self.ID, self.Value)
 	
-	if self.Hook then
+	if (self.ReloadFlag) then
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+	elseif self.Hook then
 		self.Hook(self.Value, self.ID)
 	end
 end
@@ -570,6 +577,12 @@ end
 
 local CheckboxOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
+end
+
+local CheckboxRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
 end
 
 GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
@@ -595,6 +608,7 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Checkbox.Hook = hook
 	Checkbox.Tooltip = tooltip
 	Checkbox.ID = id
+	Checkbox.RequiresReload = CheckboxRequiresReload
 	
 	Checkbox.BG = Checkbox:CreateTexture(nil, "ARTWORK")
 	Checkbox.BG:SetScaledPoint("TOPLEFT", Checkbox, 1, -1)
@@ -679,7 +693,9 @@ local SwitchOnMouseUp = function(self)
 	
 	SetVariable(self.ID, self.Value)
 	
-	if self.Hook then
+	if self.ReloadFlag then
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+	elseif self.Hook then
 		self.Hook(self.Value, self.ID)
 	end
 end
@@ -707,6 +723,12 @@ local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
+local SwitchRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
+end
+
 GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -731,6 +753,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Hook = hook
 	Switch.Tooltip = tooltip
 	Switch.ID = id
+	Switch.RequiresReload = SwitchRequiresReload
 	
 	Switch.BG = Switch:CreateTexture(nil, "ARTWORK")
 	Switch.BG:SetScaledPoint("TOPLEFT", Switch, 1, -1)
@@ -813,7 +836,9 @@ local InputOnEnterPressed = function(self)
 	self:SetAutoFocus(false)
 	self:ClearFocus()
 	
-	if self.Hook then
+	if self.ReloadFlag then
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+	elseif self.Hook then
 		self.Hook(Value, self.ID)
 	end
 end
@@ -840,6 +865,12 @@ end
 
 local InputOnLeave = function(self)
 	self.Parent.Highlight:SetAlpha(0)
+end
+
+local InputRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
 end
 
 GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
@@ -893,6 +924,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Box.ID = id
 	Input.Box.Hook = hook
 	Input.Box.Parent = Input
+	Input.Box.RequiresReload = InputRequiresReload
 	
 	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
 	Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
@@ -1036,6 +1068,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	Input.Box.ID = id
 	Input.Box.Hook = hook
 	Input.Box.Parent = Input
+	Input.Box.RequiresReload = InputRequiresReload
 	
 	Input.Button = Button
 	Button.Input = Input.Box
@@ -1410,7 +1443,9 @@ local MenuItemOnMouseUp = function(self)
 		
 		self.GrandParent.Value = self.Key
 		
-		if self.GrandParent.Hook then
+		if self.GrandParent.ReloadFlag then
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		elseif self.GrandParent.Hook then
 			self.GrandParent.Hook(self.Key, self.ID)
 		end
 	else
@@ -1418,7 +1453,9 @@ local MenuItemOnMouseUp = function(self)
 		
 		self.GrandParent.Value = self.Value
 		
-		if self.GrandParent.Hook then
+		if self.GrandParent.ReloadFlag then
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		elseif self.GrandParent.Hook then
 			self.GrandParent.Hook(self.Value, self.ID)
 		end
 	end
@@ -1446,6 +1483,12 @@ end
 
 local MenuItemOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
+end
+
+local DropdownRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
 end
 
 local ScrollMenu = function(self)
@@ -1600,6 +1643,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Hook = hook
 	Dropdown.Tooltip = tooltip
 	Dropdown.SpecificType = specific
+	Dropdown.RequiresReload = DropdownRequiresReload
 	
 	Dropdown.Texture = Dropdown:CreateTexture(nil, "ARTWORK")
 	Dropdown.Texture:SetScaledPoint("TOPLEFT", Dropdown, 1, -1)
@@ -1859,7 +1903,9 @@ local SliderOnValueChanged = function(self)
 	
 	SetVariable(self.ID, Value)
 	
-	if self.Hook then
+	if self.ReloadFlag then
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+	elseif self.Hook then
 		self.Hook(Value, self.ID)
 	end
 end
@@ -2001,6 +2047,12 @@ local SliderDisable = function(self)
 	self.Disabled = true
 end
 
+local SliderRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
+end
+
 GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, label, tooltip, hook, prefix, postfix)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -2096,6 +2148,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.EditBox = EditBox.Box
 	Slider.Hook = hook
 	Slider.ID = id
+	Slider.RequiresReload = SliderRequiresReload
 	
 	Slider.Text = Slider:CreateFontString(nil, "OVERLAY")
 	Slider.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
@@ -2187,7 +2240,9 @@ local ColorPickerAccept = function(self)
 		
 		SetVariable(Active.ID, Active.Value)
 		
-		if Active.Hook then
+		if Active.ReloadFlag then
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", ReloadUI, "Cancel")
+		elseif Active.Hook then
 			Active.Hook(Active.Value, Active.ID)
 		end
 	end
@@ -2647,7 +2702,7 @@ local CreateColorPicker = function()
 	GUI.ColorPicker = ColorPicker
 end
 
-__SetColorPicker = function(p) -- /run __SetColorPicker("Default")
+__SetColorPicker = function(p) -- temp; /run __SetColorPicker("Default")
 	GUI.ColorPicker:SetColorPalette(p)
 end
 
@@ -2689,6 +2744,12 @@ local ColorSelectionOnMouseUp = function(self)
 	end
 end
 
+local ColorRequiresReload = function(self, flag)
+	self.ReloadFlag = flag
+	
+	return self
+end
+
 GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hook)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -2726,6 +2787,7 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Button.Value = value
 	Button.Tooltip = tooltip
 	Button.Swatch = Swatch
+	Button.RequiresReload = ColorRequiresReload
 	
 	Button.Highlight = Button:CreateTexture(nil, "OVERLAY")
 	Button.Highlight:SetScaledPoint("TOPLEFT", Button, 1, -1)

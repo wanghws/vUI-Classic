@@ -603,7 +603,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module")
+	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module"):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Backdrops"])
 	Left:CreateCheckbox("action-bars-show-bottom", Settings["action-bars-show-bottom"], "Show Bottom Backdrop", "", UpdateShowBottom)

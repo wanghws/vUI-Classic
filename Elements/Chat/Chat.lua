@@ -960,7 +960,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "")
+	Left:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], ""):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Opacity"])
 	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
