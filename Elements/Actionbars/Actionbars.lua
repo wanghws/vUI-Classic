@@ -631,7 +631,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "")
 	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "")
-	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count", "")
+	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "")
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)

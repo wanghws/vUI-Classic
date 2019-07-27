@@ -7,6 +7,12 @@ local match = string.match
 
 Profiles.List = {}
 
+--[[
+	To do:
+	
+	Profiles:CopyProfile(from, to)
+--]]
+
 Profiles.Metadata = {
 	["profile-name"] = true,
 	["profile-created"] = true,
@@ -15,7 +21,7 @@ Profiles.Metadata = {
 }
 
 -- Some settings shouldn't be sent to others
-Profiles.DontTransmit = {
+Profiles.Preserve = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
 	
@@ -38,7 +44,7 @@ Profiles.DontTransmit = {
 	["ui-button-texture-color"] = true,
 }
 
-local GetCurrentDate = function()
+Profiles.GetCurrentDate = function()
 	return date("%Y-%m-%d %I:%M %p")
 end
 
@@ -82,7 +88,7 @@ end
 function Profiles:SetLastModified(name)
 	local Profile = self:GetProfile(name)
 	
-	Profile["profile-last-modified"] = GetCurrentDate()
+	Profile["profile-last-modified"] = self:GetCurrentDate()
 end
 
 function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
@@ -183,15 +189,29 @@ function Profiles:CreateProfile(name)
 	
 	-- Some metadata just for some additional information
 	vUIProfiles[name]["profile-name"] = name
-	vUIProfiles[name]["profile-created"] = GetCurrentDate()
+	vUIProfiles[name]["profile-created"] = self:GetCurrentDate()
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
-	vUIProfiles[name]["profile-last-modified"] = GetCurrentDate()
+	vUIProfiles[name]["profile-last-modified"] = self:GetCurrentDate()
 	
 	--vUIProfileData[vUI.Realm][vUI.User] = name
 	
 	self.List[name] = name
 	
 	return vUIProfiles[name]
+end
+
+function Profiles:RestoreToDefault(name) -- /run vUI:get(7):RestoreToDefault("Test")
+	if (not vUIProfiles[name]) then
+		return
+	end
+	
+	for ID, Value in pairs(vUIProfiles[name]) do
+		if (not self.Metadata[ID]) then
+			vUIProfiles[name][ID] = nil
+		end
+	end
+	
+	vUI:print(format('Restored profile "%s" to default.', name))
 end
 
 function Profiles:GetProfile(name)
@@ -348,6 +368,27 @@ function Profiles:DeleteEmptyProfiles() -- /run vUI:get(7):DeleteEmptyProfiles()
 	vUI:print(format("Deleted %s empty profiles.", Deleted))
 end
 
+function Profiles:CountEmptyProfiles() -- /run print(vUI:get(7):CountEmptyProfiles())
+	local Count = 0
+	local Total = 0
+	
+	for Name, Value in pairs(vUIProfiles) do
+		Count = 0
+		
+		for ID in pairs(Value) do
+			if (not self.Metadata[ID]) then
+				Count = Count + 1
+			end
+		end
+		
+		if (Count == 0) then
+			Total = Total + 1
+		end
+	end
+	
+	return Total
+end
+
 function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles()
 	local Counts = {}
 	local Deleted = 0
@@ -375,6 +416,33 @@ function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles
 	Counts = nil
 	
 	vUI:print(format("Deleted %s unused profiles.", Deleted))
+end
+
+function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProfiles())
+	local Counts = {}
+	local Unused = 0
+	
+	self:UpdateProfileList()
+	
+	for Name in pairs(self.List) do
+		Counts[Name] = 0
+	end
+	
+	for Realm, Value in pairs(vUIProfileData) do
+		for Player, ProfileName in pairs(Value) do
+			Counts[ProfileName] = Counts[ProfileName] + 1
+		end
+	end
+	
+	for Name, Total in pairs(Counts) do
+		if (Total == 0) then
+			Unused = Unused + 1
+		end
+	end
+	
+	Counts = nil
+	
+	return Unused
 end
 
 function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("Default", "vUI")
@@ -497,6 +565,14 @@ local ShowImportWindow = function()
 	GUI:ToggleImportWindow()
 end
 
+local DeleteEmpty = function()
+	Profiles:DeleteEmptyProfiles()
+end
+
+local DeleteUnused = function()
+	Profiles:DeleteUnusedProfiles()
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
@@ -504,8 +580,13 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
-	Left:CreateInputWithButton("profile-delete", Profiles:GetDefaultProfileKey(), "Delete", "Delete Profile", "", DeleteProfile)
+	--Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
+	--Left:CreateInputWithButton("profile-delete", Profiles:GetDefaultProfileKey(), "Delete", "Delete Profile", "", DeleteProfile)
+	
+	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
+	Left:CreateInput("profile-delete", Profiles:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile)
+	Left:CreateButton("Delete", "Delete Empty Profiles", "", DeleteEmpty):RequiresReload(true)
+	Left:CreateButton("Delete", "Delete Unused Profiles", "", DeleteUnused):RequiresReload(true)
 	
 	Left:CreateHeader("Sharing is caring")
 	Left:CreateButton("Import", "Import A Profile", "", ShowImportWindow)
@@ -517,7 +598,11 @@ GUI:AddOptions(function(self)
 	
 	local Name = Profiles:GetActiveProfileName()
 	local Profile = Profiles:GetProfile(Name)
+	local MostUsed = Profiles:GetMostUsedProfile()
 	local NumServed, IsAll = Profiles:GetNumServedBy(Name)
+	local NumEmpty = Profiles:CountEmptyProfiles()
+	local NumUnused = Profiles:CountUnusedProfiles()
+	local MostUsedServed = NumServed
 	
 	if IsAll then
 		NumServed = format("%d (%s)", NumServed, Language["All"])
@@ -525,6 +610,10 @@ GUI:AddOptions(function(self)
 	
 	if (Profile and not Profile["profile-created-by"]) then
 		Profile["profile-created-by"] = UNKNOWN
+	end
+	
+	if (Profile ~= MostUsed) then
+		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
 	end
 	
 	Right:CreateHeader(Language["Info"])
@@ -536,8 +625,16 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Serving Characters:", NumServed)
 	
 	Right:CreateHeader(Language["General"])
-	Right:CreateDoubleLine("Popular Profile:", Profiles:GetMostUsedProfile())
+	Right:CreateDoubleLine("Popular Profile:", format("%s (%d)", MostUsed, MostUsedServed))
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
+	
+	if (NumEmpty > 0) then
+		Right:CreateDoubleLine("Empty Profiles:", NumEmpty)
+	end
+	
+	if NumUnused > 0 then
+		Right:CreateDoubleLine("Unused Profiles:", NumUnused)
+	end
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

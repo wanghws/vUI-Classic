@@ -413,14 +413,14 @@ ExperienceBar:SetScript("OnEvent", function(self, event)
 end)
 
 local HasPrinted = false
-local DevTools = "|Hcommand:/reload|h|cFF%s[Reload UI]|r|h |Hcommand:/eventtrace|h|cFF%s[Event Trace]|r|h |Hplayer:%s|h|cFF%s[Whisper Self]|r|h"
+local DevTools = "|Hcommand:/reload|h|cFF%s[Reload UI]|r|h |Hcommand:/eventtrace|h|cFF%s[Event Trace]|r|h |Hplayer:%s|h|cFF%s[Whisper Self]|r|h |Hcommand:/framestack|h|cFF%s[Frame Stack]|r|h"
 
 local UpdateDisplayDevTools = function()
 	if (not HasPrinted) then
 		local Color = Settings["ui-widget-color"]
 		local Name = UnitName("player")
 		
-		print(format(DevTools, Color, Color, Name, Color))
+		print(format(DevTools, Color, Color, Name, Color, Color))
 		
 		HasPrinted = true
 	end
@@ -481,6 +481,9 @@ GUI:AddOptions(function(self)
 	GeneralLeft:CreateCheckbox("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
 	GeneralLeft:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
+	GeneralLeft:CreateHeader("Discord")
+	GeneralLeft:CreateButton("Get Link", "Join Discord", "", function() print("https://discord.gg/SmT6Yk") end)
+	
 	GeneralRight:CreateHeader(Language["Language"])
 	GeneralRight:CreateDropdown("ui-language", vUI.Locale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	GeneralRight:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
@@ -502,7 +505,7 @@ GUI:AddOptions(function(self)
 		if Settings["ui-display-dev-tools"] then
 			local Name = UnitName("player")
 			
-			print(format(DevTools, Color1, Color1, Name, Color1))
+			print(format(DevTools, Color1, Color1, Name, Color1, Color1))
 			
 			HasPrinted = true
 		end

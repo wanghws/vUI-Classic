@@ -217,7 +217,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 end
 
 -- Header
-GUI.Widgets.CreateHeader = function(self, text)
+--[[GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -248,7 +248,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end
+end]]
 
 --[[GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
@@ -303,39 +303,107 @@ end
 	return Header
 end]]
 
+GUI.Widgets.CreateHeader = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
+	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
+	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
+	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Anchor.Text:SetJustifyH("LEFT")
+	Anchor.Text:SetShadowColor(0, 0, 0)
+	Anchor.Text:SetShadowOffset(1, -1)
+	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
+	Anchor.Reference:SetAllPoints(Anchor.Text)
+	
+	-- Header Left Line
+	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
+	HeaderLeft:SetScaledHeight(4)
+	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
+	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Reference, "LEFT", -SPACING, 0)
+	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
+	
+	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
+	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
+	HeaderLeft.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderLeft, -1, 1)
+	HeaderLeft.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderLeft.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	-- Header Right Line
+	local HeaderRight = CreateFrame("Frame", nil, Anchor)
+	HeaderRight:SetScaledHeight(4)
+	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	HeaderRight:SetScaledPoint("LEFT", Anchor.Reference, "RIGHT", SPACING, 0)
+	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderRight:SetBackdropBorderColor(0, 0, 0)
+	
+	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
+	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
+	HeaderRight.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderRight, -1, 1)
+	HeaderRight.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderRight.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Header
+end
+
 --[[GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
 	
-	-- Header
-	local Header = CreateFrame("Frame", nil, Anchor)
-	Header:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
-	Header:SetScaledPoint("CENTER", Anchor, 0, 0)
-	Header:SetBackdrop(vUI.BackdropAndBorder)
-	Header:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
-	Header:SetBackdropBorderColor(0, 0, 0)
+	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	--Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
+	Anchor.Text:SetScaledPoint("LEFT", Anchor, 15, 0)
+	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
+	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Anchor.Text:SetJustifyH("LEFT")
+	Anchor.Text:SetShadowColor(0, 0, 0)
+	Anchor.Text:SetShadowOffset(1, -1)
+	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
-	Header.NewTexture = Header:CreateTexture(nil, "OVERLAY")
-	Header.NewTexture:SetScaledPoint("TOPLEFT", Header, 1, -1)
-	Header.NewTexture:SetScaledPoint("BOTTOMRIGHT", Header, -1, 1)
-	Header.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	Header.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
+	Anchor.Reference:SetAllPoints(Anchor.Text)
+	Anchor.Reference:SetScaledWidth(Anchor.Text:GetStringWidth())
 	
-	Header.NewTexture2 = Header:CreateTexture(nil, "OVERLAY")
-	Header.NewTexture2:SetScaledSize(2, WIDGET_HEIGHT - 2)
-	Header.NewTexture2:SetScaledPoint("LEFT", Header, 1, 0)
-	Header.NewTexture2:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	Header.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-header-font-color"]))
+	-- Header Left
+	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
+	HeaderLeft:SetScaledHeight(WIDGET_HEIGHT)
+	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
+	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Reference, "LEFT", -6, 0)
+	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
 	
-	Header.Text = Header:CreateFontString(nil, "OVERLAY")
-	Header.Text:SetScaledPoint("LEFT", Header, 7, 0)
-	Header.Text:SetScaledSize(GROUP_WIDTH - 13, WIDGET_HEIGHT)
-	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
-	Header.Text:SetJustifyH("LEFT")
-	Header.Text:SetShadowColor(0, 0, 0)
-	Header.Text:SetShadowOffset(1, -1)
-	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
+	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
+	HeaderLeft.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderLeft, -1, 1)
+	HeaderLeft.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderLeft.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	
+	-- Header Right Line
+	local HeaderRight = CreateFrame("Frame", nil, Anchor)
+	HeaderRight:SetScaledHeight(WIDGET_HEIGHT)
+	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	HeaderRight:SetScaledPoint("LEFT", Anchor.Reference, "RIGHT", 6, 0)
+	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderRight:SetBackdropBorderColor(0, 0, 0)
+	
+	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
+	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
+	HeaderRight.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderRight, -1, 1)
+	HeaderRight.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderRight.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -343,7 +411,7 @@ end]]
 end]]
 
 -- Footer
-GUI.Widgets.CreateFooter = function(self, text)
+--[[GUI.Widgets.CreateFooter = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -365,9 +433,9 @@ GUI.Widgets.CreateFooter = function(self, text)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end
+end]]
 
---[[GUI.Widgets.CreateFooter = function(self, text)
+GUI.Widgets.CreateFooter = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -390,7 +458,7 @@ end
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
-end]]
+end
 
 -- Button
 local BUTTON_WIDTH = 130

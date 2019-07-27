@@ -115,9 +115,6 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("Template", Settings["ui-template"])
 	Left:CreateDoubleLine("Locale", vUI.Locale)
 	
-	Left:CreateHeader("Discord")
-	Left:CreateButton("Get Link", "Join Discord", "", function() vUI:print("a link") end)
-	
 	Right:CreateHeader("User Information")
 	Right:CreateDoubleLine("User", vUI.User)
 	Right:CreateDoubleLine("Class", vUI.Class)
