@@ -67,6 +67,7 @@ local SkinButton = function(button, pet)
 		button.HotKey:SetJustifyH("LEFT")
 		button.HotKey:SetShadowColor(0, 0, 0)
 		button.HotKey:SetShadowOffset(1, -1)
+		button.HotKey:SetDrawLayer("OVERLAY")
 		button.HotKey:SetTextColor(1, 1, 1)
 		button.HotKey.SetTextColor = function() end
 		
@@ -82,11 +83,13 @@ local SkinButton = function(button, pet)
 		button.Name:ClearAllPoints()
 		button.Name:SetScaledPoint("BOTTOMLEFT", button, 2, 2)
 		button.Name:SetScaledWidth(button:GetWidth() - 4)
-		button.Name:SetFont(Settings["ui-widget-font"], 12)
-		button.Name.SetFont = function() end
+		button.Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 		button.Name:SetJustifyH("LEFT")
 		button.Name:SetShadowColor(0, 0, 0)
 		button.Name:SetShadowOffset(1, -1)
+		button.Name:SetDrawLayer("OVERLAY")
+		button.Name:SetTextColor(1, 1, 1)
+		button.Name.SetTextColor = function() end
 	end
 	
 	if (not button.CountBG) then
@@ -101,10 +104,13 @@ local SkinButton = function(button, pet)
 	if button.Count then
 		button.Count:ClearAllPoints()
 		button.Count:SetScaledPoint("TOPRIGHT", button, -2, -2)
-		button.Count:SetFont(Settings["ui-widget-font"], 12)
+		button.Count:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 		button.Count:SetJustifyH("RIGHT")
-		button.Count:SetShadowColor(0, 0, 0, 1)
+		button.Count:SetShadowColor(0, 0, 0)
 		button.Count:SetShadowOffset(1, -1)
+		button.Count:SetDrawLayer("OVERLAY")
+		button.Count:SetTextColor(1, 1, 1)
+		button.Count.SetTextColor = function() end
 	end
 	
 	if FloatingBG then
@@ -125,7 +131,7 @@ local SkinButton = function(button, pet)
 	button.Backdrop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
 	if (button.SetHighlightTexture and not button.Hover) then
-		local Hover = button:CreateTexture(nil, "OVERLAY", button)
+		local Hover = button:CreateTexture(nil, "ARTWORK", button)
 		Hover:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Hover:SetVertexColor(1, 1, 1, 0.3)
 		Hover:SetScaledPoint("TOPLEFT", button, 1, -1)
@@ -136,7 +142,7 @@ local SkinButton = function(button, pet)
 	end
 	
 	if (button.SetPushedTexture and not button.Pushed) then
-		local Pushed = button:CreateTexture(nil, "OVERLAY", button)
+		local Pushed = button:CreateTexture(nil, "ARTWORK", button)
 		Pushed:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Pushed:SetVertexColor(0.9, 0.8, 0.1, 0.3)
 		Pushed:SetScaledPoint("TOPLEFT", button, 1, -1)
@@ -147,7 +153,7 @@ local SkinButton = function(button, pet)
 	end
 	
 	if (button.SetCheckedTexture and not button.Checked) then
-		local Checked = button:CreateTexture(nil, "OVERLAY", button)
+		local Checked = button:CreateTexture(nil, "ARTWORK", button)
 		Checked:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 		Checked:SetVertexColor(0, 1, 0, 0.3)
 		Checked:SetScaledPoint("TOPLEFT", button, 1, -1)
@@ -157,7 +163,7 @@ local SkinButton = function(button, pet)
 		button:SetCheckedTexture(Checked)
 	end
 	
-	local Range = button:CreateTexture(nil, "OVERLAY", button)
+	local Range = button:CreateTexture(nil, "ARTWORK", button)
 	Range:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 	Range:SetVertexColor(0.7, 0, 0)
 	Range:SetScaledPoint("TOPLEFT", button, 1, -1)
@@ -263,8 +269,6 @@ local UpdateBar1 = function()
 end
 
 local CreateBar1 = function()
-	local Druid, Rogue = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;", "[bonusbar:1] 7;"
-	
 	local Druid, Rogue, Warrior, Priest = "", "", "", ""
 	
 	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", UIParent, "SecureHandlerStateTemplate")
@@ -287,8 +291,7 @@ local CreateBar1 = function()
 	
 	ActionBar1.GetBar = function()
 		local Condition = ActionBar1.Page["DEFAULT"]
-		local Class = select(2, UnitClass("player"))
-		local Page = ActionBar1.Page[Class]
+		local Page = ActionBar1.Page[vUI.Class]
 		
 		if Page then
 			Condition = Condition .. " " .. Page

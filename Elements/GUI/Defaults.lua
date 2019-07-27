@@ -13,6 +13,7 @@ Defaults["ui-display-whats-new"] = true
 -- Media
 Defaults["ui-picker-palette"] = "Default" -- Media:GetPaletteList()
 Defaults["ui-picker-format"] = "Hex" -- Hex/RGB/(HSV?)
+Defaults["ui-picker-show-texture"] = true -- Show textures on the swatches.
 
 Defaults["ui-template"] = "vUI"
 

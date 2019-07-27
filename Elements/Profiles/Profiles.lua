@@ -63,6 +63,36 @@ local IsToday = function(s)
 	return s
 end
 
+function Profiles:UpdateProfileInfo()
+	local Name = Profiles:GetActiveProfileName()
+	local Profile = Profiles:GetProfile(Name)
+	local MostUsed = Profiles:GetMostUsedProfile()
+	local NumServed, IsAll = Profiles:GetNumServedBy(Name)
+	local NumEmpty = Profiles:CountEmptyProfiles()
+	local NumUnused = Profiles:CountUnusedProfiles()
+	local MostUsedServed = NumServed
+	
+	if IsAll then
+		NumServed = format("%d (%s)", NumServed, Language["All"])
+	end
+	
+	if (Profile ~= MostUsed) then
+		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
+	end
+	
+	GUI:GetWidgetByWindow(Language["Profiles"], "Current-Profile").Right:SetText(Name)
+	GUI:GetWidgetByWindow(Language["Profiles"], "Created-By").Right:SetText(Profile["profile-created-by"])
+	GUI:GetWidgetByWindow(Language["Profiles"], "Created-On").Right:SetText(IsToday(Profile["profile-created"]))
+	GUI:GetWidgetByWindow(Language["Profiles"], "Last-Modified").Right:SetText(IsToday(Profile["profile-last-modified"]))
+	GUI:GetWidgetByWindow(Language["Profiles"], "Modifications").Right:SetText(Profiles:CountChangedValues(Name))
+	GUI:GetWidgetByWindow(Language["Profiles"], "Serving-Characters").Right:SetText(NumServed)
+	
+	GUI:GetWidgetByWindow(Language["Profiles"], "Popular-Profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
+	GUI:GetWidgetByWindow(Language["Profiles"], "Stored-Profiles").Right:SetText(Profiles:GetProfileCount())
+	GUI:GetWidgetByWindow(Language["Profiles"], "Empty-Profiles").Right:SetText(NumEmpty)
+	GUI:GetWidgetByWindow(Language["Profiles"], "Unused-Profiles").Right:SetText(NumUnused)
+end
+
 function Profiles:UpdateProfileList()
 	if vUIProfiles then
 		for Name in pairs(vUIProfiles) do
@@ -486,20 +516,23 @@ function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata(
 	end
 end
 
-local UpdateProfile = function(value)
+local UpdateActiveProfile = function(value)
 	if (value ~= Profiles:GetActiveProfileName()) then
 		Profiles:SetActiveProfile(value)
 		
-		ReloadUI()
+		--ReloadUI()
+		Profiles:UpdateProfileInfo()
 	end
 end
 
 local CreateProfile = function(value)
 	Profiles:CreateProfile(value)
+	Profiles:UpdateProfileInfo()
 end
 
 local DeleteProfile = function(value)
 	Profiles:DeleteProfile(value)
+	Profiles:UpdateProfileInfo()
 end
 
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
@@ -567,17 +600,28 @@ end
 
 local DeleteEmpty = function()
 	Profiles:DeleteEmptyProfiles()
+	Profiles:UpdateProfileInfo()
 end
 
 local DeleteUnused = function()
 	Profiles:DeleteUnusedProfiles()
+	Profiles:UpdateProfileInfo()
+end
+
+local RenameProfile = function(value)
+	Profiles:UpdateProfileInfo()
+end
+
+local UpdateProfileInfo = function()
+	Profiles:UpdateProfileInfo()
 end
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
 	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Set Profile"], "", UpdateProfile):RequiresReload(true)
+	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Select Profile"], "", UpdateActiveProfile)
+	--Left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
 	
 	Left:CreateHeader(Language["Modify"])
 	--Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
@@ -585,6 +629,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
 	Left:CreateInput("profile-delete", Profiles:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile)
+	Left:CreateInput("profile-rename", "", "Rename Profile", "", RenameProfile)
 	Left:CreateButton("Delete", "Delete Empty Profiles", "", DeleteEmpty):RequiresReload(true)
 	Left:CreateButton("Delete", "Delete Unused Profiles", "", DeleteUnused):RequiresReload(true)
 	
@@ -608,10 +653,6 @@ GUI:AddOptions(function(self)
 		NumServed = format("%d (%s)", NumServed, Language["All"])
 	end
 	
-	if (Profile and not Profile["profile-created-by"]) then
-		Profile["profile-created-by"] = UNKNOWN
-	end
-	
 	if (Profile ~= MostUsed) then
 		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
 	end
@@ -627,14 +668,8 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["General"])
 	Right:CreateDoubleLine("Popular Profile:", format("%s (%d)", MostUsed, MostUsedServed))
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
-	
-	if (NumEmpty > 0) then
-		Right:CreateDoubleLine("Empty Profiles:", NumEmpty)
-	end
-	
-	if NumUnused > 0 then
-		Right:CreateDoubleLine("Unused Profiles:", NumUnused)
-	end
+	Right:CreateDoubleLine("Empty Profiles:", NumEmpty)
+	Right:CreateDoubleLine("Unused Profiles:", NumUnused)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

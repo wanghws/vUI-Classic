@@ -11,6 +11,7 @@ local match = string.match
 local upper = string.upper
 local lower = string.lower
 local sub = string.sub
+local gsub = string.gsub
 local floor = math.floor
 
 GUI.Widgets = {}
@@ -21,6 +22,7 @@ GUI.Widgets = {}
 	
 	- Test different resolutions and find the pixel perfect scale for each. Then either set or suggest the scale
 	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
+	- Rename RequiresReload to RequiresWarning etc
 	
 	-- Templates Enable option. If Templates are enabled then it will apply those colors, otherwise use a default. I'll need a system to determine which to retrieve though... bad idea maybe.
 	
@@ -34,7 +36,8 @@ GUI.Widgets = {}
 	- Widget methods
 	widget:Disable()
 	widget:Enable()
-	
+	widget:GetValue()
+	widget:SetValue()
 --]]
 
 -- Constants
@@ -151,30 +154,39 @@ local PairsByKeys = function(t)
     return OrderedNext, t, nil
 end
 
+local CreateID = function(text)
+	text = gsub(text, "%s", "-")
+	text = gsub(text, ":", "")
+	
+	return text
+end
+
 -- Widgets
 
 -- Line
 GUI.Widgets.CreateLine = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.ID = CreateID(text)
 	
-	local Text = Anchor:CreateFontString(nil, "OVERLAY")
-	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
-	Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
-	Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Text:SetJustifyH("LEFT")
-	Text:SetShadowColor(0, 0, 0)
-	Text:SetShadowOffset(1, -1)
-	Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
+	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
+	Anchor.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Anchor.Text:SetJustifyH("LEFT")
+	Anchor.Text:SetShadowColor(0, 0, 0)
+	Anchor.Text:SetShadowOffset(1, -1)
+	Anchor.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
 	
 	tinsert(self.Widgets, Anchor)
 	
-	return Text
+	return Anchor.Text
 end
 
 GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.ID = CreateID(text)
 	
 	--[[local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
@@ -192,28 +204,29 @@ end
 GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.ID = CreateID(left)
 	
-	local Left = Anchor:CreateFontString(nil, "OVERLAY")
-	Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
-	Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
-	Left:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Left:SetJustifyH("LEFT")
-	Left:SetShadowColor(0, 0, 0)
-	Left:SetShadowOffset(1, -1)
-	Left:SetText("|cFF"..Settings["ui-widget-font-color"]..left.."|r")
+	Anchor.Left = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
+	Anchor.Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
+	Anchor.Left:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Anchor.Left:SetJustifyH("LEFT")
+	Anchor.Left:SetShadowColor(0, 0, 0)
+	Anchor.Left:SetShadowOffset(1, -1)
+	Anchor.Left:SetText("|cFF"..Settings["ui-widget-font-color"]..left.."|r")
 	
-	local Right = Anchor:CreateFontString(nil, "OVERLAY")
-	Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
-	Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
-	Right:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Right:SetJustifyH("RIGHT")
-	Right:SetShadowColor(0, 0, 0)
-	Right:SetShadowOffset(1, -1)
-	Right:SetText("|cFF"..Settings["ui-widget-font-color"]..right.."|r")
+	Anchor.Right = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
+	Anchor.Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
+	Anchor.Right:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Anchor.Right:SetJustifyH("RIGHT")
+	Anchor.Right:SetShadowColor(0, 0, 0)
+	Anchor.Right:SetShadowOffset(1, -1)
+	Anchor.Right:SetText("|cFF"..Settings["ui-widget-font-color"]..right.."|r")
 	
 	tinsert(self.Widgets, Anchor)
 	
-	return Text
+	return Anchor.Left
 end
 
 -- Header
@@ -411,7 +424,7 @@ end
 end]]
 
 -- Footer
---[[GUI.Widgets.CreateFooter = function(self, text)
+--[[GUI.Widgets.CreateFooter = function(self)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -435,7 +448,7 @@ end]]
 	return Header
 end]]
 
-GUI.Widgets.CreateFooter = function(self, text)
+GUI.Widgets.CreateFooter = function(self)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.IsHeader = true
@@ -3020,15 +3033,22 @@ local AddScrollBar = function(self)
 	self.MaxScroll = max(LeftMaxValue, RightMaxValue, 1)
 	self.WidgetCount = max(#self.LeftWidgets, #self.RightWidgets)
 	
+	self.ScrollParent = CreateFrame("Frame", nil, self)
+	self.ScrollParent:SetScaledPoint("TOPRIGHT", self, 0, 0)
+	self.ScrollParent:SetScaledPoint("BOTTOMRIGHT", self, 0, 0)
+	self.ScrollParent:SetScaledWidth(WIDGET_HEIGHT)
+	self.ScrollParent:SetBackdrop(vUI.BackdropAndBorder)
+	self.ScrollParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	self.ScrollParent:SetBackdropBorderColor(0, 0, 0)
+	
 	local ScrollBar = CreateFrame("Slider", nil, self)
-	ScrollBar:SetScaledPoint("TOPRIGHT", self, 0, 0)
-	ScrollBar:SetScaledPoint("BOTTOMRIGHT", self, 0, 0)
-	ScrollBar:SetScaledWidth(WIDGET_HEIGHT)
+	ScrollBar:SetScaledPoint("TOPLEFT", self.ScrollParent, 3, -3)
+	ScrollBar:SetScaledPoint("BOTTOMRIGHT", self.ScrollParent, -3, 3)
 	ScrollBar:SetThumbTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	ScrollBar:SetOrientation("VERTICAL")
 	ScrollBar:SetValueStep(1)
 	ScrollBar:SetBackdrop(vUI.BackdropAndBorder)
-	ScrollBar:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	ScrollBar:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	ScrollBar:SetBackdropBorderColor(0, 0, 0)
 	ScrollBar:SetMinMaxValues(1, self.MaxScroll)
 	ScrollBar:SetValue(1)
@@ -3039,7 +3059,7 @@ local AddScrollBar = function(self)
 	ScrollBar.Window = self
 	
 	local Thumb = ScrollBar:GetThumbTexture() 
-	Thumb:SetScaledSize(WIDGET_HEIGHT, WIDGET_HEIGHT)
+	Thumb:SetScaledSize(ScrollBar:GetWidth(), WIDGET_HEIGHT)
 	Thumb:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Thumb:SetVertexColor(0, 0, 0)
 	
@@ -3055,13 +3075,11 @@ local AddScrollBar = function(self)
 	ScrollBar.NewTexture2:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	ScrollBar.NewTexture2:SetVertexColor(HexToRGB(Settings["ui-widget-bright-color"]))
 	
-	local R, G, B = HexToRGB(Settings["ui-widget-bright-color"])
-	
 	ScrollBar.Progress = ScrollBar:CreateTexture(nil, "ARTWORK")
 	ScrollBar.Progress:SetScaledPoint("TOPLEFT", ScrollBar, 1, -1)
 	ScrollBar.Progress:SetScaledPoint("BOTTOMRIGHT", ScrollBar.NewTexture, "TOPRIGHT", -1, 0)
 	ScrollBar.Progress:SetTexture(Media:GetTexture("Blank"))
-	ScrollBar.Progress:SetVertexColor(R * 0.65, G * 0.65, B * 0.65)
+	ScrollBar.Progress:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	self:EnableMouseWheel(true)
 	self:SetScript("OnMouseWheel", WindowOnMouseWheel)
@@ -3311,7 +3329,7 @@ GUI.GetWindow = function(self, name)
 	end
 end
 
-GUI.GetWidgetByWindow = function(name, id)
+GUI.GetWidgetByWindow = function(self, name, id)
 	if self.Windows[name] then
 		local Window = self.Windows[name]
 		
@@ -3322,8 +3340,8 @@ GUI.GetWidgetByWindow = function(name, id)
 		end
 		
 		for i = 1, #Window.RightWidgets do
-			if (Window.LeftWidgets[i].ID == id) then
-				return Window.LeftWidgets[i]
+			if (Window.RightWidgets[i].ID == id) then
+				return Window.RightWidgets[i]
 			end
 		end
 	end
