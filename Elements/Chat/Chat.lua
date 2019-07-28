@@ -252,7 +252,7 @@ local TabButton_OnEvent = function(self, event)
 	self.Anim:Play()
 end
 
-local CreateChatFramePanels = function(self)
+local CreateChatFramePanels = function()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
 	local LeftChatFrameBottom = CreateFrame("Frame", "vUIChatFrameBottom", UIParent)

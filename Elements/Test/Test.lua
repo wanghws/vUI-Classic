@@ -6,7 +6,7 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 -- Notification system with a bell icon under the minimap or something. This is just a small log where it shows things like version handshakes, update news etc
 
 -- To do: A bag slot visualizer (Yes, like FFXIV)
--- black square, 2x2 pixels inside, colored by what's in the slot if occupied, 0.3 opacity if it's an empty slot.
+-- black square, 2x2 pixels inside, colored by what's in the slot if occupied, 0.3 opacity or something if it's an empty slot.
 
 local Debug = '"%s" set to %s.'
 local floor = floor
@@ -105,23 +105,37 @@ GUI:AddOptions(function(self)
 end)
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow("Info")
+	local Left, Right = self:CreateWindow(Language["Info"])
 	
-	Left:CreateHeader("UI Information")
-	Left:CreateDoubleLine("Version", vUI.Version)
-	Left:CreateDoubleLine("UI Scale", Settings["ui-scale"].."%")
-	Left:CreateDoubleLine("Resolution", select(GetCurrentResolution(), GetScreenResolutions()))
-	Left:CreateDoubleLine("Profile", Profiles:GetActiveProfileName())
-	Left:CreateDoubleLine("Template", Settings["ui-template"])
-	Left:CreateDoubleLine("Locale", vUI.Locale)
+	Left:CreateHeader(Language["UI Information"])
+	Left:CreateDoubleLine(Language["Version"], vUI.Version)
+	Left:CreateDoubleLine(Language["UI Scale"], Settings["ui-scale"].."%")
+	Left:CreateDoubleLine(Language["Resolution"], select(GetCurrentResolution(), GetScreenResolutions()))
+	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())
+	Left:CreateDoubleLine(Language["Template"], Settings["ui-template"])
+	Left:CreateDoubleLine(Language["Locale"], vUI.Locale)
 	
-	Right:CreateHeader("User Information")
-	Right:CreateDoubleLine("User", vUI.User)
-	Right:CreateDoubleLine("Class", vUI.Class)
-	Right:CreateDoubleLine("Realm", vUI.Realm)
+	Right:CreateHeader(Language["User Information"])
+	Right:CreateDoubleLine(Language["User"], vUI.User)
+	Right:CreateDoubleLine(Language["Race"], vUI.Race)
+	Right:CreateDoubleLine(Language["Class"], vUI.Class)
+	Right:CreateDoubleLine(Language["Realm"], vUI.Realm)
+	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
+	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
+end)
+
+local UpdateZone = CreateFrame("Frame")
+UpdateZone:RegisterEvent("ZONE_CHANGED")
+UpdateZone:RegisterEvent("ZONE_CHANGED_INDOORS")
+UpdateZone:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+UpdateZone:SetScript("OnEvent", function(self)
+	if GUI:IsShown() then
+		GUI:GetWidgetByWindow(Language["Info"], "zone").Right:SetText(GetZoneText())
+		GUI:GetWidgetByWindow(Language["Info"], "sub-zone").Right:SetText(GetMinimapZoneText())
+	end
 end)
 
 -- small quick concept

@@ -31,6 +31,7 @@ Elements\Experience\Experience.lua
 Elements\Actionbars\Actionbars.lua
 Elements\Unitframes\Unitframes.lua
 Elements\Tooltips\Tooltips.lua
+Elements\MetersBG\MetersBG.lua
 Elements\Minimap\Minimap.lua
 Elements\ZoneText\ZoneText.lua
 Elements\Alerts\Alerts.lua

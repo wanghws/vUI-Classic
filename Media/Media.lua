@@ -25,7 +25,7 @@ function Media:SetFont(name, path, silent)
 	end
 end
 
-function Media:GetFont(name)
+function Media:GetFont(name, template)
 	if self.Fonts[name] then
 		return self.Fonts[name]
 	else
@@ -50,7 +50,7 @@ function Media:SetTexture(name, path, silent)
 	end
 end
 
-function Media:GetTexture(name)
+function Media:GetTexture(name, template)
 	if self.Textures[name] then
 		return self.Textures[name]
 	else
@@ -75,7 +75,7 @@ function Media:SetHighlight(name, path, silent)
 	end
 end
 
-function Media:GetHighlight(name)
+function Media:GetHighlight(name, template)
 	if self.Highlights[name] then
 		return self.Highlights[name]
 	else
@@ -93,16 +93,16 @@ function Media:SetTemplate(name, info, silent)
 		return
 	end
 	
-	local Key = name
-	
-	-- Just sprinkling on some flavor. Really rub it in.
-	if info["ui-widget-color"] then
-		Key = format("|cFF%s%s|r", info["ui-widget-color"], name)
-	end
-	
 	self.Templates[name] = info
 	
 	if (not silent) then
+		local Key = name
+		
+		-- Just sprinkling on some flavor. Really rub it in.
+		if info["ui-widget-color"] then
+			Key = format("|cFF%s%s|r", info["ui-widget-color"], name)
+		end
+		
 		self.TemplateList[Key] = name
 	end
 end
@@ -154,7 +154,7 @@ function Media:SetPalette(name, t, silent)
 	end
 end
 
-function Media:GetPalette(name)
+function Media:GetPalette(name, template)
 	if self.Palettes[name] then
 		return self.Palettes[name]
 	else
@@ -177,10 +177,6 @@ Media:SetTexture("Kola", "Interface\\AddOns\\vUI\\Media\\Textures\\Kola.tga")
 Media:SetTexture("noInterrupt", "Interface\\AddOns\\vUI\\Media\\Textures\\noInterrupt.tga", true)
 Media:SetTexture("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\RenHorizonUp.tga", true)
 Media:SetTexture("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga", true)
-Media:SetTexture("Ferous 4", "Interface\\AddOns\\vUI\\Media\\Textures\\fer4.tga", true)
-Media:SetTexture("Ferous 8", "Interface\\AddOns\\vUI\\Media\\Textures\\fer8.tga", true)
-Media:SetTexture("Ferous 14", "Interface\\AddOns\\vUI\\Media\\Textures\\fer14.tga", true)
-Media:SetTexture("Ferous 16", "Interface\\AddOns\\vUI\\Media\\Textures\\fer16.tga", true)
 Media:SetTexture("Ferous 27", "Interface\\AddOns\\vUI\\Media\\Textures\\fer27.tga")
 Media:SetTexture("Ferous 35", "Interface\\AddOns\\vUI\\Media\\Textures\\fer35.tga", true)
 Media:SetTexture("Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\Mail.tga", true)
@@ -225,8 +221,6 @@ Large[8] = {"922B21", "B03A2E", "76448A", "6C3483", "1F618D", "2874A6", "148F77"
 Large[9] = {"7B241C", "943126", "633974", "5B2C6F", "1A5276", "21618C", "117864", "0E6655", "196F3D", "1D8348", "9A7D0A", "9C640C", "935116", "873600", "979A9A", "797D7F", "5F6A6A", "515A5A", "212F3C", "1C2833"}
 Large[10] = {"641E16", "78281F", "512E5F", "4A235A", "154360", "1B4F72", "0E6251", "0B5345", "145A32", "186A3B", "7D6608", "7E5109", "784212", "6E2C00", "7B7D7D", "626567", "4D5656", "424949", "1B2631", "17202A"}
 
-Media:SetPalette("Large", Large)
-
 local Default = {} -- https://www.materialui.co/colors
 
 Default[1] = {"FFEBEE", "FCE4EC", "F3E5F5", "EDE7F6", "E8EAF6", "E3F2FD", "E1F5FE", "E0F7FA", "E0F2F1", "E8F5E9", "F1F8E9", "F9FBE7", "FFFDE7", "FFF8E1", "FFF3E0", "FBE9E7", "EFEBE9", "FAFAFA", "ECEFF1"}
@@ -240,15 +234,11 @@ Default[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D
 Default[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
 Default[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
 
-Media:SetPalette("Default", Default)
-
 local Lite = {}
 
 Lite[1] = {"F17171", "FFA071", "FFD071", "A2D471", "71E2D0", "71D0FF", "7EA9FF", "B38DFF", "FF71B7", "A2ADB8"}
 Lite[2] = {"EE4D4D", "FF884D", "FFC44D", "8BC94D", "4DDBC4", "4DC4FF", "5E94FF", "AD71FF", "FF4dA5", "8B98A6"}
 Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
-
-Media:SetPalette("Lite", Lite)
 
 local Rapid = {} -- https://www.rapidtables.com/web/color/RGB_Color.html
 
@@ -262,6 +252,9 @@ Rapid[7] = {"FF6666", "FFB266", "FFFF66", "B2FF66", "66FF66", "66FFB2", "66FFFF"
 Rapid[8] = {"FF9999", "FFCC99", "FFFF99", "CCFF99", "99FF99", "99FFCC", "99FFFF", "99CCFF", "9999FF", "CC99FF", "FF99FF", "FF99CC", "E0E0E0"}
 Rapid[9] = {"FFCCCC", "FFE5CC", "FFFFCC", "E5FFCC", "CCFFCC", "CCFFE5", "CCFFFF", "CCE5FF", "CCCCFF", "E5CCFF", "FFCCFF", "FFCCE5", "FFFFFF"}
 
+Media:SetPalette("Large", Large)
+Media:SetPalette("Default", Default)
+Media:SetPalette("Lite", Lite)
 Media:SetPalette("Rapid", Rapid)
 
 -- Templates

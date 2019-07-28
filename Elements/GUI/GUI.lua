@@ -33,6 +33,8 @@ GUI.Widgets = {}
 	
 	- If template == "None" then disable the page
 	
+	- Set the scrollbars to have arrow buttons
+	
 	- Widget methods
 	widget:Disable()
 	widget:Enable()
@@ -157,6 +159,7 @@ end
 local CreateID = function(text)
 	text = gsub(text, "%s", "-")
 	text = gsub(text, ":", "")
+	text = lower(text)
 	
 	return text
 end
@@ -325,7 +328,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
 	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
 	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
-	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12) -- 14
 	Anchor.Text:SetJustifyH("LEFT")
 	Anchor.Text:SetShadowColor(0, 0, 0)
 	Anchor.Text:SetShadowOffset(1, -1)
@@ -340,14 +343,14 @@ GUI.Widgets.CreateHeader = function(self, text)
 	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
 	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Reference, "LEFT", -SPACING, 0)
 	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
-	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
 	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
 	
 	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
 	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
 	HeaderLeft.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderLeft, -1, 1)
 	HeaderLeft.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	HeaderLeft.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderLeft.NewTexture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	-- Header Right Line
 	local HeaderRight = CreateFrame("Frame", nil, Anchor)
@@ -355,14 +358,14 @@ GUI.Widgets.CreateHeader = function(self, text)
 	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	HeaderRight:SetScaledPoint("LEFT", Anchor.Reference, "RIGHT", SPACING, 0)
 	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
-	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
 	HeaderRight:SetBackdropBorderColor(0, 0, 0)
 	
 	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
 	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
 	HeaderRight.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderRight, -1, 1)
 	HeaderRight.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	HeaderRight.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	HeaderRight.NewTexture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -459,14 +462,14 @@ GUI.Widgets.CreateFooter = function(self)
 	Line:SetScaledPoint("LEFT", Anchor, 0, 0)
 	Line:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	Line:SetBackdrop(vUI.BackdropAndBorder)
-	Line:SetBackdropColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Line:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
 	Line:SetBackdropBorderColor(0, 0, 0)
 	
 	Line.NewTexture = Line:CreateTexture(nil, "OVERLAY")
 	Line.NewTexture:SetScaledPoint("TOPLEFT", Line, 1, -1)
 	Line.NewTexture:SetScaledPoint("BOTTOMRIGHT", Line, -1, 1)
 	Line.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	Line.NewTexture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
+	Line.NewTexture:SetVertexColor(HexToRGB(Settings["ui-button-texture-color"]))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -3582,6 +3585,10 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("ui-widget-font-color", Settings["ui-widget-font-color"], Language["Label Color"], "")
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	
+	Right:CreateHeader("What is a template?")
+	Right:CreateLine("Templates store media settings such as fonts,")
+	Right:CreateLine("textures, and colors to create an overall theme.")
 	
 	Right:CreateHeader(Language["Console"])
 	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)

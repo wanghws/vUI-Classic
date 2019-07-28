@@ -80,17 +80,17 @@ function Profiles:UpdateProfileInfo()
 		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
 	end
 	
-	GUI:GetWidgetByWindow(Language["Profiles"], "Current-Profile").Right:SetText(Name)
-	GUI:GetWidgetByWindow(Language["Profiles"], "Created-By").Right:SetText(Profile["profile-created-by"])
-	GUI:GetWidgetByWindow(Language["Profiles"], "Created-On").Right:SetText(IsToday(Profile["profile-created"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "Last-Modified").Right:SetText(IsToday(Profile["profile-last-modified"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "Modifications").Right:SetText(Profiles:CountChangedValues(Name))
-	GUI:GetWidgetByWindow(Language["Profiles"], "Serving-Characters").Right:SetText(NumServed)
+	GUI:GetWidgetByWindow(Language["Profiles"], "current-profile").Right:SetText(Name)
+	GUI:GetWidgetByWindow(Language["Profiles"], "created-by").Right:SetText(Profile["profile-created-by"])
+	GUI:GetWidgetByWindow(Language["Profiles"], "created-on").Right:SetText(IsToday(Profile["profile-created"]))
+	GUI:GetWidgetByWindow(Language["Profiles"], "last-modified").Right:SetText(IsToday(Profile["profile-last-modified"]))
+	GUI:GetWidgetByWindow(Language["Profiles"], "modifications").Right:SetText(Profiles:CountChangedValues(Name))
+	GUI:GetWidgetByWindow(Language["Profiles"], "serving-characters").Right:SetText(NumServed)
 	
-	GUI:GetWidgetByWindow(Language["Profiles"], "Popular-Profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
-	GUI:GetWidgetByWindow(Language["Profiles"], "Stored-Profiles").Right:SetText(Profiles:GetProfileCount())
-	GUI:GetWidgetByWindow(Language["Profiles"], "Empty-Profiles").Right:SetText(NumEmpty)
-	GUI:GetWidgetByWindow(Language["Profiles"], "Unused-Profiles").Right:SetText(NumUnused)
+	GUI:GetWidgetByWindow(Language["Profiles"], "popular-profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
+	GUI:GetWidgetByWindow(Language["Profiles"], "stored-profiles").Right:SetText(Profiles:GetProfileCount())
+	GUI:GetWidgetByWindow(Language["Profiles"], "empty-profiles").Right:SetText(NumEmpty)
+	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(NumUnused)
 end
 
 function Profiles:UpdateProfileList()
@@ -616,6 +616,10 @@ local UpdateProfileInfo = function()
 	Profiles:UpdateProfileInfo()
 end
 
+local RestoreToDefault = function()
+	Profiles:RestoreToDefault(Profiles:GetActiveProfileName())
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
@@ -630,6 +634,7 @@ GUI:AddOptions(function(self)
 	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
 	Left:CreateInput("profile-delete", Profiles:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile)
 	Left:CreateInput("profile-rename", "", "Rename Profile", "", RenameProfile)
+	Left:CreateButton("Restore", "Restore To Default", "", RestoreToDefault):RequiresReload(true)
 	Left:CreateButton("Delete", "Delete Empty Profiles", "", DeleteEmpty):RequiresReload(true)
 	Left:CreateButton("Delete", "Delete Unused Profiles", "", DeleteUnused):RequiresReload(true)
 	

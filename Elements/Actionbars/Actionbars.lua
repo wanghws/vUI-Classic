@@ -77,6 +77,10 @@ local SkinButton = function(button, pet)
 		button.HotKey.SetText = function(self, text)
 			self:OST("|cFFFFFFFF" .. text .. "|r")
 		end
+		
+		if (not Settings["action-bars-show-hotkeys"]) then
+			button.HotKey:Hide()
+		end
 	end
 	
 	if button.Name then
@@ -90,6 +94,10 @@ local SkinButton = function(button, pet)
 		button.Name:SetDrawLayer("OVERLAY")
 		button.Name:SetTextColor(1, 1, 1)
 		button.Name.SetTextColor = function() end
+		
+		if (not Settings["action-bars-show-macro-names"]) then
+			button.Name:Hide()
+		end
 	end
 	
 	if (not button.CountBG) then
@@ -111,6 +119,10 @@ local SkinButton = function(button, pet)
 		button.Count:SetDrawLayer("OVERLAY")
 		button.Count:SetTextColor(1, 1, 1)
 		button.Count.SetTextColor = function() end
+		
+		if (not Settings["action-bars-show-count"]) then
+			button.Count:Hide()
+		end
 	end
 	
 	if FloatingBG then
@@ -250,6 +262,7 @@ local UpdateBar1 = function()
 	
 	ActionBar1:Execute([[
 		Button = table.new()
+		
 		for i = 1, 12 do
 			table.insert(Button, self:GetFrameRef("ActionButton"..i))
 		end
@@ -314,7 +327,6 @@ local CreateBar1 = function()
 			Button:SetScaledPoint("LEFT", ActionBar1[i-1], "RIGHT", SPACING, 0)
 		end
 		
-		--ActionBar1["Button"..i] = Button
 		ActionBar1[i] = Button
 	end
 	
@@ -327,7 +339,6 @@ end
 local CreateBar2 = function()
 	local ActionBar2 = CreateFrame("Frame", "vUIActionBar2", UIParent, "SecureHandlerStateTemplate")
 	ActionBar2:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
-	ActionBar2:SetScaledPoint("TOPLEFT", vUIBottomActionBarsPanel, (SPACING + 1), -(SPACING + 1))
 	ActionBar2:SetFrameStrata("MEDIUM")
 	
 	MultiBarBottomLeft:SetParent(ActionBar2)
@@ -336,7 +347,6 @@ local CreateBar2 = function()
 		local Button = _G["MultiBarBottomLeftButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
 		Button:ClearAllPoints()
-		--Button:SetParent(ActionBar2)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("LEFT", ActionBar2, 0, 0)
@@ -360,7 +370,6 @@ local CreateBar3 = function()
 		local Button = _G["MultiBarRightButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
 		Button:ClearAllPoints()
-		--Button:SetParent(ActionBar3)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar3, 0, 0)
@@ -375,7 +384,6 @@ end
 local CreateBar4 = function()
 	local ActionBar4 = CreateFrame("Frame", "vUIActionBar4", UIParent, "SecureHandlerStateTemplate")
 	ActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
-	--ActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
 	ActionBar4:SetFrameStrata("MEDIUM")
 	
 	MultiBarLeft:SetParent(ActionBar4)
@@ -384,7 +392,6 @@ local CreateBar4 = function()
 		local Button = _G["MultiBarLeftButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
 		Button:ClearAllPoints()
-		--Button:SetParent(ActionBar4)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar4, 0, 0)
@@ -399,7 +406,6 @@ end
 local CreateBar5 = function()
 	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", UIParent, "SecureHandlerStateTemplate")
 	ActionBar5:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
-	--ActionBar5:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	ActionBar5:SetFrameStrata("MEDIUM")
 	
 	MultiBarBottomRight:SetParent(ActionBar5)
@@ -408,7 +414,6 @@ local CreateBar5 = function()
 		local Button = _G["MultiBarBottomRightButton"..i]
 		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
 		Button:ClearAllPoints()
-		--Button:SetParent(ActionBar5)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("TOP", ActionBar5, 0, 0)
@@ -467,6 +472,9 @@ local SetClassicStyle = function()
 	Bar:SetScaledPoint("TOPRIGHT", vUIBottomActionBarsPanel, -(SPACING + 1), -(SPACING + 1))
 	Bar:SetScaledSize((BUTTON_SIZE * 6) + (SPACING * 5), (BUTTON_SIZE * 2) + SPACING)
 	
+	vUIActionBar2:ClearAllPoints()
+	vUIActionBar2:SetScaledPoint("TOPLEFT", vUIBottomActionBarsPanel, (SPACING + 1), -(SPACING + 1))
+	
 	vUIActionBar4:ClearAllPoints()
 	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	
@@ -485,17 +493,20 @@ local SetClassicStyle = function()
 		end
 	end
 	
-	if (Settings["experience-position"] == "CLASSIC") then
+	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
 		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
 	end
 end
 
-local SetCompactStyle = function()
+local Set2x3Style = function()
 	local Bar = vUIActionBar5
 	
 	Bar:ClearAllPoints()
 	Bar:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	Bar:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	
+	vUIActionBar2:ClearAllPoints()
+	vUIActionBar2:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
 	
 	vUIActionBar4:ClearAllPoints()
 	vUIActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
@@ -513,15 +524,48 @@ local SetCompactStyle = function()
 		end
 	end
 	
-	if (Settings["experience-position"] == "CLASSIC") then
+	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
+		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
+	end
+end
+
+local Set3x2Style = function()
+	local Bar = vUIActionBar5
+	
+	Bar:ClearAllPoints()
+	Bar:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
+	Bar:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	
+	vUIActionBar2:ClearAllPoints()
+	vUIActionBar2:SetScaledPoint("LEFT", vUIBottomActionBarsPanel, (SPACING + 1), 0)
+	
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	
+	vUIBottomActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 3) + (SPACING * 5)))
+	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
+	
+	for i = 1, Num do
+		Bar[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			Bar[i]:SetScaledPoint("LEFT", Bar, 0, 0)
+		else
+			Bar[i]:SetScaledPoint("LEFT", Bar[i-1], "RIGHT", SPACING, 0)
+		end
+	end
+	
+	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
 		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
 	end
 end
 
 local SetActionBarLayout = function(value)
-	if (value == "COMPACT") then
-		SetCompactStyle()
-	elseif (value == "CLASSIC") then
+	if (value == "2x3") then
+		Set2x3Style()
+	elseif (value == "3x2") then
+		Set3x2Style()
+	elseif (value == "DEFAULT") then
 		SetClassicStyle()
 	end
 end
@@ -540,12 +584,17 @@ local SetButtonSize = function(value)
 	vUIActionBar3:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 	vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 	
-	if (Settings["action-bars-layout"] == "COMPACT") then
+	if (Settings["action-bars-layout"] == "2x3") then
 		vUIActionBar5:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 		
 		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 2) + (SPACING * 4)))
 		vUISideActionBarsPanel:SetScaledSize(((value * 3) + (SPACING * 5)), ((value * 12) + (SPACING * 14)))
-	elseif (Settings["action-bars-layout"] == "CLASSIC") then
+	elseif (Settings["action-bars-layout"] == "3x2") then
+		vUIActionBar5:SetScaledSize(((value * 12) + (SPACING * 11)), value)
+		
+		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 3) + (SPACING * 5)))
+		vUISideActionBarsPanel:SetScaledSize(((value * 2) + (SPACING * 4)), ((value * 12) + (SPACING * 14)))
+	elseif (Settings["action-bars-layout"] == "DEFAULT") then
 		vUIActionBar5:SetScaledSize((value * 6) + (SPACING * 5), (value * 2) + SPACING)
 		
 		vUISideActionBarsPanel:SetScaledSize(((value * 2) + (SPACING * 4)), ((value * 12) + (SPACING * 14)))
@@ -561,7 +610,6 @@ local SetHighlightTexture = function(value)
 		vUIActionBar1[i].Pushed:SetTexture(Texture)
 		vUIActionBar1[i].Checked:SetTexture(Texture)
 		vUIActionBar1[i].Range:SetTexture(Texture)
-		--vUIActionBar1[i]:SetPushedTexture(Pushed)
 		
 		vUIActionBar2[i].Hover:SetTexture(Texture)
 		vUIActionBar2[i].Pushed:SetTexture(Texture)
@@ -619,6 +667,66 @@ local UpdateShowSide = function(value)
 	end
 end
 
+local UpdateShowHotKey = function(value)
+	if value then
+		for i = 1, Num do
+			vUIActionBar1[i].HotKey:Show()
+			vUIActionBar2[i].HotKey:Show()
+			vUIActionBar3[i].HotKey:Show()
+			vUIActionBar4[i].HotKey:Show()
+			vUIActionBar5[i].HotKey:Show()
+		end
+	else
+		for i = 1, Num do
+			vUIActionBar1[i].HotKey:Hide()
+			vUIActionBar2[i].HotKey:Hide()
+			vUIActionBar3[i].HotKey:Hide()
+			vUIActionBar4[i].HotKey:Hide()
+			vUIActionBar5[i].HotKey:Hide()
+		end
+	end
+end
+
+local UpdateShowMacroName = function(value)
+	if value then
+		for i = 1, Num do
+			vUIActionBar1[i].Name:Show()
+			vUIActionBar2[i].Name:Show()
+			vUIActionBar3[i].Name:Show()
+			vUIActionBar4[i].Name:Show()
+			vUIActionBar5[i].Name:Show()
+		end
+	else
+		for i = 1, Num do
+			vUIActionBar1[i].Name:Hide()
+			vUIActionBar2[i].Name:Hide()
+			vUIActionBar3[i].Name:Hide()
+			vUIActionBar4[i].Name:Hide()
+			vUIActionBar5[i].Name:Hide()
+		end
+	end
+end
+
+local UpdateShowCount = function(value)
+	if value then
+		for i = 1, Num do
+			vUIActionBar1[i].Count:Show()
+			vUIActionBar2[i].Count:Show()
+			vUIActionBar3[i].Count:Show()
+			vUIActionBar4[i].Count:Show()
+			vUIActionBar5[i].Count:Show()
+		end
+	else
+		for i = 1, Num do
+			vUIActionBar1[i].Count:Hide()
+			vUIActionBar2[i].Count:Hide()
+			vUIActionBar3[i].Count:Hide()
+			vUIActionBar4[i].Count:Hide()
+			vUIActionBar5[i].Count:Hide()
+		end
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
@@ -632,12 +740,13 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
 	
-	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "")
-	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "")
-	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "")
+	Right:CreateHeader(Language["Styling"])
+	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "", UpdateShowHotKey)
+	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "", UpdateShowMacroName)
+	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "", UpdateShowCount)
 	
 	Left:CreateHeader(Language["Layouts"])
-	Left:CreateDropdown("action-bars-layout", "Classic", {[Language["Compact"]] = "COMPACT", [Language["Classic"]] = "CLASSIC"}, "Action Bar Layout", "", SetActionBarLayout)
+	Left:CreateDropdown("action-bars-layout", "Default", {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Action Bar Layout", "", SetActionBarLayout)
 	
 	Left:CreateHeader(Language["Highlights"])
 	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "", SetHighlightTexture, "Texture")

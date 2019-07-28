@@ -44,7 +44,7 @@ Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
 -- Action Bars
 Defaults["action-bars-enable"] = true
-Defaults["action-bars-layout"] = "COMPACT"
+Defaults["action-bars-layout"] = "DEFAULT"
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-button-size"] = 32
 Defaults["action-bars-button-highlight"] = "Blank"
