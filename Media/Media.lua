@@ -337,7 +337,7 @@ Media:SetTemplate("Slate", {
 	["ui-button-texture-color"] = "78909C",
 })
 
--- Unnamed
+--[[ Unnamed
 Media:SetTemplate("Unnamed", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
@@ -360,4 +360,4 @@ Media:SetTemplate("Unnamed", {
 	
 	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
-})
+})]]

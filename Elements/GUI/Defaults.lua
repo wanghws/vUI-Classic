@@ -80,3 +80,8 @@ Defaults["minimap-size"] = 140
 
 -- Unitframes
 Defaults["unitframes-enable"] = true
+
+-- Name Plates
+Defaults["nameplates-enable"] = true
+Defaults["nameplates-width"] = 134
+Defaults["nameplates-height"] = 14

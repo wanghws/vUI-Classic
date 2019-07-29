@@ -98,7 +98,6 @@ GUI:AddOptions(function(self)
 	Right:CreateFooter()
 	
 	-- Testing
-	self:CreateWindow("Unit Frames")
 	self:CreateWindow("Tooltips")
 	self:CreateWindow("Misc.")
 	self:CreateWindow("Search")

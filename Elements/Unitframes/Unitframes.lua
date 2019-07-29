@@ -120,8 +120,9 @@ Methods["vUI-Name15"] = function(unit)
 end
 
 local StyleNamePlate = function(self, unit)
-	self:SetSize(110, 8)
+	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
+	self:SetScale(Settings["ui-scale"] / 100)
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
@@ -133,11 +134,37 @@ local StyleNamePlate = function(self, unit)
 	Health:SetPoint("BOTTOMRIGHT", self, -1, 1)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
+	local HealthBG = Health:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local Name = Health:CreateFontString(nil, "OVERLAY")
+	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Name:SetScaledPoint("CENTER", Health, "TOP", 0, 2)
+	Name:SetJustifyH("CENTER")
+	Name:SetShadowColor(0, 0, 0)
+	Name:SetShadowOffset(1, -1)
+	
+	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
+	HealthValue:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthValue:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -6, -2)
+	HealthValue:SetJustifyH("RIGHT")
+	HealthValue:SetShadowColor(0, 0, 0)
+	HealthValue:SetShadowOffset(1, -1)
+	
 	Health.colorHealth = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
+	Health.colorClass = true
+	Health.colorReaction = true
+	
+	self:Tag(Name, "[vUI-Name15]")
+	self:Tag(HealthValue, "[vUI-HealthPercent]")
 	
 	self.Health = Health
+	self.Health.bg = HealthBG
 end
 
 local StylePlayer = function(self, unit)
@@ -360,7 +387,7 @@ local Style = function(self, unit)
 		StylePlayer(self, unit)
 	elseif (unit == "target") then
 		StyleTarget(self, unit)
-	elseif match(unit, "nameplate") then
+	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
 	end
 end
@@ -395,7 +422,9 @@ Frame:SetScript("OnEvent", function(self, event)
 	Target:SetSize(230, 45)
 	Target:SetPoint("LEFT", UIParent, "CENTER", 67, -304)
 	
-	oUF:SpawnNamePlates(nil, nil, PlateCVars)
+	if Settings["nameplates-enable"] then
+		oUF:SpawnNamePlates(nil, nil, PlateCVars)
+	end
 	
 	self:UnregisterEvent(event)
 end)
@@ -405,6 +434,20 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], ""):RequiresReload(true)
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
+end)
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:CreateWindow(Language["Name Plates"])
+	
+	Left:CreateHeader(Language["Enable"])
+	Left:CreateCheckbox("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], ""):RequiresReload(true)
+	
+	Right:CreateHeader(Language["Sizes"])
+	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "")
+	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
