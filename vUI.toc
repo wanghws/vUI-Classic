@@ -29,6 +29,7 @@ Elements\GUI\GUI.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua
 Elements\Actionbars\Actionbars.lua
+Elements\Unitframes\oUF\oUF.xml
 Elements\Unitframes\Unitframes.lua
 Elements\Tooltips\Tooltips.lua
 Elements\MetersBG\MetersBG.lua

@@ -77,3 +77,6 @@ Defaults["experience-percent-visibility"] = "ALWAYS"
 -- Minimap
 Defaults["minimap-enable"] = true
 Defaults["minimap-size"] = 140
+
+-- Unitframes
+Defaults["unitframes-enable"] = true
