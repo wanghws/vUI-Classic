@@ -485,7 +485,7 @@ GUI:AddOptions(function(self)
 	GeneralLeft:CreateButton("Get Link", "Join Discord", "", function() print("https://discord.gg/SmT6Yk") end)
 	
 	GeneralRight:CreateHeader(Language["Language"])
-	GeneralRight:CreateDropdown("ui-language", vUI.Locale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
+	GeneralRight:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	GeneralRight:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
 	
 	GeneralRight:CreateHeader(Language["Scale"])

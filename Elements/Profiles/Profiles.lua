@@ -112,7 +112,7 @@ function Profiles:GetProfileCount()
 end
 
 function Profiles:GetDefaultProfileKey()
-	return format(DefaultKey, vUI.User, vUI.Realm)
+	return format(DefaultKey, vUI.UserName, vUI.UserRealm)
 end
 
 function Profiles:SetLastModified(name)
@@ -122,25 +122,25 @@ function Profiles:SetLastModified(name)
 end
 
 function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
-	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
-		if vUIProfileData[vUI.Realm][vUI.User] then
-			return vUIProfileData[vUI.Realm][vUI.User]
+	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
+		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
+			return vUIProfileData[vUI.UserRealm][vUI.UserName]
 		end
 	end
 end
 
 function Profiles:GetActiveProfile()
-	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
-		if vUIProfileData[vUI.Realm][vUI.User] then
-			return self:GetProfile(vUIProfileData[vUI.Realm][vUI.User])
+	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
+		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
+			return self:GetProfile(vUIProfileData[vUI.UserRealm][vUI.UserName])
 		end
 	end
 end
 
 function Profiles:SetActiveProfile(name)
-	if (vUIProfileData and vUIProfileData[vUI.Realm]) then
-		if vUIProfileData[vUI.Realm][vUI.User] then
-			vUIProfileData[vUI.Realm][vUI.User] = name
+	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
+		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
+			vUIProfileData[vUI.UserRealm][vUI.UserName] = name
 		end
 	end
 end
@@ -163,12 +163,12 @@ function Profiles:CreateProfileData()
 		self:CreateProfile("Default")
 	end
 	
-	if (not vUIProfileData[vUI.Realm]) then
-		vUIProfileData[vUI.Realm] = {}
+	if (not vUIProfileData[vUI.UserRealm]) then
+		vUIProfileData[vUI.UserRealm] = {}
 	end
 	
-	if (not vUIProfileData[vUI.Realm][vUI.User]) then
-		vUIProfileData[vUI.Realm][vUI.User] = self:GetMostUsedProfile()
+	if (not vUIProfileData[vUI.UserRealm][vUI.UserName]) then
+		vUIProfileData[vUI.UserRealm][vUI.UserName] = self:GetMostUsedProfile()
 	end
 end
 
@@ -198,15 +198,15 @@ function Profiles:CreateProfile(name)
 	
 	if (not vUIProfileData) then
 		vUIProfileData = {}
-		vUIProfileData[vUI.Realm] = {}
+		vUIProfileData[vUI.UserRealm] = {}
 	end
 	
 	if (not name) then
 		name = self:GetDefaultProfileKey()
 	end
 	
-	if (not vUIProfileData[vUI.Realm][vUI.User]) then
-		vUIProfileData[vUI.Realm][vUI.User] = name
+	if (not vUIProfileData[vUI.UserRealm][vUI.UserName]) then
+		vUIProfileData[vUI.UserRealm][vUI.UserName] = name
 	end
 	
 	if vUIProfiles[name] then
@@ -223,7 +223,7 @@ function Profiles:CreateProfile(name)
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = self:GetCurrentDate()
 	
-	--vUIProfileData[vUI.Realm][vUI.User] = name
+	--vUIProfileData[vUI.UserRealm][vUI.UserName] = name
 	
 	self.List[name] = name
 	
@@ -370,7 +370,7 @@ function Profiles:ApplyProfile(name)
 		Settings[ID] = Value
 	end
 	
-	vUIProfileData[vUI.Realm][vUI.User] = name
+	vUIProfileData[vUI.UserRealm][vUI.UserName] = name
 	
 	Values = nil
 end

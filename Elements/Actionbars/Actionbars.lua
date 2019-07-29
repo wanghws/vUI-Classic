@@ -304,7 +304,7 @@ local CreateBar1 = function()
 	
 	ActionBar1.GetBar = function()
 		local Condition = ActionBar1.Page["DEFAULT"]
-		local Page = ActionBar1.Page[vUI.Class]
+		local Page = ActionBar1.Page[vUI.UserClass]
 		
 		if Page then
 			Condition = Condition .. " " .. Page

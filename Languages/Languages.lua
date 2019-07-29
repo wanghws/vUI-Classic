@@ -6,7 +6,7 @@ local index = function(t, key)
 	if (Settings and Settings["ui-language"]) then
 		Locale = Settings["ui-language"]
 	else
-		Locale = vUI.Locale
+		Locale = vUI.UserLocale
 	end
 	
 	if (t[Locale] and t[Locale][key]) then

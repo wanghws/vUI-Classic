@@ -42,14 +42,14 @@ end
 
 -- Some Data
 vUI.Version = GetAddOnMetadata("vUI", "Version")
-vUI.User = UnitName("player")
-vUI.Class = UnitClass("player")
-vUI.Race = UnitRace("player")
-vUI.Realm = GetRealmName()
-vUI.Locale = GetLocale()
+vUI.UserName = UnitName("player")
+vUI.UserClass = UnitClass("player")
+vUI.UserRace = UnitRace("player")
+vUI.UserRealm = GetRealmName()
+vUI.UserLocale = GetLocale()
 
-if (vUI.Locale == "enGB") then
-	vUI.Locale = "enUS"
+if (vUI.UserLocale == "enGB") then
+	vUI.UserLocale = "enUS"
 end
 
 vUI.Backdrop = {
@@ -80,7 +80,7 @@ end
 local min = math.min
 local max = math.max
 
-function vUI:RGBToHSV(r, g, b)
+function vUI:RGBToHSV(r, g, b) -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 	local R = r / 255
 	local G = g / 255
 	local B = b / 255
@@ -95,8 +95,6 @@ function vUI:Reset() -- /run vUI:Reset()
 	vUIProfileData = nil
 	ReloadUI()
 end
-
--- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 
 vUI.Delimiter = " "
 

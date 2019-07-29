@@ -104,7 +104,7 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (match(sender, "(%S+)-%S+") == vUI.User) then
+	if (match(sender, "(%S+)-%S+") == vUI.UserName) then
 		return
 	end
 	
