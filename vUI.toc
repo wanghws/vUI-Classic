@@ -26,6 +26,7 @@ Elements\Serialize\AceSerializer-3.0.lua
 Elements\Serialize\LibCompress.lua
 Elements\Profiles\Profiles.lua
 Elements\GUI\GUI.lua
+Elements\Throttle\Throttle.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua
 Elements\Actionbars\Actionbars.lua

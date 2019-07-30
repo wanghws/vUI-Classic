@@ -136,30 +136,3 @@ UpdateZone:SetScript("OnEvent", function(self)
 		GUI:GetWidgetByWindow(Language["Info"], "sub-zone").Right:SetText(GetMinimapZoneText())
 	end
 end)
-
--- small quick concept
-local Throttles = {}
-Throttles.Inactive = {}
-Throttles.Active = {}
-
-function Throttles:NewThrottle(name, duration)
-	if (self.Active[name] or self.Inactive[name]) then
-		return
-	end
-	
-	self.Inactive[name] = duration
-end
-
-function Throttles:IsThrottled(name)
-	if self.Active[name] then
-		return true
-	end
-end
-
-function Throttles:Start(name)
-	-- put into an updater
-end
-
-function Throttles:Stop(name)
-	
-end
