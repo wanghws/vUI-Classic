@@ -1,15 +1,16 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
-local tinsert = table.insert
-local tremove = table.remove
-
-local Throttles = {}
+-- Just laying out a super basic throttle system for now
+local Throttles = CreateFrame("Frame")
 Throttles.Inactive = {}
 Throttles.Active = {}
 
+local tinsert = table.insert
+local tremove = table.remove
+
 local OnUpdate = function(self, ela)
 	for i = 1, #self.Active do
-		self.Active[i] = self.Active[i] - ela
+		self.Active[i].Time = self.Active[i].Time - ela
 		
 		if (self.Active[i].Time <= 0) then
 			tinsert(self.Inactive, tremove(self.Active, i))
@@ -22,13 +23,13 @@ local OnUpdate = function(self, ela)
 end
 
 function Throttles:Create(name, duration)
-	if self:IsThrottled(name) then
-		vUI:print(format('A throttle already exists with the name "%s".', name))
+	if self:Exists(name) then
+		--vUI:print(format('A throttle already exists with the name "%s".', name))
 		
 		return
 	end
 	
-	tinsert(self.Inactive, {Name = name, Time = duration})
+	tinsert(self.Inactive, {Name = name, Time = duration, Duration = duration})
 end
 
 function Throttles:IsThrottled(name)
@@ -41,14 +42,37 @@ function Throttles:IsThrottled(name)
 	return false
 end
 
-function Throttles:Start(name)
-	if (not self.Inactive[name]) then
-		return
+function Throttles:GetRemaining(name)
+	for i = 1, #self.Active do
+		if (self.Active[i].Name == name) then
+			return self.Active[i].Time
+		end
+	end
+end
+
+function Throttles:Exists(name)
+	for i = 1, #self.Active do
+		if (self.Active[i].Name == name) then
+			return true
+		end
 	end
 	
 	for i = 1, #self.Inactive do
 		if (self.Inactive[i].Name == name) then
-			tinsert(self.Active, tremove(self.Inactive, i))
+			return true
+		end
+	end
+	
+	return false
+end
+
+function Throttles:Start(name)
+	for i = 1, #self.Inactive do
+		if (self.Inactive[i].Name == name) then
+			local Throttle = tremove(self.Inactive, i)
+			
+			Throttle.Time = Throttle.Duration
+			tinsert(self.Active, Throttle)
 			
 			if (not self:GetScript("OnUpdate")) then
 				self:SetScript("OnUpdate", OnUpdate)
@@ -72,3 +96,5 @@ function Throttles:Stop(name)
 		self:SetScript("OnUpdate", nil)
 	end
 end
+
+vUI.Throttle = Throttles

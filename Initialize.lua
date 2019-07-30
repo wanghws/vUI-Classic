@@ -108,12 +108,26 @@ vUI.ClassColors = {}
 		Hex = vUI:RGBToHex(R, G, B)
 		
 		if (Class == "DEATHKNIGHT") then
-			RAID_CLASS_COLORS[Class] = {r = 27/255, g = 34/255, b = 45/255, colorStr = Hex}
+			RAID_CLASS_COLORS[Class] = {r = 127/255, g = 34/255, b = 45/255, colorStr = Hex}
 		else
 			RAID_CLASS_COLORS[Class] = {r = R, g = G, b = B, colorStr = Hex}
 		end
 	end
 --end
+
+function vUI:FormatTime(seconds)
+	if (seconds >= 86400) then
+		return format("%dd", ceil(seconds / 86400))
+	elseif (seconds >= 3600) then
+		return format("%dh", ceil(seconds / 3600))
+	elseif (seconds >= 60) then
+		return format("%dm", ceil(seconds / 60))
+	elseif (seconds >= 60 / 12) then
+		return floor(seconds)
+	end
+	
+	return format("%.1f", seconds)
+end
 
 function vUI:Reset() -- /run vUI:Reset()
 	-- Create a prompt unless dev

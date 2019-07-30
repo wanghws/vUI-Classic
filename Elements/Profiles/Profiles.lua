@@ -44,7 +44,7 @@ Profiles.Preserve = {
 	["ui-button-texture-color"] = true,
 }
 
-Profiles.GetCurrentDate = function()
+function Profiles:GetCurrentDate()
 	return date("%Y-%m-%d %I:%M %p")
 end
 

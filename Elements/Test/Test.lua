@@ -37,7 +37,7 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Buttons"])
 	Right:CreateButton("Test", "Button Demo", "Enable something", function() vUI:print("test-button-1") end)
 	Right:CreateButton("Test", "Button Demo", "Enable something", function() vUI:print("test-button-2") end)
-	Right:CreateButton("Test", "Button Demo", "Enable something", function() vUI:print("test-button-3") end)
+	Right:CreateButton("Test", "Button Demo", "Enable something", function() vUI.Throttle:Create("test1", 10) if vUI.Throttle:IsThrottled("test1") then print('throttled:'..vUI:FormatTime(vUI.Throttle:GetRemaining("test1"))) else vUI.Throttle:Start("test1") print("starting") end end)
 	
 	Left:CreateHeader(Language["Switches"])
 	Left:CreateSwitch("test-switch-1", true, "Switch Demo", "", function(v, id) vUI:print(format(Debug, id, tostring(v))) end)
