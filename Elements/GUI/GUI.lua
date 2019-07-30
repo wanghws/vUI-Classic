@@ -3430,12 +3430,20 @@ function GUI:Create()
 	self.CloseButton:SetBackdropBorderColor(0, 0, 0)
 	self.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
 	self.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
-	self.CloseButton:SetScript("OnMouseUp", function()
-		self.FadeOut:Play()
+	self.CloseButton:SetScript("OnMouseUp", function(self)
+		self.Texture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 		
-		if (self.ColorPicker and self.ColorPicker:GetAlpha() > 0) then
-			self.ColorPicker.FadeOut:Play()
+		GUI.FadeOut:Play()
+		
+		if (GUI.ColorPicker and GUI.ColorPicker:GetAlpha() > 0) then
+			GUI.ColorPicker.FadeOut:Play()
 		end
+	end)
+	
+	self.CloseButton:SetScript("OnMouseDown", function(self)
+		local R, G, B = HexToRGB(Settings["ui-header-texture-color"])
+		
+		self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 	end)
 	
 	self.CloseButton.Texture = self.CloseButton:CreateTexture(nil, "ARTWORK")

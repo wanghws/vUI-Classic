@@ -89,6 +89,32 @@ function vUI:RGBToHSV(r, g, b) -- https://www.rapidtables.com/convert/color/rgb-
 	local Max = max(R, G, B)
 end
 
+vUI.ClassColors = {}
+
+--function vUI:UpdateClassColors()
+	local R, G, B, Hex
+	local Mod
+	
+	for Class, Color in pairs(RAID_CLASS_COLORS) do
+		if (Class == "WARLOCK") then
+			Mod = 0.78 -- 0.82
+		else
+			Mod = 0.9
+		end
+		
+		R = (Color.r * Mod)
+		G = (Color.g * Mod)
+		B = (Color.b * Mod)
+		Hex = vUI:RGBToHex(R, G, B)
+		
+		if (Class == "DEATHKNIGHT") then
+			RAID_CLASS_COLORS[Class] = {r = 27/255, g = 34/255, b = 45/255, colorStr = Hex}
+		else
+			RAID_CLASS_COLORS[Class] = {r = R, g = G, b = B, colorStr = Hex}
+		end
+	end
+--end
+
 function vUI:Reset() -- /run vUI:Reset()
 	-- Create a prompt unless dev
 	vUIProfiles = nil

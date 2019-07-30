@@ -38,4 +38,5 @@ Elements\ZoneText\ZoneText.lua
 Elements\Alerts\Alerts.lua
 Elements\Popup\Popup.lua
 Elements\Update\Update.lua
+Elements\Colors\Colors.lua
 Elements\Test\Test.lua

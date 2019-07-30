@@ -42,6 +42,20 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
+-- Class Colors
+Defaults["cc-death-knight"] = "C41F3B"
+Defaults["cc-demon-hunter"] = "A330C9"
+Defaults["cc-druid"] = "FF7D0A"
+Defaults["cc-hunter"] = "ABD473"
+Defaults["cc-mage"] = "40C7EB"
+Defaults["cc-monk"] = "00FF96"
+Defaults["cc-paladin"] = "F58CBA"
+Defaults["cc-priest"] = "FFFFFF"
+Defaults["cc-rogue"] = "FFF569"
+Defaults["cc-shaman"] = "0070DE"
+Defaults["cc-warlock"] = "8787ED"
+Defaults["cc-warrior"] = "C79C6E"
+
 -- Action Bars
 Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "DEFAULT"

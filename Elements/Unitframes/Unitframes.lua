@@ -119,6 +119,13 @@ Methods["vUI-Name15"] = function(unit)
 	return sub(Name, 1, 18)
 end
 
+Events["vUI-Name20"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Methods["vUI-Name20"] = function(unit)
+	local Name = UnitName(unit)
+	
+	return sub(Name, 1, 20)
+end
+
 local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
@@ -134,7 +141,7 @@ local StyleNamePlate = function(self, unit)
 	Health:SetPoint("BOTTOMRIGHT", self, -1, 1)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealthBG = Health:CreateTexture(nil, "BORDER")
+	local HealthBG = Health:CreateTexture(nil, "BACKGROUND")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
 	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
@@ -149,7 +156,7 @@ local StyleNamePlate = function(self, unit)
 	
 	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
 	HealthValue:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	HealthValue:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -6, -2)
+	HealthValue:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -2)
 	HealthValue:SetJustifyH("RIGHT")
 	HealthValue:SetShadowColor(0, 0, 0)
 	HealthValue:SetShadowOffset(1, -1)
@@ -160,10 +167,11 @@ local StyleNamePlate = function(self, unit)
 	Health.colorClass = true
 	Health.colorReaction = true
 	
-	self:Tag(Name, "[vUI-Name15]")
+	self:Tag(Name, "[vUI-Name20]")
 	self:Tag(HealthValue, "[vUI-HealthPercent]")
 	
 	self.Health = Health
+	self.Name = Name
 	self.Health.bg = HealthBG
 end
 
@@ -264,6 +272,7 @@ local StylePlayer = function(self, unit)
 	self.Health.bg = HealthBG
 	self.Power = Power
 	self.Power.bg = PowerBG
+	self.PowerValue = PowerValue
 	self.Combat = Combat
 	self.Castbar = CastBar
 	self.HealBar = HealBar
@@ -294,9 +303,12 @@ local StyleTarget = function(self, unit)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
-	local Combat = Health:CreateTexture(nil, "OVERLAY")
-	Combat:SetScaledSize(20, 20)
-	Combat:SetScaledPoint("CENTER", Health)
+	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
+	HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	HealthValue:SetScaledPoint("BOTTOMLEFT", self, 2, 2)
+	HealthValue:SetJustifyH("LEFT")
+	HealthValue:SetShadowColor(0, 0, 0)
+	HealthValue:SetShadowOffset(1, -1)
 	
 	local Name = Health:CreateFontString(nil, "OVERLAY")
 	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
@@ -335,14 +347,12 @@ local StyleTarget = function(self, unit)
 	Power.frequentUpdates = true
 	Power.colorPower = true
 	
-	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
-	HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	HealthValue:SetScaledPoint("BOTTOMLEFT", self, 2, 2)
-	HealthValue:SetJustifyH("LEFT")
-	HealthValue:SetShadowColor(0, 0, 0)
-	HealthValue:SetShadowOffset(1, -1)
+	-- Combat
+	local Combat = Health:CreateTexture(nil, "OVERLAY")
+	Combat:SetScaledSize(20, 20)
+	Combat:SetScaledPoint("CENTER", Health)
 	
-	-- Heal Prediction
+	-- Heal	Prediction
 	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
 	AbsorbsBar:SetAllPoints(Health)
 	AbsorbsBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
@@ -376,6 +386,8 @@ local StyleTarget = function(self, unit)
 	self.Health.bg = HealthBG
 	self.Power = Power
 	self.Power.bg = PowerBG
+	self.PowerValue = PowerValue
+	self.Name = Name
 	self.Combat = Combat
 	self.Castbar = CastBar
 	self.HealBar = HealBar
