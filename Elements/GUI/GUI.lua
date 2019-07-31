@@ -3498,9 +3498,11 @@ function GUI:VARIABLES_LOADED()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
 	
 	--[[
-		if EnableTemplates then
+		if Settings["enable-templates"] then
 			Merge templates with Settings, otherwise use default settings?
 		end
+		
+		-- Write the template into the Defaults table?
 	--]]
 	
 	-- Load the GUI

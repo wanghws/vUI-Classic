@@ -746,7 +746,7 @@ GUI:AddOptions(function(self)
 	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "", UpdateShowCount)
 	
 	Left:CreateHeader(Language["Layouts"])
-	Left:CreateDropdown("action-bars-layout", "Default", {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Action Bar Layout", "", SetActionBarLayout)
+	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "", SetActionBarLayout)
 	
 	Left:CreateHeader(Language["Highlights"])
 	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "", SetHighlightTexture, "Texture")

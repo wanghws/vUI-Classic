@@ -94,6 +94,7 @@ Defaults["minimap-size"] = 140
 
 -- Unitframes
 Defaults["unitframes-enable"] = true
+Defaults["unitframes-player-show-name"] = false
 
 -- Name Plates
 Defaults["nameplates-enable"] = true

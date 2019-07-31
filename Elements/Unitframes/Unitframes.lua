@@ -199,6 +199,13 @@ local StylePlayer = function(self, unit)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
+	local Name = Health:CreateFontString(nil, "OVERLAY")
+	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Name:SetScaledPoint("LEFT", Health, 3, 0)
+	Name:SetJustifyH("LEFT")
+	Name:SetShadowColor(0, 0, 0)
+	Name:SetShadowOffset(1, -1)
+	
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
@@ -267,12 +274,19 @@ local StylePlayer = function(self, unit)
 	-- Tags
 	self:Tag(HealthValue, "[vUI-PlayerInfo]")
 	self:Tag(PowerValue, "[vUI-Power]")
+	self:Tag(Name, "[vUI-Name20]")
+	
+	--if Settings["unitframes-player-show-name"] then
+	--	self:Tag(Name, "[vUI-Name15]")
+
+	--end
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.Power = Power
 	self.Power.bg = PowerBG
 	self.PowerValue = PowerValue
+	self.Name = Name
 	self.Combat = Combat
 	self.Castbar = CastBar
 	self.HealBar = HealBar
@@ -441,11 +455,22 @@ Frame:SetScript("OnEvent", function(self, event)
 	self:UnregisterEvent(event)
 end)
 
+local TogglePlayerName = function(value)
+	if value then
+		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "vUI-Name15")
+	else
+		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, nil)
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], ""):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Player"])
+	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
