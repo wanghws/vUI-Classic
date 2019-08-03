@@ -628,9 +628,6 @@ GUI:AddOptions(function(self)
 	--Left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	--Left:CreateInputWithButton("profile-key", Profiles:GetDefaultProfileKey(), "Create", "Create New Profile", "", CreateProfile)
-	--Left:CreateInputWithButton("profile-delete", Profiles:GetDefaultProfileKey(), "Delete", "Delete Profile", "", DeleteProfile)
-	
 	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile)
 	Left:CreateInput("profile-delete", Profiles:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile)
 	Left:CreateInput("profile-rename", "", "Rename Profile", "", RenameProfile)
