@@ -179,7 +179,6 @@ Media:SetTexture("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\RenHo
 Media:SetTexture("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga", true)
 Media:SetTexture("Ferous 27", "Interface\\AddOns\\vUI\\Media\\Textures\\fer27.tga")
 Media:SetTexture("Ferous 35", "Interface\\AddOns\\vUI\\Media\\Textures\\fer35.tga", true)
-Media:SetTexture("Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\Mail.tga", true)
 Media:SetTexture("MailLight", "Interface\\AddOns\\vUI\\Media\\Textures\\MailLight.tga", true)
 Media:SetTexture("pHishTex5", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex5.tga")
 Media:SetTexture("pHishTex6", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex6.tga")

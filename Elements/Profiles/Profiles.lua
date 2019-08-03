@@ -5,6 +5,8 @@ local pairs = pairs
 local date = date
 local match = string.match
 
+-- vUI.UserProfileKey = format("%s:%s", vUI.UserRealm, vUI.UserName)
+
 Profiles.List = {}
 
 --[[
@@ -122,26 +124,20 @@ function Profiles:SetLastModified(name)
 end
 
 function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
-	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
-		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
-			return vUIProfileData[vUI.UserRealm][vUI.UserName]
-		end
+	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
+		return vUIProfileData[vUI.UserProfileKey]
 	end
 end
 
 function Profiles:GetActiveProfile()
-	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
-		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
-			return self:GetProfile(vUIProfileData[vUI.UserRealm][vUI.UserName])
-		end
+	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
+		return self:GetProfile(vUIProfileData[vUI.UserProfileKey])
 	end
 end
 
 function Profiles:SetActiveProfile(name)
-	if (vUIProfileData and vUIProfileData[vUI.UserRealm]) then
-		if vUIProfileData[vUI.UserRealm][vUI.UserName] then
-			vUIProfileData[vUI.UserRealm][vUI.UserName] = name
-		end
+	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
+		vUIProfileData[vUI.UserProfileKey] = name
 	end
 end
 
@@ -160,15 +156,11 @@ end
 
 function Profiles:CreateProfileData()
 	if (not vUIProfileData) then -- No profile data exists, create a default
-		self:CreateProfile("Default")
+		self:CreateProfile(Language["Default"])
 	end
 	
-	if (not vUIProfileData[vUI.UserRealm]) then
-		vUIProfileData[vUI.UserRealm] = {}
-	end
-	
-	if (not vUIProfileData[vUI.UserRealm][vUI.UserName]) then
-		vUIProfileData[vUI.UserRealm][vUI.UserName] = self:GetMostUsedProfile()
+	if (not vUIProfileData[vUI.UserProfileKey]) then
+		vUIProfileData[vUI.UserProfileKey] = self:GetMostUsedProfile()
 	end
 end
 
@@ -192,21 +184,20 @@ function Profiles:AddProfile(profile)
 end
 
 function Profiles:CreateProfile(name)
-	if (not vUIProfiles) then
-		vUIProfiles = {}
-	end
-	
 	if (not vUIProfileData) then
 		vUIProfileData = {}
-		vUIProfileData[vUI.UserRealm] = {}
+	end
+	
+	if (not vUIProfiles) then
+		vUIProfiles = {}
 	end
 	
 	if (not name) then
 		name = self:GetDefaultProfileKey()
 	end
 	
-	if (not vUIProfileData[vUI.UserRealm][vUI.UserName]) then
-		vUIProfileData[vUI.UserRealm][vUI.UserName] = name
+	if (not vUIProfileData[vUI.UserProfileKey]) then
+		vUIProfileData[vUI.UserProfileKey] = name
 	end
 	
 	if vUIProfiles[name] then
@@ -223,7 +214,7 @@ function Profiles:CreateProfile(name)
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = self:GetCurrentDate()
 	
-	--vUIProfileData[vUI.UserRealm][vUI.UserName] = name
+	--vUIProfileData[vUI.UserProfileKey] = name
 	
 	self.List[name] = name
 	
@@ -251,7 +242,7 @@ function Profiles:GetProfile(name)
 		local Default = self:GetMostUsedProfile()
 		
 		if (not Default) then
-			local Profile = self:CreateProfile("Default")
+			local Profile = self:CreateProfile(Language["Default"])
 			
 			return Profile
 		elseif (Default and vUIProfiles[Default]) then
@@ -275,10 +266,8 @@ function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback
 	local HighestValue = 0
 	local HighestName
 	
-	for Realm, Value in pairs(vUIProfileData) do
-		for Player, ProfileName in pairs(Value) do
-			Temp[ProfileName] = (Temp[ProfileName] or 0) + 1
-		end
+	for Key, ProfileName in pairs(vUIProfileData) do
+		Temp[ProfileName] = (Temp[ProfileName] or 0) + 1
 	end
 	
 	for Name, Value in pairs(Temp) do
@@ -295,14 +284,12 @@ function Profiles:GetNumServedBy(name)
 	local Count = 0
 	local Total = 0
 	
-	for Realm, Value in pairs(vUIProfileData) do
-		for Player, ProfileName in pairs(Value) do
-			if (ProfileName == name) then
-				Count = Count + 1
-			end
-			
-			Total = Total + 1
+	for Key, ProfileName in pairs(vUIProfileData) do
+		if (ProfileName == name) then
+			Count = Count + 1
 		end
+		
+		Total = Total + 1
 	end
 	
 	return Count, (Count == Total)
@@ -316,11 +303,9 @@ function Profiles:DeleteProfile(name)
 		local Default = self:GetMostUsedProfile()
 		
 		-- If we just wiped out a profile that characters were using, reroute them to a different profile for the time being.
-		for Realm, Value in pairs(vUIProfileData) do
-			for Player, ProfileName in pairs(Value) do
-				if (ProfileName == name) then
-					vUIProfileData[Realm][Player] = Default
-				end
+		for Key, ProfileName in pairs(vUIProfileData) do
+			if (ProfileName == name) then
+				vUIProfileData[Key] = Default
 			end
 		end
 		
@@ -330,12 +315,10 @@ function Profiles:DeleteProfile(name)
 	end
 	
 	if (self:GetProfileCount() == 0) then
-		self:CreateProfile("Default") -- If we just deleted our last profile, make a new default.
+		self:CreateProfile(Language["Default"]) -- If we just deleted our last profile, make a new default.
 		
-		for Realm, Value in pairs(vUIProfileData) do
-			for Player, ProfileName in pairs(Value) do
-				vUIProfileData[Realm][Player] = "Default"
-			end
+		for Key, Value in pairs(vUIProfileData) do
+			vUIProfileData[Key] = Language["Default"]
 		end
 	end
 end
@@ -360,17 +343,13 @@ function Profiles:MergeWithDefaults(name)
 end
 
 function Profiles:ApplyProfile(name)
-	--[[if (not vUIProfiles[name]) then -- I think we're protected against this, and will manage default if needed?
-		return
-	end]]
-	
 	local Values = self:MergeWithDefaults(name)
 	
 	for ID, Value in pairs(Values) do
 		Settings[ID] = Value
 	end
 	
-	vUIProfileData[vUI.UserRealm][vUI.UserName] = name
+	vUIProfileData[vUI.UserProfileKey] = name
 	
 	Values = nil
 end
@@ -454,14 +433,12 @@ function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProf
 	
 	self:UpdateProfileList()
 	
-	for Name in pairs(self.List) do
+	for Name in pairs(self.List) do -- 
 		Counts[Name] = 0
 	end
 	
-	for Realm, Value in pairs(vUIProfileData) do
-		for Player, ProfileName in pairs(Value) do
-			Counts[ProfileName] = Counts[ProfileName] + 1
-		end
+	for Key, ProfileName in pairs(vUIProfileData) do
+		Counts[ProfileName] = Counts[ProfileName] + 1
 	end
 	
 	for Name, Total in pairs(Counts) do
@@ -475,7 +452,7 @@ function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProf
 	return Unused
 end
 
-function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("Default", "vUI")
+function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("ProfileName", "vUI")
 	local FromProfile = vUIProfiles[from]
 	local ToProfile = vUIProfiles[to]
 	
@@ -508,7 +485,7 @@ function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("Defa
 	vUI:print(format('Profile "%s" has been renamed to "%s".', from, to))
 end
 
-function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata("Default", "profile-created-by", "Hydra")
+function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata("ProfileName", "profile-created-by", "Hydra")
 	if vUIProfiles[name] then
 		if self.Metadata[meta] then
 			vUIProfiles[name][meta] = value
@@ -609,7 +586,12 @@ local DeleteUnused = function()
 end
 
 local RenameProfile = function(value)
-	Profiles:UpdateProfileInfo()
+	if value and match(value, "%S+") then
+		local Active = Profiles:GetActiveProfileName()
+		
+		Profiles:RenameProfile(Active, value)
+		Profiles:UpdateProfileInfo()
+	end
 end
 
 local UpdateProfileInfo = function()

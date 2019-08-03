@@ -50,8 +50,8 @@ vUI.UserRace = UnitRace("player")
 vUI.UserRealm = GetRealmName()
 vUI.UserFaction = UnitFactionGroup("player")
 vUI.UserLocale = GetLocale()
-vUI.UserKey = format("%s-%s", vUI.UserRealm, vUI.UserName)
-vUI.UserKeyGold = format("%s-%s-%s", vUI.UserRealm, vUI.UserName, vUI.UserFaction)
+vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
+vUI.UserKeyGold = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
 
 if (vUI.UserLocale == "enGB") then
 	vUI.UserLocale = "enUS"

@@ -140,7 +140,7 @@ local OnEvent = function(self, event)
 	MiniMapMailFrame:SetFrameLevel(Minimap:GetFrameLevel() + 2)
 	
 	MiniMapMailIcon:SetScaledSize(32, 32)
-	MiniMapMailIcon:SetTexture(Media:GetTexture("Mail"))
+	MiniMapMailIcon:SetTexture(Media:GetTexture("MailLight"))
 	MiniMapMailIcon:SetVertexColor(Settings["ui-wdiget-bright"])
 	
 	MinimapNorthTag:SetTexture(nil)
