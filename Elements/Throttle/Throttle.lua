@@ -1,6 +1,6 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
--- Just laying out a super basic throttle system for now
+-- Just laying out a super basic throttle system for now, I can add to it later if needed
 local Throttles = CreateFrame("Frame")
 Throttles.Inactive = {}
 Throttles.Active = {}
@@ -71,7 +71,7 @@ function Throttles:Start(name)
 		if (self.Inactive[i].Name == name) then
 			local Throttle = tremove(self.Inactive, i)
 			
-			Throttle.Time = Throttle.Duration
+			Throttle.Time = Throttle.Duration -- Reset the duration
 			tinsert(self.Active, Throttle)
 			
 			if (not self:GetScript("OnUpdate")) then

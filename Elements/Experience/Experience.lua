@@ -446,6 +446,18 @@ local UpdateUIScale = function(value)
 	SetCVar("uiScale", value)
 end
 
+local GetDiscordLink = function()
+	if (not vUI.Throttle:Exists("get-discord-link")) then
+		vUI.Throttle:Create("get-discord-link", 10)
+	end
+	
+	if (not vUI.Throttle:IsThrottled("get-discord-link")) then
+		print("https://discord.gg/SmT6Yk")
+		
+		vUI.Throttle:Start("get-discord-link")
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Experience"])
 	
@@ -482,7 +494,7 @@ GUI:AddOptions(function(self)
 	GeneralLeft:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
 	
 	GeneralLeft:CreateHeader("Discord")
-	GeneralLeft:CreateButton("Get Link", "Join Discord", "", function() print("https://discord.gg/SmT6Yk") end)
+	GeneralLeft:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
 	
 	GeneralRight:CreateHeader(Language["Language"])
 	GeneralRight:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)

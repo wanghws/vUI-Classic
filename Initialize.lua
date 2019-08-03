@@ -6,6 +6,8 @@ local sub = string.sub
 local format = string.format
 local floor = math.floor
 local ceil = math.ceil
+local min = math.min
+local max = math.max
 local type = type
 local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
@@ -46,7 +48,10 @@ vUI.UserName = UnitName("player")
 vUI.UserClass = UnitClass("player")
 vUI.UserRace = UnitRace("player")
 vUI.UserRealm = GetRealmName()
+vUI.UserFaction = UnitFactionGroup("player")
 vUI.UserLocale = GetLocale()
+vUI.UserKey = format("%s-%s", vUI.UserRealm, vUI.UserName)
+vUI.UserKeyGold = format("%s-%s-%s", vUI.UserRealm, vUI.UserName, vUI.UserFaction)
 
 if (vUI.UserLocale == "enGB") then
 	vUI.UserLocale = "enUS"
@@ -76,9 +81,6 @@ end
 function vUI:RGBToHex(r, g, b)
 	return format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
-
-local min = math.min
-local max = math.max
 
 function vUI:RGBToHSV(r, g, b) -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 	local R = r / 255

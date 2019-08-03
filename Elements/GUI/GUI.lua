@@ -316,7 +316,7 @@ end]]
 	
 	tinsert(self.Widgets, Anchor)
 	
-	return Header
+	return Anchor.Text
 end]]
 
 GUI.Widgets.CreateHeader = function(self, text)
@@ -369,7 +369,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	
 	tinsert(self.Widgets, Anchor)
 	
-	return Header
+	return Anchor.Text
 end
 
 --[[GUI.Widgets.CreateHeader = function(self, text)
@@ -1553,7 +1553,7 @@ local MenuItemOnMouseUp = function(self)
 	self.GrandParent.Current:SetText(self.Key)
 end
 
-local DropdownUpdate = function(self)
+local DropdownUpdateList = function(self)
 	
 end
 

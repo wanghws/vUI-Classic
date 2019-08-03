@@ -287,6 +287,31 @@ Media:SetTemplate("vUI", {
 	["ui-button-texture-color"] = "616161",
 })
 
+-- vUI 2
+Media:SetTemplate("vUI 2", {
+	["ui-widget-font"] = "PT Sans",
+	["ui-header-font"] = "PT Sans",
+	["ui-button-font"] = "PT Sans",
+	
+	["ui-widget-texture"] = "Kola",
+	["ui-header-texture"] = "Kola",
+	["ui-button-texture"] = "Kola",
+	
+	["ui-header-font-color"] = "FFE6C0",
+	["ui-header-texture-color"] = "616161",
+	
+	["ui-window-bg-color"] = "424242",
+	["ui-window-main-color"] = "2B2B2B",
+	
+	["ui-widget-color"] = "FFB74D",
+	["ui-widget-bright-color"] = "8E8E8E",
+	["ui-widget-bg-color"] = "424242",
+	["ui-widget-font-color"] = "FFFFFF",
+	
+	["ui-button-font-color"] = "FFB74D",
+	["ui-button-texture-color"] = "8E8E8E",
+})
+
 -- Midnight
 Media:SetTemplate("Midnight", {
 	["ui-widget-font"] = "Prototype",
