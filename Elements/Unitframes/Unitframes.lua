@@ -274,12 +274,10 @@ local StylePlayer = function(self, unit)
 	-- Tags
 	self:Tag(HealthValue, "[vUI-PlayerInfo]")
 	self:Tag(PowerValue, "[vUI-Power]")
-	self:Tag(Name, "[vUI-Name20]")
 	
-	--if Settings["unitframes-player-show-name"] then
-	--	self:Tag(Name, "[vUI-Name15]")
-
-	--end
+	if Settings["unitframes-player-show-name"] then
+		self:Tag(Name, "[vUI-Name15")
+	end
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -457,9 +455,11 @@ end)
 
 local TogglePlayerName = function(value)
 	if value then
-		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "vUI-Name15")
+		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "[vUI-Name15]")
+		oUF_vUIPlayer:UpdateTags()
 	else
-		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, nil)
+		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "")
+		oUF_vUIPlayer:UpdateTags()
 	end
 end
 

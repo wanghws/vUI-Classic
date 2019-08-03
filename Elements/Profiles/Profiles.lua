@@ -5,8 +5,6 @@ local pairs = pairs
 local date = date
 local match = string.match
 
--- vUI.UserProfileKey = format("%s:%s", vUI.UserRealm, vUI.UserName)
-
 Profiles.List = {}
 
 --[[
