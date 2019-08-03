@@ -64,12 +64,10 @@ local IsToday = function(s)
 end
 
 function Profiles:UpdateProfileInfo()
-	local Name = Profiles:GetActiveProfileName()
-	local Profile = Profiles:GetProfile(Name)
-	local MostUsed = Profiles:GetMostUsedProfile()
-	local NumServed, IsAll = Profiles:GetNumServedBy(Name)
-	local NumEmpty = Profiles:CountEmptyProfiles()
-	local NumUnused = Profiles:CountUnusedProfiles()
+	local Name = self:GetActiveProfileName()
+	local Profile = self:GetProfile(Name)
+	local MostUsed = self:GetMostUsedProfile()
+	local NumServed, IsAll = self:GetNumServedBy(Name)
 	local MostUsedServed = NumServed
 	
 	if IsAll then
@@ -77,20 +75,20 @@ function Profiles:UpdateProfileInfo()
 	end
 	
 	if (Profile ~= MostUsed) then
-		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
+		MostUsedServed = self:GetNumServedBy(MostUsed)
 	end
 	
 	GUI:GetWidgetByWindow(Language["Profiles"], "current-profile").Right:SetText(Name)
 	GUI:GetWidgetByWindow(Language["Profiles"], "created-by").Right:SetText(Profile["profile-created-by"])
 	GUI:GetWidgetByWindow(Language["Profiles"], "created-on").Right:SetText(IsToday(Profile["profile-created"]))
 	GUI:GetWidgetByWindow(Language["Profiles"], "last-modified").Right:SetText(IsToday(Profile["profile-last-modified"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "modifications").Right:SetText(Profiles:CountChangedValues(Name))
+	GUI:GetWidgetByWindow(Language["Profiles"], "modifications").Right:SetText(self:CountChangedValues(Name))
 	GUI:GetWidgetByWindow(Language["Profiles"], "serving-characters").Right:SetText(NumServed)
 	
 	GUI:GetWidgetByWindow(Language["Profiles"], "popular-profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
-	GUI:GetWidgetByWindow(Language["Profiles"], "stored-profiles").Right:SetText(Profiles:GetProfileCount())
-	GUI:GetWidgetByWindow(Language["Profiles"], "empty-profiles").Right:SetText(NumEmpty)
-	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(NumUnused)
+	GUI:GetWidgetByWindow(Language["Profiles"], "stored-profiles").Right:SetText(self:GetProfileCount())
+	GUI:GetWidgetByWindow(Language["Profiles"], "empty-profiles").Right:SetText(self:CountEmptyProfiles())
+	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(self:CountUnusedProfiles())
 end
 
 function Profiles:UpdateProfileList()
