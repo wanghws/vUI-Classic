@@ -263,6 +263,10 @@ function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback
 	local HighestName
 	
 	for Key, ProfileName in pairs(vUIProfileData) do
+		if (not Temp[ProfileName]) then -- In case we renamed something
+			Temp[ProfileName] = 0
+		end
+		
 		Temp[ProfileName] = (Temp[ProfileName] or 0) + 1
 	end
 	
@@ -404,10 +408,12 @@ function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles
 		Counts[Name] = 0
 	end
 	
-	for Realm, Value in pairs(vUIProfileData) do
-		for Player, ProfileName in pairs(Value) do
-			Counts[ProfileName] = Counts[ProfileName] + 1
+	for Key, ProfileName in pairs(vUIProfileData) do
+		if (not Counts[ProfileName]) then -- In case we renamed something
+			Counts[ProfileName] = 0
 		end
+		
+		Counts[ProfileName] = Counts[ProfileName] + 1
 	end
 	
 	for Name, Total in pairs(Counts) do
@@ -429,11 +435,15 @@ function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProf
 	
 	self:UpdateProfileList()
 	
-	for Name in pairs(self.List) do -- 
+	for Name in pairs(self.List) do
 		Counts[Name] = 0
 	end
 	
 	for Key, ProfileName in pairs(vUIProfileData) do
+		if (not Counts[ProfileName]) then -- In case we renamed something
+			Counts[ProfileName] = 0
+		end
+	
 		Counts[ProfileName] = Counts[ProfileName] + 1
 	end
 	
@@ -468,11 +478,9 @@ function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("Prof
 	self.List[to] = to
 	
 	-- Reroute characters who used this profile
-	for Realm, Value in pairs(vUIProfileData) do
-		for Player, ProfileName in pairs(Value) do
-			if (ProfileName == from) then
-				vUIProfileData[Realm][Player] = to
-			end
+	for Key, ProfileName in pairs(vUIProfileData) do
+		if (ProfileName == from) then
+			vUIProfileData[Key] = to
 		end
 	end
 	

@@ -43,18 +43,18 @@ Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
 -- Colors
-Defaults["color-death-knight"] = "C41F3B"
-Defaults["color-demon-hunter"] = "A330C9"
-Defaults["color-druid"] = "FF7D0A"
-Defaults["color-hunter"] = "ABD473"
-Defaults["color-mage"] = "40C7EB"
-Defaults["color-monk"] = "00FF96"
-Defaults["color-paladin"] = "F58CBA"
-Defaults["color-priest"] = "FFFFFF"
-Defaults["color-rogue"] = "FFF569"
-Defaults["color-shaman"] = "0070DE"
-Defaults["color-warlock"] = "8787ED"
-Defaults["color-warrior"] = "C79C6E"
+Defaults["color-death-knight"] = "C41F3B" -- 7F222D
+Defaults["color-demon-hunter"] = "A330C9" -- 922BB4
+Defaults["color-druid"] = "FF7D0A" -- E56F08
+Defaults["color-hunter"] = "ABD473" -- 98BD66
+Defaults["color-mage"] = "40C7EB" -- 38B2D2
+Defaults["color-monk"] = "00FF96" -- 00E586
+Defaults["color-paladin"] = "F58CBA" -- DB7DA7
+Defaults["color-priest"] = "FFFFFF" -- E5E5E5
+Defaults["color-rogue"] = "FFF569" -- E5DB5D
+Defaults["color-shaman"] = "0070DE" -- 0046C6
+Defaults["color-warlock"] = "8787ED" -- 6969B8
+Defaults["color-warrior"] = "C79C6E" -- B28B62
 
 Defaults["color-sanctuary"] = "68CCEF"
 Defaults["color-arena"] = "FF1919"

@@ -85,7 +85,18 @@ local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
+local unpack = unpack
+
 local unitSelectionType = Private.unitSelectionType
+
+local UnitClass = UnitClass
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsTapDenied = UnitIsTapDenied
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitIsConnected = UnitIsConnected
+local UnitIsPlayer = UnitIsPlayer
+local UnitReaction = UnitReaction
 
 local function UpdateColor(element, unit, cur, max)
 	local parent = element.__owner

@@ -276,7 +276,7 @@ local StylePlayer = function(self, unit)
 	self:Tag(PowerValue, "[vUI-Power]")
 	
 	if Settings["unitframes-player-show-name"] then
-		self:Tag(Name, "[vUI-Name15")
+		self:Tag(Name, "[vUI-Name15]")
 	end
 	
 	self.Health = Health

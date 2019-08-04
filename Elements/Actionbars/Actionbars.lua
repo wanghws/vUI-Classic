@@ -646,6 +646,13 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBar4()
 	CreateBar5()
 	
+	SHOW_MULTI_ACTIONBAR_1 = true
+	SHOW_MULTI_ACTIONBAR_2 = true
+	SHOW_MULTI_ACTIONBAR_3 = true
+	SHOW_MULTI_ACTIONBAR_4 = true
+	
+	MultiActionBar_Update()
+	
 	SetActionBarLayout(Settings["action-bars-layout"])
 	
 	self:UnregisterEvent(event)
