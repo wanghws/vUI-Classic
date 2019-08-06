@@ -39,7 +39,11 @@ local Height = GetScreenHeight()
 local Mult = 768 / Height / ((GetCVar("useUiScale") and GetCVar("uiScale") or 0.71))
 
 local Scale = function(num)
-	return Mult * floor(num / Mult + 0.5)
+	if (num == 1) then
+		return Mult
+	else
+		return Mult * floor(num / Mult + 0.5)
+	end
 end
 
 -- Some Data
