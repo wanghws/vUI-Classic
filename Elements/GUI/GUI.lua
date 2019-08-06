@@ -2371,6 +2371,14 @@ local SwatchEditBoxOnEditFocusLost = function(self)
 		
 		GUI.ColorPicker.Transition:SetChange(HexToRGB(Value))
 		GUI.ColorPicker.Selected = Value
+	elseif (Value and Value == "CLASS") then
+		local ClassColor = RAID_CLASS_COLORS[vUI.UserClass]
+		local ClassHex = vUI:RGBToHex(ClassColor.r, ClassColor.g, ClassColor.b)
+		
+		self:SetText("#"..upper(ClassHex))
+		
+		GUI.ColorPicker.Transition:SetChange(HexToRGB(ClassHex))
+		GUI.ColorPicker.Selected = ClassHex
 	else
 		vUI:print(format('Invalid hex code "%s".', Value))
 		
@@ -2391,7 +2399,7 @@ local SwatchEditBoxOnChar = function(self)
 	
 	self:SetText(Value)
 	
-	if (Value and match(Value, "%x%x%x%x%x%x")) then
+	if match(Value, "%x%x%x%x%x%x") or (Value == "CLASS") then
 		self:SetAutoFocus(false)
 		self:ClearFocus()
 	end
@@ -3510,7 +3518,7 @@ function GUI:VARIABLES_LOADED()
 	self:RunQueue()
 	
 	-- Set the frame height
-	local Height = HEADER_HEIGHT + (self.WindowCount * WIDGET_HEIGHT) + (self.WindowCount * SPACING) - 1
+	local Height = HEADER_HEIGHT + (self.WindowCount * WIDGET_HEIGHT) + ((self.WindowCount - 1) * SPACING)
 	
 	self:SetScaledHeight(Height)
 	

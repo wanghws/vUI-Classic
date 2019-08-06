@@ -210,11 +210,20 @@ local StylePlayer = function(self, unit)
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
 	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
 	-- Attributes
 	Health.frequentUpdates = true
-	Health.colorTapping = true
-	Health.colorDisconnected = true
-	Health.colorClass = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-player-cc-health"] then
+		Health.colorReaction = true
+		Health.colorClass = true
+		Health.colorDisconnected = true
+	else
+		Health.colorHealth = true
+		Health.colorDisconnected = true
+	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
@@ -237,7 +246,13 @@ local StylePlayer = function(self, unit)
 	
 	-- Attributes
 	Power.frequentUpdates = true
-	Power.colorPower = true
+	
+	if Settings["unitframes-player-cc-health"] then
+		Power.colorPower = true
+		Power.colorReaction = true
+	else
+		Power.colorClass = true
+	end
 	
 	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
 	HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
@@ -329,12 +344,22 @@ local StyleTarget = function(self, unit)
 	Name:SetShadowColor(0, 0, 0)
 	Name:SetShadowOffset(1, -1)
 	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
 	-- Attributes
 	Health.frequentUpdates = true
-	Health.colorTapping = true
-	Health.colorDisconnected = true
-	Health.colorClass = true
-	Health.colorReaction = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-target-cc-health"] then
+		Health.colorReaction = true
+		Health.colorClass = true
+		Health.colorTapping = true
+		Health.colorDisconnected = true
+	else
+		Health.colorHealth = true
+		Health.colorTapping = true
+		Health.colorDisconnected = true
+	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
@@ -357,7 +382,13 @@ local StyleTarget = function(self, unit)
 	
 	-- Attributes
 	Power.frequentUpdates = true
-	Power.colorPower = true
+	
+	if Settings["unitframes-target-cc-health"] then
+		Power.colorPower = true
+		Power.colorReaction = true
+	else
+		Power.colorClass = true
+	end
 	
 	-- Combat
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
@@ -443,8 +474,8 @@ Frame:SetScript("OnEvent", function(self, event)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -67, -304)
 	
 	local Target = oUF:Spawn("target")
-	Target:SetSize(230, 45)
-	Target:SetPoint("LEFT", UIParent, "CENTER", 67, -304)
+	Target:SetScaledSize(230, 45)
+	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 67, -304)
 	
 	if Settings["nameplates-enable"] then
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)
@@ -471,6 +502,11 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Player"])
 	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
+	Left:CreateCheckbox("unitframes-player-cc-health", Settings["unitframes-player-cc-health"], Language["Dark Scheme"], "")
+	
+	Right:CreateHeader(Language["Target"])
+	Right:CreateCheckbox("unitframes-target-show-name", Settings["unitframes-target-show-name"], Language["Enable Name"], "", TogglePlayerName)
+	Right:CreateCheckbox("unitframes-target-cc-health", Settings["unitframes-target-cc-health"], Language["Dark Scheme"], "")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

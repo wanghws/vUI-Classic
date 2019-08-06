@@ -238,15 +238,11 @@ function Profiles:GetProfile(name)
 		local Default = self:GetMostUsedProfile()
 		
 		if (not Default) then
-			local Profile = self:CreateProfile(Language["Default"])
-			
-			return Profile
+			return self:CreateProfile(Language["Default"])
 		elseif (Default and vUIProfiles[Default]) then
 			return vUIProfiles[Default]
 		end
 	end
-	
-	return vUI:print("Please report that this case happened: Profiles:GetProfile()")
 end
 
 function Profiles:GetProfileList()
@@ -324,8 +320,8 @@ function Profiles:DeleteProfile(name)
 end
 
 function Profiles:MergeWithDefaults(name)
-	local Values = {}
 	local Profile = self:GetProfile(name)
+	local Values = {}
 	
 	-- Collect default values
 	for ID, Value in pairs(Defaults) do
@@ -354,7 +350,7 @@ function Profiles:ApplyProfile(name)
 	Values = nil
 end
 
-function Profiles:DeleteEmptyProfiles() -- /run vUI:get(7):DeleteEmptyProfiles()
+function Profiles:DeleteEmptyProfiles()
 	local Count = 0
 	local Deleted = 0
 	
@@ -377,7 +373,7 @@ function Profiles:DeleteEmptyProfiles() -- /run vUI:get(7):DeleteEmptyProfiles()
 	vUI:print(format("Deleted %s empty profiles.", Deleted))
 end
 
-function Profiles:CountEmptyProfiles() -- /run print(vUI:get(7):CountEmptyProfiles())
+function Profiles:CountEmptyProfiles()
 	local Count = 0
 	local Total = 0
 	
@@ -398,7 +394,7 @@ function Profiles:CountEmptyProfiles() -- /run print(vUI:get(7):CountEmptyProfil
 	return Total
 end
 
-function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles()
+function Profiles:DeleteUnusedProfiles()
 	local Counts = {}
 	local Deleted = 0
 	
@@ -429,7 +425,7 @@ function Profiles:DeleteUnusedProfiles() -- /run vUI:get(7):DeleteUnusedProfiles
 	vUI:print(format("Deleted %s unused profiles.", Deleted))
 end
 
-function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProfiles())
+function Profiles:CountUnusedProfiles()
 	local Counts = {}
 	local Unused = 0
 	
@@ -458,7 +454,7 @@ function Profiles:CountUnusedProfiles() -- /run print(vUI:get(7):CountUnusedProf
 	return Unused
 end
 
-function Profiles:RenameProfile(from, to) -- /run vUI:get(7):RenameProfile("ProfileName", "vUI")
+function Profiles:RenameProfile(from, to)
 	local FromProfile = vUIProfiles[from]
 	local ToProfile = vUIProfiles[to]
 	

@@ -292,12 +292,12 @@ Media:SetTemplate("vUI 2", {
 	["ui-header-font"] = "PT Sans",
 	["ui-button-font"] = "PT Sans",
 	
-	["ui-widget-texture"] = "Kola",
-	["ui-header-texture"] = "Kola",
-	["ui-button-texture"] = "Kola",
+	["ui-widget-texture"] = "Ferous 27",
+	["ui-header-texture"] = "Ferous 27",
+	["ui-button-texture"] = "Ferous 27",
 	
 	["ui-header-font-color"] = "FFE6C0",
-	["ui-header-texture-color"] = "616161",
+	["ui-header-texture-color"] = "515151",
 	
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "2B2B2B",
@@ -308,7 +308,7 @@ Media:SetTemplate("vUI 2", {
 	["ui-widget-font-color"] = "FFFFFF",
 	
 	["ui-button-font-color"] = "FFB74D",
-	["ui-button-texture-color"] = "8E8E8E",
+	["ui-button-texture-color"] = "666666",
 })
 
 -- Midnight
@@ -361,7 +361,7 @@ Media:SetTemplate("Slate", {
 	["ui-button-texture-color"] = "78909C",
 })
 
---[[ Unnamed
+-- Unnamed
 Media:SetTemplate("Unnamed", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
@@ -384,4 +384,4 @@ Media:SetTemplate("Unnamed", {
 	
 	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
-})]]
+})
