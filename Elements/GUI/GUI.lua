@@ -1963,7 +1963,9 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		Dropdown.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * Count) + 1)
 	end
 	
-	tinsert(self.Widgets, Anchor)
+	if self.Widgets then
+		tinsert(self.Widgets, Anchor)
+	end
 	
 	return Dropdown
 end
@@ -2424,14 +2426,18 @@ local SwatchButtonOnMouseDown = function(self)
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
+local UpdateColorPalette = function(value)
+	GUI.ColorPicker:SetColorPalette(value)
+end
+
 local CreateColorPicker = function()
 	if GUI.ColorPicker then
 		return
 	end
 	
 	local ColorPicker = CreateFrame("Frame", "vUIColorPicker", GUI)
-	ColorPicker:SetScaledSize(389, 270)
-	ColorPicker:SetScaledPoint("CENTER", UIParent, 0, 81)
+	ColorPicker:SetScaledSize(388, 290)
+	ColorPicker:SetScaledPoint("CENTER", UIParent, 0, 80)
 	ColorPicker:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	ColorPicker:SetBackdropBorderColor(0, 0, 0)
@@ -2470,7 +2476,8 @@ local CreateColorPicker = function()
 	-- Selection parent
 	ColorPicker.SwatchParent = CreateFrame("Frame", nil, ColorPicker)
 	ColorPicker.SwatchParent:SetScaledPoint("TOPLEFT", ColorPicker.Header, "BOTTOMLEFT", 0, -2)
-	ColorPicker.SwatchParent:SetScaledPoint("BOTTOMRIGHT", ColorPicker, 0, 3)
+	ColorPicker.SwatchParent:SetScaledPoint("TOPRIGHT", ColorPicker.Header, "BOTTOMRIGHT", 0, -2)
+	ColorPicker.SwatchParent:SetScaledHeight((SWATCH_SIZE * MAX_SWATCHES_Y) - SPACING)
 	ColorPicker.SwatchParent:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.SwatchParent:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	ColorPicker.SwatchParent:SetBackdropBorderColor(0, 0, 0)
@@ -2493,8 +2500,8 @@ local CreateColorPicker = function()
 	
 	-- Current
 	ColorPicker.Current = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.Current:SetScaledSize(119, 20)
-	ColorPicker.Current:SetScaledPoint("TOPLEFT", ColorPicker.SwatchParent, "BOTTOMLEFT", 3, 45)
+	ColorPicker.Current:SetScaledSize((390 / 3) - SPACING, 20)
+	ColorPicker.Current:SetScaledPoint("TOPLEFT", ColorPicker.SwatchParent, "BOTTOMLEFT", 0, -2)
 	ColorPicker.Current:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.Current:SetBackdropColor(0, 0, 0)
 	ColorPicker.Current:SetBackdropBorderColor(0, 0, 0)
@@ -2515,7 +2522,7 @@ local CreateColorPicker = function()
 	ColorPicker.CurrentText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	
 	ColorPicker.CurrentHex = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.CurrentHex:SetScaledSize(97, 20)
+	ColorPicker.CurrentHex:SetScaledSize(105, 20)
 	ColorPicker.CurrentHex:SetScaledPoint("TOPLEFT", ColorPicker.Current, "BOTTOMLEFT", 0, -2)
 	ColorPicker.CurrentHex:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.CurrentHex:SetBackdropColor(0, 0, 0)
@@ -2548,7 +2555,7 @@ local CreateColorPicker = function()
 	
 	-- New
 	ColorPicker.New = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.New:SetScaledSize(119, 20)
+	ColorPicker.New:SetScaledSize((390 / 3) - SPACING, 20)
 	ColorPicker.New:SetScaledPoint("TOPLEFT", ColorPicker.Current, "TOPRIGHT", 2, 0)
 	ColorPicker.New:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.New:SetBackdropColor(0, 0, 0)
@@ -2570,7 +2577,7 @@ local CreateColorPicker = function()
 	ColorPicker.NewText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	
 	ColorPicker.NewHex = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.NewHex:SetScaledSize(97, 20)
+	ColorPicker.NewHex:SetScaledSize(105, 20)
 	ColorPicker.NewHex:SetScaledPoint("TOPRIGHT", ColorPicker.New, "BOTTOMRIGHT", 0, -2)
 	ColorPicker.NewHex:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.NewHex:SetBackdropColor(0, 0, 0)
@@ -2622,7 +2629,7 @@ local CreateColorPicker = function()
 	
 	-- Accept
 	ColorPicker.Accept = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.Accept:SetScaledSize(120, 20)
+	ColorPicker.Accept:SetScaledSize(((390 / 3) - SPACING) + 1, 20)
 	ColorPicker.Accept:SetScaledPoint("TOPLEFT", ColorPicker.New, "TOPRIGHT", 2, 0)
 	ColorPicker.Accept:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.Accept:SetBackdropColor(0, 0, 0)
@@ -2655,7 +2662,7 @@ local CreateColorPicker = function()
 	
 	-- Cancel
 	ColorPicker.Cancel = CreateFrame("Frame", nil, ColorPicker)
-	ColorPicker.Cancel:SetScaledSize(120, 20)
+	ColorPicker.Cancel:SetScaledSize(((390 / 3) - SPACING) + 1, 20)
 	ColorPicker.Cancel:SetScaledPoint("TOPLEFT", ColorPicker.Accept, "BOTTOMLEFT", 0, -2)
 	ColorPicker.Cancel:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker.Cancel:SetBackdropColor(0, 0, 0)
@@ -2707,6 +2714,9 @@ local CreateColorPicker = function()
 	ColorPicker.FadeOut:SetScript("OnFinished", function(self)
 		self:GetParent():Hide()
 	end)
+	
+	local PaletteDropdown = GUI.Widgets.CreateDropdown(ColorPicker, "ui-picker-palette", Settings["ui-picker-palette"], Media:GetPaletteList(), "Set Palette", "", UpdateColorPalette, "Palette")
+	PaletteDropdown:GetParent():SetScaledPoint("BOTTOMRIGHT", ColorPicker, 0, 3)
 	
 	local Palette = Media:GetPalette(Settings["ui-picker-palette"])
 	
@@ -2795,10 +2805,6 @@ local CreateColorPicker = function()
 	end
 	
 	GUI.ColorPicker = ColorPicker
-end
-
-__SetColorPicker = function(p) -- temp; /run __SetColorPicker("Default")
-	GUI.ColorPicker:SetColorPalette(p)
 end
 
 local SetSwatchObject = function(active)

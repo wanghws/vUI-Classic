@@ -161,11 +161,15 @@ local StyleNamePlate = function(self, unit)
 	HealthValue:SetShadowColor(0, 0, 0)
 	HealthValue:SetShadowOffset(1, -1)
 	
-	Health.colorHealth = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
-	Health.colorClass = true
-	Health.colorReaction = true
+	
+	if Settings["nameplates-cc-health"] then
+		Health.colorReaction = true
+		Health.colorClass = true
+	else
+		Health.colorHealth = true
+	end
 	
 	self:Tag(Name, "[vUI-Name20]")
 	self:Tag(HealthValue, "[vUI-HealthPercent]")
@@ -219,16 +223,14 @@ local StylePlayer = function(self, unit)
 	if Settings["unitframes-player-cc-health"] then
 		Health.colorReaction = true
 		Health.colorClass = true
-		Health.colorDisconnected = true
 	else
 		Health.colorHealth = true
-		Health.colorDisconnected = true
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
-	Power:SetScaledHeight(14)
+	Power:SetScaledHeight(15)
 	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
@@ -348,23 +350,21 @@ local StyleTarget = function(self, unit)
 	
 	-- Attributes
 	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
 	self.colors.health = {R, G, B}
 	
 	if Settings["unitframes-target-cc-health"] then
 		Health.colorReaction = true
 		Health.colorClass = true
-		Health.colorTapping = true
-		Health.colorDisconnected = true
 	else
 		Health.colorHealth = true
-		Health.colorTapping = true
-		Health.colorDisconnected = true
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
-	Power:SetScaledHeight(14)
+	Power:SetScaledHeight(15)
 	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
@@ -382,10 +382,10 @@ local StyleTarget = function(self, unit)
 	
 	-- Attributes
 	Power.frequentUpdates = true
+	Power.colorReaction = true
 	
 	if Settings["unitframes-target-cc-health"] then
 		Power.colorPower = true
-		Power.colorReaction = true
 	else
 		Power.colorClass = true
 	end
@@ -470,12 +470,12 @@ Frame:SetScript("OnEvent", function(self, event)
 	end
 	
 	local Player = oUF:Spawn("player")
-	Player:SetScaledSize(230, 45)
-	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -67, -304)
+	Player:SetScaledSize(230, 46)
+	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 	
 	local Target = oUF:Spawn("target")
-	Target:SetScaledSize(230, 45)
-	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 67, -304)
+	Target:SetScaledSize(230, 46)
+	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 	
 	if Settings["nameplates-enable"] then
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)

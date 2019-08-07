@@ -111,3 +111,4 @@ Defaults["unitframes-target-cc-health"] = false
 Defaults["nameplates-enable"] = true
 Defaults["nameplates-width"] = 134
 Defaults["nameplates-height"] = 14
+Defaults["nameplates-cc-health"] = false

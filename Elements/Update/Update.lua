@@ -78,7 +78,7 @@ end
 
 -- /run vUISettings.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
 Update["VARIABLES_LOADED"] = function(self, event)
-	if (not vUISettings) then
+	if (not vUIData) then
 		vUIData = {}
 	end
 	

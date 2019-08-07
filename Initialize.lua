@@ -25,26 +25,45 @@ local Core = {
 
 Core[2].Queue = {}
 
+Core[2].CreateWindow = function(self, name, func)
+	-- add to a table by name where the function is run when the window is selected. After this and AddToWindow are run, flag for a sort
+end
+
+Core[2].AddToWindow = function(self, name, func)
+	
+end
+
 Core[2].AddOptions = function(self, func)
 	if (type(func) == "function") then
 		tinsert(self.Queue, func)
 	end
 end
 
-local Resolution = select(GetCurrentResolution(), GetScreenResolutions())
-local ScreenHeight = string.match(Resolution, "%d+x(%d+)")
-local UIParentHeight = UIParent:GetHeight()
-local Height = GetScreenHeight()
+vUI.Resolution = select(GetCurrentResolution(), GetScreenResolutions())
+local ScreenHeight = string.match(vUI.Resolution, "%d+x(%d+)")
+local Mult = 768 / ScreenHeight / (GetCVar("uiScale") or 0.71111111111111)
 
-local Mult = 768 / Height / ((GetCVar("useUiScale") and GetCVar("uiScale") or 0.71))
+local Scale = function(x)
+	return Mult * floor(x / Mult + 0.5)
+end
 
-local Scale = function(num)
-	if (num == 1) then
-		return Mult
-	else
-		return Mult * floor(num / Mult + 0.5)
+function vUI:SuggestScale()
+	local Scale = 0.64
+	local Value
+	
+	for i = 1, 36 do
+		Value = 768 / ScreenHeight / Scale
+		
+		if (Value == 1) then
+			return Scale
+		end
+		
+		Scale = Scale + 0.01
 	end
 end
+--print(Mult)
+--print(vUI:SuggestScale()) -- /run print(vUI:get(1):SuggestScale())
+--print(768 / 1080 / 0.71111111111111)
 
 -- Some Data
 vUI.Version = GetAddOnMetadata("vUI", "Version")
@@ -123,7 +142,9 @@ print = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
 	
-	if (NumArgs > 1) then
+	if (NumArgs == 0) then
+		return
+	elseif (NumArgs > 1) then
 		for i = 1, NumArgs do
 			if (i == 1) then
 				String = tostring(select(i, ...))
