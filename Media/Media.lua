@@ -205,7 +205,7 @@ Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.tt
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 
 -- Palettes
--- Yes, doing these did take forever. And yes it was so worth it.
+-- Yes, doing these did take forever. And yes it was worth it.
 
 local Large = {} -- https://htmlcolorcodes.com/
 
@@ -233,11 +233,18 @@ Default[8] = {"D32F2F", "C2185B", "7B1FA2", "512DA8", "303F9F", "1976D2", "0288D
 Default[9] = {"C62828", "AD1457", "6A1B9A", "4527A0", "283593", "1565C0", "0277BD", "00838F", "00695C", "2E7D32", "558B2F", "9E9D24", "F9A825", "FF8F00", "EF6C00", "D84315", "4E342E", "424242", "37474F"}
 Default[10] = {"B71C1C", "880E4F", "4A148C", "311B92", "1A237E", "0D47A1", "01579B", "006064", "004D40", "1B5E20", "33691E", "827717", "F57F17", "FF6F00", "E65100", "BF360C", "3E2723", "212121", "263238"}
 
-local Lite = {}
+--[[local Lite = {}
 
 Lite[1] = {"F17171", "FFA071", "FFD071", "A2D471", "71E2D0", "71D0FF", "7EA9FF", "B38DFF", "FF71B7", "A2ADB8"}
 Lite[2] = {"EE4D4D", "FF884D", "FFC44D", "8BC94D", "4DDBC4", "4DC4FF", "5E94FF", "AD71FF", "FF4dA5", "8B98A6"}
-Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
+Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}]]
+
+local Flat = {}
+
+Flat[1] = {"1abc9c", "2ecc71", "3498db", "9b59b6", "34495e"}
+Flat[2] = {"16a085", "27ae60", "2980b9", "8e44ad", "2c3e50"}
+Flat[3] = {"f1c40f", "e67e22", "e74c3c", "ecf0f1", "95a5a6"}
+Flat[4] = {"f39c12", "d35400", "c0392b", "bdc3c7", "7f8c8d"}
 
 local Rapid = {} -- https://www.rapidtables.com/web/color/RGB_Color.html
 
@@ -251,10 +258,23 @@ Rapid[7] = {"FF6666", "FFB266", "FFFF66", "B2FF66", "66FF66", "66FFB2", "66FFFF"
 Rapid[8] = {"FF9999", "FFCC99", "FFFF99", "CCFF99", "99FF99", "99FFCC", "99FFFF", "99CCFF", "9999FF", "CC99FF", "FF99FF", "FF99CC", "E0E0E0"}
 Rapid[9] = {"FFCCCC", "FFE5CC", "FFFFCC", "E5FFCC", "CCFFCC", "CCFFE5", "CCFFFF", "CCE5FF", "CCCCFF", "E5CCFF", "FFCCFF", "FFCCE5", "FFFFFF"}
 
+local Fluent = {} -- https://fluentcolors.com/
+
+Fluent[1] = {"FFB900", "E74856", "0078D7", "0099BC", "7A7574", "767676"}
+Fluent[2] = {"FF8C00", "E81123", "0063B1", "2D7D9A", "5D5A58", "4C4A48"}
+Fluent[3] = {"F7630C", "EA005E", "8E8CD8", "00B7C3", "68768A", "69797E"}
+Fluent[4] = {"CA5010", "C30052", "6B69D6", "038387", "515C6B", "4A5459"}
+Fluent[5] = {"DA3B01", "E3008C", "8764B8", "00B294", "567C73", "647C64"}
+Fluent[6] = {"EF6950", "BF0077", "744DA9", "018574", "486860", "525E54"}
+Fluent[7] = {"D13438", "C239B3", "B146C2", "00CC6A", "498205", "847545"}
+Fluent[8] = {"FF4343", "9A0089", "881798", "10893E", "107C10", "7E735F"}
+
 Media:SetPalette("Large", Large)
 Media:SetPalette("Default", Default)
-Media:SetPalette("Lite", Lite)
+--Media:SetPalette("Lite", Lite)
 Media:SetPalette("Rapid", Rapid)
+--Media:SetPalette("Fluent", Fluent)
+Media:SetPalette("Flat", Flat)
 
 -- Templates
 
@@ -277,12 +297,12 @@ Media:SetTemplate("vUI", {
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "2B2B2B",
 	
-	["ui-widget-color"] = "FFCE54",
+	["ui-widget-color"] = "FFC44D", -- FFC44D - FFCE54
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FFFFFF",
 	
-	["ui-button-font-color"] = "FFCE54",
+	["ui-button-font-color"] = "FFC44D",
 	["ui-button-texture-color"] = "616161",
 })
 

@@ -39,31 +39,29 @@ Core[2].AddOptions = function(self, func)
 	end
 end
 
-vUI.Resolution = select(GetCurrentResolution(), GetScreenResolutions())
-local ScreenHeight = string.match(vUI.Resolution, "%d+x(%d+)")
-local Mult = 768 / ScreenHeight / (GetCVar("uiScale") or 0.71111111111111)
+vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
+vUI.GameResolution = GetCVar("gxFullscreenResolution")
+local ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+local ResHeight = tonumber(string.match(vUI.GameResolution, "%d+x(%d+)"))
+local Mult = (768 / ScreenHeight) / GetCVar("uiScale")
 
 local Scale = function(x)
-	return Mult * floor(x / Mult + 0.5)
+	--return Mult * floor(x / Mult + 0.5)
+	return Mult * x
+end
+
+function vUI:UpdateScale()
+	self.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
+	self.GameResolution = GetCVar("gxFullscreenResolution")
+	
+	ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+	
+	Mult = (768 / ScreenHeight) / GetCVar("uiScale") -- Settings["ui-scale"] -- /run SetCVar("uiScale", 0.7111111111111111)
 end
 
 function vUI:SuggestScale()
-	local Scale = 0.64
-	local Value
-	
-	for i = 1, 36 do
-		Value = 768 / ScreenHeight / Scale
-		
-		if (Value == 1) then
-			return Scale
-		end
-		
-		Scale = Scale + 0.01
-	end
+	return (768 / ScreenHeight)
 end
---print(Mult)
---print(vUI:SuggestScale()) -- /run print(vUI:get(1):SuggestScale())
---print(768 / 1080 / 0.71111111111111)
 
 -- Some Data
 vUI.Version = GetAddOnMetadata("vUI", "Version")
