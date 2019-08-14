@@ -175,7 +175,11 @@ print = function(...)
 end
 
 function vUI:print(...)
-	print("|cFF"..Core[5]["ui-widget-color"].."vUI|r:", ...)
+	if Core[5]["ui-widget-color"] then
+		print("|cFF"..Core[5]["ui-widget-color"].."vUI|r:", ...)
+	else
+		print("|cFF"..Core[6]["ui-widget-color"].."vUI|r:", ...)
+	end
 end
 
 function Namespace:get(key)

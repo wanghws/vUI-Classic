@@ -107,7 +107,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["UI Information"])
 	Left:CreateDoubleLine(Language["Version"], vUI.Version)
-	Left:CreateDoubleLine(Language["UI Scale"], Settings["ui-scale"].."%")
+	Left:CreateDoubleLine(Language["UI Scale"], Settings["ui-scale"])
 	Left:CreateDoubleLine(Language["Resolution"], vUI.ScreenResolution)
 	Left:CreateDoubleLine(Language["Game Resolution"], vUI.GameResolution)
 	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())

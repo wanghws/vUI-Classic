@@ -42,7 +42,7 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
--- Colors
+-- Colors (populating retail colors as well)
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
 Defaults["color-demon-hunter"] = "A330C9" -- 922BB4
 Defaults["color-druid"] = "FF7D0A" -- E56F08
@@ -55,6 +55,25 @@ Defaults["color-rogue"] = "FFF569" -- E5DB5D
 Defaults["color-shaman"] = "0070DE" -- 0046C6
 Defaults["color-warlock"] = "8787ED" -- 6969B8
 Defaults["color-warrior"] = "C79C6E" -- B28B62
+
+Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
+Defaults["color-rage"] = "FF0000" -- FF0000 for the default rage color
+Defaults["color-energy"] = "FFFF00"
+Defaults["color-fuel"] = "008C7F"
+Defaults["color-focus"] = "FF7F3F"
+Defaults["color-insanity"] = "6600CC"
+Defaults["color-holy-power"] = "F2E599"
+Defaults["color-fury"] = "C842FC"
+Defaults["color-pain"] = "FF9C00"
+Defaults["color-runic-power"] = "00D1FF"
+Defaults["color-chi"] = "B5FFEA"
+Defaults["color-maelstrom"] = "007FFF"
+Defaults["color-lunar-power"] = "4C84E5"
+Defaults["color-arcane-charges"] = "1919F9"
+Defaults["color-ammo-slot"] = "CC9900"
+Defaults["color-soul-shards"] = "7F518C"
+Defaults["color-runes"] = "7F7F7F"
+Defaults["color-combo-points"] = "FFF468"
 
 Defaults["reaction-1"] = "CC4C38" -- Exceptionally Hostile
 Defaults["reaction-2"] = "CC4C38" -- Very Hostile
