@@ -91,7 +91,7 @@ local SetVariable = function(id, value)
 		if (value ~= Defaults[id]) then -- Only saving a value if it's different than default
 			vUIProfiles[Name][id] = value
 			
-			Profiles:SetLastModified(Name)
+			Profiles:UpdateLastModified(Name)
 		else
 			vUIProfiles[Name][id] = nil
 		end

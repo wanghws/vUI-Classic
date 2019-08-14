@@ -1,8 +1,9 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
 local DefaultKey = "%s-%s"
-local pairs = pairs
 local date = date
+local pairs = pairs
+local format = format
 local match = string.match
 
 Profiles.List = {}
@@ -25,7 +26,7 @@ Profiles.Preserve = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
 	
-	-- To be decided. I think I should leave these to Templates exclusively, but will that feel restrictive?
+	--[[ To be decided. I think I should leave these to Templates exclusively, but will that feel restrictive?
 	["ui-widget-font"] = true,
 	["ui-header-font"] = true,
 	["ui-button-font"] = true,
@@ -41,7 +42,7 @@ Profiles.Preserve = {
 	["ui-widget-bg-color"] = true,
 	["ui-widget-font-color"] = true,
 	["ui-button-font-color"] = true,
-	["ui-button-texture-color"] = true,
+	["ui-button-texture-color"] = true,]]
 }
 
 function Profiles:GetCurrentDate()
@@ -99,6 +100,12 @@ function Profiles:UpdateProfileList()
 	end
 end
 
+function Profiles:UpdateLastModified(name)
+	local Profile = self:GetProfile(name)
+	
+	Profile["profile-last-modified"] = self:GetCurrentDate()
+end
+
 function Profiles:GetProfileCount()
 	local Count = 0
 	
@@ -111,12 +118,6 @@ end
 
 function Profiles:GetDefaultProfileKey()
 	return format(DefaultKey, vUI.UserName, vUI.UserRealm)
-end
-
-function Profiles:SetLastModified(name)
-	local Profile = self:GetProfile(name)
-	
-	Profile["profile-last-modified"] = self:GetCurrentDate()
 end
 
 function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?

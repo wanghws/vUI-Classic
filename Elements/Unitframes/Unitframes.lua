@@ -160,19 +160,33 @@ local StyleNamePlate = function(self, unit)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
-	local Name = Health:CreateFontString(nil, "OVERLAY")
-	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Name:SetScaledPoint("CENTER", Health, "TOP", 0, 2)
-	Name:SetJustifyH("CENTER")
-	Name:SetShadowColor(0, 0, 0)
-	Name:SetShadowOffset(1, -1)
+	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
+	TopLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 2)
+	TopLeft:SetJustifyH("LEFT")
+	TopLeft:SetShadowColor(0, 0, 0)
+	TopLeft:SetShadowOffset(1, -1)
 	
-	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
-	HealthValue:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	HealthValue:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -2)
-	HealthValue:SetJustifyH("RIGHT")
-	HealthValue:SetShadowColor(0, 0, 0)
-	HealthValue:SetShadowOffset(1, -1)
+	local Top = Health:CreateFontString(nil, "OVERLAY")
+	Top:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 2)
+	Top:SetJustifyH("CENTER")
+	Top:SetShadowColor(0, 0, 0)
+	Top:SetShadowOffset(1, -1)
+	
+	local TopRight = Health:CreateFontString(nil, "OVERLAY")
+	TopRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 2)
+	TopRight:SetJustifyH("RIGHT")
+	TopRight:SetShadowColor(0, 0, 0)
+	TopRight:SetShadowOffset(1, -1)
+	
+	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
+	BottomRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -2)
+	BottomRight:SetJustifyH("RIGHT")
+	BottomRight:SetShadowColor(0, 0, 0)
+	BottomRight:SetShadowOffset(1, -1)
 	
 	Health.colorTapping = true
 	Health.colorDisconnected = true
@@ -181,17 +195,21 @@ local StyleNamePlate = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(Name, "[vUI-Name20]")
+		self:Tag(TopLeft, "[vUI-Name20]")
 	else
 		Health.colorHealth = true
 		
-		self:Tag(Name, "[vUI-ClassReaction][vUI-Name20]")
+		self:Tag(TopLeft, "[vUI-ClassReaction][vUI-Name20]")
 	end
 	
-	self:Tag(HealthValue, "[vUI-HealthPercent]")
+	self:Tag(BottomRight, "[perhp]")
+	self:Tag(TopRight, "[difficulty][level]")
 	
 	self.Health = Health
-	self.Name = Name
+	self.TopLeft = TopLeft
+	self.Top = Top
+	self.TopRight = TopRight
+	self.BottomRight = BottomRight
 	self.Health.bg = HealthBG
 end
 
