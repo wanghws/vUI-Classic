@@ -5,7 +5,7 @@ local Defaults = select(2, ...):get(6)
 -- Rename: action-bars-show-side <-- This is just a BG, not a whole bar or something.
 
 -- UI
-Defaults["ui-scale"] = 71
+Defaults["ui-scale"] = 0.7111111111111111 -- GetCVar("uiScale")
 Defaults["ui-display-welcome"] = true
 Defaults["ui-display-dev-tools"] = false
 Defaults["ui-display-whats-new"] = true

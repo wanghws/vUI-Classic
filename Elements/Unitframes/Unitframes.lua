@@ -29,7 +29,7 @@ local ShortValue = function(n)
 		return n
 	end
 	
-	if (n >= 1000000) then
+	if (n >= 1000000) then -- Is a million even a number anywhere in classic?
 		return format("%.2fm", n / 1000000)
 	elseif (n >= 1000) then
 		return format("%dk", n / 1000)
@@ -79,35 +79,35 @@ Methods["vUI-Power"] = function(unit)
 	end
 end
 
-Events["vUI-Name4"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Events["vUI-Name4"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name4"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 4)
 end
 
-Events["vUI-Name5"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Events["vUI-Name5"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name5"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 5)
 end
 
-Events["vUI-Name8"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Events["vUI-Name8"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 8)
 end
 
-Events["vUI-Name15"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Events["vUI-Name15"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 18)
 end
 
-Events["vUI-Name20"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE"
+Events["vUI-Name20"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name20"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -237,12 +237,19 @@ local StylePlayer = function(self, unit)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
-	local Name = Health:CreateFontString(nil, "OVERLAY")
-	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Name:SetScaledPoint("LEFT", Health, 3, 0)
-	Name:SetJustifyH("LEFT")
-	Name:SetShadowColor(0, 0, 0)
-	Name:SetShadowOffset(1, -1)
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	HealthLeft:SetShadowColor(0, 0, 0)
+	HealthLeft:SetShadowOffset(1, -1)
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	HealthRight:SetShadowColor(0, 0, 0)
+	HealthRight:SetShadowOffset(1, -1)
 	
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
 	Combat:SetScaledSize(20, 20)
@@ -273,12 +280,19 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
-	local PowerValue = Power:CreateFontString(nil, "OVERLAY")
-	PowerValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	PowerValue:SetScaledPoint("RIGHT", Power, -1, 0)
-	PowerValue:SetJustifyH("RIGHT")
-	PowerValue:SetShadowColor(0, 0, 0)
-	PowerValue:SetShadowOffset(1, -1)
+	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
+	PowerRight:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
+	PowerRight:SetJustifyH("RIGHT")
+	PowerRight:SetShadowColor(0, 0, 0)
+	PowerRight:SetShadowOffset(1, -1)
+	
+	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
+	PowerLeft:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
+	PowerLeft:SetJustifyH("LEFT")
+	PowerLeft:SetShadowColor(0, 0, 0)
+	PowerLeft:SetShadowOffset(1, -1)
 	
 	-- Attributes
 	Power.frequentUpdates = true
@@ -289,13 +303,6 @@ local StylePlayer = function(self, unit)
 	else
 		Power.colorClass = true
 	end
-	
-	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
-	HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	HealthValue:SetScaledPoint("BOTTOMLEFT", self, 2, 2)
-	HealthValue:SetJustifyH("LEFT")
-	HealthValue:SetShadowColor(0, 0, 0)
-	HealthValue:SetShadowOffset(1, -1)
 	
 	-- Heal Prediction
 	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
@@ -323,14 +330,14 @@ local StylePlayer = function(self, unit)
 	HealSpark:SetVertexColor(0, 0, 0)
 	
 	-- Tags
-	self:Tag(HealthValue, "[vUI-PlayerInfo]")
+	self:Tag(PowerLeft, "[vUI-PlayerInfo]")
 	self:Tag(PowerValue, "[vUI-Power]")
 	
 	if Settings["unitframes-player-show-name"] then
 		if Settings["unitframes-player-cc-health"] then
-			self:Tag(Name, "[vUI-Name15]")
+			self:Tag(HealthLeft, "[vUI-Name15]")
 		else
-			self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+			self:Tag(HealthLeft, "[vUI-ClassReaction][vUI-Name15]")
 		end
 	end
 	
@@ -339,7 +346,10 @@ local StylePlayer = function(self, unit)
 	self.Power = Power
 	self.Power.bg = PowerBG
 	self.PowerValue = PowerValue
-	self.Name = Name
+	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
+	self.PowerLeft = PowerLeft
+	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = CastBar
 	self.HealBar = HealBar

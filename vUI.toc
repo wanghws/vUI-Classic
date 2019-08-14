@@ -27,6 +27,7 @@ Elements\Serialize\LibCompress.lua
 Elements\Profiles\Profiles.lua
 Elements\GUI\GUI.lua
 Elements\Throttle\Throttle.lua
+Elements\General\General.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua
 Elements\ActionBars\ActionBars.lua

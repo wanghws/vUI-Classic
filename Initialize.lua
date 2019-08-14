@@ -43,7 +43,7 @@ vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
 vUI.GameResolution = GetCVar("gxFullscreenResolution")
 local ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
 local ResHeight = tonumber(string.match(vUI.GameResolution, "%d+x(%d+)"))
-local Mult = (768 / ScreenHeight) / 0.71111111111111
+local Mult = (768 / ScreenHeight) / GetCVar("uiScale")
 
 local Scale = function(x)
 	--return Mult * floor(x / Mult + 0.5)
@@ -56,7 +56,9 @@ function vUI:UpdateScale()
 	
 	ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
 	
-	Mult = (768 / ScreenHeight) / GetCVar("uiScale")--GetCVar("uiScale") -- Settings["ui-scale"] -- /run SetCVar("uiScale", 0.7111111111111111)
+	local Settings =  _G["vUI"]:get(5)
+	
+	Mult = (768 / ScreenHeight) / Settings["ui-scale"]--GetCVar("uiScale") -- Settings["ui-scale"] -- /run SetCVar("uiScale", 0.7111111111111111)
 end
 
 function vUI:SuggestScale() -- /run print(vUI:get(1):SuggestScale())

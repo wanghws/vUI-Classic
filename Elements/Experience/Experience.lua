@@ -412,52 +412,6 @@ ExperienceBar:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-local HasPrinted = false
-local DevTools = "|Hcommand:/reload|h|cFF%s[Reload UI]|r|h |Hcommand:/eventtrace|h|cFF%s[Event Trace]|r|h |Hplayer:%s|h|cFF%s[Whisper Self]|r|h |Hcommand:/framestack|h|cFF%s[Frame Stack]|r|h"
-
-local UpdateDisplayDevTools = function()
-	if (not HasPrinted) then
-		local Color = Settings["ui-widget-color"]
-		local Name = UnitName("player")
-		
-		print(format(DevTools, Color, Color, Name, Color, Color))
-		
-		HasPrinted = true
-	end
-end
-
-local Languages = {
-	["English"] = "enUS",
-	--[[["German"] = "deDE",
-	["Spanish (Spain)"] = "esES",
-	["Spanish (Mexico)"] = "esMX",
-	["French"] = "frFR",
-	["Italian"] = "itIT",
-	["Korean"] = "koKR",
-	["Portuguese (Brazil)"] = "ptBR",
-	["Russian"] = "ruRU",
-	["Chinese (Simplified)"] = "zhCN",
-	["Chinese (Traditional)"] = "zhTW",]]
-}
-
-local UpdateUIScale = function(value)
-	value = value / 100
-	
-	SetCVar("uiScale", value)
-end
-
-local GetDiscordLink = function()
-	if (not vUI.Throttle:Exists("get-discord-link")) then
-		vUI.Throttle:Create("get-discord-link", 10)
-	end
-	
-	if (not vUI.Throttle:IsThrottled("get-discord-link")) then
-		print("https://discord.gg/SmT6Yk")
-		
-		vUI.Throttle:Start("get-discord-link")
-	end
-end
-
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Experience"])
 	
@@ -484,42 +438,4 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
-	
-	-- TEMPORARY -- Debug/Test
-	local GeneralLeft, GeneralRight = self:CreateWindow(Language["General"])
-	
-	GeneralLeft:CreateHeader(Language["Welcome"])
-	GeneralLeft:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
-	GeneralLeft:CreateCheckbox("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
-	GeneralLeft:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
-	
-	GeneralLeft:CreateHeader("Discord")
-	GeneralLeft:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
-	
-	GeneralRight:CreateHeader(Language["Language"])
-	GeneralRight:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
-	GeneralRight:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
-	
-	GeneralRight:CreateHeader(Language["Scale"])
-	GeneralRight:CreateSlider("ui-scale", Settings["ui-scale"], 64, 100, 1, "Set UI Scale", "", UpdateUIScale, nil, "%")
-	
-	GeneralLeft:CreateFooter()
-	GeneralRight:CreateFooter()
-	
-	if Settings["ui-display-welcome"] then
-		local Color1 = Settings["ui-widget-color"]
-		local Color2 = Settings["ui-header-font-color"]
-		
-		print(format(Language["Welcome to |cFF%svUI|r version |cFF%s%s|r."], Color1, Color2, vUI.Version))
-		print(format(Language["Type |cFF%s/vui|r to access the console for settings, or click |cFF%s|Hcommand:/vui|h[here]|h|r."], Color1, Color1))
-		
-		-- May as well put this here for now too.
-		if Settings["ui-display-dev-tools"] then
-			local Name = UnitName("player")
-			
-			print(format(DevTools, Color1, Color1, Name, Color1, Color1))
-			
-			HasPrinted = true
-		end
-	end
 end)
