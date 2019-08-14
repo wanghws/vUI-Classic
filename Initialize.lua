@@ -42,36 +42,28 @@ end
 vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
 vUI.GameResolution = GetCVar("gxFullscreenResolution")
 local ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
-local ResHeight = tonumber(string.match(vUI.GameResolution, "%d+x(%d+)"))
-local Mult = (768 / ScreenHeight) / GetCVar("uiScale")
+local Scale = 1
 
-local Scale = function(x)
+local GetScale = function(x)
 	--return Mult * floor(x / Mult + 0.5)
-	return Mult * x
+	return Scale * x
 end
 
-function vUI:UpdateScale()
-	self.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
-	self.GameResolution = GetCVar("gxFullscreenResolution")
-	
-	ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
-	
-	local Settings =  _G["vUI"]:get(5)
-	
-	Mult = (768 / ScreenHeight) / Settings["ui-scale"]--GetCVar("uiScale") -- Settings["ui-scale"] -- /run SetCVar("uiScale", 0.7111111111111111)
-end
-
-function vUI:SuggestScale() -- /run print(vUI:get(1):SuggestScale())
-	return (768 / ScreenHeight)
-end
-
-function vUI:SetScale(x) --/run local v = vUI:get(1);  v:SetScale(v:SuggestScale())
+function vUI:SetScale(x) --/run local v = vUI:get(1);  v:SetScale(v:GetSuggestedScale())
 	x = max(0.64, x)
 	x = min(1.15, x)
 	
-	--SetCVar("uiScale", x)
-	
+	--SetCVar("uiScale", x) -- Leaving the CVar alone
 	UIParent:SetScale(x)
+	
+	Scale = (768 / ScreenHeight) / x
+	
+	self.BackdropAndBorder.edgeSize = GetScale(x)
+	self.Outline.edgeSize = GetScale(x)
+end
+
+function vUI:GetSuggestedScale() -- /run print(vUI:get(1):GetSuggestedScale())
+	return (768 / ScreenHeight)
 end
 
 -- Some Data
@@ -98,12 +90,13 @@ vUI.Backdrop = {
 vUI.BackdropAndBorder = {
 	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
 	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
-	edgeSize = Scale(1),
+	edgeSize = GetScale(1),
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 
 vUI.Outline = {
-	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga", edgeSize = Scale(1),
+	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
+	edgeSize = GetScale(1),
 	insets = {left = 0, right = 0, top = 0, bottom = 0},
 }
 
@@ -191,22 +184,22 @@ function Namespace:get(key)
 end
 
 local SetScaledHeight = function(self, height)
-	self:SetHeight(Scale(height))
+	self:SetHeight(GetScale(height))
 end
 
 local SetScaledWidth = function(self, width)
-	self:SetWidth(Scale(width))
+	self:SetWidth(GetScale(width))
 end
 
 local SetScaledSize = function(self, width, height)
-	self:SetSize(Scale(width), Scale(height or width))
+	self:SetSize(GetScale(width), GetScale(height or width))
 end
 
 local SetScaledPoint = function(self, a1, p, a2, xoff, yoff)
-	if (type(p) == "number") then p = Scale(p) end
-	if (type(a2) == "number") then a2 = Scale(a2) end
-	if (type(xoff) == "number") then xoff = Scale(xoff) end
-	if (type(yoff) == "number") then yoff = Scale(yoff) end
+	if (type(p) == "number") then p = GetScale(p) end
+	if (type(a2) == "number") then a2 = GetScale(a2) end
+	if (type(xoff) == "number") then xoff = GetScale(xoff) end
+	if (type(yoff) == "number") then yoff = GetScale(yoff) end
 	
 	self:SetPoint(a1, p, a2, xoff, yoff)
 end

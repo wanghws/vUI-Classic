@@ -22,14 +22,10 @@ local PVPTypeColors = {
 local ZoneUpdate = function(self)
 	local Zone = GetMinimapZoneText()
 	local PVPType = GetZonePVPInfo()
-	
-	if PVPTypeColors[PVPType] then
-		self.Text:SetTextColor(PVPTypeColors[PVPType][1], PVPTypeColors[PVPType][2], PVPTypeColors[PVPType][3])
-	else
-		self.Text:SetTextColor(1.0, 0.9294, 0.7607)
-	end
+	local Color = vUI.ZoneColors[PVPType or "other"]
 	
 	self.Text:SetText(Zone)
+	self.Text:SetTextColor(Color[1], Color[2], Color[3])
 end
 
 local CreateMinimap = function()

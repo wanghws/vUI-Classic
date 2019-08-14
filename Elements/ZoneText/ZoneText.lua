@@ -98,46 +98,52 @@ local SetZoneText = function(show)
 		PVPText = PVPArenaText
 	end
 	
+	if (not PVPType) then
+		PVPType = "other"
+	end
+	
+	local Color = vUI.ZoneColors[PVPType]
+	
 	if (PVPType == "sanctuary") then
 		PVPText:SetText(SANCTUARY_TERRITORY)
-		PVPText:SetTextColor(0.41, 0.8, 0.94)
-		ZoneText:SetTextColor(0.41, 0.8, 0.94)
-		SubZoneText:SetTextColor(0.41, 0.8, 0.94)
+		PVPText:SetTextColor(Color[1], Color[2], Color[3])
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	elseif (PVPType == "arena") then
 		PVPText:SetText(FREE_FOR_ALL_TERRITORY)
-		PVPText:SetTextColor(1.0, 0.1, 0.1)
-		ZoneText:SetTextColor(1.0, 0.1, 0.1)
-		SubZoneText:SetTextColor(1.0, 0.1, 0.1)
+		PVPText:SetTextColor(Color[1], Color[2], Color[3])
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	elseif (PVPType == "friendly") then
 		if (Faction and Faction ~= "") then
 			PVPText:SetFormattedText(FACTION_CONTROLLED_TERRITORY, Faction)
-			PVPText:SetTextColor(0.1, 1.0, 0.1)
+			PVPText:SetTextColor(Color[1], Color[2], Color[3])
 		end
 		
-		ZoneText:SetTextColor(0.1, 1.0, 0.1)
-		SubZoneText:SetTextColor(0.1, 1.0, 0.1)
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	elseif (PVPType == "hostile") then
 		if (Faction and Faction ~= "") then
 			PVPText:SetFormattedText(FACTION_CONTROLLED_TERRITORY, Faction)
-			PVPText:SetTextColor(1.0, 0.1, 0.1)
+			PVPText:SetTextColor(Color[1], Color[2], Color[3])
 		end
 		
-		ZoneText:SetTextColor(1.0, 0.1, 0.1)
-		SubZoneText:SetTextColor(1.0, 0.1, 0.1)
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	elseif (PVPType == "contested") then
 		PVPText:SetText(CONTESTED_TERRITORY)
-		PVPText:SetTextColor(1.0, 0.7, 0)
-		ZoneText:SetTextColor(1.0, 0.7, 0)
-		SubZoneText:SetTextColor(1.0, 0.7, 0)
+		PVPText:SetTextColor(Color[1], Color[2], Color[3])
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	elseif (PVPType == "combat") then
 		PVPText = PVPArenaTextString
 		PVPText:SetText(COMBAT_ZONE)
-		PVPText:SetTextColor(1.0, 0.1, 0.1)
-		ZoneText:SetTextColor(1.0, 0.1, 0.1)
-		SubZoneText:SetTextColor(1.0, 0.1, 0.1)
-	else
-		ZoneText:SetTextColor(1.0, 0.9294, 0.7607)
-		SubZoneText:SetTextColor(1.0, 0.9294, 0.7607)
+		PVPText:SetTextColor(Color[1], Color[2], Color[3])
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
+	elseif (PVPType == "other") then
+		ZoneText:SetTextColor(Color[1], Color[2], Color[3])
+		SubZoneText:SetTextColor(Color[1], Color[2], Color[3])
 	end
 	
 	SubZoneText:ClearAllPoints()

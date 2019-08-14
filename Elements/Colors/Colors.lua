@@ -4,6 +4,7 @@ local oUF = Namespace.oUF
 
 local ClassColors = {}
 local ReactionColors = {}
+local ZoneColors = {}
 
 local Meta = getmetatable(CreateFrame("Frame"))
 
@@ -55,8 +56,19 @@ function vUI:UpdateReactionColors()
 	self.ReactionColors[8] = {self:HexToRGB(Settings["reaction-8"])}
 end
 
+function vUI:UpdateZoneColors()
+	ZoneColors["sanctuary"] = {self:HexToRGB(Settings["color-sanctuary"])}
+	ZoneColors["arena"] = {self:HexToRGB(Settings["color-arena"])}
+	ZoneColors["hostile"] = {self:HexToRGB(Settings["color-hostile"])}
+	ZoneColors["combat"] = {self:HexToRGB(Settings["color-combat"])}
+	ZoneColors["friendly"] = {self:HexToRGB(Settings["color-friendly"])}
+	ZoneColors["contested"] = {self:HexToRGB(Settings["color-contested"])}
+	ZoneColors["other"] = {self:HexToRGB(Settings["color-other"])}
+end
+
 vUI.ClassColors = ClassColors
 vUI.ReactionColors = ReactionColors
+vUI.ZoneColors = ZoneColors
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
@@ -99,4 +111,5 @@ GUI:AddOptions(function(self)
 	
 	vUI:UpdateClassColors()
 	vUI:UpdateReactionColors()
+	vUI:UpdateZoneColors()
 end)

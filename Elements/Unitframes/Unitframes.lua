@@ -142,7 +142,7 @@ end
 local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
-	self:SetScale(Settings["ui-scale"] / 100)
+	self:SetScale(Settings["ui-scale"])
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
@@ -195,11 +195,11 @@ local StyleNamePlate = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(TopLeft, "[vUI-Name20]")
+		self:Tag(TopLeft, "[vUI-Name15]")
 	else
 		Health.colorHealth = true
 		
-		self:Tag(TopLeft, "[vUI-ClassReaction][vUI-Name20]")
+		self:Tag(TopLeft, "[vUI-ClassReaction][vUI-Name15]")
 	end
 	
 	self:Tag(BottomRight, "[perhp]")

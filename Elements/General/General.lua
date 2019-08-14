@@ -68,7 +68,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Scale"])
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale)
-	--Right:CreateDoubleLine("Suggested Scale:", vUI:SuggestScale())
+	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
@@ -89,7 +89,4 @@ GUI:AddOptions(function(self)
 			HasPrinted = true
 		end
 	end
-	
-	vUI:SetScale(Settings["ui-scale"])
-	vUI:UpdateScale()
 end)
