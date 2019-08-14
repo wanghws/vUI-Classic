@@ -49,11 +49,10 @@ local GetScale = function(x)
 	return Scale * x
 end
 
-function vUI:SetScale(x) --/run local v = vUI:get(1);  v:SetScale(v:GetSuggestedScale())
+function vUI:SetScale(x)
 	x = max(0.64, x)
-	x = min(1.15, x)
+	x = min(8, x)
 	
-	--SetCVar("uiScale", x) -- Leaving the CVar alone
 	UIParent:SetScale(x)
 	
 	Scale = (768 / ScreenHeight) / x
@@ -62,7 +61,11 @@ function vUI:SetScale(x) --/run local v = vUI:get(1);  v:SetScale(v:GetSuggested
 	self.Outline.edgeSize = GetScale(x)
 end
 
-function vUI:GetSuggestedScale() -- /run print(vUI:get(1):GetSuggestedScale())
+function vUI:SetSuggestedScale()
+	self:SetScale(self:GetSuggestedScale())
+end
+
+function vUI:GetSuggestedScale()
 	return (768 / ScreenHeight)
 end
 

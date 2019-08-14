@@ -30,12 +30,7 @@ local Languages = {
 
 local UpdateUIScale = function(value)
 	value = tonumber(value)
-	value = max(0.64, value)
-	value = min(1.15, value)
 	
-	print(value)
-	
-	--SetCVar("uiScale", value)
 	vUI:SetScale(value)
 end
 
