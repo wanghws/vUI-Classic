@@ -30,8 +30,9 @@ local oUF = ns.oUF
 
 local _FRAMES = {}
 local OnRangeFrame
-
-local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
+local UnitInRange = UnitInRange
+local UnitIsConnected = UnitIsConnected
+local next = next
 
 local function Update(self, event)
 	local element = self.Range

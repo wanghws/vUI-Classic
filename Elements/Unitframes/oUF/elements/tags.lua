@@ -73,6 +73,18 @@ local unitExists = Private.unitExists
 
 local _PATTERN = '%[..-%]+'
 
+local type = type
+local next = next
+local unpack = unpack
+local select = select
+local tinsert = table.insert
+local tremove = table.remove
+local sub = string.sub
+local gsub = string.gsub
+local match = string.match
+local gmatch = string.gmatch
+local format = format
+
 local _ENV = {
 	Hex = function(r, g, b)
 		if(type(r) == 'table') then
@@ -82,7 +94,7 @@ local _ENV = {
 				r, g, b = unpack(r)
 			end
 		end
-		return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
+		return format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
 	end,
 }
 _ENV.ColorGradient = function(...)
@@ -606,20 +618,20 @@ local funcPool = {}
 local tmp = {}
 
 local function getTagName(tag)
-	local tagStart = (tag:match('>+()') or 2)
-	local tagEnd = tag:match('.*()<+')
+	local tagStart = (match(tag, '>+()') or 2)
+	local tagEnd = match(tag, '.*()<+')
 	tagEnd = (tagEnd and tagEnd - 1) or -2
 
-	return tag:sub(tagStart, tagEnd), tagStart, tagEnd
+	return sub(tag, tagStart, tagEnd), tagStart, tagEnd
 end
 
 local function getTagFunc(tagstr)
 	local func = tagPool[tagstr]
 	if(not func) then
-		local format, numTags = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
+		local format, numTags = gsub(gsub(tagstr, '%%', '%%%%'), _PATTERN, '%%s')
 		local args = {}
 
-		for bracket in tagstr:gmatch(_PATTERN) do
+		for bracket in gmatch(tagstr, _PATTERN) do
 			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
 			if(not tagFunc) then
 				local tagName, tagStart, tagEnd = getTagName(bracket)
@@ -630,8 +642,8 @@ local function getTagFunc(tagstr)
 					tagEnd = tagEnd + 2
 
 					if(tagStart ~= 0 and tagEnd ~= 0) then
-						local prefix = bracket:sub(2, tagStart)
-						local suffix = bracket:sub(tagEnd, -2)
+						local prefix = sub(bracket, 2, tagStart)
+						local suffix = sub(bracket, tagEnd, -2)
 
 						tagFunc = function(unit, realUnit)
 							local str = tag(unit, realUnit)
@@ -640,7 +652,7 @@ local function getTagFunc(tagstr)
 							end
 						end
 					elseif(tagStart ~= 0) then
-						local prefix = bracket:sub(2, tagStart)
+						local prefix = sub(bracket, 2, tagStart)
 
 						tagFunc = function(unit, realUnit)
 							local str = tag(unit, realUnit)
@@ -649,7 +661,7 @@ local function getTagFunc(tagstr)
 							end
 						end
 					elseif(tagEnd ~= 0) then
-						local suffix = bracket:sub(tagEnd, -2)
+						local suffix = sub(bracket, tagEnd, -2)
 
 						tagFunc = function(unit, realUnit)
 							local str = tag(unit, realUnit)
@@ -664,9 +676,9 @@ local function getTagFunc(tagstr)
 			end
 
 			if(tagFunc) then
-				table.insert(args, tagFunc)
+				tinsert(args, tagFunc)
 			else
-				return error(string.format('Attempted to use invalid tag %s.', bracket), 3)
+				return error(format('Attempted to use invalid tag %s.', bracket), 3)
 			end
 		end
 
@@ -750,7 +762,7 @@ local function registerEvent(fontstr, event)
 	if(not events[event]) then events[event] = {} end
 
 	eventFrame:RegisterEvent(event)
-	table.insert(events[event], fontstr)
+	tinsert(events[event], fontstr)
 end
 
 local function registerEvents(fontstr, tagstr)
@@ -758,7 +770,7 @@ local function registerEvents(fontstr, tagstr)
 		tag = getTagName(tag)
 		local tagevents = tagEvents[tag]
 		if(tagevents) then
-			for event in tagevents:gmatch('%S+') do
+			for event in gmatch(tagevents, '%S+') do
 				registerEvent(fontstr, event)
 			end
 		end
@@ -773,7 +785,7 @@ local function unregisterEvents(fontstr)
 					eventFrame:UnregisterEvent(event)
 				end
 
-				table.remove(data, i)
+				tremove(data, i)
 			end
 		end
 	end
@@ -794,7 +806,7 @@ local function Tag(self, fs, tagstr, ...)
 
 	if(not self.__tags) then
 		self.__tags = {}
-		table.insert(self.__elements, Update)
+		tinsert(self.__elements, Update)
 	elseif(self.__tags[fs]) then
 		-- We don't need to remove it from the __tags table as Untag handles
 		-- that for us.
@@ -813,7 +825,7 @@ local function Tag(self, fs, tagstr, ...)
 		end
 
 		if(not eventlessUnits[timer]) then eventlessUnits[timer] = {} end
-		table.insert(eventlessUnits[timer], fs)
+		tinsert(eventlessUnits[timer], fs)
 
 		createOnUpdate(timer)
 	else
@@ -847,7 +859,7 @@ local function Untag(self, fs)
 	for _, timers in next, eventlessUnits do
 		for i, fontstr in next, timers do
 			if(fs == fontstr) then
-				table.remove(timers, i)
+				tremove(timers, i)
 			end
 		end
 	end
@@ -870,7 +882,7 @@ oUF.Tags = {
 
 		tag = '%[' .. tag .. '%]'
 		for tagstr, func in next, tagPool do
-			if(tagstr:match(tag)) then
+			if(match(tagstr, tag)) then
 				tagPool[tagstr] = nil
 
 				for fs in next, taggedFS do
@@ -890,7 +902,7 @@ oUF.Tags = {
 
 		tag = '%[' .. tag .. '%]'
 		for tagstr in next, tagPool do
-			if(tagstr:match(tag)) then
+			if(match(tagstr, tag)) then
 				for fs, ts in next, taggedFS do
 					if(ts == tagstr) then
 						unregisterEvents(fs)

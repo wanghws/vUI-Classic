@@ -3,6 +3,7 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = Namespace:get()
 local oUF = Namespace.oUF
 
 local ClassColors = {}
+local ReactionColors = {}
 
 local Meta = getmetatable(CreateFrame("Frame"))
 
@@ -29,21 +30,33 @@ local UpdateDK = function(value)
 end
 
 function vUI:UpdateClassColors()
-	ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
-	ClassColors["DEMONHUNTER"] = {self:HexToRGB(Settings["color-demon-hunter"])}
-	ClassColors["DRUID"] = {self:HexToRGB(Settings["color-druid"])}
-	ClassColors["HUNTER"] = {self:HexToRGB(Settings["color-hunter"])}
-	ClassColors["MAGE"] = {self:HexToRGB(Settings["color-mage"])}
-	ClassColors["MONK"] = {self:HexToRGB(Settings["color-monk"])}
-	ClassColors["PALADIN"] = {self:HexToRGB(Settings["color-paladin"])}
-	ClassColors["PRIEST"] = {self:HexToRGB(Settings["color-priest"])}
-	ClassColors["ROGUE"] = {self:HexToRGB(Settings["color-rogue"])}
-	ClassColors["SHAMAN"] = {self:HexToRGB(Settings["color-shaman"])}
-	ClassColors["WARLOCK"] = {self:HexToRGB(Settings["color-warlock"])}
-	ClassColors["WARRIOR"] = {self:HexToRGB(Settings["color-warrior"])}
+	self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
+	self.ClassColors["DEMONHUNTER"] = {self:HexToRGB(Settings["color-demon-hunter"])}
+	self.ClassColors["DRUID"] = {self:HexToRGB(Settings["color-druid"])}
+	self.ClassColors["HUNTER"] = {self:HexToRGB(Settings["color-hunter"])}
+	self.ClassColors["MAGE"] = {self:HexToRGB(Settings["color-mage"])}
+	self.ClassColors["MONK"] = {self:HexToRGB(Settings["color-monk"])}
+	self.ClassColors["PALADIN"] = {self:HexToRGB(Settings["color-paladin"])}
+	self.ClassColors["PRIEST"] = {self:HexToRGB(Settings["color-priest"])}
+	self.ClassColors["ROGUE"] = {self:HexToRGB(Settings["color-rogue"])}
+	self.ClassColors["SHAMAN"] = {self:HexToRGB(Settings["color-shaman"])}
+	self.ClassColors["WARLOCK"] = {self:HexToRGB(Settings["color-warlock"])}
+	self.ClassColors["WARRIOR"] = {self:HexToRGB(Settings["color-warrior"])}
+end
+
+function vUI:UpdateReactionColors()
+	self.ReactionColors[1] = {self:HexToRGB(Settings["reaction-1"])}
+	self.ReactionColors[2] = {self:HexToRGB(Settings["reaction-2"])}
+	self.ReactionColors[3] = {self:HexToRGB(Settings["reaction-3"])}
+	self.ReactionColors[4] = {self:HexToRGB(Settings["reaction-4"])}
+	self.ReactionColors[5] = {self:HexToRGB(Settings["reaction-5"])}
+	self.ReactionColors[6] = {self:HexToRGB(Settings["reaction-6"])}
+	self.ReactionColors[7] = {self:HexToRGB(Settings["reaction-7"])}
+	self.ReactionColors[8] = {self:HexToRGB(Settings["reaction-8"])}
 end
 
 vUI.ClassColors = ClassColors
+vUI.ReactionColors = ReactionColors
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
@@ -71,8 +84,19 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-friendly", Settings["color-friendly"], "Friendly", "")
 	Right:CreateColorSelection("color-other", Settings["color-other"], "Other", "")
 	
+	Right:CreateHeader(Language["Reaction Colors"])
+	Right:CreateColorSelection("reaction-1", Settings["reaction-1"], Language["Exceptionally Hostile"], "")
+	Right:CreateColorSelection("reaction-2", Settings["reaction-2"], Language["Very Hostile"], "")
+	Right:CreateColorSelection("reaction-3", Settings["reaction-3"], Language["Hostile"], "")
+	Right:CreateColorSelection("reaction-4", Settings["reaction-4"], Language["Neutral"], "")
+	Right:CreateColorSelection("reaction-5", Settings["reaction-5"], Language["Friendly"], "")
+	Right:CreateColorSelection("reaction-6", Settings["reaction-6"], Language["Very Friendly"], "")
+	Right:CreateColorSelection("reaction-7", Settings["reaction-7"], Language["Exceptionally Friendly"], "")
+	Right:CreateColorSelection("reaction-8", Settings["reaction-8"], Language["Exalted"], "")
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 	
 	vUI:UpdateClassColors()
+	vUI:UpdateReactionColors()
 end)

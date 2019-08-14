@@ -133,7 +133,7 @@ UpdateZone:RegisterEvent("ZONE_CHANGED_INDOORS")
 UpdateZone:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 UpdateZone:SetScript("OnEvent", function(self)
 	if GUI:IsShown() then
-		GUI:GetWidgetByWindow(Language["Info"], "zone").Right:SetText(GetZoneText())
-		GUI:GetWidgetByWindow(Language["Info"], "sub-zone").Right:SetText(GetMinimapZoneText())
+		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
+		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
 	end
 end)

@@ -33,7 +33,8 @@ GUI.Widgets = {}
 	
 	- If template == "None" then disable the page
 	
-	- Set the scrollbars to have arrow buttons
+	- Set the scrollbars to have arrow button
+	- Dropdown breaks, when clicked won't respond. something like "---------------"
 	
 	- Widget methods
 	widget:Disable()
@@ -2435,7 +2436,7 @@ local CreateColorPicker = function()
 		return
 	end
 	
-	local ColorPicker = CreateFrame("Frame", "vUIColorPicker", UIParent)
+	local ColorPicker = CreateFrame("Frame", "vUIColorPicker", GUI)
 	ColorPicker:SetScaledSize(388, 290)
 	ColorPicker:SetScaledPoint("CENTER", UIParent, 0, 80)
 	ColorPicker:SetBackdrop(vUI.BackdropAndBorder)

@@ -56,6 +56,15 @@ Defaults["color-shaman"] = "0070DE" -- 0046C6
 Defaults["color-warlock"] = "8787ED" -- 6969B8
 Defaults["color-warrior"] = "C79C6E" -- B28B62
 
+Defaults["reaction-1"] = "CC4C38" -- Exceptionally Hostile
+Defaults["reaction-2"] = "CC4C38" -- Very Hostile
+Defaults["reaction-3"] = "BF4400" -- Hostile
+Defaults["reaction-4"] = "E5B200" -- Neutral
+Defaults["reaction-5"] = "009919" -- Friendly
+Defaults["reaction-6"] = "009919" -- Very Friendly
+Defaults["reaction-7"] = "009919" -- Exceptionally Friendly
+Defaults["reaction-8"] = "009919" -- Exalted
+
 Defaults["color-sanctuary"] = "68CCEF"
 Defaults["color-arena"] = "FF1919"
 Defaults["color-hostile"] = "FF1919"

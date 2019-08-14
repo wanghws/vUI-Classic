@@ -14,9 +14,11 @@ local DebuffTypeColor = DebuffTypeColor
 local UnitCanAttack = UnitCanAttack
 local UnitIsFriend = UnitIsFriend
 local UnitIsConnected = UnitIsConnected
-local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
+local UnitIsPlayer = UnitIsPlayer
 local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
+local UnitClass = UnitClass
+local UnitReaction = UnitReaction
 
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
@@ -28,20 +30,6 @@ local ShortValue = function(n)
 	end
 	
 	if (n >= 1000000) then
-		return format("%.2fm", n / 1000000)
-	elseif (n >= 1000) then
-		return format("%dk", n / 1000)
-	end
-end
-
-local ShortValueLarge = function(n)
-	if (n <= 999) then
-		return n
-	end
-	
-	if (n > 1000000000) then
-		return format("%.2fb", n / 1000000000)
-	elseif (n >= 1000000) then
 		return format("%.2fm", n / 1000000)
 	elseif (n >= 1000) then
 		return format("%dk", n / 1000)
@@ -66,7 +54,7 @@ end
 
 Events["vUI-HealthLarge"] = "UNIT_HEALTH_FREQUENT"
 Methods["vUI-HealthLarge"] = function(unit)
-	return ShortValueLarge(UnitHealth(unit))
+	return ShortValue(UnitHealth(unit))
 end
 
 Events["vUI-HealthPercent"] = "UNIT_HEALTH_FREQUENT"
@@ -81,7 +69,7 @@ end
 
 Events["vUI-TargetInfo"] = "UNIT_HEALTH_FREQUENT"
 Methods["vUI-TargetInfo"] = function(unit)
-	return ShortValueLarge(UnitHealth(unit)) .. "/" .. ShortValueLarge(UnitHealthMax(unit))
+	return ShortValue(UnitHealth(unit)) .. "/" .. ShortValue(UnitHealthMax(unit))
 end
 
 Events["vUI-Power"] = "UNIT_POWER_FREQUENT"
@@ -126,6 +114,31 @@ Methods["vUI-Name20"] = function(unit)
 	return sub(Name, 1, 20)
 end
 
+Events["vUI-ClassReaction"] = "UNIT_NAME_UPDATE"
+Methods["vUI-ClassReaction"] = function(unit)
+	if UnitIsPlayer(unit) then
+		local _, Class = UnitClass(unit)
+		
+		if Class then
+			local Color = vUI.ClassColors[Class]
+			
+			if Color then
+				return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			end
+		end
+	else
+		local Reaction = UnitReaction(unit, "player")
+		
+		if Reaction then
+			local Color = vUI.ReactionColors[Reaction]
+			
+			if Color then
+				return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			end
+		end
+	end
+end
+
 local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
@@ -167,11 +180,14 @@ local StyleNamePlate = function(self, unit)
 	if Settings["nameplates-cc-health"] then
 		Health.colorReaction = true
 		Health.colorClass = true
+		
+		self:Tag(Name, "[vUI-Name20]")
 	else
 		Health.colorHealth = true
+		
+		self:Tag(Name, "[vUI-ClassReaction][vUI-Name20]")
 	end
 	
-	self:Tag(Name, "[vUI-Name20]")
 	self:Tag(HealthValue, "[vUI-HealthPercent]")
 	
 	self.Health = Health
@@ -293,7 +309,11 @@ local StylePlayer = function(self, unit)
 	self:Tag(PowerValue, "[vUI-Power]")
 	
 	if Settings["unitframes-player-show-name"] then
-		self:Tag(Name, "[vUI-Name15]")
+		if Settings["unitframes-player-cc-health"] then
+			self:Tag(Name, "[vUI-Name15]")
+		else
+			self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+		end
 	end
 	
 	self.Health = Health
@@ -357,8 +377,12 @@ local StyleTarget = function(self, unit)
 	if Settings["unitframes-target-cc-health"] then
 		Health.colorReaction = true
 		Health.colorClass = true
+		
+		self:Tag(Name, "[vUI-Name15]")
 	else
 		Health.colorHealth = true
+		
+		self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
@@ -423,7 +447,6 @@ local StyleTarget = function(self, unit)
 	-- Tags
 	self:Tag(HealthValue, "[vUI-TargetInfo]")
 	self:Tag(HealthPercent, "[vUI-HealthPercent]")
-	self:Tag(Name, "[vUI-Name15]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
