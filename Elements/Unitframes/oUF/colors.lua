@@ -1,5 +1,6 @@
 local parent, ns = ...
 local oUF = ns.oUF
+local vUI, GUI, Language, Media, Settings, Defaults, Profiles = ns:get()
 local Private = oUF.Private
 
 local frame_metatable = Private.frame_metatable
@@ -34,13 +35,23 @@ local colors = {
 		[12] = {255 / 255, 255 / 255, 139 / 255}, -- SELF, buggy
 		[13] = {0 / 255, 153 / 255, 0 / 255}, -- BATTLEGROUND_FRIENDLY_PVP
 	},
-	class = {},
+	--class = {},
 	debuff = {},
-	reaction = {},
+	--reaction = {},
 	power = {},
 }
 
--- We do this because people edit the vars directly, and changing the default
+function vUI:UpdateoUFColors()
+	colors.class = vUI.ClassColors
+	colors.reaction = vUI.ReactionColors
+	
+	oUF.colors = colors
+	
+	frame_metatable.__index.colors = colors
+	frame_metatable.__index.ColorGradient = oUF.ColorGradient
+end
+
+--[[ We do this because people edit the vars directly, and changing the default
 -- globals makes SPICE FLOW!
 local function customClassColors()
 	if(CUSTOM_CLASS_COLORS) then
@@ -74,15 +85,15 @@ if(not customClassColors()) then
 			self:SetScript('OnEvent', nil)
 		end
 	end)
-end
+end--]]
 
 for debuffType, color in next, DebuffTypeColor do
 	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
-for eclass, color in next, FACTION_BAR_COLORS do
+--[[for eclass, color in next, FACTION_BAR_COLORS do
 	colors.reaction[eclass] = {color.r, color.g, color.b}
-end
+end]]
 
 for power, color in next, PowerBarColor do
 	if (type(power) == 'string') then

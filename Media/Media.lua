@@ -25,7 +25,7 @@ function Media:SetFont(name, path, silent)
 	end
 end
 
-function Media:GetFont(name, template)
+function Media:GetFont(name)
 	if self.Fonts[name] then
 		return self.Fonts[name]
 	else
@@ -50,7 +50,7 @@ function Media:SetTexture(name, path, silent)
 	end
 end
 
-function Media:GetTexture(name, template)
+function Media:GetTexture(name)
 	if self.Textures[name] then
 		return self.Textures[name]
 	else
@@ -75,7 +75,7 @@ function Media:SetHighlight(name, path, silent)
 	end
 end
 
-function Media:GetHighlight(name, template)
+function Media:GetHighlight(name)
 	if self.Highlights[name] then
 		return self.Highlights[name]
 	else
@@ -154,7 +154,7 @@ function Media:SetPalette(name, t, silent)
 	end
 end
 
-function Media:GetPalette(name, template)
+function Media:GetPalette(name)
 	if self.Palettes[name] then
 		return self.Palettes[name]
 	else

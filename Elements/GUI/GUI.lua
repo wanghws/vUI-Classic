@@ -3527,6 +3527,8 @@ function GUI:VARIABLES_LOADED()
 	
 	vUI:SetScale(Settings["ui-scale"])
 	
+	vUI:UpdateoUFColors()
+	
 	-- Load the GUI
 	self:Create()
 	self:RunQueue()
