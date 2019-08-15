@@ -203,6 +203,7 @@ Media:SetFont("Matthan", "Interface\\Addons\\vUI\\Media\\Fonts\\MatthanSans.ttf"
 Media:SetFont("Swansea", "Interface\\Addons\\vUI\\Media\\Fonts\\Swansea.ttf")
 Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
+Media:SetFont("Sunflower", "Interface\\Addons\\vUI\\Media\\Fonts\\SunflowerMedium.ttf")
 
 -- Palettes
 -- Yes, doing these did take forever. And yes it was worth it.

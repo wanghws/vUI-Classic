@@ -39,9 +39,15 @@ Core[2].AddOptions = function(self, func)
 	end
 end
 
-vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
-vUI.GameResolution = GetCVar("gxFullscreenResolution")
-local ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+--[[
+	Scale comprehension references:
+	https://wow.gamepedia.com/UI_Scale
+	https://www.reddit.com/r/WowUI/comments/95o7qc/other_how_to_pixel_perfect_ui_xpost_rwow/
+	https://www.wowinterface.com/forums/showthread.php?t=31813
+--]]
+
+local Resolution = GetCurrentResolution()
+local ScreenHeight
 local Scale = 1
 
 local GetScale = function(x)
@@ -54,6 +60,18 @@ function vUI:SetScale(x)
 	x = min(8, x)
 	
 	UIParent:SetScale(x)
+	
+	Resolution = GetCurrentResolution()
+	
+	if (Resolution > 0) then
+		vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
+		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+	else
+		ScreenHeight = UIParent:GetHeight()
+		vUI.ScreenResolution = UIParent:GetWidth().."x"..UIParent:GetHeight()
+		print(ScreenHeight)
+	end
+	
 	Scale = (768 / ScreenHeight) / x
 	
 	self.BackdropAndBorder.edgeSize = GetScale(x)

@@ -59,6 +59,8 @@ function vUI:UpdateoUFColors()
 	colors.power[17] = colors.power.FURY
 	colors.power[18] = colors.power.PAIN
 	
+	colors.health = {vUI:HexToRGB(Settings["ui-header-texture-color"])}
+	
 	oUF.colors = colors
 	
 	frame_metatable.__index.colors = colors

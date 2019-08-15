@@ -645,7 +645,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBar3()
 	CreateBar4()
 	CreateBar5()
-	--vUI:SetScale(Settings["ui-scale"])
+	
 	SetActionBarToggles(1, 1, 1, 1)
 	MultiActionBar_Update()
 	

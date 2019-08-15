@@ -24,6 +24,8 @@ local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
 local Methods = oUF.Tags.Methods
 
+vUI.UnitFrames = {}
+
 local ShortValue = function(n)
 	if (n <= 999) then
 		return n
@@ -98,6 +100,13 @@ Methods["vUI-Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 8)
+end
+
+Events["vUI-Name10"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["vUI-Name10"] = function(unit)
+	local Name = UnitName(unit)
+	
+	return sub(Name, 1, 10)
 end
 
 Events["vUI-Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
@@ -304,6 +313,68 @@ local StylePlayer = function(self, unit)
 		Power.colorClass = true
 	end
 	
+    -- Castbar
+    local Castbar = CreateFrame("StatusBar", nil, self)
+    Castbar:SetScaledSize(250, 20)
+    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 130)
+    Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+    Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	
+	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
+	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetScaledPoint("BOTTOMRIGHT", Castbar, 0, 0)
+    CastbarBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+    CastbarBG:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	CastbarBG:SetAlpha(0.2)
+	
+    -- Add a background
+    local Background = Castbar:CreateTexture(nil, "BACKGROUND")
+    Background:SetScaledPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetScaledPoint("BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetTexture(Media:GetTexture("Blank"))
+    Background:SetVertexColor(0, 0, 0)
+	
+    -- Add a timer
+    local Time = Castbar:CreateFontString(nil, "OVERLAY")
+	Time:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
+	Time:SetJustifyH("RIGHT")
+	Time:SetShadowColor(0, 0, 0)
+	Time:SetShadowOffset(1, -1)
+	
+    -- Add spell text
+    local Text = Castbar:CreateFontString(nil, "OVERLAY")
+	Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
+	Text:SetJustifyH("LEFT")
+	Text:SetShadowColor(0, 0, 0)
+	Text:SetShadowOffset(1, -1)
+	
+    -- Add spell icon
+    local Icon = Castbar:CreateTexture(nil, "OVERLAY")
+    Icon:SetScaledSize(20, 20)
+    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -3, 0)
+    Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	
+    -- Add Shield
+    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
+    Shield:SetScaledSize(20, 20)
+    Shield:SetScaledPoint("CENTER", Castbar)
+	
+    -- Add safezone
+    local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
+	SafeZone:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	SafeZone:SetVertexColor(vUI:HexToRGB("C0392B"))
+	
+    -- Register it with oUF
+    --Castbar.bg = Background
+    Castbar.Time = Time
+    Castbar.Text = Text
+    Castbar.Icon = Icon
+    Castbar.Shield = Shield
+    Castbar.SafeZone = SafeZone
+    Castbar.showTradeSkills = true
+	
 	-- Tags
 	self:Tag(PowerLeft, "[vUI-PlayerInfo]")
 	self:Tag(PowerValue, "[vUI-Power]")
@@ -326,7 +397,7 @@ local StylePlayer = function(self, unit)
 	self.PowerLeft = PowerLeft
 	self.PowerRight = PowerRight
 	self.Combat = Combat
-	self.Castbar = CastBar
+	self.Castbar = Castbar
 end
 
 local StyleTarget = function(self, unit)
@@ -383,7 +454,8 @@ local StyleTarget = function(self, unit)
 	else
 		Health.colorHealth = true
 		
-		self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+		self:Tag(Name, "[vUI-Name15]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
@@ -415,6 +487,68 @@ local StyleTarget = function(self, unit)
 		Power.colorClass = true
 	end
 	
+    -- Castbar
+    local Castbar = CreateFrame("StatusBar", nil, self)
+    Castbar:SetScaledSize(250, 20)
+    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 130)
+    Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+    Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	
+	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
+	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetScaledPoint("BOTTOMRIGHT", Castbar, 0, 0)
+    CastbarBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+    CastbarBG:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	CastbarBG:SetAlpha(0.2)
+	
+    -- Add a background
+    local Background = Castbar:CreateTexture(nil, "BACKGROUND")
+    Background:SetScaledPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetScaledPoint("BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetTexture(Media:GetTexture("Blank"))
+    Background:SetVertexColor(0, 0, 0)
+	
+    -- Add a timer
+    local Time = Castbar:CreateFontString(nil, "OVERLAY")
+	Time:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
+	Time:SetJustifyH("RIGHT")
+	Time:SetShadowColor(0, 0, 0)
+	Time:SetShadowOffset(1, -1)
+	
+    -- Add spell text
+    local Text = Castbar:CreateFontString(nil, "OVERLAY")
+	Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
+	Text:SetJustifyH("LEFT")
+	Text:SetShadowColor(0, 0, 0)
+	Text:SetShadowOffset(1, -1)
+	
+    -- Add spell icon
+    local Icon = Castbar:CreateTexture(nil, "OVERLAY")
+    Icon:SetScaledSize(20, 20)
+    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -3, 0)
+    Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	
+    -- Add Shield
+    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
+    Shield:SetScaledSize(20, 20)
+    Shield:SetScaledPoint("CENTER", Castbar)
+	
+    -- Add safezone
+    local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
+	SafeZone:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	SafeZone:SetVertexColor(vUI:HexToRGB("C0392B"))
+	
+    -- Register it with oUF
+    --Castbar.bg = Background
+    Castbar.Time = Time
+    Castbar.Text = Text
+    Castbar.Icon = Icon
+    Castbar.Shield = Shield
+    Castbar.SafeZone = SafeZone
+    Castbar.showTradeSkills = true
+	
 	-- Combat
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
 	Combat:SetScaledSize(20, 20)
@@ -431,7 +565,131 @@ local StyleTarget = function(self, unit)
 	self.PowerValue = PowerValue
 	self.Name = Name
 	self.Combat = Combat
-	self.Castbar = CastBar
+	self.Castbar = Castbar
+end
+
+local StyleTargetTarget = function(self, unit)
+	-- General
+	self:RegisterForClicks("AnyUp")
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
+	self:SetBackdrop(vUI.BackdropAndBorder)
+	self:SetBackdropColor(0, 0, 0)
+	self:SetBackdropBorderColor(0, 0, 0)
+	
+	-- Health Bar
+	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
+	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetFrameLevel(5)
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local HealthBG = self:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	HealthLeft:SetShadowColor(0, 0, 0)
+	HealthLeft:SetShadowOffset(1, -1)
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	HealthRight:SetShadowColor(0, 0, 0)
+	HealthRight:SetShadowOffset(1, -1)
+	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-target-cc-health"] then
+		Health.colorReaction = true
+		Health.colorClass = true
+		Health.colorClassPet = true
+		
+		self:Tag(HealthLeft, "[vUI-Name10]")
+	else
+		Health.colorHealth = true
+		
+		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+		self:Tag(HealthLeft, "[vUI-Name10]")
+	end
+	
+	self.Health = Health
+	self.Health.bg = HealthBG
+	self.HealthLeft = HealthLeft
+end
+
+local StylePet = function(self, unit)
+	-- General
+	self:RegisterForClicks("AnyUp")
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
+	self:SetBackdrop(vUI.BackdropAndBorder)
+	self:SetBackdropColor(0, 0, 0)
+	self:SetBackdropBorderColor(0, 0, 0)
+	
+	-- Health Bar
+	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
+	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetFrameLevel(5)
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local HealthBG = self:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	HealthLeft:SetShadowColor(0, 0, 0)
+	HealthLeft:SetShadowOffset(1, -1)
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	HealthRight:SetShadowColor(0, 0, 0)
+	HealthRight:SetShadowOffset(1, -1)
+	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-target-cc-health"] then
+		Health.colorReaction = true
+		
+		self:Tag(HealthLeft, "[vUI-Name10]")
+	else
+		Health.colorHealth = true
+		
+		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
+		self:Tag(HealthLeft, "[vUI-Name10]")
+	end
+	
+	self.Health = Health
+	self.Health.bg = HealthBG
+	self.HealthLeft = HealthLeft
 end
 
 local Style = function(self, unit)
@@ -439,6 +697,10 @@ local Style = function(self, unit)
 		StylePlayer(self, unit)
 	elseif (unit == "target") then
 		StyleTarget(self, unit)
+	elseif (unit == "targettarget") then
+		StyleTargetTarget(self, unit)
+	elseif (unit == "pet") then
+		StylePet(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
 	end
@@ -473,6 +735,19 @@ Frame:SetScript("OnEvent", function(self, event)
 	local Target = oUF:Spawn("target")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
+	
+	local TargetTarget = oUF:Spawn("targettarget")
+	TargetTarget:SetScaledSize(110, 26)
+	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
+	
+	local Pet = oUF:Spawn("pet")
+	Pet:SetScaledSize(110, 26)
+	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
+	
+	vUI.UnitFrames["player"] = Player
+	vUI.UnitFrames["target"] = Target
+	vUI.UnitFrames["targettarget"] = TargetTarget
+	vUI.UnitFrames["pet"] = Pet
 	
 	if Settings["nameplates-enable"] then
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)

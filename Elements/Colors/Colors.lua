@@ -8,12 +8,12 @@ local ZoneColors = {}
 local PowerColors = {}
 
 function vUI:UpdateClassColors()
-	self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
-	self.ClassColors["DEMONHUNTER"] = {self:HexToRGB(Settings["color-demon-hunter"])}
+	--self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
+	--self.ClassColors["DEMONHUNTER"] = {self:HexToRGB(Settings["color-demon-hunter"])}
 	self.ClassColors["DRUID"] = {self:HexToRGB(Settings["color-druid"])}
 	self.ClassColors["HUNTER"] = {self:HexToRGB(Settings["color-hunter"])}
 	self.ClassColors["MAGE"] = {self:HexToRGB(Settings["color-mage"])}
-	self.ClassColors["MONK"] = {self:HexToRGB(Settings["color-monk"])}
+	--self.ClassColors["MONK"] = {self:HexToRGB(Settings["color-monk"])}
 	self.ClassColors["PALADIN"] = {self:HexToRGB(Settings["color-paladin"])}
 	self.ClassColors["PRIEST"] = {self:HexToRGB(Settings["color-priest"])}
 	self.ClassColors["ROGUE"] = {self:HexToRGB(Settings["color-rogue"])}
@@ -48,7 +48,7 @@ function vUI:UpdatePowerColors()
 	PowerColors["RAGE"] = {self:HexToRGB(Settings["color-rage"])}
 	PowerColors["ENERGY"] = {self:HexToRGB(Settings["color-energy"])}
 	PowerColors["COMBO_POINTS"] = {self:HexToRGB(Settings["color-combo-points"])}
-	PowerColors["SOUL_SHARDS"] = {self:HexToRGB(Settings["color-soul-shards"])}
+	--[[PowerColors["SOUL_SHARDS"] = {self:HexToRGB(Settings["color-soul-shards"])}
 	PowerColors["FOCUS"] = {self:HexToRGB(Settings["color-focus"])}
 	PowerColors["INSANITY"] = {self:HexToRGB(Settings["color-insanity"])}
 	PowerColors["FURY"] = {self:HexToRGB(Settings["color-fury"])}
@@ -61,7 +61,7 @@ function vUI:UpdatePowerColors()
 	PowerColors["RUNIC_POWER"] = {self:HexToRGB(Settings["color-runic-power"])}
 	PowerColors["RUNES"] = {self:HexToRGB(Settings["color-runes"])}
 	PowerColors["FUEL"] = {self:HexToRGB(Settings["color-fuel"])}
-	PowerColors["AMMO_SLOT"] = {self:HexToRGB(Settings["color-ammo-slot"])}
+	PowerColors["AMMO_SLOT"] = {self:HexToRGB(Settings["color-ammo-slot"])}]]
 end
 
 vUI.ClassColors = ClassColors
@@ -73,12 +73,12 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
 	
 	Left:CreateHeader(Language["Class Colors"])
-	Left:CreateColorSelection("color-death-knight", Settings["color-death-knight"], Language["Death Knight"], "")
-	Left:CreateColorSelection("color-demon-hunter", Settings["color-demon-hunter"], Language["Demon Hunter"], "")
+	--Left:CreateColorSelection("color-death-knight", Settings["color-death-knight"], Language["Death Knight"], "")
+	--Left:CreateColorSelection("color-demon-hunter", Settings["color-demon-hunter"], Language["Demon Hunter"], "")
 	Left:CreateColorSelection("color-druid", Settings["color-druid"], Language["Druid"], "")
 	Left:CreateColorSelection("color-hunter", Settings["color-hunter"], Language["Hunter"], "")
 	Left:CreateColorSelection("color-mage", Settings["color-mage"], Language["Mage"], "")
-	Left:CreateColorSelection("color-monk", Settings["color-monk"], Language["Monk"], "")
+	--Left:CreateColorSelection("color-monk", Settings["color-monk"], Language["Monk"], "")
 	Left:CreateColorSelection("color-paladin", Settings["color-paladin"], Language["Paladin"], "")
 	Left:CreateColorSelection("color-priest", Settings["color-priest"], Language["Priest"], "")
 	Left:CreateColorSelection("color-rogue", Settings["color-rogue"], Language["Rogue"], "")
@@ -91,39 +91,39 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-rage", Settings["color-rage"], Language["Rage"], "")
 	Right:CreateColorSelection("color-energy", Settings["color-energy"], Language["Energy"], "")
 	Right:CreateColorSelection("color-combo-points", Settings["color-combo-points"], Language["Combo Points"], "")
-	Right:CreateColorSelection("color-soul-shards", Settings["color-soul-shards"], Language["Soul Shards"], "")
-	Right:CreateColorSelection("color-focus", Settings["color-focus"], Language["Focus"], "")
-	Right:CreateColorSelection("color-insanity", Settings["color-insanity"], Language["Insanity"], "")
-	Right:CreateColorSelection("color-fury", Settings["color-fury"], Language["Fury"], "")
-	Right:CreateColorSelection("color-pain", Settings["color-pain"], Language["Pain"], "")
-	Right:CreateColorSelection("color-chi", Settings["color-chi"], Language["Chi"], "")
-	Right:CreateColorSelection("color-maelstrom", Settings["color-maelstrom"], Language["Maelstrom"], "")
-	Right:CreateColorSelection("color-arcane-charges", Settings["color-arcane-charges"], Language["Arcane Charges"], "")
-	Right:CreateColorSelection("color-holy-power", Settings["color-holy-power"], Language["Holy Power"], "")
-	Right:CreateColorSelection("color-lunar-power", Settings["color-lunar-power"], Language["Lunar Power"], "")
-	Right:CreateColorSelection("color-runic-power", Settings["color-runic-power"], Language["Runic Power"], "")
-	Right:CreateColorSelection("color-runes", Settings["color-runes"], Language["Runes"], "")
-	Right:CreateColorSelection("color-fuel", Settings["color-fuel"], Language["Fuel"], "")
-	Right:CreateColorSelection("color-ammo-slot", Settings["color-ammo-slot"], Language["Ammo Slot"], "")
+	--[[Left:CreateColorSelection("color-soul-shards", Settings["color-soul-shards"], Language["Soul Shards"], "")
+	Left:CreateColorSelection("color-focus", Settings["color-focus"], Language["Focus"], "")
+	Left:CreateColorSelection("color-insanity", Settings["color-insanity"], Language["Insanity"], "")
+	Left:CreateColorSelection("color-fury", Settings["color-fury"], Language["Fury"], "")
+	Left:CreateColorSelection("color-pain", Settings["color-pain"], Language["Pain"], "")
+	Left:CreateColorSelection("color-chi", Settings["color-chi"], Language["Chi"], "")
+	Left:CreateColorSelection("color-maelstrom", Settings["color-maelstrom"], Language["Maelstrom"], "")
+	Left:CreateColorSelection("color-arcane-charges", Settings["color-arcane-charges"], Language["Arcane Charges"], "")
+	Left:CreateColorSelection("color-holy-power", Settings["color-holy-power"], Language["Holy Power"], "")
+	Left:CreateColorSelection("color-lunar-power", Settings["color-lunar-power"], Language["Lunar Power"], "")
+	Left:CreateColorSelection("color-runic-power", Settings["color-runic-power"], Language["Runic Power"], "")
+	Left:CreateColorSelection("color-runes", Settings["color-runes"], Language["Runes"], "")
+	Left:CreateColorSelection("color-fuel", Settings["color-fuel"], Language["Fuel"], "")
+	Left:CreateColorSelection("color-ammo-slot", Settings["color-ammo-slot"], Language["Ammo Slot"], "")]]
 	
-	Right:CreateHeader(Language["Zone Colors"])
-	Right:CreateColorSelection("color-sanctuary", Settings["color-sanctuary"], "Sanctuary", "")
-	Right:CreateColorSelection("color-arena", Settings["color-arena"], "Arena", "")
-	Right:CreateColorSelection("color-hostile", Settings["color-hostile"], "Hostile", "")
-	Right:CreateColorSelection("color-combat", Settings["color-combat"], "Combat", "")
-	Right:CreateColorSelection("color-contested", Settings["color-contested"], "Contested", "")
-	Right:CreateColorSelection("color-friendly", Settings["color-friendly"], "Friendly", "")
-	Right:CreateColorSelection("color-other", Settings["color-other"], "Other", "")
+	Left:CreateHeader(Language["Zone Colors"])
+	Left:CreateColorSelection("color-sanctuary", Settings["color-sanctuary"], "Sanctuary", "")
+	Left:CreateColorSelection("color-arena", Settings["color-arena"], "Arena", "")
+	Left:CreateColorSelection("color-hostile", Settings["color-hostile"], "Hostile", "")
+	Left:CreateColorSelection("color-combat", Settings["color-combat"], "Combat", "")
+	Left:CreateColorSelection("color-contested", Settings["color-contested"], "Contested", "")
+	Left:CreateColorSelection("color-friendly", Settings["color-friendly"], "Friendly", "")
+	Left:CreateColorSelection("color-other", Settings["color-other"], "Other", "")
 	
-	Left:CreateHeader(Language["Reaction Colors"])
-	Left:CreateColorSelection("reaction-1", Settings["reaction-1"], Language["Exceptionally Hostile"], "")
-	Left:CreateColorSelection("reaction-2", Settings["reaction-2"], Language["Very Hostile"], "")
-	Left:CreateColorSelection("reaction-3", Settings["reaction-3"], Language["Hostile"], "")
-	Left:CreateColorSelection("reaction-4", Settings["reaction-4"], Language["Neutral"], "")
-	Left:CreateColorSelection("reaction-5", Settings["reaction-5"], Language["Friendly"], "")
-	Left:CreateColorSelection("reaction-6", Settings["reaction-6"], Language["Very Friendly"], "")
-	Left:CreateColorSelection("reaction-7", Settings["reaction-7"], Language["Exceptionally Friendly"], "")
-	Left:CreateColorSelection("reaction-8", Settings["reaction-8"], Language["Exalted"], "")
+	Right:CreateHeader(Language["Reaction Colors"])
+	Right:CreateColorSelection("reaction-1", Settings["reaction-1"], Language["Exceptionally Hostile"], "")
+	Right:CreateColorSelection("reaction-2", Settings["reaction-2"], Language["Very Hostile"], "")
+	Right:CreateColorSelection("reaction-3", Settings["reaction-3"], Language["Hostile"], "")
+	Right:CreateColorSelection("reaction-4", Settings["reaction-4"], Language["Neutral"], "")
+	Right:CreateColorSelection("reaction-5", Settings["reaction-5"], Language["Friendly"], "")
+	Right:CreateColorSelection("reaction-6", Settings["reaction-6"], Language["Very Friendly"], "")
+	Right:CreateColorSelection("reaction-7", Settings["reaction-7"], Language["Exceptionally Friendly"], "")
+	Right:CreateColorSelection("reaction-8", Settings["reaction-8"], Language["Exalted"], "")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
