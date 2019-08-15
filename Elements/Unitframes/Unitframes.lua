@@ -79,35 +79,35 @@ Methods["vUI-Power"] = function(unit)
 	end
 end
 
-Events["vUI-Name4"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
+Events["vUI-Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name4"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 4)
 end
 
-Events["vUI-Name5"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
+Events["vUI-Name5"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name5"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 5)
 end
 
-Events["vUI-Name8"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
+Events["vUI-Name8"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 8)
 end
 
-Events["vUI-Name15"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
+Events["vUI-Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 18)
 end
 
-Events["vUI-Name20"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE PLAYER_ENTERING_WORLD"
+Events["vUI-Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["vUI-Name20"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -304,31 +304,6 @@ local StylePlayer = function(self, unit)
 		Power.colorClass = true
 	end
 	
-	-- Heal Prediction
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
-	
-	local AbsorbsSpark = AbsorbsBar:CreateTexture(nil, "OVERLAY")
-	AbsorbsSpark:SetScaledSize(1, 28)
-	AbsorbsSpark:SetScaledPoint("LEFT", AbsorbsBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	AbsorbsSpark:SetTexture(Media:GetTexture("Blank"))
-	AbsorbsSpark:SetVertexColor(0, 0, 0)
-	
-	local HealBar = CreateFrame("StatusBar", nil, self)
-	HealBar:SetAllPoints(Health)
-	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
-	
-	local HealSpark = HealBar:CreateTexture(nil, "OVERLAY")
-	HealSpark:SetScaledSize(1, 28)
-	HealSpark:SetScaledPoint("LEFT", HealBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	HealSpark:SetTexture(Media:GetTexture("Blank"))
-	HealSpark:SetVertexColor(0, 0, 0)
-	
 	-- Tags
 	self:Tag(PowerLeft, "[vUI-PlayerInfo]")
 	self:Tag(PowerValue, "[vUI-Power]")
@@ -352,8 +327,6 @@ local StylePlayer = function(self, unit)
 	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = CastBar
-	self.HealBar = HealBar
-	self.AbsorbsBar = AbsorbsBar
 end
 
 local StyleTarget = function(self, unit)
@@ -447,31 +420,6 @@ local StyleTarget = function(self, unit)
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
 	
-	-- Heal	Prediction
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
-	
-	local AbsorbsSpark = AbsorbsBar:CreateTexture(nil, "OVERLAY")
-	AbsorbsSpark:SetScaledSize(1, 28)
-	AbsorbsSpark:SetScaledPoint("LEFT", AbsorbsBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	AbsorbsSpark:SetTexture(Media:GetTexture("Blank"))
-	AbsorbsSpark:SetVertexColor(0, 0, 0)
-	
-	local HealBar = CreateFrame("StatusBar", nil, self)
-	HealBar:SetAllPoints(Health)
-	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
-	
-	local HealSpark = HealBar:CreateTexture(nil, "OVERLAY")
-	HealSpark:SetScaledSize(1, 28)
-	HealSpark:SetScaledPoint("LEFT", HealBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	HealSpark:SetTexture(Media:GetTexture("Blank"))
-	HealSpark:SetVertexColor(0, 0, 0)
-	
 	-- Tags
 	self:Tag(HealthValue, "[vUI-TargetInfo]")
 	self:Tag(HealthPercent, "[vUI-HealthPercent]")
@@ -484,8 +432,6 @@ local StyleTarget = function(self, unit)
 	self.Name = Name
 	self.Combat = Combat
 	self.Castbar = CastBar
-	self.HealBar = HealBar
-	self.AbsorbsBar = AbsorbsBar
 end
 
 local Style = function(self, unit)

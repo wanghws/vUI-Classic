@@ -54,7 +54,6 @@ function vUI:SetScale(x)
 	x = min(8, x)
 	
 	UIParent:SetScale(x)
-	
 	Scale = (768 / ScreenHeight) / x
 	
 	self.BackdropAndBorder.edgeSize = GetScale(x)

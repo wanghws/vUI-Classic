@@ -3525,8 +3525,6 @@ function GUI:VARIABLES_LOADED()
 		-- Write the template into the Defaults table?
 	--]]
 	
-	vUI:SetScale(Settings["ui-scale"])
-	
 	vUI:UpdateoUFColors()
 	
 	-- Load the GUI
