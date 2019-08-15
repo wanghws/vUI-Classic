@@ -1,19 +1,17 @@
-local Defaults = select(2, ...):get(6)
+local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 -- These are just default values. Use the GUI to change settings.
 
--- Rename: action-bars-show-side <-- This is just a BG, not a whole bar or something.
-
 -- UI
-Defaults["ui-scale"] = 0.7111111111111111 -- GetCVar("uiScale")
+Defaults["ui-scale"] = 0.71111111111111 --vUI:GetSuggestedScale()
 Defaults["ui-display-welcome"] = true
 Defaults["ui-display-dev-tools"] = false
 Defaults["ui-display-whats-new"] = true
 
 -- Media
-Defaults["ui-picker-palette"] = "Default" -- Media:GetPaletteList()
-Defaults["ui-picker-format"] = "Hex" -- Hex/RGB/(HSV?)
-Defaults["ui-picker-show-texture"] = true -- Show textures on the swatches.
+Defaults["ui-picker-palette"] = "Default"
+Defaults["ui-picker-format"] = "Hex"
+Defaults["ui-picker-show-texture"] = true
 
 Defaults["ui-template"] = "vUI"
 
@@ -42,7 +40,7 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
--- Colors (populating retail colors as well)
+-- Classes (populating retail colors as well) -- The commented colors are 10% darker, I like them better.
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
 Defaults["color-demon-hunter"] = "A330C9" -- 922BB4
 Defaults["color-druid"] = "FF7D0A" -- E56F08
@@ -56,6 +54,7 @@ Defaults["color-shaman"] = "0070DE" -- 0046C6
 Defaults["color-warlock"] = "8787ED" -- 6969B8
 Defaults["color-warrior"] = "C79C6E" -- B28B62
 
+-- Power Types
 Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
 Defaults["color-rage"] = "FF0000" -- FF0000 for the default rage color
 Defaults["color-energy"] = "FFFF00"
@@ -75,15 +74,17 @@ Defaults["color-soul-shards"] = "7F518C"
 Defaults["color-runes"] = "7F7F7F"
 Defaults["color-combo-points"] = "FFF468"
 
-Defaults["reaction-1"] = "CC4C38" -- Exceptionally Hostile
-Defaults["reaction-2"] = "CC4C38" -- Very Hostile
-Defaults["reaction-3"] = "BF4400" -- Hostile
-Defaults["reaction-4"] = "E5B200" -- Neutral
-Defaults["reaction-5"] = "009919" -- Friendly
-Defaults["reaction-6"] = "009919" -- Very Friendly
-Defaults["reaction-7"] = "009919" -- Exceptionally Friendly
-Defaults["reaction-8"] = "009919" -- Exalted
+-- Reactions
+Defaults["color-reaction-1"] = "CC4C38" -- Exceptionally Hostile
+Defaults["color-reaction-2"] = "CC4C38" -- Very Hostile
+Defaults["color-reaction-3"] = "BF4400" -- Hostile
+Defaults["color-reaction-4"] = "E5B200" -- Neutral
+Defaults["color-reaction-5"] = "009919" -- Friendly
+Defaults["color-reaction-6"] = "009919" -- Very Friendly
+Defaults["color-reaction-7"] = "009919" -- Exceptionally Friendly
+Defaults["color-reaction-8"] = "009919" -- Exalted
 
+-- Zone PVP Types
 Defaults["color-sanctuary"] = "68CCEF"
 Defaults["color-arena"] = "FF1919"
 Defaults["color-hostile"] = "FF1919"
@@ -92,14 +93,21 @@ Defaults["color-friendly"] = "19FF19"
 Defaults["color-contested"] = "FFB200"
 Defaults["color-other"] = "FFECC1"
 
+-- Debuff Types
+Defaults["color-curse"] = "9900FF"
+Defaults["color-disease"] = "996600"
+Defaults["color-magic"] = "3399FF"
+Defaults["color-poison"] = "009900"
+Defaults["color-none"] = "CC0000"
+
 -- Action Bars
 Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "DEFAULT"
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-button-size"] = 32
 Defaults["action-bars-button-highlight"] = "Blank"
-Defaults["action-bars-show-bottom"] = true
-Defaults["action-bars-show-side"] = true
+Defaults["action-bars-show-bottom-bg"] = true
+Defaults["action-bars-show-side-bg"] = true
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-show-macro-names"] = true
 Defaults["action-bars-show-count"] = true

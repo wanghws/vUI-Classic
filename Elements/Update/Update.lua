@@ -17,8 +17,7 @@ local Update = CreateFrame("Frame")
 
 -- We'll only store information on the previous 5-10 versions
 local RecentVersions = { -- I guess I only need to put major versions in here, minor versions are ignored anyways
-	[1] = "Minor",
-	[1.01] = "Minor",
+	--[1.01] = "Minor",
 }
 
 local WhatsNew = {

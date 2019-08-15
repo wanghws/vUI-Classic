@@ -433,7 +433,7 @@ local CreateBarPanels = function()
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
 	BottomPanel:SetFrameStrata("LOW")
 	
-	if (not Settings["action-bars-show-bottom"]) then
+	if (not Settings["action-bars-show-bottom-bg"]) then
 		BottomPanel:SetAlpha(0)
 	end
 	
@@ -454,7 +454,7 @@ local CreateBarPanels = function()
 	PetPanel:SetFrameStrata("LOW")
 	PetPanel:Hide()
 	
-	if (not Settings["action-bars-show-side"]) then
+	if (not Settings["action-bars-show-side-bg"]) then
 		SidePanel:SetAlpha(0)
 	end
 	
@@ -737,8 +737,8 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module"):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Backdrops"])
-	Left:CreateCheckbox("action-bars-show-bottom", Settings["action-bars-show-bottom"], "Show Bottom Backdrop", "", UpdateShowBottom)
-	Left:CreateCheckbox("action-bars-show-side", Settings["action-bars-show-side"], "Show Side Backdrop", "", UpdateShowSide)
+	Left:CreateCheckbox("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "", UpdateShowBottom)
+	Left:CreateCheckbox("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "", UpdateShowSide)
 	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)

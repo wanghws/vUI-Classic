@@ -6,6 +6,7 @@ local ClassColors = {}
 local ReactionColors = {}
 local ZoneColors = {}
 local PowerColors = {}
+local DebuffColors = {}
 
 function vUI:UpdateClassColors()
 	--self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
@@ -23,24 +24,24 @@ function vUI:UpdateClassColors()
 end
 
 function vUI:UpdateReactionColors()
-	self.ReactionColors[1] = {self:HexToRGB(Settings["reaction-1"])}
-	self.ReactionColors[2] = {self:HexToRGB(Settings["reaction-2"])}
-	self.ReactionColors[3] = {self:HexToRGB(Settings["reaction-3"])}
-	self.ReactionColors[4] = {self:HexToRGB(Settings["reaction-4"])}
-	self.ReactionColors[5] = {self:HexToRGB(Settings["reaction-5"])}
-	self.ReactionColors[6] = {self:HexToRGB(Settings["reaction-6"])}
-	self.ReactionColors[7] = {self:HexToRGB(Settings["reaction-7"])}
-	self.ReactionColors[8] = {self:HexToRGB(Settings["reaction-8"])}
+	self.ReactionColors[1] = {self:HexToRGB(Settings["color-reaction-1"])}
+	self.ReactionColors[2] = {self:HexToRGB(Settings["color-reaction-2"])}
+	self.ReactionColors[3] = {self:HexToRGB(Settings["color-reaction-3"])}
+	self.ReactionColors[4] = {self:HexToRGB(Settings["color-reaction-4"])}
+	self.ReactionColors[5] = {self:HexToRGB(Settings["color-reaction-5"])}
+	self.ReactionColors[6] = {self:HexToRGB(Settings["color-reaction-6"])}
+	self.ReactionColors[7] = {self:HexToRGB(Settings["color-reaction-7"])}
+	self.ReactionColors[8] = {self:HexToRGB(Settings["color-reaction-8"])}
 end
 
 function vUI:UpdateZoneColors()
-	ZoneColors["sanctuary"] = {self:HexToRGB(Settings["color-sanctuary"])}
-	ZoneColors["arena"] = {self:HexToRGB(Settings["color-arena"])}
-	ZoneColors["hostile"] = {self:HexToRGB(Settings["color-hostile"])}
-	ZoneColors["combat"] = {self:HexToRGB(Settings["color-combat"])}
-	ZoneColors["friendly"] = {self:HexToRGB(Settings["color-friendly"])}
-	ZoneColors["contested"] = {self:HexToRGB(Settings["color-contested"])}
-	ZoneColors["other"] = {self:HexToRGB(Settings["color-other"])}
+	self.ZoneColors["sanctuary"] = {self:HexToRGB(Settings["color-sanctuary"])}
+	self.ZoneColors["arena"] = {self:HexToRGB(Settings["color-arena"])}
+	self.ZoneColors["hostile"] = {self:HexToRGB(Settings["color-hostile"])}
+	self.ZoneColors["combat"] = {self:HexToRGB(Settings["color-combat"])}
+	self.ZoneColors["friendly"] = {self:HexToRGB(Settings["color-friendly"])}
+	self.ZoneColors["contested"] = {self:HexToRGB(Settings["color-contested"])}
+	self.ZoneColors["other"] = {self:HexToRGB(Settings["color-other"])}
 end
 
 function vUI:UpdatePowerColors()
@@ -48,8 +49,8 @@ function vUI:UpdatePowerColors()
 	PowerColors["RAGE"] = {self:HexToRGB(Settings["color-rage"])}
 	PowerColors["ENERGY"] = {self:HexToRGB(Settings["color-energy"])}
 	PowerColors["COMBO_POINTS"] = {self:HexToRGB(Settings["color-combo-points"])}
-	--[[PowerColors["SOUL_SHARDS"] = {self:HexToRGB(Settings["color-soul-shards"])}
 	PowerColors["FOCUS"] = {self:HexToRGB(Settings["color-focus"])}
+	--[[PowerColors["SOUL_SHARDS"] = {self:HexToRGB(Settings["color-soul-shards"])}
 	PowerColors["INSANITY"] = {self:HexToRGB(Settings["color-insanity"])}
 	PowerColors["FURY"] = {self:HexToRGB(Settings["color-fury"])}
 	PowerColors["PAIN"] = {self:HexToRGB(Settings["color-pain"])}
@@ -64,10 +65,19 @@ function vUI:UpdatePowerColors()
 	PowerColors["AMMO_SLOT"] = {self:HexToRGB(Settings["color-ammo-slot"])}]]
 end
 
+function vUI:UpdateDebuffColors()
+	self.DebuffColors["Curse"] = {self:HexToRGB(Settings["color-curse"])}
+	self.DebuffColors["Disease"] = {self:HexToRGB(Settings["color-disease"])}
+	self.DebuffColors["Magic"] = {self:HexToRGB(Settings["color-magic"])}
+	self.DebuffColors["Poison"] = {self:HexToRGB(Settings["color-poison"])}
+	self.DebuffColors["none"] = {self:HexToRGB(Settings["color-none"])}
+end
+
 vUI.ClassColors = ClassColors
 vUI.ReactionColors = ReactionColors
 vUI.ZoneColors = ZoneColors
 vUI.PowerColors = PowerColors
+vUI.DebuffColors = DebuffColors
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
@@ -91,8 +101,8 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-rage", Settings["color-rage"], Language["Rage"], "")
 	Right:CreateColorSelection("color-energy", Settings["color-energy"], Language["Energy"], "")
 	Right:CreateColorSelection("color-combo-points", Settings["color-combo-points"], Language["Combo Points"], "")
+	Right:CreateColorSelection("color-focus", Settings["color-focus"], Language["Focus"], "")
 	--[[Left:CreateColorSelection("color-soul-shards", Settings["color-soul-shards"], Language["Soul Shards"], "")
-	Left:CreateColorSelection("color-focus", Settings["color-focus"], Language["Focus"], "")
 	Left:CreateColorSelection("color-insanity", Settings["color-insanity"], Language["Insanity"], "")
 	Left:CreateColorSelection("color-fury", Settings["color-fury"], Language["Fury"], "")
 	Left:CreateColorSelection("color-pain", Settings["color-pain"], Language["Pain"], "")
@@ -116,14 +126,21 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("color-other", Settings["color-other"], "Other", "")
 	
 	Right:CreateHeader(Language["Reaction Colors"])
-	Right:CreateColorSelection("reaction-1", Settings["reaction-1"], Language["Exceptionally Hostile"], "")
-	Right:CreateColorSelection("reaction-2", Settings["reaction-2"], Language["Very Hostile"], "")
-	Right:CreateColorSelection("reaction-3", Settings["reaction-3"], Language["Hostile"], "")
-	Right:CreateColorSelection("reaction-4", Settings["reaction-4"], Language["Neutral"], "")
-	Right:CreateColorSelection("reaction-5", Settings["reaction-5"], Language["Friendly"], "")
-	Right:CreateColorSelection("reaction-6", Settings["reaction-6"], Language["Very Friendly"], "")
-	Right:CreateColorSelection("reaction-7", Settings["reaction-7"], Language["Exceptionally Friendly"], "")
-	Right:CreateColorSelection("reaction-8", Settings["reaction-8"], Language["Exalted"], "")
+	Right:CreateColorSelection("color-reaction-1", Settings["color-reaction-1"], Language["Exceptionally Hostile"], "")
+	Right:CreateColorSelection("color-reaction-2", Settings["color-reaction-2"], Language["Very Hostile"], "")
+	Right:CreateColorSelection("color-reaction-3", Settings["color-reaction-3"], Language["Hostile"], "")
+	Right:CreateColorSelection("color-reaction-4", Settings["color-reaction-4"], Language["Neutral"], "")
+	Right:CreateColorSelection("color-reaction-5", Settings["color-reaction-5"], Language["Friendly"], "")
+	Right:CreateColorSelection("color-reaction-6", Settings["color-reaction-6"], Language["Very Friendly"], "")
+	Right:CreateColorSelection("color-reaction-7", Settings["color-reaction-7"], Language["Exceptionally Friendly"], "")
+	Right:CreateColorSelection("color-reaction-8", Settings["color-reaction-8"], Language["Exalted"], "")
+	
+	Right:CreateHeader(Language["Debuff Colors"])
+	Right:CreateColorSelection("color-curse", Settings["color-curse"], Language["Curse"], "")
+	Right:CreateColorSelection("color-disease", Settings["color-disease"], Language["Disease"], "")
+	Right:CreateColorSelection("color-magic", Settings["color-magic"], Language["Magic"], "")
+	Right:CreateColorSelection("color-poison", Settings["color-poison"], Language["Poison"], "")
+	Right:CreateColorSelection("color-none", Settings["color-none"], Language["None"], "")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
@@ -132,4 +149,5 @@ GUI:AddOptions(function(self)
 	vUI:UpdateReactionColors()
 	vUI:UpdateZoneColors()
 	vUI:UpdatePowerColors()
+	vUI:UpdateDebuffColors()
 end)

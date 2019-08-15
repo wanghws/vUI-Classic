@@ -11,14 +11,8 @@ local colors = {
 		1, 1, 0,
 		0, 1, 0
 	},
-	health = {49 / 255, 207 / 255, 37 / 255},
 	disconnected = {0.6, 0.6, 0.6},
 	tapped = {0.6, 0.6, 0.6},
-	runes = {
-		{247 / 255, 65 / 255, 57 / 255}, -- blood
-		{148 / 255, 203 / 255, 247 / 255}, -- frost
-		{173 / 255, 235 / 255, 66 / 255}, -- unholy
-	},
 	selection = {
 		[ 0] = {255 / 255, 0 / 255, 0 / 255}, -- HOSTILE
 		[ 1] = {255 / 255, 129 / 255, 0 / 255}, -- UNFRIENDLY
@@ -35,13 +29,13 @@ local colors = {
 		[12] = {255 / 255, 255 / 255, 139 / 255}, -- SELF, buggy
 		[13] = {0 / 255, 153 / 255, 0 / 255}, -- BATTLEGROUND_FRIENDLY_PVP
 	},
-	debuff = {},
 }
 
 function vUI:UpdateoUFColors()
 	colors.class = vUI.ClassColors
 	colors.reaction = vUI.ReactionColors
 	colors.power = vUI.PowerColors
+	colors.debuff = vUI.DebuffColors
 	colors.power[0] = colors.power.MANA
 	colors.power[1] = colors.power.RAGE
 	colors.power[2] = colors.power.FOCUS
@@ -65,10 +59,6 @@ function vUI:UpdateoUFColors()
 	
 	frame_metatable.__index.colors = colors
 	frame_metatable.__index.ColorGradient = oUF.ColorGradient
-end
-
-for debuffType, color in next, DebuffTypeColor do
-	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
 local function colorsAndPercent(a, b, ...)

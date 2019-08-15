@@ -124,7 +124,7 @@ end
 local function UpdateColor(element, unit, cur, min, max, displayType)
 	local parent = element.__owner
 	local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
-
+	
 	local r, g, b, t
 	if(element.colorTapping and element.tapped) then
 		t = parent.colors.tapped

@@ -51,7 +51,6 @@ local ScreenHeight
 local Scale = 1
 
 local GetScale = function(x)
-	--return Mult * floor(x / Mult + 0.5)
 	return Scale * x
 end
 
@@ -110,13 +109,13 @@ vUI.Backdrop = {
 vUI.BackdropAndBorder = {
 	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
 	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
-	edgeSize = GetScale(1),
+	edgeSize = 1,
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 
 vUI.Outline = {
 	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
-	edgeSize = GetScale(1),
+	edgeSize = 1,
 	insets = {left = 0, right = 0, top = 0, bottom = 0},
 }
 
@@ -219,13 +218,13 @@ local SetScaledSize = function(self, width, height)
 	self:SetSize(GetScale(width), GetScale(height or width))
 end
 
-local SetScaledPoint = function(self, a1, p, a2, xoff, yoff)
-	if (type(p) == "number") then p = GetScale(p) end
-	if (type(a2) == "number") then a2 = GetScale(a2) end
-	if (type(xoff) == "number") then xoff = GetScale(xoff) end
-	if (type(yoff) == "number") then yoff = GetScale(yoff) end
+local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
+	if (type(parent) == "number") then parent = GetScale(parent) end
+	if (type(anchor2) == "number") then anchor2 = GetScale(anchor2) end
+	if (type(x) == "number") then x = GetScale(x) end
+	if (type(y) == "number") then y = GetScale(y) end
 	
-	self:SetPoint(a1, p, a2, xoff, yoff)
+	self:SetPoint(anchor1, parent, anchor2, x, y)
 end
 
 -- Thank you Tukz for letting me use this script!

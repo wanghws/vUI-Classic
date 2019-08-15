@@ -337,6 +337,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	
 	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
 	Anchor.Reference:SetAllPoints(Anchor.Text)
+	Anchor.Reference:SetScaledWidth(floor(Anchor.Text:GetStringWidth()))
 	
 	-- Header Left Line
 	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
