@@ -62,6 +62,19 @@ Methods["HealthPercent"] = function(unit)
 	return floor((UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 end
 
+Events["HealthValues"] = "UNIT_HEALTH_FREQUENT"
+Methods["HealthValues"] = function(unit)
+	if UnitIsDead(unit) then
+		return Language["Dead"]
+	elseif UnitIsGhost(unit) then
+		return Language["Ghost"]
+	elseif (not UnitIsConnected(unit)) then
+		return Language["Offline"]
+	end
+	
+	return ShortValue(UnitHealth(unit)) .. " / " .. ShortValue(UnitHealthMax(unit))
+end
+
 local GetColor = function(p, r1, g1, b1, r2, g2, b2)
 	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
 end
@@ -83,6 +96,11 @@ Methods["PowerPercent"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
 		return floor((UnitPower(unit) / UnitPowerMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 	end
+end
+
+Events["PowerColor"] = "UNIT_POWER_FREQUENT"
+Methods["PowerColor"] = function(unit)
+	return "|cFF"..vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
 end
 
 Events["Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
@@ -431,9 +449,6 @@ local StylePlayer = function(self, unit)
 	end
 	
 	-- Tags
-	self:Tag(PowerLeft, "[Health]")
-	self:Tag(PowerValue, "[Power]")
-	
 	if Settings["unitframes-player-show-name"] then
 		if Settings["unitframes-player-cc-health"] then
 			self:Tag(HealthLeft, "[Name15]")
@@ -443,6 +458,8 @@ local StylePlayer = function(self, unit)
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
+	self:Tag(PowerLeft, "[HealthValues]")
+	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -480,13 +497,6 @@ local StyleTarget = function(self, unit)
 	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
-	
-	local HealthValue = Health:CreateFontString(nil, "OVERLAY")
-	HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	HealthValue:SetScaledPoint("BOTTOMLEFT", self, 2, 2)
-	HealthValue:SetJustifyH("LEFT")
-	HealthValue:SetShadowColor(0, 0, 0)
-	HealthValue:SetShadowOffset(1, -1)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
@@ -534,12 +544,19 @@ local StyleTarget = function(self, unit)
 	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
-	local PowerValue = Power:CreateFontString(nil, "OVERLAY")
-	PowerValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
-	PowerValue:SetScaledPoint("RIGHT", Power, -1, 0)
-	PowerValue:SetJustifyH("RIGHT")
-	PowerValue:SetShadowColor(0, 0, 0)
-	PowerValue:SetShadowOffset(1, -1)
+	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
+	PowerLeft:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
+	PowerLeft:SetJustifyH("LEFT")
+	PowerLeft:SetShadowColor(0, 0, 0)
+	PowerLeft:SetShadowOffset(1, -1)
+	
+	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
+	PowerRight:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
+	PowerRight:SetJustifyH("RIGHT")
+	PowerRight:SetShadowColor(0, 0, 0)
+	PowerRight:SetShadowOffset(1, -1)
 	
 	-- Attributes
 	Power.frequentUpdates = true
@@ -619,16 +636,18 @@ local StyleTarget = function(self, unit)
 	Combat:SetScaledPoint("CENTER", Health)
 	
 	-- Tags
-	self:Tag(HealthValue, "[Health]")
 	self:Tag(HealthRight, "[HealthColor][perhp]")
+	self:Tag(PowerLeft, "[HealthValues]")
+	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
-	self.Power = Power
-	self.Power.bg = PowerBG
-	self.PowerValue = PowerValue
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
+	self.Power = Power
+	self.Power.bg = PowerBG
+	self.PowerLeft = PowerLeft
+	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = Castbar
 end

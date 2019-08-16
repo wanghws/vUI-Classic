@@ -133,7 +133,7 @@ end
 local OrderedNext = function(t, state)
 	local OrderedIndex = GetOrderedIndex(t)
 	local Key
-	
+	print(state)
     if (state == nil) then
         Key = OrderedIndex[1]
 		
@@ -149,11 +149,9 @@ local OrderedNext = function(t, state)
     if Key then
         return Key, t[Key]
     end
-	
-    return
 end
 
-local PairsByKeys = function(t)
+local SortedPairs = function(t)
     return OrderedNext, t, nil
 end
 
@@ -1870,7 +1868,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	local Count = 0
 	local LastMenuItem
 	
-	for Key, Value in PairsByKeys(values) do
+	for Key, Value in SortedPairs(values) do
 		Count = Count + 1
 		
 		local MenuItem = CreateFrame("Frame", nil, Dropdown.Menu)

@@ -68,7 +68,6 @@ function vUI:SetScale(x)
 	else
 		ScreenHeight = UIParent:GetHeight()
 		vUI.ScreenResolution = UIParent:GetWidth().."x"..UIParent:GetHeight()
-		print(ScreenHeight)
 	end
 	
 	Scale = (768 / ScreenHeight) / x
@@ -227,14 +226,20 @@ local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
 	self:SetPoint(anchor1, parent, anchor2, x, y)
 end
 
+local SetTextHexColor = function(self, hex)
+	self:SetTextColor(vUI:HexToRGB(hex))
+end
+
 -- Thank you Tukz for letting me use this script!
 local AddMethods = function(object)
-	local mt = getmetatable(object).__index
+	local metatable = getmetatable(object).__index
 	
-	if (not object.SetScaledHeight) then mt.SetScaledHeight = SetScaledHeight end
-	if (not object.SetScaledWidth) then mt.SetScaledWidth = SetScaledWidth end
-	if (not object.SetScaledSize) then mt.SetScaledSize = SetScaledSize end
-	if (not object.SetScaledPoint) then mt.SetScaledPoint = SetScaledPoint end
+	if (not object.SetScaledHeight) then metatable.SetScaledHeight = SetScaledHeight end
+	if (not object.SetScaledWidth) then metatable.SetScaledWidth = SetScaledWidth end
+	if (not object.SetScaledSize) then metatable.SetScaledSize = SetScaledSize end
+	if (not object.SetScaledPoint) then metatable.SetScaledPoint = SetScaledPoint end
+	
+	if metatable.SetTextColor then object.SetTextHexColor = SetTextHexColor end
 end
 
 local Handled = {["Frame"] = true}
