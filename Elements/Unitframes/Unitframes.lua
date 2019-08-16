@@ -62,6 +62,15 @@ Methods["HealthPercent"] = function(unit)
 	return floor((UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 end
 
+local GetColor = function(p, r1, g1, b1, r2, g2, b2)
+	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
+end
+
+Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
+Methods["HealthColor"] = function(unit)
+	return "|cFF"..vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+end
+
 Events["Power"] = "UNIT_POWER_FREQUENT"
 Methods["Power"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
@@ -229,11 +238,11 @@ local StyleNamePlate = function(self, unit)
 	else
 		Health.colorHealth = true
 		
-		self:Tag(TopLeft, "[ClassReaction][Name15]")
+		self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	end
 	
-	self:Tag(BottomRight, "[perhp]")
-	self:Tag(TopRight, "[level]")
+	self:Tag(TopRight, Settings["nameplates-topright-text"])
+	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
 	
 	self.Health = Health
 	self.TopLeft = TopLeft
@@ -396,6 +405,31 @@ local StylePlayer = function(self, unit)
     Castbar.SafeZone = SafeZone
     Castbar.showTradeSkills = true
 	
+	if (vUI.UserClass == "SHAMAN") then
+		local Totems = {}
+		
+		for index = 1, 5 do
+			-- Position and size of the totem indicator
+			local Totem = CreateFrame("Button", nil, self)
+			Totem:SetSize(40, 40)
+			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", index * Totem:GetWidth(), 0)
+			
+			local Icon = Totem:CreateTexture(nil, 'OVERLAY')
+			Icon:SetAllPoints()
+			
+			local Cooldown = CreateFrame('Cooldown', nil, Totem, 'CooldownFrameTemplate')
+			Cooldown:SetAllPoints()
+			
+			Totem.Icon = Icon
+			Totem.Cooldown = Cooldown
+			
+			Totems[index] = Totem
+		end
+		
+		-- Register with oUF
+		self.Totems = Totems
+	end
+	
 	-- Tags
 	self:Tag(PowerLeft, "[Health]")
 	self:Tag(PowerValue, "[Power]")
@@ -404,9 +438,11 @@ local StylePlayer = function(self, unit)
 		if Settings["unitframes-player-cc-health"] then
 			self:Tag(HealthLeft, "[Name15]")
 		else
-			self:Tag(HealthLeft, "[ClassReaction][Name15]")
+			self:Tag(HealthLeft, "[Name15]")
 		end
 	end
+	
+	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -452,12 +488,19 @@ local StyleTarget = function(self, unit)
 	HealthValue:SetShadowColor(0, 0, 0)
 	HealthValue:SetShadowOffset(1, -1)
 	
-	local Name = Health:CreateFontString(nil, "OVERLAY")
-	Name:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Name:SetScaledPoint("LEFT", Health, 3, 0)
-	Name:SetJustifyH("LEFT")
-	Name:SetShadowColor(0, 0, 0)
-	Name:SetShadowOffset(1, -1)
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	HealthLeft:SetShadowColor(0, 0, 0)
+	HealthLeft:SetShadowOffset(1, -1)
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	HealthRight:SetShadowColor(0, 0, 0)
+	HealthRight:SetShadowOffset(1, -1)
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -471,12 +514,12 @@ local StyleTarget = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(Name, "[Name15]")
+		self:Tag(HealthLeft, "[Name15]")
 	else
 		Health.colorHealth = true
 		
-		--self:Tag(Name, "[ClassReaction][Name15]")
-		self:Tag(Name, "[Name15]")
+		self:Tag(HealthLeft, "[ClassReaction][Name15]")
+		--self:Tag(HealthLeft, "[Name15]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
@@ -577,14 +620,15 @@ local StyleTarget = function(self, unit)
 	
 	-- Tags
 	self:Tag(HealthValue, "[Health]")
-	self:Tag(HealthPercent, "[HealthPercent]")
+	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.Power = Power
 	self.Power.bg = PowerBG
 	self.PowerValue = PowerValue
-	self.Name = Name
+	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
 	self.Combat = Combat
 	self.Castbar = Castbar
 end
@@ -643,13 +687,16 @@ local StyleTargetTarget = function(self, unit)
 	else
 		Health.colorHealth = true
 		
-		--self:Tag(Name, "[ClassReaction][Name15]")
-		self:Tag(HealthLeft, "[Name10]")
+		self:Tag(HealthLeft, "[ClassReaction][Name10]")
+		--self:Tag(HealthLeft, "[Name10]")
 	end
+	
+	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
 end
 
 local StylePet = function(self, unit)
@@ -811,6 +858,12 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Sizes"])
 	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "")
 	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "")
+	
+	Right:CreateHeader(Language["Information"])
+	Right:CreateInput("nameplates-topleft-text", Settings["nameplates-topleft-text"], Language["Top Left Text"], "")
+	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "")
+	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
+	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

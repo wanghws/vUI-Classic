@@ -112,6 +112,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())
 	Left:CreateDoubleLine(Language["Template"], Settings["ui-template"])
 	Left:CreateDoubleLine(Language["Locale"], vUI.UserLocale)
+	--Left:CreateDoubleLine(Language["Language"], Settings["ui-language"])
 	
 	Right:CreateHeader(Language["User Information"])
 	Right:CreateDoubleLine(Language["User"], vUI.UserName)

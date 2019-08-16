@@ -4,6 +4,7 @@ local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 -- UI
 Defaults["ui-scale"] = 0.71111111111111 --vUI:GetSuggestedScale()
+Defaults["ui-language"] = GetLocale()
 Defaults["ui-display-welcome"] = true
 Defaults["ui-display-dev-tools"] = false
 Defaults["ui-display-whats-new"] = true
@@ -40,7 +41,7 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
--- Classes (populating retail colors as well) -- The commented colors are 10% darker, I like them better.
+-- Classes (populating retail colors as well) -- The commented colors are 10% darker
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
 Defaults["color-demon-hunter"] = "A330C9" -- 922BB4
 Defaults["color-druid"] = "FF7D0A" -- E56F08
@@ -56,10 +57,10 @@ Defaults["color-warrior"] = "C79C6E" -- B28B62
 
 -- Power Types
 Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
-Defaults["color-rage"] = "FF0000" -- FF0000 for the default rage color
-Defaults["color-energy"] = "FFFF00"
-Defaults["color-fuel"] = "008C7F"
+Defaults["color-rage"] = "E53935" -- FF0000 for the default rage color
+Defaults["color-energy"] = "#FFEB3B" -- FFFF00
 Defaults["color-focus"] = "FF7F3F"
+Defaults["color-fuel"] = "008C7F"
 Defaults["color-insanity"] = "6600CC"
 Defaults["color-holy-power"] = "F2E599"
 Defaults["color-fury"] = "C842FC"
@@ -153,3 +154,7 @@ Defaults["nameplates-enable"] = true
 Defaults["nameplates-width"] = 134
 Defaults["nameplates-height"] = 14
 Defaults["nameplates-cc-health"] = false
+Defaults["nameplates-topleft-text"] = "[ClassReaction][Name15]"
+Defaults["nameplates-topright-text"] = "[level]"
+Defaults["nameplates-bottomleft-text"] = ""
+Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"

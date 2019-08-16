@@ -48,15 +48,17 @@ OnEnter and OnLeave script handlers will be set to display a Tooltip if the `Tot
 local _, ns = ...
 local oUF = ns.oUF
 
+local GetTotemInfo = GetTotemInfo
+
 local function UpdateTooltip(self)
-	GameTooltip:SetTotem(self:GetID())
+	--GameTooltip:SetTotem(self:GetID())
 end
 
 local function OnEnter(self)
 	if(not self:IsVisible()) then return end
 
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-	self:UpdateTooltip()
+	--self:UpdateTooltip()
 end
 
 local function OnLeave()
@@ -148,19 +150,14 @@ local function Enable(self)
 
 				* self - the widget at the given slot index
 				--]]
-				if(not totem.UpdateTooltip) then
+				--[[if(not totem.UpdateTooltip) then
 					totem.UpdateTooltip = UpdateTooltip
-				end
+				end]]
 			end
 		end
 
 		self:RegisterEvent('PLAYER_TOTEM_UPDATE', Path, true)
-
-		TotemFrame:UnregisterEvent('PLAYER_TOTEM_UPDATE')
-		TotemFrame:UnregisterEvent('PLAYER_ENTERING_WORLD')
-		TotemFrame:UnregisterEvent('UPDATE_SHAPESHIFT_FORM')
-		TotemFrame:UnregisterEvent('PLAYER_TALENT_UPDATE')
-
+		
 		return true
 	end
 end
@@ -171,12 +168,7 @@ local function Disable(self)
 		for i = 1, #element do
 			element[i]:Hide()
 		end
-
-		TotemFrame:RegisterEvent('PLAYER_TOTEM_UPDATE')
-		TotemFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-		TotemFrame:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
-		TotemFrame:RegisterEvent('PLAYER_TALENT_UPDATE')
-
+		
 		self:UnregisterEvent('PLAYER_TOTEM_UPDATE', Path)
 	end
 end

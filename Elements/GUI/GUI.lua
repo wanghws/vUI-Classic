@@ -916,7 +916,7 @@ local InputOnEnterPressed = function(self)
 		return
 	end
 	
-	self:SetText("")
+	--self:SetText("")
 	
 	self:SetAutoFocus(false)
 	self:ClearFocus()
@@ -2438,7 +2438,7 @@ local CreateColorPicker = function()
 	
 	local ColorPicker = CreateFrame("Frame", "vUIColorPicker", GUI)
 	ColorPicker:SetScaledSize(388, 290)
-	ColorPicker:SetScaledPoint("CENTER", UIParent, 0, 80)
+	ColorPicker:SetScaledPoint("CENTER", GUI, 0, 50)
 	ColorPicker:SetBackdrop(vUI.BackdropAndBorder)
 	ColorPicker:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	ColorPicker:SetBackdropBorderColor(0, 0, 0)
@@ -3477,7 +3477,7 @@ function GUI:Create()
 	self.CloseButton.Texture:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	self.CloseButton.Text = self.CloseButton:CreateFontString(nil, "OVERLAY")
-	self.CloseButton.Text:SetScaledPoint("CENTER", self.CloseButton, 0, 0)
+	self.CloseButton.Text:SetScaledPoint("CENTER", self.CloseButton, 1, 0)
 	self.CloseButton.Text:SetFont(Media:GetFont("PT Sans"), 18)
 	self.CloseButton.Text:SetJustifyH("CENTER")
 	self.CloseButton.Text:SetShadowColor(0, 0, 0)
