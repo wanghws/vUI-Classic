@@ -100,6 +100,11 @@ Defaults["color-magic"] = "3399FF"
 Defaults["color-poison"] = "009900"
 Defaults["color-none"] = "CC0000"
 
+-- Happiness
+Defaults["color-happiness-1"] = "FF6666"
+Defaults["color-happiness-2"] = "FFFF66"
+Defaults["color-happiness-3"] = "66FF66"
+
 -- Action Bars
 Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "DEFAULT"

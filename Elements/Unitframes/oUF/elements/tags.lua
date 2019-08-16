@@ -188,13 +188,6 @@ local tagStrings = {
 		end
 	end]],
 
-	['difficulty'] = [[function(u)
-		if UnitCanAttack('player', u) then
-			local l = UnitEffectiveLevel(u)
-			return Hex(GetCreatureDifficultyColor((l > 0) and l or 999))
-		end
-	end]],
-
 	['group'] = [[function(unit)
 		local name, server = UnitName(unit)
 		if(server and server ~= '') then
@@ -232,10 +225,7 @@ local tagStrings = {
 
 	['level'] = [[function(u)
 		local l = UnitLevel(u)
-		if(UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u)) then
-			l = UnitBattlePetLevel(u)
-		end
-
+		
 		if(l > 0) then
 			return l
 		else
@@ -349,29 +339,7 @@ local tagStrings = {
 			return 'zzz'
 		end
 	end]],
-
-	['runes'] = [[function()
-		local amount = 0
-
-		for i = 1, 6 do
-			local _, _, ready = GetRuneCooldown(i)
-			if(ready) then
-				amount = amount + 1
-			end
-		end
-
-		return amount
-	end]],
-
-	['sex'] = [[function(u)
-		local s = UnitSex(u)
-		if(s == 2) then
-			return 'Male'
-		elseif(s == 3) then
-			return 'Female'
-		end
-	end]],
-
+	
 	['shortclassification'] = [[function(u)
 		local c = UnitClassification(u)
 		if(c == 'rare') then
@@ -409,14 +377,7 @@ local tagStrings = {
 			end
 		end
 	end]],
-
-	['soulshards'] = [[function()
-		local num = UnitPower('player', Enum.PowerType.SoulShards)
-		if(num > 0) then
-			return num
-		end
-	end]],
-
+	
 	['status'] = [[function(u)
 		if(UnitIsDead(u)) then
 			return 'Dead'
@@ -509,9 +470,6 @@ _ENV._VARS = vars
 
 local tagEvents = {
 	['affix']               = 'UNIT_CLASSIFICATION_CHANGED',
-	['arcanecharges']       = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
-	['arenaspec']           = 'ARENA_PREP_OPPONENT_SPECIALIZATIONS',
-	['chi']                 = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['cpoints']             = 'UNIT_POWER_FREQUENT PLAYER_TARGET_CHANGED',
 	['curhp']               = 'UNIT_HEALTH UNIT_MAXHEALTH',
@@ -519,7 +477,6 @@ local tagEvents = {
 	['curpp']               = 'UNIT_POWER_UPDATE UNIT_MAXPOWER',
 	['dead']                = 'UNIT_HEALTH',
 	['deficit:name']        = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE',
-	['difficulty']          = 'UNIT_FACTION',
 	['faction']             = 'NEUTRAL_FACTION_SELECT_RESULT',
 	['group']               = 'GROUP_ROSTER_UPDATE',
 	['holypower']           = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
@@ -540,10 +497,8 @@ local tagEvents = {
 	['pvp']                 = 'UNIT_FACTION',
 	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
 	['resting']             = 'PLAYER_UPDATE_RESTING',
-	['runes']               = 'RUNE_POWER_UPDATE',
 	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
 	['smartlevel']          = 'UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED',
-	['soulshards']          = 'UNIT_POWER_UPDATE',
 	['status']              = 'UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION',
 	['threat']              = 'UNIT_THREAT_SITUATION_UPDATE',
 	['threatcolor']         = 'UNIT_THREAT_SITUATION_UPDATE',

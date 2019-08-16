@@ -7,6 +7,7 @@ local ReactionColors = {}
 local ZoneColors = {}
 local PowerColors = {}
 local DebuffColors = {}
+local HappinessColors = {}
 
 function vUI:UpdateClassColors()
 	--self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
@@ -73,11 +74,18 @@ function vUI:UpdateDebuffColors()
 	self.DebuffColors["none"] = {self:HexToRGB(Settings["color-none"])}
 end
 
+function vUI:UpdateHappinessColors()
+	self.HappinessColors[1] = {self:HexToRGB(Settings["color-happiness-1"])}
+	self.HappinessColors[2] = {self:HexToRGB(Settings["color-happiness-2"])}
+	self.HappinessColors[3] = {self:HexToRGB(Settings["color-happiness-3"])}
+end
+
 vUI.ClassColors = ClassColors
 vUI.ReactionColors = ReactionColors
 vUI.ZoneColors = ZoneColors
 vUI.PowerColors = PowerColors
 vUI.DebuffColors = DebuffColors
+vUI.HappinessColors = HappinessColors
 
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
@@ -142,6 +150,11 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-poison", Settings["color-poison"], Language["Poison"], "")
 	Right:CreateColorSelection("color-none", Settings["color-none"], Language["None"], "")
 	
+	Left:CreateHeader(Language["Pet Happiness Colors"])
+	Left:CreateColorSelection("color-happiness-1", Settings["color-happiness-1"], Language["Unhappy"], "")
+	Left:CreateColorSelection("color-happiness-2", Settings["color-happiness-2"], Language["Content"], "")
+	Left:CreateColorSelection("color-happiness-3", Settings["color-happiness-3"], Language["Happy"], "")
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 	
@@ -150,4 +163,5 @@ GUI:AddOptions(function(self)
 	vUI:UpdateZoneColors()
 	vUI:UpdatePowerColors()
 	vUI:UpdateDebuffColors()
+	vUI:UpdateHappinessColors()
 end)

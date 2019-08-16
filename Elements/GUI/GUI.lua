@@ -256,7 +256,7 @@ end
 	Header.Text = Header:CreateFontString(nil, "OVERLAY")
 	Header.Text:SetScaledPoint("LEFT", Header, HEADER_SPACING, 0)
 	Header.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
-	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 14)
+	Header.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
 	Header.Text:SetJustifyH("LEFT")
 	Header.Text:SetShadowColor(0, 0, 0)
 	Header.Text:SetShadowOffset(1, -1)
@@ -330,20 +330,19 @@ GUI.Widgets.CreateHeader = function(self, text)
 	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
 	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
 	Anchor.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12) -- 14
-	Anchor.Text:SetJustifyH("LEFT")
+	Anchor.Text:SetJustifyH("CENTER")
 	Anchor.Text:SetShadowColor(0, 0, 0)
 	Anchor.Text:SetShadowOffset(1, -1)
 	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
 	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
 	Anchor.Reference:SetAllPoints(Anchor.Text)
-	Anchor.Reference:SetScaledWidth(floor(Anchor.Text:GetStringWidth()))
 	
 	-- Header Left Line
 	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
 	HeaderLeft:SetScaledHeight(4)
 	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
-	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Reference, "LEFT", -SPACING, 0)
+	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Text, "LEFT", -SPACING, 0)
 	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
 	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
 	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
@@ -358,7 +357,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	local HeaderRight = CreateFrame("Frame", nil, Anchor)
 	HeaderRight:SetScaledHeight(4)
 	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
-	HeaderRight:SetScaledPoint("LEFT", Anchor.Reference, "RIGHT", SPACING, 0)
+	HeaderRight:SetScaledPoint("LEFT", Anchor.Text, "RIGHT", SPACING, 0)
 	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
 	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
 	HeaderRight:SetBackdropBorderColor(0, 0, 0)
@@ -2916,7 +2915,7 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Button.Transition:SetDuration(0.15)
 	
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
-	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
+	Button.MiddleText:SetScaledPoint("CENTER", Button, 0, 0)
 	Button.MiddleText:SetScaledSize(COLOR_WIDTH - 6, WIDGET_HEIGHT)
 	Button.MiddleText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	Button.MiddleText:SetJustifyH("CENTER")
@@ -3050,6 +3049,8 @@ local WindowScrollBarOnMouseWheel = function(self, delta)
 	WindowOnMouseWheel(self:GetParent(), delta)
 end
 
+local NoScroll = function() end -- Just to prevent zooming while we're working in the GUI
+
 local AddScrollBar = function(self)
 	local LeftMaxValue = (#self.LeftWidgets - (self:GetParent().WindowCount - 1))
 	local RightMaxValue = (#self.RightWidgets - (self:GetParent().WindowCount - 1))
@@ -3106,7 +3107,6 @@ local AddScrollBar = function(self)
 	ScrollBar.Progress:SetVertexColor(HexToRGB(Settings["ui-header-texture-color"]))
 	
 	self:EnableMouseWheel(true)
-	self:SetScript("OnMouseWheel", WindowOnMouseWheel)
 	
 	self.Scroll = Scroll
 	self.SetOffset = SetOffset
@@ -3122,6 +3122,9 @@ local AddScrollBar = function(self)
 		ScrollBar.NewTexture:Hide()
 		ScrollBar.NewTexture2:Hide()
 		ScrollBar.Progress:Hide()
+		self:SetScript("OnMouseWheel", NoScroll)
+	else
+		self:SetScript("OnMouseWheel", WindowOnMouseWheel)
 	end
 end
 
@@ -3513,7 +3516,7 @@ function GUI:RunQueue()
 	end
 end
 
-function GUI:VARIABLES_LOADED()
+function GUI:VARIABLES_LOADED() -- This should be moved later
 	Profiles:CreateProfileData()
 	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())

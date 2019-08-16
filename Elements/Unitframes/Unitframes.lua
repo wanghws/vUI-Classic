@@ -19,12 +19,15 @@ local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
 local UnitClass = UnitClass
 local UnitReaction = UnitReaction
+local GetPetHappiness = GetPetHappiness
 
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
 local Methods = oUF.Tags.Methods
 
 vUI.UnitFrames = {}
+
+local HappinessLevels = {Language["Unhappy"], Language["Content"], Language["Happy"]}
 
 local ShortValue = function(n)
 	if (n <= 999) then
@@ -38,8 +41,8 @@ local ShortValue = function(n)
 	end
 end
 
-Events["vUI-Status"] = "UNIT_HEALTH UNIT_CONNECTION"
-Methods["vUI-Status"] = function(unit)
+Events["Status"] = "UNIT_HEALTH UNIT_CONNECTION"
+Methods["Status"] = function(unit)
 	if UnitIsDead(unit) then
 		return Language["Dead"]
 	elseif UnitIsGhost(unit) then
@@ -49,82 +52,74 @@ Methods["vUI-Status"] = function(unit)
 	end
 end
 
-Events["vUI-Health"] = "UNIT_HEALTH_FREQUENT"
-Methods["vUI-Health"] = function(unit)
+Events["Health"] = "UNIT_HEALTH_FREQUENT"
+Methods["Health"] = function(unit)
 	return ShortValue(UnitHealth(unit))
 end
 
-Events["vUI-HealthLarge"] = "UNIT_HEALTH_FREQUENT"
-Methods["vUI-HealthLarge"] = function(unit)
-	return ShortValue(UnitHealth(unit))
-end
-
-Events["vUI-HealthPercent"] = "UNIT_HEALTH_FREQUENT"
-Methods["vUI-HealthPercent"] = function(unit)
+Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
+Methods["HealthPercent"] = function(unit)
 	return floor((UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 end
 
-Events["vUI-PlayerInfo"] = "UNIT_HEALTH_FREQUENT"
-Methods["vUI-PlayerInfo"] = function(unit)
-	return ShortValue(UnitHealth(unit)) .. "/" .. ShortValue(UnitHealthMax(unit))
-end
-
-Events["vUI-TargetInfo"] = "UNIT_HEALTH_FREQUENT"
-Methods["vUI-TargetInfo"] = function(unit)
-	return ShortValue(UnitHealth(unit)) .. "/" .. ShortValue(UnitHealthMax(unit))
-end
-
-Events["vUI-Power"] = "UNIT_POWER_FREQUENT"
-Methods["vUI-Power"] = function(unit)
+Events["Power"] = "UNIT_POWER_FREQUENT"
+Methods["Power"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
 		return ShortValue(UnitPower(unit))
 	end
 end
 
-Events["vUI-Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name4"] = function(unit)
+Events["PowerPercent"] = "UNIT_POWER_FREQUENT"
+Methods["PowerPercent"] = function(unit)
+	if (UnitPower(unit) ~= 0) then
+		return floor((UnitPower(unit) / UnitPowerMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
+	end
+end
+
+Events["Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name4"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 4)
 end
 
-Events["vUI-Name5"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name5"] = function(unit)
+Events["Name5"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name5"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 5)
 end
 
-Events["vUI-Name8"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name8"] = function(unit)
+Events["Name8"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 8)
 end
 
-Events["vUI-Name10"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name10"] = function(unit)
+Events["Name10"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name10"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 10)
 end
 
-Events["vUI-Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name15"] = function(unit)
+Events["Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 18)
 end
 
-Events["vUI-Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
-Methods["vUI-Name20"] = function(unit)
+Events["Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name20"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 20)
 end
 
-Events["vUI-ClassReaction"] = "UNIT_NAME_UPDATE"
-Methods["vUI-ClassReaction"] = function(unit)
+Events["ClassReaction"] = "UNIT_NAME_UPDATE"
+Methods["ClassReaction"] = function(unit)
 	if UnitIsPlayer(unit) then
 		local _, Class = UnitClass(unit)
 		
@@ -143,6 +138,32 @@ Methods["vUI-ClassReaction"] = function(unit)
 			
 			if Color then
 				return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			end
+		end
+	end
+end
+
+Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Methods["PetHappiness"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			return HappinessLevels[Happiness]
+		end
+	end
+end
+
+Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Methods["HappinessColor"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			local Color = vUI.HappinessColors[Happiness]
+			
+			if Color then
+				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
 			end
 		end
 	end
@@ -204,15 +225,15 @@ local StyleNamePlate = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(TopLeft, "[vUI-Name15]")
+		self:Tag(TopLeft, "[Name15]")
 	else
 		Health.colorHealth = true
 		
-		self:Tag(TopLeft, "[vUI-ClassReaction][vUI-Name15]")
+		self:Tag(TopLeft, "[ClassReaction][Name15]")
 	end
 	
 	self:Tag(BottomRight, "[perhp]")
-	self:Tag(TopRight, "[difficulty][level]")
+	self:Tag(TopRight, "[level]")
 	
 	self.Health = Health
 	self.TopLeft = TopLeft
@@ -376,14 +397,14 @@ local StylePlayer = function(self, unit)
     Castbar.showTradeSkills = true
 	
 	-- Tags
-	self:Tag(PowerLeft, "[vUI-PlayerInfo]")
-	self:Tag(PowerValue, "[vUI-Power]")
+	self:Tag(PowerLeft, "[Health]")
+	self:Tag(PowerValue, "[Power]")
 	
 	if Settings["unitframes-player-show-name"] then
 		if Settings["unitframes-player-cc-health"] then
-			self:Tag(HealthLeft, "[vUI-Name15]")
+			self:Tag(HealthLeft, "[Name15]")
 		else
-			self:Tag(HealthLeft, "[vUI-ClassReaction][vUI-Name15]")
+			self:Tag(HealthLeft, "[ClassReaction][Name15]")
 		end
 	end
 	
@@ -450,12 +471,12 @@ local StyleTarget = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(Name, "[vUI-Name15]")
+		self:Tag(Name, "[Name15]")
 	else
 		Health.colorHealth = true
 		
-		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
-		self:Tag(Name, "[vUI-Name15]")
+		--self:Tag(Name, "[ClassReaction][Name15]")
+		self:Tag(Name, "[Name15]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
@@ -490,7 +511,7 @@ local StyleTarget = function(self, unit)
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
     Castbar:SetScaledSize(250, 20)
-    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 130)
+    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 156)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
     Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
@@ -530,10 +551,10 @@ local StyleTarget = function(self, unit)
     Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -3, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
-    -- Add Shield
+    --[[ Add Shield
     local Shield = Castbar:CreateTexture(nil, "OVERLAY")
     Shield:SetScaledSize(20, 20)
-    Shield:SetScaledPoint("CENTER", Castbar)
+    Shield:SetScaledPoint("CENTER", Castbar)]]
 	
     -- Add safezone
     local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
@@ -545,7 +566,7 @@ local StyleTarget = function(self, unit)
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
-    Castbar.Shield = Shield
+	--Castbar.Shield = Shield
     Castbar.SafeZone = SafeZone
     Castbar.showTradeSkills = true
 	
@@ -555,8 +576,8 @@ local StyleTarget = function(self, unit)
 	Combat:SetScaledPoint("CENTER", Health)
 	
 	-- Tags
-	self:Tag(HealthValue, "[vUI-TargetInfo]")
-	self:Tag(HealthPercent, "[vUI-HealthPercent]")
+	self:Tag(HealthValue, "[Health]")
+	self:Tag(HealthPercent, "[HealthPercent]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -618,12 +639,12 @@ local StyleTargetTarget = function(self, unit)
 		Health.colorClass = true
 		Health.colorClassPet = true
 		
-		self:Tag(HealthLeft, "[vUI-Name10]")
+		self:Tag(HealthLeft, "[Name10]")
 	else
 		Health.colorHealth = true
 		
-		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
-		self:Tag(HealthLeft, "[vUI-Name10]")
+		--self:Tag(Name, "[ClassReaction][Name15]")
+		self:Tag(HealthLeft, "[Name10]")
 	end
 	
 	self.Health = Health
@@ -678,14 +699,11 @@ local StylePet = function(self, unit)
 	
 	if Settings["unitframes-target-cc-health"] then
 		Health.colorReaction = true
-		
-		self:Tag(HealthLeft, "[vUI-Name10]")
 	else
 		Health.colorHealth = true
-		
-		--self:Tag(Name, "[vUI-ClassReaction][vUI-Name15]")
-		self:Tag(HealthLeft, "[vUI-Name10]")
 	end
+	
+	self:Tag(HealthLeft, "[HappinessColor][Name10]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -758,7 +776,7 @@ end)
 
 local TogglePlayerName = function(value)
 	if value then
-		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "[vUI-Name15]")
+		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "[Name15]")
 		oUF_vUIPlayer:UpdateTags()
 	else
 		oUF_vUIPlayer:Tag(oUF_vUIPlayer.Name, "")

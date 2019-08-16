@@ -1,12 +1,18 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 local rawget = rawget
+local rawset = rawset
+local type = type
 local Locale
+local Updated
 
-local index = function(self, key)
-	if (Settings and Settings["ui-language"]) then
-		Locale = Settings["ui-language"]
-	else
-		Locale = vUI.UserLocale
+local Index = function(self, key)
+	if (not Updated) then
+		if (Settings and Settings["ui-language"]) then
+			Locale = Settings["ui-language"]
+			Updated = true
+		else
+			Locale = vUI.UserLocale
+		end
 	end
 	
 	local Result = rawget(self, Locale)
@@ -16,12 +22,12 @@ local index = function(self, key)
 	else
 		return key
 	end
-	
-	--[[if (self[Locale] and self[Locale][key]) then
-		return self[Locale][key]
-	else
-		return key
-	end]]
 end
 
-setmetatable(Language, {__index = index})
+local NewIndex = function(self, key, value)
+	if (type(key) == "string" and type(value) == "table") then
+		rawset(self, key, value)
+	end
+end
+
+setmetatable(Language, {__index = Index, __newindex = NewIndex})
