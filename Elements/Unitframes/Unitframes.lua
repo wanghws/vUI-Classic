@@ -171,9 +171,22 @@ Methods["HealthValues"] = function(unit)
 	return vUI:ShortValue(UnitHealth(unit)) .. " / " .. vUI:ShortValue(UnitHealthMax(unit))
 end
 
+Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
+Methods["ColoredHealthValues"] = function(unit)
+	if UnitIsDead(unit) then
+		return "|cFFFAFAFA" .. Language["Dead"]
+	elseif UnitIsGhost(unit) then
+		return "|cFFFAFAFA" .. Language["Ghost"]
+	elseif (not UnitIsConnected(unit)) then
+		return "|cFFFAFAFA" .. Language["Offline"]
+	end
+	
+	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(UnitHealth(unit)) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(UnitHealthMax(unit))
+end
+
 Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
 Methods["HealthColor"] = function(unit)
-	return "|cFF"..vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
 end
 
 Events["Power"] = "UNIT_POWER_FREQUENT"
@@ -347,6 +360,11 @@ local StyleNamePlate = function(self, unit)
 	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
+	-- Target Icon
+	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTargetIndicator:SetSize(16, 16)
+	RaidTargetIndicator:SetPoint("RIGHT", Health, "LEFT", -5, 0)
+	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
 	TopLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 3)
@@ -406,6 +424,7 @@ local StyleNamePlate = function(self, unit)
 	self.TopRight = TopRight
 	self.BottomRight = BottomRight
 	self.Health.bg = HealthBG
+	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
 local StylePlayer = function(self, unit)
@@ -449,6 +468,10 @@ local StylePlayer = function(self, unit)
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
+	
+	--[[local RaidTargetIndicator = Health:CreateTexture(nil, "OVERLAY")
+	RaidTargetIndicator:SetScaledSize(16, 16)
+	RaidTargetIndicator:SetScaledPoint("CENTER", Health, "TOP")]]
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -570,10 +593,10 @@ local StylePlayer = function(self, unit)
 			Totem:SetSize(40, 40)
 			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", index * Totem:GetWidth(), 0)
 			
-			local Icon = Totem:CreateTexture(nil, 'OVERLAY')
+			local Icon = Totem:CreateTexture(nil, "OVERLAY")
 			Icon:SetAllPoints()
 			
-			local Cooldown = CreateFrame('Cooldown', nil, Totem, 'CooldownFrameTemplate')
+			local Cooldown = CreateFrame("Cooldown", nil, Totem, "CooldownFrameTemplate")
 			Cooldown:SetAllPoints()
 			
 			Totem.Icon = Icon
@@ -596,7 +619,7 @@ local StylePlayer = function(self, unit)
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
-	self:Tag(PowerLeft, "[HealthValues]")
+	self:Tag(PowerLeft, "[ColoredHealthValues]")
 	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
@@ -610,6 +633,7 @@ local StylePlayer = function(self, unit)
 	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = Castbar
+	--self.RaidTargetIndicator = RaidTargetIndicator
 end
 
 local StyleTarget = function(self, unit)
@@ -649,6 +673,11 @@ local StyleTarget = function(self, unit)
 	HealthRight:SetJustifyH("RIGHT")
 	HealthRight:SetShadowColor(0, 0, 0)
 	HealthRight:SetShadowOffset(1, -1)
+	
+	-- Target Icon
+	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTargetIndicator:SetSize(16, 16)
+	RaidTargetIndicator:SetPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -775,7 +804,7 @@ local StyleTarget = function(self, unit)
 	
 	-- Tags
 	self:Tag(HealthRight, "[HealthColor][perhp]")
-	self:Tag(PowerLeft, "[HealthValues]")
+	self:Tag(PowerLeft, "[ColoredHealthValues]")
 	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
@@ -788,6 +817,7 @@ local StyleTarget = function(self, unit)
 	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = Castbar
+	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
 local StyleTargetTarget = function(self, unit)
@@ -827,6 +857,11 @@ local StyleTargetTarget = function(self, unit)
 	HealthRight:SetShadowColor(0, 0, 0)
 	HealthRight:SetShadowOffset(1, -1)
 	
+	-- Target Icon
+	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTargetIndicator:SetSize(16, 16)
+	RaidTargetIndicator:SetPoint("CENTER", Health, "TOP")
+	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
 	-- Attributes
@@ -854,6 +889,7 @@ local StyleTargetTarget = function(self, unit)
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
+	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
 local StylePet = function(self, unit)

@@ -76,13 +76,13 @@ Defaults["color-runes"] = "7F7F7F"
 Defaults["color-combo-points"] = "FFF468"
 
 -- Reactions
-Defaults["color-reaction-1"] = "CC4C38" -- Exceptionally Hostile
-Defaults["color-reaction-2"] = "CC4C38" -- Very Hostile
-Defaults["color-reaction-3"] = "BF4400" -- Hostile
+Defaults["color-reaction-1"] = "CC4C38" -- Hated
+Defaults["color-reaction-2"] = "CC4C38" -- Hostile
+Defaults["color-reaction-3"] = "BF4400" -- Unfriendly
 Defaults["color-reaction-4"] = "E5B200" -- Neutral
 Defaults["color-reaction-5"] = "009919" -- Friendly
-Defaults["color-reaction-6"] = "009919" -- Very Friendly
-Defaults["color-reaction-7"] = "009919" -- Exceptionally Friendly
+Defaults["color-reaction-6"] = "009919" -- Honored
+Defaults["color-reaction-7"] = "009919" -- Revered
 Defaults["color-reaction-8"] = "009919" -- Exalted
 
 -- Zone PVP Types
