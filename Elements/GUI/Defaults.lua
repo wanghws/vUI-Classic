@@ -108,7 +108,7 @@ Defaults["color-happiness-3"] = "66FF66"
 
 -- Difficulty
 Defaults["color-trivial"] = "9E9E9E"
-Defaults["color-standard"] = "A2D471"
+Defaults["color-standard"] = "27AE60"
 Defaults["color-difficult"] = "F1C40F"
 Defaults["color-verydifficult"] = "E57A45"
 Defaults["color-impossible"] = "EE4D4D"
@@ -162,6 +162,6 @@ Defaults["nameplates-width"] = 134
 Defaults["nameplates-height"] = 14
 Defaults["nameplates-cc-health"] = false
 Defaults["nameplates-topleft-text"] = "[ClassReaction][Name15]"
-Defaults["nameplates-topright-text"] = "[LevelColor][Level]"
-Defaults["nameplates-bottomleft-text"] = "[Classification]"
+Defaults["nameplates-topright-text"] = "[LevelColor][Level][Plus]"
+Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"

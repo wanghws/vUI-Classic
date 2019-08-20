@@ -3409,6 +3409,7 @@ function GUI:Create()
 	self:RegisterForDrag("LeftButton")
 	self:SetScript("OnDragStart", self.StartMoving)
 	self:SetScript("OnDragStop", self.StopMovingOrSizing)
+	self:SetClampedToScreen(true)
 	self:Hide()
 	
 	-- Header

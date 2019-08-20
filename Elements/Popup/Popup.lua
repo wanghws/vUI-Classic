@@ -50,6 +50,7 @@ Popup.CreatePopupFrame = function(self)
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self:SetBackdropBorderColor(0, 0, 0)
+	self:SetClampedToScreen(true)
 	--self:SetAlpha(0)
 	--self:Hide()
 	

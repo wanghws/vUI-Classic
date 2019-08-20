@@ -262,9 +262,36 @@ Methods["ClassReaction"] = function(unit)
 	end
 end
 
+Events["Reaction"] = "UNIT_NAME_UPDATE"
+Methods["Reaction"] = function(unit)
+	local Reaction = UnitReaction(unit, "player")
+	
+	if Reaction then
+		local Color = vUI.ReactionColors[Reaction]
+		
+		if Color then
+			return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+		end
+	end
+end
+
 Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
 Methods["LevelColor"] = function(unit)
 	return UnitDifficultyColor(unit)
+end
+
+Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["LevelColor"] = function(unit)
+	return UnitDifficultyColor(unit)
+end
+
+Events["PetColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP" -- UNIT_HAPPINESS
+Methods["PetColor"] = function(unit)
+	if (vUI.UserClass == "HUNTER") then
+		return Methods["HappinessColor"](unit)
+	else
+		return Methods["Reaction"](unit)
+	end
 end
 
 -- Temporary so I can code on retail
@@ -322,31 +349,38 @@ local StyleNamePlate = function(self, unit)
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
 	TopLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 2)
+	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 3)
 	TopLeft:SetJustifyH("LEFT")
 	TopLeft:SetShadowColor(0, 0, 0)
 	TopLeft:SetShadowOffset(1, -1)
 	
 	local Top = Health:CreateFontString(nil, "OVERLAY")
 	Top:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 2)
+	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 3)
 	Top:SetJustifyH("CENTER")
 	Top:SetShadowColor(0, 0, 0)
 	Top:SetShadowOffset(1, -1)
 	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
 	TopRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 2)
+	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
 	TopRight:SetJustifyH("RIGHT")
 	TopRight:SetShadowColor(0, 0, 0)
 	TopRight:SetShadowOffset(1, -1)
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
 	BottomRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -2)
+	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
 	BottomRight:SetJustifyH("RIGHT")
 	BottomRight:SetShadowColor(0, 0, 0)
 	BottomRight:SetShadowOffset(1, -1)
+	
+	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
+	BottomLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	BottomLeft:SetScaledPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
+	BottomLeft:SetJustifyH("LEFT")
+	BottomLeft:SetShadowColor(0, 0, 0)
+	BottomLeft:SetShadowOffset(1, -1)
 	
 	Health.colorTapping = true
 	Health.colorDisconnected = true
@@ -364,6 +398,7 @@ local StyleNamePlate = function(self, unit)
 	
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
+	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
 	
 	self.Health = Health
 	self.TopLeft = TopLeft
@@ -872,7 +907,7 @@ local StylePet = function(self, unit)
 		Health.colorHealth = true
 	end
 	
-	self:Tag(HealthLeft, "[HappinessColor][Name10]")
+	self:Tag(HealthLeft, "[PetColor][Name10]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG

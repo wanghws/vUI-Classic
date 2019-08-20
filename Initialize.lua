@@ -66,7 +66,7 @@ function vUI:VARIABLES_LOADED(event) -- Migrate VARIABLES_LOADED from GUI to her
 end
 
 function vUI:PLAYER_ENTERING_WORLD(event)
-	self:LoadModules(self:GetGameVersion())
+	self:LoadModules(self:GetClientVersion())
 	
 	self:UnregisterEvent(event)
 end
@@ -170,15 +170,17 @@ function vUI:IsClassic()
 	return self.TOCVersion < 20000 and true or false
 end
 
-function vUI:GetGameVersion()
+function vUI:GetClientVersion()
 	return self.TOCVersion > 19999 and "Live" or "Classic"
 end
 
 function vUI:ShortValue(num)
-	if (num <= 999) then
-		return num
-	else
+	if (num >= 1000000) then
+		return format("%.2fm", num / 1000000)
+	elseif (num >= 1000) then
 		return format("%dk", num / 1000)
+	else
+		return num
 	end
 end
 
