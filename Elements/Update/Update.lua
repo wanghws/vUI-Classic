@@ -11,7 +11,7 @@ local IsInRaid = IsInRaid
 -- Use a button in GUI to request newer versions? -- Put a pretty hard throttle on the button too so it can't be smashed.
 -- vUI:print("If any version data is recieved, you will be prompted.")
 
-local AddOnVersion = tonumber(vUI.Version)
+local AddOnVersion = tonumber(vUI.UIVersion)
 
 local Update = CreateFrame("Frame")
 

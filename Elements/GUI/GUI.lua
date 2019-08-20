@@ -130,18 +130,18 @@ local GetOrderedIndex = function(t)
     return OrderedIndex
 end
 
-local OrderedNext = function(t, state)
+local OrderedNext = function(t, key)
 	local OrderedIndex = GetOrderedIndex(t)
 	local Key
-	print(state)
-    if (state == nil) then
+	
+    if (key == nil) then
         Key = OrderedIndex[1]
 		
         return Key, t[Key]
     end
 	
     for i = 1, #OrderedIndex do
-        if (OrderedIndex[i] == state) then
+        if (OrderedIndex[i] == key) then
             Key = OrderedIndex[i + 1]
         end
     end
@@ -915,6 +915,7 @@ local InputOnEnterPressed = function(self)
 	end
 	
 	--self:SetText("")
+	self:SetCursorPosition(0)
 	
 	self:SetAutoFocus(false)
 	self:ClearFocus()
@@ -1004,6 +1005,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Box:SetShadowColor(0, 0, 0)
 	Input.Box:SetShadowOffset(1, -1)
 	Input.Box:SetText(value)
+	Input.Box:SetCursorPosition(0)
 	Input.Box.ID = id
 	Input.Box.Hook = hook
 	Input.Box.Parent = Input
@@ -3431,8 +3433,8 @@ function GUI:Create()
 	self.Header.Text:SetShadowColor(0, 0, 0)
 	self.Header.Text:SetShadowOffset(1, -1)
 	self.Header.Text:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
-	self.Header.Text:SetText(format(Language["- vUI version %s -"], vUI.Version))
-	--self.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..format(Language["- |cff%svUI|r version %s -"], Settings["ui-widget-color"], vUI.Version).."|r")
+	self.Header.Text:SetText(format(Language["- vUI version %s -"], vUI.UIVersion))
+	--self.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..format(Language["- |cff%svUI|r version %s -"], Settings["ui-widget-color"], vUI.UIVersion).."|r")
 	
 	-- Selection parent
 	self.SelectionParent = CreateFrame("Frame", nil, self)
@@ -3514,7 +3516,7 @@ function GUI:RunQueue()
 	end
 end
 
-function GUI:VARIABLES_LOADED() -- This should be moved later
+function GUI:VARIABLES_LOADED()
 	Profiles:CreateProfileData()
 	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())

@@ -18,8 +18,11 @@ local UnitIsPlayer = UnitIsPlayer
 local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
 local UnitClass = UnitClass
+local UnitLevel = UnitLevel
 local UnitReaction = UnitReaction
 local GetPetHappiness = GetPetHappiness
+local IsResting = IsResting
+local GetQuestGreenRange = GetQuestGreenRange
 
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
@@ -29,18 +32,43 @@ vUI.UnitFrames = {}
 
 local HappinessLevels = {Language["Unhappy"], Language["Content"], Language["Happy"]}
 
-local ShortValue = function(n)
-	if (n <= 999) then
-		return n
-	end
+local Classes = {
+	["rare"] = Language["Rare"],
+	["elite"] = Language["Elite"],
+	["rareelite"] = Language["Rare Elite"],
+	["worldboss"] = Language["Boss"],
+	["minus"] = Language["Affix"],
+}
+
+local ShortClasses = {
+	["rare"] = Language["R"],
+	["elite"] = Language["+"],
+	["rareelite"] = Language["R+"],
+	["worldboss"] = Language["B"],
+	["minus"] = Language["-"],
+}
+
+local UnitDifficultyColor = function(unit)
+	local Difference = UnitLevel(unit) - UnitLevel("player")
 	
-	if (n >= 1000000) then -- Is a million even a number anywhere in classic?
-		return format("%.2fm", n / 1000000)
-	elseif (n >= 1000) then
-		return format("%dk", n / 1000)
+	if (Difference >= 5) then
+		return "|cFF"..Settings["color-impossible"]
+	elseif (Difference >= 3) then
+		return "|cFF"..Settings["color-verydifficult"]
+	elseif (Difference >= -2) then
+		return "|cFF"..Settings["color-difficult"]
+	elseif (-Difference <= GetQuestGreenRange()) then
+		return "|cFF"..Settings["color-standard"]
+	else
+		return "|cFF"..Settings["color-trivial"]
 	end
 end
 
+local GetColor = function(p, r1, g1, b1, r2, g2, b2)
+	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
+end
+
+-- Tags
 Events["Status"] = "UNIT_HEALTH UNIT_CONNECTION"
 Methods["Status"] = function(unit)
 	if UnitIsDead(unit) then
@@ -52,9 +80,66 @@ Methods["Status"] = function(unit)
 	end
 end
 
+Events["Level"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["Level"] = function(unit)
+	return UnitLevel(unit)
+end
+
+Events["LevelPlus"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["LevelPlus"] = function(unit)
+	local Class = UnitClassification(unit)
+	
+	if (Class == "worldboss") then
+		return "Boss"
+	else
+		local Plus = Methods["Plus"](unit)
+		local Level = Methods["Level"](unit)
+		
+		if Plus then
+			return Level .. Plus
+		else
+			return Level
+		end
+	end
+end
+
+Events["Classification"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["Classification"] = function(unit)
+	local Class = UnitClassification(unit)
+	
+	if Classes[Class] then
+		return Classes[Class]
+	end
+end
+
+Events["ShortClassification"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["ShortClassification"] = function(unit)
+	local Class = UnitClassification(unit)
+	
+	if ShortClasses[Class] then
+		return ShortClasses[Class]
+	end
+end
+
+Events["Plus"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["Plus"] = function(unit)
+	local Class = UnitClassification(unit)
+	
+	if ShortClasses[Class] then
+		return ShortClasses[Class]
+	end
+end
+
+Events["Resting"] = "PLAYER_UPDATE_RESTING"
+Methods["Resting"] = function(unit)
+	if (unit == "player" and IsResting()) then
+		return "zZz"
+	end
+end
+
 Events["Health"] = "UNIT_HEALTH_FREQUENT"
 Methods["Health"] = function(unit)
-	return ShortValue(UnitHealth(unit))
+	return vUI:ShortValue(UnitHealth(unit))
 end
 
 Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
@@ -62,7 +147,18 @@ Methods["HealthPercent"] = function(unit)
 	return floor((UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 end
 
-Events["HealthValues"] = "UNIT_HEALTH_FREQUENT"
+Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
+Methods["HealthPercent"] = function(unit)
+	local Max = UnitHealthMax(unit)
+	
+	if (Max == 0) then
+		return 0
+	else
+		return floor(UnitHealth(unit) / Max * 100 + 0.5)
+	end
+end
+
+Events["HealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
 Methods["HealthValues"] = function(unit)
 	if UnitIsDead(unit) then
 		return Language["Dead"]
@@ -72,11 +168,7 @@ Methods["HealthValues"] = function(unit)
 		return Language["Offline"]
 	end
 	
-	return ShortValue(UnitHealth(unit)) .. " / " .. ShortValue(UnitHealthMax(unit))
-end
-
-local GetColor = function(p, r1, g1, b1, r2, g2, b2)
-	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
+	return vUI:ShortValue(UnitHealth(unit)) .. " / " .. vUI:ShortValue(UnitHealthMax(unit))
 end
 
 Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
@@ -87,7 +179,7 @@ end
 Events["Power"] = "UNIT_POWER_FREQUENT"
 Methods["Power"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
-		return ShortValue(UnitPower(unit))
+		return vUI:ShortValue(UnitPower(unit))
 	end
 end
 
@@ -100,7 +192,7 @@ end
 
 Events["PowerColor"] = "UNIT_POWER_FREQUENT"
 Methods["PowerColor"] = function(unit)
-	return "|cFF"..vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	
 end
 
 Events["Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
@@ -170,30 +262,41 @@ Methods["ClassReaction"] = function(unit)
 	end
 end
 
-Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
-Methods["PetHappiness"] = function(unit)
-	if (unit == "pet") then
-		local Happiness = GetPetHappiness()
-		
-		if Happiness then
-			return HappinessLevels[Happiness]
-		end
-	end
+Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Methods["LevelColor"] = function(unit)
+	return UnitDifficultyColor(unit)
 end
 
-Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
-Methods["HappinessColor"] = function(unit)
-	if (unit == "pet") then
-		local Happiness = GetPetHappiness()
-		
-		if Happiness then
-			local Color = vUI.HappinessColors[Happiness]
+-- Temporary so I can code on retail
+if vUI:IsClassic() then
+	Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+	Methods["PetHappiness"] = function(unit)
+		if (unit == "pet") then
+			local Happiness = GetPetHappiness()
 			
-			if Color then
-				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			if Happiness then
+				return HappinessLevels[Happiness]
 			end
 		end
 	end
+
+	Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+	Methods["HappinessColor"] = function(unit)
+		if (unit == "pet") then
+			local Happiness = GetPetHappiness()
+			
+			if Happiness then
+				local Color = vUI.HappinessColors[Happiness]
+				
+				if Color then
+					return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+				end
+			end
+		end
+	end
+else
+	Methods["PetHappiness"] = function() end
+	Methods["HappinessColor"] = function() end
 end
 
 local StyleNamePlate = function(self, unit)

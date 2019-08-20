@@ -14,7 +14,7 @@ Defaults["ui-picker-palette"] = "Default"
 Defaults["ui-picker-format"] = "Hex"
 Defaults["ui-picker-show-texture"] = true
 
-Defaults["ui-template"] = "vUI"
+Defaults["ui-template"] = "None"
 
 Defaults["ui-header-font"] = "Roboto"
 Defaults["ui-widget-font"] = "Roboto"
@@ -41,7 +41,7 @@ Defaults["ui-button-texture-color"] = "616161"
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
--- Classes (populating retail colors as well) -- The commented colors are 10% darker
+-- Classes (populating retail colors as well) -- The commented colors are 10% darker, I like it better on some textures
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
 Defaults["color-demon-hunter"] = "A330C9" -- 922BB4
 Defaults["color-druid"] = "FF7D0A" -- E56F08
@@ -57,8 +57,8 @@ Defaults["color-warrior"] = "C79C6E" -- B28B62
 
 -- Power Types
 Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
-Defaults["color-rage"] = "E53935" -- FF0000 for the default rage color
-Defaults["color-energy"] = "#FFEB3B" -- FFFF00
+Defaults["color-rage"] = "E53935" -- FF0000 ^
+Defaults["color-energy"] = "#FFEB3B" -- FFFF00 ^
 Defaults["color-focus"] = "FF7F3F"
 Defaults["color-fuel"] = "008C7F"
 Defaults["color-insanity"] = "6600CC"
@@ -105,6 +105,13 @@ Defaults["color-none"] = "CC0000"
 Defaults["color-happiness-1"] = "FF6666"
 Defaults["color-happiness-2"] = "FFFF66"
 Defaults["color-happiness-3"] = "66FF66"
+
+-- Difficulty
+Defaults["color-trivial"] = "9E9E9E"
+Defaults["color-standard"] = "A2D471"
+Defaults["color-difficult"] = "F1C40F"
+Defaults["color-verydifficult"] = "E57A45"
+Defaults["color-impossible"] = "EE4D4D"
 
 -- Action Bars
 Defaults["action-bars-enable"] = true
@@ -155,6 +162,6 @@ Defaults["nameplates-width"] = 134
 Defaults["nameplates-height"] = 14
 Defaults["nameplates-cc-health"] = false
 Defaults["nameplates-topleft-text"] = "[ClassReaction][Name15]"
-Defaults["nameplates-topright-text"] = "[level]"
-Defaults["nameplates-bottomleft-text"] = ""
+Defaults["nameplates-topright-text"] = "[LevelColor][Level]"
+Defaults["nameplates-bottomleft-text"] = "[Classification]"
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"

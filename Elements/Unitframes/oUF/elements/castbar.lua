@@ -85,11 +85,17 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 --]]
 local _, ns = ...
 local oUF = ns.oUF
+local vUI = ns:get()
 
 local GetNetStats = GetNetStats
 local GetTime = GetTime
-local CastingInfo = CastingInfo
-local ChannelInfo = ChannelInfo
+local CastingInfo = UnitCastingInfo
+local ChannelInfo = UnitChannelInfo
+
+if vUI:IsClassic() then
+	CastingInfo = CastingInfo
+	ChannelInfo = ChannelInfo
+end
 
 local function updateSafeZone(self)
 	local safeZone = self.SafeZone

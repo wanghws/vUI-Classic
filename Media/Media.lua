@@ -5,12 +5,14 @@ Media.Textures = {}
 Media.Highlights = {}
 Media.Templates = {}
 Media.Palettes = {}
+Media.Sounds = {}
 
 Media.FontList = {}
 Media.TextureList = {}
 Media.HighlightList = {}
 Media.TemplateList = {}
 Media.PaletteList = {}
+Media.SoundList = {}
 
 -- Fonts
 function Media:SetFont(name, path, silent)
@@ -137,8 +139,6 @@ function Media:ApplyTemplate(name)
 			Settings[ID] = Value
 		end
 	end
-	
-	-- Maybe also allow a function argument, to be called when the template is loaded
 end
 
 -- Palettes
@@ -168,8 +168,22 @@ end
 
 -- Some pre-loaded goodness.
 
+-- Fonts
+Media:SetFont("PT Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\PTSans.ttf")
+Media:SetFont("Roboto", "Interface\\Addons\\vUI\\Media\\Fonts\\Roboto.ttf")
+Media:SetFont("Prototype", "Interface\\Addons\\vUI\\Media\\Fonts\\Prototype.ttf")
+Media:SetFont("Mosk", "Interface\\Addons\\vUI\\Media\\Fonts\\MoskBold.ttf")
+Media:SetFont("Matthan", "Interface\\Addons\\vUI\\Media\\Fonts\\MatthanSans.ttf")
+Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
+Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
+Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
+Media:SetFont("Noto Sans Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedBold.ttf")
+
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")
+Media:SetTexture("vUI 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI2.tga") -- We don't talk about what happened to vUI 1. And if you tell ANYONE...
+Media:SetTexture("vUI 3", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI3.tga")
+Media:SetTexture("vUI 4", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI4.tga")
 Media:SetTexture("Bettina", "Interface\\AddOns\\vUI\\Media\\Textures\\Bettina.tga")
 Media:SetTexture("Ferous", "Interface\\AddOns\\vUI\\Media\\Textures\\Ferous.tga")
 Media:SetTexture("Halycon", "Interface\\AddOns\\vUI\\Media\\Textures\\Halycon.tga")
@@ -194,18 +208,7 @@ Media:SetHighlight("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\Ren
 Media:SetHighlight("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga")
 Media:SetHighlight("Ferous 14", "Interface\\AddOns\\vUI\\Media\\Textures\\fer14.tga")
 
--- Fonts
-Media:SetFont("PT Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\PTSans.ttf")
-Media:SetFont("Roboto", "Interface\\Addons\\vUI\\Media\\Fonts\\Roboto.ttf")
-Media:SetFont("Prototype", "Interface\\Addons\\vUI\\Media\\Fonts\\Prototype.ttf")
-Media:SetFont("Mosk", "Interface\\Addons\\vUI\\Media\\Fonts\\MoskBold.ttf")
-Media:SetFont("Matthan", "Interface\\Addons\\vUI\\Media\\Fonts\\MatthanSans.ttf")
-Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
-Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
-Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
-
--- Palettes
--- Yes, doing these did take forever. And yes it was worth it.
+-- Palettes - Yes, doing these did take forever. And yes it was worth it.
 
 local Large = {} -- https://htmlcolorcodes.com/
 
@@ -331,15 +334,15 @@ Media:SetTemplate("vUI 2", {
 	["ui-button-texture-color"] = "666666",
 })
 
--- Midnight
-Media:SetTemplate("Midnight", {
-	["ui-widget-font"] = "Prototype",
-	["ui-header-font"] = "Prototype",
-	["ui-button-font"] = "Prototype",
+-- Conjured Muffin
+Media:SetTemplate("Conjured Muffin", {
+	["ui-widget-font"] = "Roboto",
+	["ui-header-font"] = "Roboto",
+	["ui-button-font"] = "Roboto",
 	
-	["ui-widget-texture"] = "pHishTex12",
-	["ui-header-texture"] = "pHishTex12",
-	["ui-button-texture"] = "pHishTex12",
+	["ui-widget-texture"] = "vUI 4",
+	["ui-header-texture"] = "vUI 4",
+	["ui-button-texture"] = "vUI 4",
 	
 	["ui-header-font-color"] = "EFEBE9",
 	["ui-header-texture-color"] = "37474F",
@@ -347,12 +350,37 @@ Media:SetTemplate("Midnight", {
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "263238",
 	
-	["ui-widget-color"] = "81D4FA",
+	["ui-widget-color"] = "3EC5E9",
 	["ui-widget-bright-color"] = "8E8E8E",
 	["ui-widget-bg-color"] = "263238",
 	["ui-widget-font-color"] = "FAFAFA",
 	
-	["ui-button-font-color"] = "81D4FA",
+	["ui-button-font-color"] = "3EC5E9",
+	["ui-button-texture-color"] = "757575",
+})
+
+-- Zen
+Media:SetTemplate("Zen", {
+	["ui-widget-font"] = "Prototype",
+	["ui-header-font"] = "Prototype",
+	["ui-button-font"] = "Prototype",
+	
+	["ui-widget-texture"] = "vUI 4",
+	["ui-header-texture"] = "vUI 4",
+	["ui-button-texture"] = "vUI 4",
+	
+	["ui-header-font-color"] = "EFEBE9",
+	["ui-header-texture-color"] = "37474F",
+	
+	["ui-window-bg-color"] = "424242",
+	["ui-window-main-color"] = "263238",
+	
+	["ui-widget-color"] = "00FF99", -- 81D4FA
+	["ui-widget-bright-color"] = "8E8E8E",
+	["ui-widget-bg-color"] = "263238",
+	["ui-widget-font-color"] = "FAFAFA",
+	
+	["ui-button-font-color"] = "00FF99", -- 81D4FA
 	["ui-button-texture-color"] = "757575",
 })
 

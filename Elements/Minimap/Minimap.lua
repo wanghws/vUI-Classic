@@ -10,15 +10,6 @@ local floor = floor
 
 local Frame = CreateFrame("Frame", "vUIMinimap", UIParent)
 
-local PVPTypeColors = {
-	["sanctuary"] = {0.41, 0.8, 0.94},
-	["arena"] = {1.0, 0.1, 0.1},
-	["friendly"] = {0.1, 1.0, 0.1},
-	["hostile"] = {1.0, 0.1, 0.1},
-	["contested"] = {1.0, 0.7, 0},
-	["combat"] = {1.0, 0.1, 0.1},
-}
-
 local ZoneUpdate = function(self)
 	local Zone = GetMinimapZoneText()
 	local PVPType = GetZonePVPInfo()

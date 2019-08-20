@@ -11,7 +11,87 @@ local max = math.max
 local type = type
 local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local vUI = {}
+local vUI = CreateFrame("Frame")
+
+vUI.Modules = {}
+
+function vUI:NewModule(name, version)
+	if self.Modules[name] then
+		return self.Modules[name]
+	end
+	
+	local Module = CreateFrame("Frame", name, UIParent)
+	
+	Module.Name = name
+	Module.Version = version
+	Module.Loaded = false
+	
+	self.Modules[name] = Module
+	self.Modules[#self.Modules + 1] = Module
+	
+	return Module
+end
+
+function vUI:GetModule(name)
+	if self.Modules[name] then
+		return self.Modules[name]
+	end
+end
+
+function vUI:LoadModule(name)
+	if (not self.Modules[name]) then
+		return
+	end
+	
+	local Module = self.Modules[name]
+	
+	if (not Module.Loaded) and Module.Load then
+		Module:Load()
+		Module.Loaded = true
+	end
+end
+
+function vUI:LoadModules(version)
+	for i = 1, #self.Modules do
+		if (not self.Modules[i].Version or self.Modules[i].Version == version) then
+			if self.Modules[i].Load then
+				self.Modules[i]:Load()
+			end
+		end
+	end
+end
+
+function vUI:VARIABLES_LOADED(event) -- Migrate VARIABLES_LOADED from GUI to here eventually, unimportant now
+	
+end
+
+function vUI:PLAYER_ENTERING_WORLD(event)
+	self:LoadModules(self:GetGameVersion())
+	
+	self:UnregisterEvent(event)
+end
+
+-- Some Data
+vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
+vUI.GameVersion = GetBuildInfo()
+vUI.TOCVersion = select(4, GetBuildInfo())
+vUI.UserName = UnitName("player")
+vUI.UserClass = select(2, UnitClass("player"))
+vUI.UserClassName = UnitClass("player")
+vUI.UserRace = UnitRace("player")
+vUI.UserRealm = GetRealmName()
+vUI.UserFaction = UnitFactionGroup("player")
+vUI.UserLocale = GetLocale()
+vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
+vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
+
+local vUIParent = CreateFrame("Frame", nil, UIParent)
+vUIParent:SetSize(UIParent:GetWidth(), UIParent:GetHeight())
+vUIParent:SetPoint("CENTER")
+
+if (vUI.UserLocale == "enGB") then
+	vUI.UserLocale = "enUS"
+end
 
 local Core = {
 	[1] = vUI, -- Functions/Constants
@@ -59,13 +139,14 @@ function vUI:SetScale(x)
 	x = min(8, x)
 	
 	UIParent:SetScale(x)
+	--vUIParent:SetScale(x)
 	
 	Resolution = GetCurrentResolution()
 	
 	if (Resolution > 0) then
-		vUI.ScreenResolution = select(GetCurrentResolution(), GetScreenResolutions())
+		vUI.ScreenResolution = select(Resolution, GetScreenResolutions())
 		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
-	else
+	else -- Windowed
 		ScreenHeight = UIParent:GetHeight()
 		vUI.ScreenResolution = UIParent:GetWidth().."x"..UIParent:GetHeight()
 	end
@@ -84,20 +165,21 @@ function vUI:GetSuggestedScale()
 	return (768 / ScreenHeight)
 end
 
--- Some Data
-vUI.Version = GetAddOnMetadata("vUI", "Version")
-vUI.UserName = UnitName("player")
-vUI.UserClass = select(2, UnitClass("player"))
-vUI.UserClassName = UnitClass("player")
-vUI.UserRace = UnitRace("player")
-vUI.UserRealm = GetRealmName()
-vUI.UserFaction = UnitFactionGroup("player")
-vUI.UserLocale = GetLocale()
-vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
-vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
+-- Temporary so I can code on retail and disable Classic-only things
+function vUI:IsClassic()
+	return self.TOCVersion < 20000 and true or false
+end
 
-if (vUI.UserLocale == "enGB") then
-	vUI.UserLocale = "enUS"
+function vUI:GetGameVersion()
+	return self.TOCVersion > 19999 and "Live" or "Classic"
+end
+
+function vUI:ShortValue(num)
+	if (num <= 999) then
+		return num
+	else
+		return format("%dk", num / 1000)
+	end
 end
 
 vUI.Backdrop = {
@@ -226,7 +308,7 @@ local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
 	self:SetPoint(anchor1, parent, anchor2, x, y)
 end
 
-local SetTextHexColor = function(self, hex)
+local SetTextColorHex = function(self, hex)
 	self:SetTextColor(vUI:HexToRGB(hex))
 end
 
@@ -239,7 +321,7 @@ local AddMethods = function(object)
 	if (not object.SetScaledSize) then metatable.SetScaledSize = SetScaledSize end
 	if (not object.SetScaledPoint) then metatable.SetScaledPoint = SetScaledPoint end
 	
-	if metatable.SetTextColor then object.SetTextHexColor = SetTextHexColor end
+	if metatable.SetTextColor then object.SetTextColorHex = SetTextColorHex end
 end
 
 local Handled = {["Frame"] = true}
@@ -256,8 +338,18 @@ while Object do
 		AddMethods(Object)
 		Handled[Object:GetObjectType()] = true
 	end
-
+	
 	Object = EnumerateFrames(Object)
 end
+
+local OnEvent = function(self, event, ...)
+	if self[event] then
+		self[event](self, event, ...)
+	end
+end
+
+vUI:RegisterEvent("VARIABLES_LOADED")
+vUI:RegisterEvent("PLAYER_ENTERING_WORLD")
+vUI:SetScript("OnEvent", OnEvent)
 
 _G["vUI"] = Namespace

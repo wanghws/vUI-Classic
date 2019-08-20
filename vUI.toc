@@ -9,7 +9,6 @@ Initialize.lua
 Media\Media.lua
 Languages\Languages.lua
 Languages\deDE.lua
-Languages\enUS.lua
 Languages\esES.lua
 Languages\esMX.lua
 Languages\frFR.lua

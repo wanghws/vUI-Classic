@@ -72,7 +72,7 @@ GUI:AddOptions(function(self)
 		local Color1 = Settings["ui-widget-color"]
 		local Color2 = Settings["ui-header-font-color"]
 		
-		print(format(Language["Welcome to |cFF%svUI|r version |cFF%s%s|r."], Color1, Color2, vUI.Version))
+		print(format(Language["Welcome to |cFF%svUI|r version |cFF%s%s|r."], Color1, Color2, vUI.UIVersion))
 		print(format(Language["Type |cFF%s/vui|r to access the console for settings, or click |cFF%s|Hcommand:/vui|h[here]|h|r."], Color1, Color1))
 		
 		-- May as well put this here for now too.
