@@ -20,13 +20,13 @@ local RecentVersions = { -- I guess I only need to put major versions in here, m
 	--[1.01] = "Minor",
 }
 
-local WhatsNew = {
+--[[local WhatsNew = {
 	[1.01] = {
 		"Alert frames",
 		"Version check module",
 	},
 }
-
+]]
 local GetRecentVersionTypes = function(compare)
 	local Major = 0
 	
@@ -50,11 +50,11 @@ local UpdateOnMouseUp = function()
 end
 
 Update["PLAYER_ENTERING_WORLD"] = function(self, event)
-	if self.NewVersion then
+	--[[if self.NewVersion then
 		vUI:SendAlert("What's new?", "Click here to learn more", nil, WhatsNewOnMouseUp, true)
 		
 		self.NewVersion = false
-	end
+	end]]
 	
 	if IsInGuild() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
@@ -75,7 +75,7 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 	--self:UnregisterEvent(event)
 end
 
--- /run vUISettings.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
+-- /run vUIData.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
 Update["VARIABLES_LOADED"] = function(self, event)
 	if (not vUIData) then
 		vUIData = {}
@@ -87,12 +87,12 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	
 	local StoredVersion = vUIData.Version
 	
-	-- You installed a newer version! Yay you. Yes, you.
+	--[[ You installed a newer version! Yay you. Yes, you.
 	if (AddOnVersion > StoredVersion) then
 		if (WhatsNew[AddOnVersion] and Settings["ui-display-whats-new"]) then
 			self.NewVersion = true -- Let PEW take over from here.
 		end
-	end
+	end]]
 	
 	-- Store a new version if needed.
 	if (StoredVersion ~= AddOnVersion) then

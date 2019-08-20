@@ -126,8 +126,9 @@ local OnEvent = function(self, event)
 	MiniMapMailFrame:SetScaledPoint("TOPRIGHT", -4, 12)
 	
 	MiniMapMailIcon:SetScaledSize(32, 32)
-	MiniMapMailIcon:SetTexture(Media:GetTexture("vUI Mail"))
-	MiniMapMailIcon:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
+	MiniMapMailIcon:SetTexture(Media:GetTexture("vUI Mail 2"))
+	--MiniMapMailIcon:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
+	MiniMapMailIcon:SetVertexColorHex("EEEEEE")
 	
 	MinimapNorthTag:SetTexture(nil)
 	

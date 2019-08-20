@@ -3344,7 +3344,6 @@ GUI.CreateWindow = function(self, name, default)
 		self.DefaultWindow = name
 	end
 	
-	-- return left and right widget group too?
 	return Window.LeftWidgetsBG, Window.RightWidgetsBG
 end
 

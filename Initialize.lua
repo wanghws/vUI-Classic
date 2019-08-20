@@ -314,30 +314,49 @@ local SetTextColorHex = function(self, hex)
 	self:SetTextColor(vUI:HexToRGB(hex))
 end
 
--- Thank you Tukz for letting me use this script!
-local AddMethods = function(object)
-	local metatable = getmetatable(object).__index
-	
-	if (not object.SetScaledHeight) then metatable.SetScaledHeight = SetScaledHeight end
-	if (not object.SetScaledWidth) then metatable.SetScaledWidth = SetScaledWidth end
-	if (not object.SetScaledSize) then metatable.SetScaledSize = SetScaledSize end
-	if (not object.SetScaledPoint) then metatable.SetScaledPoint = SetScaledPoint end
-	
-	if metatable.SetTextColor then object.SetTextColorHex = SetTextColorHex end
+local SetVertexColorHex = function(self, hex)
+	self:SetVertexColor(vUI:HexToRGB(hex))
 end
 
-local Handled = {["Frame"] = true}
+local SetStatusBarColorHex = function(self, hex)
+	self:SetStatusBarColor(vUI:HexToRGB(hex))
+end
+
+local AddMethod = function(self, key, newkey, value)
+	if (self[key] and not self[newkey]) then
+		rawset(self, newkey, value)
+	end
+end
+
+-- Thank you Tukz for letting me use this script!
+local AddMethodsToObject = function(object)
+	local metatable = getmetatable(object).__index
+	
+	AddMethod(metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
+	AddMethod(metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
+	AddMethod(metatable, "SetSize", "SetScaledSize", SetScaledSize)
+	AddMethod(metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
+	AddMethod(metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
+	AddMethod(metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
+	AddMethod(metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
+end
+
+local Handled = {
+	["Frame"] = true, 
+	["Texture"] = true,
+	["FontString"] = true
+}
 
 local Object = CreateFrame("Frame")
-AddMethods(Object)
-AddMethods(Object:CreateTexture())
-AddMethods(Object:CreateFontString())
+AddMethodsToObject(Object)
+AddMethodsToObject(Object:CreateTexture())
+AddMethodsToObject(Object:CreateFontString())
 
 Object = EnumerateFrames()
 
 while Object do
 	if (not Handled[Object:GetObjectType()]) then
-		AddMethods(Object)
+		AddMethodsToObject(Object)
 		Handled[Object:GetObjectType()] = true
 	end
 	

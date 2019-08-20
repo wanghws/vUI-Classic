@@ -185,6 +185,7 @@ Media:SetTexture("vUI 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI2.tga") -
 Media:SetTexture("vUI 3", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI3.tga")
 Media:SetTexture("vUI 4", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI4.tga")
 Media:SetTexture("vUI Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)
+Media:SetTexture("vUI Mail 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMailTextured.tga", true)
 Media:SetTexture("vUI Close", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIClose.tga", true)
 Media:SetTexture("Bettina", "Interface\\AddOns\\vUI\\Media\\Textures\\Bettina.tga")
 Media:SetTexture("Ferous", "Interface\\AddOns\\vUI\\Media\\Textures\\Ferous.tga")
