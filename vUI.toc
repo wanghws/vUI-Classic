@@ -6,6 +6,11 @@
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData
 
 Initialize.lua
+Elements\Libraries\LibStub.lua
+Elements\Libraries\CallbackHandler-1.0.lua
+Elements\Libraries\LibSharedMedia-3.0.lua
+Elements\Libraries\AceSerializer-3.0.lua
+Elements\Libraries\LibCompress.lua
 Media\Media.lua
 Languages\Languages.lua
 Languages\deDE.lua
@@ -20,9 +25,6 @@ Languages\zhCN.lua
 Languages\zhTW.lua
 Elements\Animation\Animation.lua
 Elements\GUI\Defaults.lua
-Elements\Serialize\LibStub.lua
-Elements\Serialize\AceSerializer-3.0.lua
-Elements\Serialize\LibCompress.lua
 Elements\Profiles\Profiles.lua
 Elements\GUI\GUI.lua
 Elements\Throttle\Throttle.lua

@@ -165,3 +165,6 @@ Defaults["nameplates-topleft-text"] = "[ClassReaction][Name15]"
 Defaults["nameplates-topright-text"] = "[LevelColor][Level][Plus]"
 Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
+
+-- Tooltips
+Defaults["tooltips-enable"] = true

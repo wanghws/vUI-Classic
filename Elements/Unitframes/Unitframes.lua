@@ -48,22 +48,6 @@ local ShortClasses = {
 	["minus"] = Language["-"],
 }
 
-local UnitDifficultyColor = function(unit)
-	local Difference = UnitLevel(unit) - UnitLevel("player")
-	
-	if (Difference >= 5) then
-		return "|cFF"..Settings["color-impossible"]
-	elseif (Difference >= 3) then
-		return "|cFF"..Settings["color-verydifficult"]
-	elseif (Difference >= -2) then
-		return "|cFF"..Settings["color-difficult"]
-	elseif (-Difference <= GetQuestGreenRange()) then
-		return "|cFF"..Settings["color-standard"]
-	else
-		return "|cFF"..Settings["color-trivial"]
-	end
-end
-
 local GetColor = function(p, r1, g1, b1, r2, g2, b2)
 	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
 end
@@ -290,12 +274,7 @@ end
 
 Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
 Methods["LevelColor"] = function(unit)
-	return UnitDifficultyColor(unit)
-end
-
-Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
-Methods["LevelColor"] = function(unit)
-	return UnitDifficultyColor(unit)
+	return vUI:UnitDifficultyColor(unit)
 end
 
 Events["PetColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP" -- UNIT_HAPPINESS
@@ -619,7 +598,7 @@ local StylePlayer = function(self, unit)
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
-	self:Tag(PowerLeft, "[ColoredHealthValues]")
+	self:Tag(PowerLeft, "[HealthValues]")
 	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
@@ -804,7 +783,7 @@ local StyleTarget = function(self, unit)
 	
 	-- Tags
 	self:Tag(HealthRight, "[HealthColor][perhp]")
-	self:Tag(PowerLeft, "[ColoredHealthValues]")
+	self:Tag(PowerLeft, "[HealthValues]")
 	self:Tag(PowerRight, "[Power]")
 	
 	self.Health = Health
@@ -944,6 +923,7 @@ local StylePet = function(self, unit)
 	end
 	
 	self:Tag(HealthLeft, "[PetColor][Name10]")
+	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -967,11 +947,9 @@ end
 oUF:RegisterStyle("vUI", Style)
 
 local PlateCVars = {
-    -- important, strongly recommend to set these to 1
     nameplateGlobalScale = 1,
     NamePlateHorizontalScale = 1,
     NamePlateVerticalScale = 1,
-    -- optional, you may use any values
     nameplateLargerScale = 1,
     nameplateMaxScale = 1,
     nameplateMinScale = 1,

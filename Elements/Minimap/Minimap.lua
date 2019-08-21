@@ -46,7 +46,7 @@ local CreateMinimap = function()
 	ZoneFrame.Tex:SetPoint("TOPLEFT", ZoneFrame, 1, -1)
 	ZoneFrame.Tex:SetPoint("BOTTOMRIGHT", ZoneFrame, -1, 1)
 	ZoneFrame.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	ZoneFrame.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	ZoneFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
 	
 	ZoneFrame.Text = ZoneFrame:CreateFontString(nil, "OVERLAY", 7)
 	ZoneFrame.Text:SetScaledPoint("CENTER", ZoneFrame, 0, -1)
@@ -127,8 +127,8 @@ local OnEvent = function(self, event)
 	
 	MiniMapMailIcon:SetScaledSize(32, 32)
 	MiniMapMailIcon:SetTexture(Media:GetTexture("vUI Mail 2"))
-	--MiniMapMailIcon:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
-	MiniMapMailIcon:SetVertexColorHex("EEEEEE")
+	MiniMapMailIcon:SetVertexColorHex(Settings["ui-widget-bright-color"])
+	--MiniMapMailIcon:SetVertexColorHex("EEEEEE")
 	
 	MinimapNorthTag:SetTexture(nil)
 	

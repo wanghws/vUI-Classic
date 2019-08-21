@@ -9,6 +9,7 @@ local ceil = math.ceil
 local min = math.min
 local max = math.max
 local type = type
+local UnitLevel = UnitLevel
 local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local vUI = CreateFrame("Frame")
@@ -67,7 +68,6 @@ end
 
 function vUI:PLAYER_ENTERING_WORLD(event)
 	self:LoadModules(self:GetClientVersion())
-	
 	self:UnregisterEvent(event)
 end
 
@@ -84,10 +84,6 @@ vUI.UserFaction = UnitFactionGroup("player")
 vUI.UserLocale = GetLocale()
 vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
 vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
-
-local vUIParent = CreateFrame("Frame", nil, UIParent)
-vUIParent:SetSize(UIParent:GetWidth(), UIParent:GetHeight())
-vUIParent:SetPoint("CENTER")
 
 if (vUI.UserLocale == "enGB") then
 	vUI.UserLocale = "enUS"
@@ -139,7 +135,6 @@ function vUI:SetScale(x)
 	x = min(8, x)
 	
 	UIParent:SetScale(x)
-	--vUIParent:SetScale(x)
 	
 	Resolution = GetCurrentResolution()
 	
@@ -167,9 +162,10 @@ end
 
 -- Temporary so I can code on retail and disable Classic-only things
 function vUI:IsClassic()
-	return self.TOCVersion < 20000 and true or false
+	return self.TOCVersion <= 20000 and true or false
 end
 
+-- Two ways to skin a cat, why do I have 2 of these? lol
 function vUI:GetClientVersion()
 	return self.TOCVersion > 19999 and "Live" or "Classic"
 end
@@ -181,6 +177,22 @@ function vUI:ShortValue(num)
 		return format("%dk", num / 1000)
 	else
 		return num
+	end
+end
+
+function vUI:UnitDifficultyColor(unit)
+	local Difference = UnitLevel(unit) - UnitLevel("player")
+	
+	if (Difference >= 5) then
+		return "|cFF"..Settings["color-impossible"]
+	elseif (Difference >= 3) then
+		return "|cFF"..Settings["color-verydifficult"]
+	elseif (Difference >= -2) then
+		return "|cFF"..Settings["color-difficult"]
+	elseif (-Difference <= GetQuestGreenRange()) then
+		return "|cFF"..Settings["color-standard"]
+	else
+		return "|cFF"..Settings["color-trivial"]
 	end
 end
 
@@ -233,10 +245,12 @@ function vUI:FormatTime(seconds)
 	return format("%.1fs", seconds)
 end
 
-function vUI:Reset() -- /run vUI:Reset()
+function vUI:Reset()
 	-- Create a prompt
+	--vUIData = nil
 	vUIProfiles = nil
 	vUIProfileData = nil
+	
 	ReloadUI()
 end
 
@@ -310,6 +324,14 @@ local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
 	self:SetPoint(anchor1, parent, anchor2, x, y)
 end
 
+local SetBackdropColorHex = function(self, hex)
+	self:SetBackdropColor(vUI:HexToRGB(hex))
+end
+
+local SetBackdropBorderColorHex = function(self, hex)
+	self:SetBackdropBorderColor(vUI:HexToRGB(hex))
+end
+
 local SetTextColorHex = function(self, hex)
 	self:SetTextColor(vUI:HexToRGB(hex))
 end
@@ -328,26 +350,33 @@ local AddMethod = function(self, key, newkey, value)
 	end
 end
 
--- Thank you Tukz for letting me use this script!
-local AddMethodsToObject = function(object)
-	local metatable = getmetatable(object).__index
-	
-	AddMethod(metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
-	AddMethod(metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
-	AddMethod(metatable, "SetSize", "SetScaledSize", SetScaledSize)
-	AddMethod(metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
-	AddMethod(metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
-	AddMethod(metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
-	AddMethod(metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
-end
-
 local Handled = {
 	["Frame"] = true, 
 	["Texture"] = true,
 	["FontString"] = true
 }
 
-local Object = CreateFrame("Frame")
+local Object = vUI
+local HandledCount = 0
+
+-- Thank you Tukz for letting me use this script!
+local AddMethodsToObject = function(object)
+	local Metatable = getmetatable(object).__index
+	
+	AddMethod(Metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
+	AddMethod(Metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
+	AddMethod(Metatable, "SetSize", "SetScaledSize", SetScaledSize)
+	AddMethod(Metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
+	AddMethod(Metatable, "SetBackdropColor", "SetBackdropColorHex", SetBackdropColorHex)
+	AddMethod(Metatable, "SetBackdropBorderColor", "SetBackdropBorderColorHex", SetBackdropBorderColorHex)
+	AddMethod(Metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
+	AddMethod(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
+	AddMethod(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
+	
+	Handled[object:GetObjectType()] = true
+	HandledCount = HandledCount + 1
+end
+
 AddMethodsToObject(Object)
 AddMethodsToObject(Object:CreateTexture())
 AddMethodsToObject(Object:CreateFontString())
@@ -357,7 +386,10 @@ Object = EnumerateFrames()
 while Object do
 	if (not Handled[Object:GetObjectType()]) then
 		AddMethodsToObject(Object)
-		Handled[Object:GetObjectType()] = true
+		
+		if (HandledCount == 26) then -- We found everything we need
+			break
+		end
 	end
 	
 	Object = EnumerateFrames(Object)

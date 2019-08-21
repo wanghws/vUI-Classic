@@ -1,4 +1,5 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
+local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 
 Media.Fonts = {}
 Media.Textures = {}
@@ -24,6 +25,8 @@ function Media:SetFont(name, path, silent)
 	
 	if (not silent) then
 		self.FontList[name] = path
+		
+		LSM:Register("font", name, path)
 	end
 end
 
@@ -49,6 +52,8 @@ function Media:SetTexture(name, path, silent)
 	
 	if (not silent) then
 		self.TextureList[name] = path
+		
+		LSM:Register("statusbar", name, path)
 	end
 end
 
