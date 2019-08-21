@@ -40,6 +40,7 @@ end
 
 function Media:GetFontList()
 	return self.FontList
+	--return LSM:HashTable("font")
 end
 
 -- Textures
@@ -67,6 +68,7 @@ end
 
 function Media:GetTextureList()
 	return self.TextureList
+	--return LSM:HashTable("statusbar")
 end
 
 -- Highlights

@@ -89,7 +89,9 @@ end
 
 local SetStyle = function(self)
 	if self.Styled then
-		return UpdateFonts(self)
+		UpdateFonts(self)
+		
+		return
 	end
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
@@ -191,6 +193,13 @@ local OnTooltipSetUnit = function(self)
 			
 			self:AddLine(Language["|cFFFFFFFFTargeting: |cFF"] .. TargetColor .. UnitName(UnitID .. "target") .. "|r")
 		end
+		
+		GameTooltipStatusBar:SetStatusBarColorHex(Color)
+		
+		if self.OuterBG then
+			self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 3)
+			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -15)
+		end
 	end
 end
 
@@ -204,19 +213,20 @@ end
 
 function Tooltips:StyleHealth()
 	local HealthBar = GameTooltipStatusBar
+	
 	HealthBar:ClearAllPoints()
 	HealthBar:SetScaledHeight(8)
-	HealthBar:SetPoint("TOPLEFT", HealthBar:GetParent(), "BOTTOMLEFT", 1, 0)
-	HealthBar:SetPoint("TOPRIGHT", HealthBar:GetParent(), "BOTTOMRIGHT", -1, 0)
+	HealthBar:SetScaledPoint("TOPLEFT", HealthBar:GetParent(), "BOTTOMLEFT", 1, -3)
+	HealthBar:SetScaledPoint("TOPRIGHT", HealthBar:GetParent(), "BOTTOMRIGHT", -1, -3)
 	HealthBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	--[[HealthBar.Backdrop = CreateFrame("Frame", nil, HealthBar)
+	HealthBar.Backdrop = CreateFrame("Frame", nil, HealthBar)
+	HealthBar.Backdrop:SetScaledPoint("TOPLEFT", HealthBar, -1, 1)
+	HealthBar.Backdrop:SetScaledPoint("BOTTOMRIGHT", HealthBar, 1, -1)
 	HealthBar.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	HealthBar.Backdrop:SetBackdropColor(0, 0, 0)
 	HealthBar.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
-	HealthBar.Backdrop:SetBackdropColor(0, 0, 0)
-	HealthBar.Backdrop:SetPoint("TOPLEFT", HealthBar, -1, 1)
-	HealthBar.Backdrop:SetPoint("BOTTOMRIGHT", HealthBar, 1, -1)]]
 end
 
 function Tooltips:Load()
