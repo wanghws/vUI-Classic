@@ -184,15 +184,15 @@ function vUI:UnitDifficultyColor(unit)
 	local Difference = UnitLevel(unit) - UnitLevel("player")
 	
 	if (Difference >= 5) then
-		return "|cFF"..Settings["color-impossible"]
+		return "|cFF"..Core[5]["color-impossible"]
 	elseif (Difference >= 3) then
-		return "|cFF"..Settings["color-verydifficult"]
+		return "|cFF"..Core[5]["color-verydifficult"]
 	elseif (Difference >= -2) then
-		return "|cFF"..Settings["color-difficult"]
+		return "|cFF"..Core[5]["color-difficult"]
 	elseif (-Difference <= GetQuestGreenRange()) then
-		return "|cFF"..Settings["color-standard"]
+		return "|cFF"..Core[5]["color-standard"]
 	else
-		return "|cFF"..Settings["color-trivial"]
+		return "|cFF"..Core[5]["color-trivial"]
 	end
 end
 

@@ -111,22 +111,34 @@ end
 local UnitPlayerControlled = UnitPlayerControlled
 local UnitCanAttack = UnitCanAttack
 local UnitIsPVP = UnitIsPVP
+local UnitPVPName = UnitPVPName
 local UnitReaction = UnitReaction
+local UnitExists = UnitExists
 local UnitClass = UnitClass
+local UnitRace = UnitRace
+local find = string.find
 
 local GetUnitColor = function(unit)
+	local Color
+	
 	if UnitIsPlayer(unit) then
 		local Class = select(2, UnitClass(unit))
 		
 		if Class then
-			return vUI.ClassColors[Class]
+			Color = vUI.ClassColors[Class]
 		end
 	else
 		local Reaction = UnitReaction(unit, "player")
 		
 		if Reaction then
-			return vUI.ReactionColors[Reaction]
+			Color = vUI.ReactionColors[Reaction]
 		end
+	end
+	
+	if Color then
+		return vUI:RGBToHex(Color[1], Color[2], Color[3])
+	else
+		return "FFFFFF"
 	end
 end
 
@@ -134,19 +146,50 @@ local OnTooltipSetUnit = function(self)
 	local Unit, UnitID = self:GetUnit()
 	
 	if UnitID then
-		local Class = select(2, UnitClass(UnitID))
+		local Class = UnitClass(UnitID)
 		
 		if (not Class) then
 			return
 		end
 		
 		local Name, Realm = UnitName(UnitID)
+		local Race = UnitRace(UnitID)
+		local Level = UnitLevel(UnitID)
+		local Title = UnitPVPName(UnitID)
 		local Color = GetUnitColor(UnitID)
 		
+		if (Class == Name) then
+			Class = ""
+		end
+		
 		if Realm then
-			GameTooltipTextLeft1:SetText(format("|cFF%s%s - %s|r", vUI:RGBToHex(Color[1], Color[2], Color[3]), Name, Realm))
+			GameTooltipTextLeft1:SetText(format("|cFF%s%s - %s|r", Color, Title, Realm))
 		else
-			GameTooltipTextLeft1:SetText(format("|cFF%s%s|r", vUI:RGBToHex(Color[1], Color[2], Color[3]), Name))
+			GameTooltipTextLeft1:SetText(format("|cFF%s%s|r", Color, Title))
+		end
+		
+		local Line
+		
+		for i = 1, self:NumLines() do
+			Line = _G[self:GetName() .. "TextLeft" .. i]
+			
+			if Line and find(Line:GetText(), "^" .. LEVEL) then
+				local LevelColor = vUI:UnitDifficultyColor(UnitID)
+				
+				if Race then
+					Line:SetText(format("%s %s%s|r %s %s", LEVEL, LevelColor, Level, Race, Class))
+				else
+					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, Class))
+				end
+				
+				break
+			end
+		end
+		
+		if (UnitID ~= "player" and UnitExists(UnitID .. "target")) then
+			local TargetColor = GetUnitColor(UnitID .. "target")
+			
+			self:AddLine(Language["|cFFFFFFFFTargeting: |cFF"] .. TargetColor .. UnitName(UnitID .. "target") .. "|r")
 		end
 	end
 end
@@ -159,12 +202,30 @@ function Tooltips:AddHooks()
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 end
 
+function Tooltips:StyleHealth()
+	local HealthBar = GameTooltipStatusBar
+	HealthBar:ClearAllPoints()
+	HealthBar:SetScaledHeight(8)
+	HealthBar:SetPoint("TOPLEFT", HealthBar:GetParent(), "BOTTOMLEFT", 1, 0)
+	HealthBar:SetPoint("TOPRIGHT", HealthBar:GetParent(), "BOTTOMRIGHT", -1, 0)
+	HealthBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	--[[HealthBar.Backdrop = CreateFrame("Frame", nil, HealthBar)
+	HealthBar.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	HealthBar.Backdrop:SetBackdropBorderColor(0, 0, 0)
+	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
+	HealthBar.Backdrop:SetBackdropColor(0, 0, 0)
+	HealthBar.Backdrop:SetPoint("TOPLEFT", HealthBar, -1, 1)
+	HealthBar.Backdrop:SetPoint("BOTTOMRIGHT", HealthBar, 1, -1)]]
+end
+
 function Tooltips:Load()
 	if (not Settings["tooltips-enable"]) then
 		return
 	end
 	
 	self:AddHooks()
+	self:StyleHealth()
 end
 
 GUI:AddOptions(function(self)
