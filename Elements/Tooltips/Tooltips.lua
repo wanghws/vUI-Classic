@@ -1,6 +1,5 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
--- Super minimal, don't judge me. So much to do in this file, but I'm just laying out something basic here
 local Tooltips = vUI:NewModule("Tooltips")
 
 local MyGuild
@@ -193,24 +192,24 @@ local OnTooltipSetUnit = function(self)
 		local Title = UnitPVPName(UnitID)
 		local Guild, Rank = GetGuildInfo(UnitID)
 		local Color = GetUnitColor(UnitID)
+		local Flag = ""
+		local Line
 		
 		if (Class == Name) then
 			Class = ""
 		end
 		
-		if UnitIsAFK(Unit) then
-			self:AppendText(" " .. CHAT_FLAG_AFK)
-		elseif UnitIsDND(Unit) then 
-			self:AppendText(" " .. CHAT_FLAG_DND)
+		if UnitIsAFK(UnitID) then
+			Flag = "|cFFFDD835" .. CHAT_FLAG_AFK .. "|r "
+		elseif UnitIsDND(UnitID) then 
+			Flag = "|cFFF44336" .. CHAT_FLAG_DND .. "|r "
 		end
 	
 		if Realm then
-			GameTooltipTextLeft1:SetText(format("|cFF%s%s - %s|r", Color, (Title or Name), Realm))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s - %s|r", Flag, Color, (Title or Name), Realm))
 		else
-			GameTooltipTextLeft1:SetText(format("|cFF%s%s|r", Color, (Title or Name)))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s|r", Flag, Color, (Title or Name)))
 		end
-		
-		local Line
 		
 		for i = 1, self:NumLines() do
 			Line = _G[self:GetName() .. "TextLeft" .. i]
