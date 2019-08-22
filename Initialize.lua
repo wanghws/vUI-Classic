@@ -131,19 +131,19 @@ local GetScale = function(x)
 end
 
 function vUI:SetScale(x)
-	x = max(0.64, x)
+	x = max(0.4, x)
 	x = min(8, x)
 	
 	UIParent:SetScale(x)
 	
 	Resolution = GetCurrentResolution()
 	
-	if (Resolution > 0) then
+	if (Resolution > 0) then -- A fullscreen resolution
 		vUI.ScreenResolution = select(Resolution, GetScreenResolutions())
 		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
 	else -- Windowed
 		ScreenHeight = UIParent:GetHeight()
-		vUI.ScreenResolution = UIParent:GetWidth().."x"..UIParent:GetHeight()
+		vUI.ScreenResolution = UIParent:GetWidth() .. "x" .. ScreenHeight
 	end
 	
 	Scale = (768 / ScreenHeight) / x
@@ -325,26 +325,36 @@ local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
 end
 
 local SetBackdropColorHex = function(self, hex)
-	self:SetBackdropColor(vUI:HexToRGB(hex))
+	if hex then
+		self:SetBackdropColor(vUI:HexToRGB(hex))
+	end
 end
 
 local SetBackdropBorderColorHex = function(self, hex)
-	self:SetBackdropBorderColor(vUI:HexToRGB(hex))
+	if hex then
+		self:SetBackdropBorderColor(vUI:HexToRGB(hex))
+	end
 end
 
 local SetTextColorHex = function(self, hex)
-	self:SetTextColor(vUI:HexToRGB(hex))
+	if hex then
+		self:SetTextColor(vUI:HexToRGB(hex))
+	end
 end
 
 local SetVertexColorHex = function(self, hex)
-	self:SetVertexColor(vUI:HexToRGB(hex))
+	if hex then
+		self:SetVertexColor(vUI:HexToRGB(hex))
+	end
 end
 
 local SetStatusBarColorHex = function(self, hex)
-	self:SetStatusBarColor(vUI:HexToRGB(hex))
+	if hex then
+		self:SetStatusBarColor(vUI:HexToRGB(hex))
+	end
 end
 
-local AddMethod = function(self, key, newkey, value)
+local AddMethodByReference = function(self, key, newkey, value)
 	if (self[key] and not self[newkey]) then
 		rawset(self, newkey, value)
 	end
@@ -357,37 +367,38 @@ local Handled = {
 }
 
 local Object = vUI
-local HandledCount = 0
+--local HandledCount = 0
 
 -- Thank you Tukz for letting me use this script!
 local AddMethodsToObject = function(object)
 	local Metatable = getmetatable(object).__index
 	
-	AddMethod(Metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
-	AddMethod(Metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
-	AddMethod(Metatable, "SetSize", "SetScaledSize", SetScaledSize)
-	AddMethod(Metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
-	AddMethod(Metatable, "SetBackdropColor", "SetBackdropColorHex", SetBackdropColorHex)
-	AddMethod(Metatable, "SetBackdropBorderColor", "SetBackdropBorderColorHex", SetBackdropBorderColorHex)
-	AddMethod(Metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
-	AddMethod(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
-	AddMethod(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
+	AddMethodByReference(Metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
+	AddMethodByReference(Metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
+	AddMethodByReference(Metatable, "SetSize", "SetScaledSize", SetScaledSize)
+	AddMethodByReference(Metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
+	AddMethodByReference(Metatable, "SetBackdropColor", "SetBackdropColorHex", SetBackdropColorHex)
+	AddMethodByReference(Metatable, "SetBackdropBorderColor", "SetBackdropBorderColorHex", SetBackdropBorderColorHex)
+	AddMethodByReference(Metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
+	AddMethodByReference(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
+	AddMethodByReference(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
 	
 	Handled[object:GetObjectType()] = true
-	HandledCount = HandledCount + 1
 end
 
 AddMethodsToObject(Object)
 AddMethodsToObject(Object:CreateTexture())
 AddMethodsToObject(Object:CreateFontString())
 
+local HandledCount = 0
 Object = EnumerateFrames()
 
 while Object do
-	if (not Handled[Object:GetObjectType()]) then
+	if not Object:IsForbidden() and not Handled[Object:GetObjectType()] then
 		AddMethodsToObject(Object)
+		HandledCount = HandledCount + 1
 		
-		if (HandledCount == 26) then -- We found everything we need
+		if (HandledCount == 23) then -- We found everything we need
 			break
 		end
 	end

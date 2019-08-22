@@ -10,6 +10,7 @@ local format = format
 local gsub = gsub
 local floor = floor
 local XP, MaxXP, Rested
+local IsResting = IsResting
 local UnitXP = UnitXP
 local UnitXPMax = UnitXPMax
 local UnitLevel = UnitLevel
@@ -225,9 +226,28 @@ local OnEnter = function(self)
 			self.Percentage:Show()
 		end
 	end
+	
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -8)
+	
+	Rested = GetXPExhaustion()
+    XP = UnitXP("player")
+    Max = UnitXPMax("player")
+	
+	local XPColor = Settings["experience-bar-color"]
+	local RestedColor = Settings["experience-rested-color"]
+	
+	if Rested then
+		GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r", XPColor, Comma(XP), Comma(Max), RestedColor, Comma(Rested)))
+	else
+		GameTooltip:AddLine(format("cFF%s%s / %s|r", XPColor, Comma(XP), Comma(Max)))
+	end
+	
+	GameTooltip:Show()
 end
 
 local OnLeave = function(self)
+	GameTooltip:Hide()
+	
 	if (Settings["experience-display-progress"] and Settings["experience-progress-visibility"] == "MOUSEOVER") then
 		if self.Progress:IsShown() then
 			self.Progress:Hide()
@@ -257,9 +277,19 @@ local UpdatePercentVisibility = function(value)
 	end
 end
 
+local UpdateRestingStatus = function(self)
+	if IsResting() then
+		self.Resting:SetText("zZz")
+	else
+		self.Resting:SetText("")
+	end
+	
+	UpdateXP(self)
+end
+
 ExperienceBar["PLAYER_LEVEL_UP"] = UpdateXP
 ExperienceBar["PLAYER_XP_UPDATE"] = UpdateXP
-ExperienceBar["PLAYER_UPDATE_RESTING"] = UpdateXP
+ExperienceBar["PLAYER_UPDATE_RESTING"] = UpdateRestingStatus
 ExperienceBar["UPDATE_EXHAUSTION"] = UpdateXP
 
 ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
@@ -269,7 +299,6 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 		return
 	end
 	
-	self:SetFrameStrata("MEDIUM")
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
 	self.LastXP = 0
@@ -280,7 +309,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.HeaderBG:SetBackdrop(vUI.BackdropAndBorder)
 	self.HeaderBG:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self.HeaderBG:SetBackdropBorderColor(0, 0, 0)
-	self.HeaderBG:SetFrameStrata("MEDIUM")
+	--self.HeaderBG:SetFrameStrata("MEDIUM")
 	
 	self.HeaderBG.Texture = self.HeaderBG:CreateTexture(nil, "OVERLAY")
 	self.HeaderBG.Texture:SetScaledPoint("TOPLEFT", self.HeaderBG, 1, -1)
@@ -330,7 +359,8 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Bar.BG = self.Bar:CreateTexture(nil, "ARTWORK")
 	self.Bar.BG:SetAllPoints(self.Bar)
 	self.Bar.BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	self.Bar.BG:SetVertexColor(R, G, B)
+	--self.Bar.BG:SetVertexColorHex(Settings["ui-window-main-color"])
+	self.Bar.BG:SetVertexColorHex(Settings["ui-window-main-color"])
 	self.Bar.BG:SetAlpha(0.2)
 	
 	self.Bar.Spark = self.Bar:CreateTexture(nil, "ARTWORK")
@@ -388,6 +418,14 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Progress:SetShadowColor(0, 0, 0)
 	self.Progress:SetShadowOffset(1, -1)
 	
+	self.Resting = self.Bar:CreateFontString(nil, "OVERLAY")
+	self.Resting:SetScaledPoint("CENTER", self.Bar, 0, 0)
+	self.Resting:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	self.Resting:SetJustifyH("CENTER")
+	self.Resting:SetShadowColor(0, 0, 0)
+	self.Resting:SetShadowOffset(1, -1)
+	self.Resting:SetTextColorHex(Settings["experience-rested-color"])
+	
 	-- Add fade to self.Progress
 	
 	self.Percentage = self.Bar:CreateFontString(nil, "OVERLAY")
@@ -406,6 +444,8 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	UpdateProgressVisibility(Settings["experience-progress-visibility"])
 	UpdatePercentVisibility(Settings["experience-percent-visibility"])
 	UpdateXP(self, true)
+	
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 ExperienceBar:RegisterEvent("PLAYER_LEVEL_UP")

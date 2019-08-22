@@ -613,6 +613,8 @@ local StylePlayer = function(self, unit)
 	self.Combat = Combat
 	self.Castbar = Castbar
 	--self.RaidTargetIndicator = RaidTargetIndicator
+	
+	self:UpdateTags()
 end
 
 local StyleTarget = function(self, unit)
