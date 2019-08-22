@@ -7,6 +7,7 @@ local MyGuild
 
 local select = select
 local find = string.find
+local floor = floor
 local format = format
 local UnitPlayerControlled = UnitPlayerControlled
 local UnitCanAttack = UnitCanAttack
@@ -20,7 +21,9 @@ local UnitRace = UnitRace
 local UnitName = UnitName
 local UnitIsAFK = UnitIsAFK
 local UnitIsDND = UnitIsDND
-local IsInGuild = IsInGuild
+local UnitIsGhost = UnitIsGhost
+local UnitIsDead = UnitIsDead
+local UnitClassification = UnitClassification
 
 Tooltips.Handled = {
 	GameTooltip,
@@ -32,6 +35,14 @@ Tooltips.Handled = {
 	ShoppingTooltip1,
 	ShoppingTooltip2,
 	EmbeddedItemTooltip,
+}
+
+Tooltips.Classifications = {
+	["rare"] = Language["Rare"],
+	["elite"] = Language["Elite"],
+	["rareelite"] = Language["Rare Elite"],
+	["worldboss"] = Language["Boss"],
+	["minus"] = Language["Affix"],
 }
 
 local UpdateFonts = function(self)
@@ -192,7 +203,7 @@ local OnTooltipSetUnit = function(self)
 		elseif UnitIsDND(Unit) then 
 			self:AppendText(" " .. CHAT_FLAG_DND)
 		end
-		
+	
 		if Realm then
 			GameTooltipTextLeft1:SetText(format("|cFF%s%s - %s|r", Color, (Title or Name), Realm))
 		else
@@ -211,7 +222,7 @@ local OnTooltipSetUnit = function(self)
 					Line:SetText(format("|cFF66BB6A%s|r", Guild))
 				end
 				
-			elseif (Line and find(Line:GetText(), "^" .. LEVEL)) then
+			elseif (Line and Line.GetText and find(Line:GetText(), "^" .. LEVEL)) then
 				local LevelColor = vUI:UnitDifficultyColor(UnitID)
 				
 				if Race then
@@ -230,12 +241,11 @@ local OnTooltipSetUnit = function(self)
 			self:AddLine(Language["Targeting: |cFF"] .. TargetColor .. UnitName(UnitID .. "target") .. "|r", 1, 1, 1)
 		end
 		
-		GameTooltipStatusBar:OldSetStatusBarColor(vUI:HexToRGB(Color))
-		GameTooltipStatusBar.BG:SetVertexColorHex(Color)
+		--GameTooltipStatusBar:OldSetStatusBarColor(vUI:HexToRGB(Color))
+		--GameTooltipStatusBar.BG:SetVertexColorHex(Color)
 		
 		if self.OuterBG then
-			self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 3)
-			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -15)
+			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
 		end
 	end
 end
@@ -247,7 +257,7 @@ local SetTooltipDefaultAnchor = function(self) -- Not actually moving them yet, 
 		--self:SetAnchorType("ANCHOR_BOTTOMRIGHT", -10, 15)
 			
 		if self.OuterBG then
-			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -15)
+			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
 		end
 	else
 		--self:SetAnchorType("ANCHOR_BOTTOMRIGHT", -10, 3)
@@ -268,19 +278,48 @@ function Tooltips:AddHooks()
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", SetTooltipDefaultAnchor)
 end
 
-function Tooltips:StyleHealth()
+local GetColor = function(p, r1, g1, b1, r2, g2, b2)
+	return r1 + (r2 - r1) * p, g1 + (g2 - g1) * p, b1 + (b2 - b1) * p
+end
+
+local OnValueChanged = function(self)
+	local Min, Max = self:GetMinMaxValues()
+	local Value = self:GetValue()
+	
+	local Unit = select(2, self:GetParent():GetUnit())
+	local Color = vUI:RGBToHex(GetColor(Value / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	
+	if Unit then
+		if UnitIsDead(Unit) then
+			self.HealthValue:SetText("|cFFEE4D4D" .. Language["Dead"] .. "|r")
+		elseif UnitIsGhost(Unit) then
+			self.HealthValue:SetText("|cFFEEEEEE" .. Language["Ghost"] .. "|r")
+		else
+			self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Value), vUI:ShortValue(Max)))
+		end
+		
+		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Value / Max * 100 + 0.5)))
+	else
+		self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Value), vUI:ShortValue(Max)))
+		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Value / Max * 100 + 0.5)))
+	end
+end
+
+function Tooltips:StyleStatusBar()
 	local HealthBar = GameTooltipStatusBar
 	
 	HealthBar:ClearAllPoints()
-	HealthBar:SetScaledHeight(8)
+	HealthBar:SetScaledHeight(15)
 	HealthBar:SetScaledPoint("TOPLEFT", HealthBar:GetParent(), "BOTTOMLEFT", 1, -3)
 	HealthBar:SetScaledPoint("TOPRIGHT", HealthBar:GetParent(), "BOTTOMRIGHT", -1, -3)
 	HealthBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	HealthBar.BG = HealthBar:CreateTexture(nil, "ARTWORK")
 	HealthBar.BG:SetScaledPoint("TOPLEFT", HealthBar, 0, 0)
 	HealthBar.BG:SetScaledPoint("BOTTOMRIGHT", HealthBar, 0, 0)
 	HealthBar.BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBar.BG:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	HealthBar.BG:SetAlpha(0.2)
 	
 	HealthBar.Backdrop = CreateFrame("Frame", nil, HealthBar)
@@ -290,6 +329,22 @@ function Tooltips:StyleHealth()
 	HealthBar.Backdrop:SetBackdropColor(0, 0, 0)
 	HealthBar.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
+	
+	HealthBar.HealthValue = HealthBar:CreateFontString(nil, "OVERLAY")
+	HealthBar.HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	HealthBar.HealthValue:SetScaledPoint("LEFT", HealthBar, 3, 0)
+	HealthBar.HealthValue:SetJustifyH("LEFT")
+	HealthBar.HealthValue:SetShadowColor(0, 0, 0)
+	HealthBar.HealthValue:SetShadowOffset(1, -1)
+	
+	HealthBar.HealthPercent = HealthBar:CreateFontString(nil, "OVERLAY")
+	HealthBar.HealthPercent:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	HealthBar.HealthPercent:SetScaledPoint("RIGHT", HealthBar, -3, 0)
+	HealthBar.HealthPercent:SetJustifyH("RIGHT")
+	HealthBar.HealthPercent:SetShadowColor(0, 0, 0)
+	HealthBar.HealthPercent:SetShadowOffset(1, -1)
+	
+	HealthBar:HookScript("OnValueChanged", OnValueChanged)
 	
 	HealthBar.OldSetStatusBarColor = HealthBar.SetStatusBarColor
 	HealthBar.SetStatusBarColor = function() end
@@ -301,7 +356,7 @@ function Tooltips:Load()
 	end
 	
 	self:AddHooks()
-	self:StyleHealth()
+	self:StyleStatusBar()
 	
 	if IsInGuild() then
 		MyGuild = GetGuildInfo("player")

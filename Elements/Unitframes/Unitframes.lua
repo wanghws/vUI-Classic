@@ -145,11 +145,11 @@ end
 Events["HealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
 Methods["HealthValues"] = function(unit)
 	if UnitIsDead(unit) then
-		return Language["Dead"]
+		return "|cFFEE4D4D" .. Language["Dead"] .. "|r"
 	elseif UnitIsGhost(unit) then
-		return Language["Ghost"]
+		return "|cFFEEEEEE" .. Language["Ghost"] .. "|r"
 	elseif (not UnitIsConnected(unit)) then
-		return Language["Offline"]
+		return "|cFFBBBBBB" .. Language["Offline"] .. "|r"
 	end
 	
 	return vUI:ShortValue(UnitHealth(unit)) .. " / " .. vUI:ShortValue(UnitHealthMax(unit))
@@ -158,11 +158,11 @@ end
 Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
 Methods["ColoredHealthValues"] = function(unit)
 	if UnitIsDead(unit) then
-		return "|cFFFAFAFA" .. Language["Dead"]
+		return "|cFFEE4D4D" .. Language["Dead"]
 	elseif UnitIsGhost(unit) then
-		return "|cFFFAFAFA" .. Language["Ghost"]
+		return "|cFFEEEEEE" .. Language["Ghost"]
 	elseif (not UnitIsConnected(unit)) then
-		return "|cFFFAFAFA" .. Language["Offline"]
+		return "|cFFBBBBBB" .. Language["Offline"]
 	end
 	
 	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(UnitHealth(unit)) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(UnitHealthMax(unit))
