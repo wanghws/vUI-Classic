@@ -144,6 +144,8 @@ Defaults["experience-height"] = 16
 Defaults["experience-position"] = "TOP"
 Defaults["experience-progress-visibility"] = "ALWAYS"
 Defaults["experience-percent-visibility"] = "ALWAYS"
+Defaults["experience-bar-color"] = "66BB6A" -- 1AE045
+Defaults["experience-rested-color"] = "00B4FF"
 
 -- Minimap
 Defaults["minimap-enable"] = true

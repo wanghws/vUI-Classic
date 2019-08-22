@@ -1,5 +1,7 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
+local Experience = vUI:NewModule("Experience")
+
 local type = type
 local tonumber = tonumber
 local match = string.match
@@ -315,8 +317,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.BGAll:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self.BGAll:SetBackdropBorderColor(0, 0, 0)
 	
-	--local R, G, B = vUI:HexToRGB("1AE045")
-	local R, G, B = vUI:HexToRGB(Settings["ui-widget-color"])
+	local R, G, B = vUI:HexToRGB("1AE045")
 	
 	self.Bar = CreateFrame("StatusBar", nil, self.BarBG)
 	self.Bar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
@@ -325,6 +326,12 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Bar:SetScaledPoint("BOTTOMRIGHT", self.BarBG, -1, 1)
 	self.Bar:SetFrameStrata("MEDIUM")
 	self.Bar:SetFrameLevel(6)
+	
+	self.Bar.BG = self.Bar:CreateTexture(nil, "ARTWORK")
+	self.Bar.BG:SetAllPoints(self.Bar)
+	self.Bar.BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	self.Bar.BG:SetVertexColor(R, G, B)
+	self.Bar.BG:SetAlpha(0.2)
 	
 	self.Bar.Spark = self.Bar:CreateTexture(nil, "ARTWORK")
 	self.Bar.Spark:SetScaledSize(1, Settings["experience-height"])
@@ -358,13 +365,13 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Flash.Out:SetDuration(0.5)
 	self.Flash.Out:SetChange(0)
 	
-	--local RR, RG, RB = vUI:HexToRGB("00B4FF")
+	local RR, RG, RB = vUI:HexToRGB("00B4FF")
 	
 	self.Bar.Rested = CreateFrame("StatusBar", nil, self.Bar)
 	self.Bar.Rested:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	self.Bar.Rested:SetFrameLevel(5)
 	self.Bar.Rested:SetAllPoints(self.Bar)
-	self.Bar.Rested:SetStatusBarColor(R, G, B)
+	self.Bar.Rested:SetStatusBarColor(RR, RG, RB)
 	self.Bar.Rested:SetFrameStrata("MEDIUM")
 	self.Bar.Rested:SetAlpha(0.5)
 	
@@ -412,6 +419,15 @@ ExperienceBar:SetScript("OnEvent", function(self, event)
 	end
 end)
 
+local UpdateBarColor = function(value)
+	ExperienceBar.Bar:SetStatusBarColorHex(value)
+	ExperienceBar.Bar.BG:SetVertexColorHex(value)
+end
+
+local UpdateRestedColor = function(value)
+	ExperienceBar.Bar.Rested:SetStatusBarColorHex(value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Experience"])
 	
@@ -435,6 +451,10 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateDropdown("experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
 	Right:CreateDropdown("experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
+	
+	Left:CreateHeader(Language["Colors"])
+	Left:CreateColorSelection("experience-bar-color", Settings["experience-bar-color"], "Experience Color", "", UpdateBarColor)
+	Left:CreateColorSelection("experience-rested-color", Settings["experience-rested-color"], "Rested Color", "", UpdateRestedColor)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
