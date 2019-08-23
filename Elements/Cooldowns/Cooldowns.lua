@@ -139,13 +139,13 @@ function Cooldowns:SPELL_UPDATE_COOLDOWN()
 	end
 end
 
-function Cooldowns:UNIT_SPELLCAST_SUCCEEDED(unit, guid, spellID)
+function Cooldowns:UNIT_SPELLCAST_SUCCEEDED(unit, guid, id)
 	if (unit == "player") then
-		if Blacklist["player"][spellID] then
+		if Blacklist["player"][id] then
 			return
 		end
 		
-		tinsert(Spells, spellID)
+		tinsert(Spells, id)
 	end
 end
 
@@ -192,6 +192,10 @@ local UseContainerItem = function(bag, slot)
 end
 
 function Cooldowns:Load()
+	if (not Settings["cooldowns-enable"]) then
+		return
+	end
+	
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 	self:SetScript("OnEvent", function(self, event, ...)

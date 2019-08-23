@@ -155,6 +155,9 @@ Defaults["experience-rested-color"] = "00B4FF"
 Defaults["minimap-enable"] = true
 Defaults["minimap-size"] = 140
 
+-- Cooldowns
+Defaults["cooldowns-enable"] = true
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false
@@ -166,7 +169,7 @@ Defaults["nameplates-enable"] = true
 Defaults["nameplates-width"] = 134
 Defaults["nameplates-height"] = 14
 Defaults["nameplates-cc-health"] = false
-Defaults["nameplates-topleft-text"] = "[ClassReaction][Name14]"
+Defaults["nameplates-topleft-text"] = "[NameColor][Name14]"
 Defaults["nameplates-topright-text"] = "[LevelColor][Level][Plus]"
 Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
