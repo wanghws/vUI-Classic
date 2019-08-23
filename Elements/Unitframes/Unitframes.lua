@@ -45,7 +45,6 @@ local ShortClasses = {
 	["elite"] = Language["+"],
 	["rareelite"] = Language["R+"],
 	["worldboss"] = Language["B"],
-	["minus"] = Language["-"],
 }
 
 local GetColor = function(p, r1, g1, b1, r2, g2, b2)
@@ -218,6 +217,13 @@ Methods["Name10"] = function(unit)
 	local Name = UnitName(unit)
 	
 	return sub(Name, 1, 10)
+end
+
+Events["Name14"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Methods["Name14"] = function(unit)
+	local Name = UnitName(unit)
+	
+	return sub(Name, 1, 14)
 end
 
 Events["Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
