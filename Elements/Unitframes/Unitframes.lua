@@ -572,14 +572,14 @@ local StylePlayer = function(self, unit)
 	if (vUI.UserClass == "SHAMAN") then
 		local Totems = {}
 		
-		for index = 1, 5 do
-			-- Position and size of the totem indicator
+		for i = 1, 5 do
 			local Totem = CreateFrame("Button", nil, self)
-			Totem:SetSize(40, 40)
-			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", index * Totem:GetWidth(), 0)
+			Totem:SetSize(32, 32)
+			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * Totem:GetWidth(), 0)
 			
 			local Icon = Totem:CreateTexture(nil, "OVERLAY")
 			Icon:SetAllPoints()
+			Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 			
 			local Cooldown = CreateFrame("Cooldown", nil, Totem, "CooldownFrameTemplate")
 			Cooldown:SetAllPoints()
@@ -587,10 +587,9 @@ local StylePlayer = function(self, unit)
 			Totem.Icon = Icon
 			Totem.Cooldown = Cooldown
 			
-			Totems[index] = Totem
+			Totems[i] = Totem
 		end
 		
-		-- Register with oUF
 		self.Totems = Totems
 	end
 	

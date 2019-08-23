@@ -953,6 +953,16 @@ local UpdateOpacity = function(value)
 	vUIChatFrame:SetBackdropColor(R, G, B, (value / 100))
 end
 
+local UpdateChatFont = function()
+	for i = 1, NUM_CHAT_WINDOWS do
+		local Frame = _G["ChatFrame"..i]
+		
+		FCF_SetChatWindowFontSize(nil, Frame, Settings["chat-font-size"])
+		
+		Frame:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
@@ -969,9 +979,9 @@ GUI:AddOptions(function(self)
 	Right:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
 	
 	Left:CreateHeader(Language["Font"])
-	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Chat Font"], "", nil, "Font")
-	Left:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "")
-	Left:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "")
+	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Chat Font"], "", UpdateChatFont, "Font")
+	Left:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "", UpdateChatFont)
+	Left:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "", UpdateChatFont)
 	--:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
 	
 	Left:CreateFooter()
