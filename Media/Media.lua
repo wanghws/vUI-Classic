@@ -15,6 +15,17 @@ Media.TemplateList = {}
 Media.PaletteList = {}
 Media.SoundList = {}
 
+Media.FlagsList = {
+	["Outline"] = "OUTLINE",
+	["Thick Outline"] = "THICKOUTLINE",
+	["Monochrome"] = "MONOCHROME",
+	["None"] = "",
+}
+
+function Media:GetFlagsList()
+	return self.FlagsList
+end
+
 -- Fonts
 function Media:SetFont(name, path, silent)
 	if self.Fonts[name] then

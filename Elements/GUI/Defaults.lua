@@ -132,6 +132,9 @@ Defaults["chat-enable-url-links"] = true
 Defaults["chat-enable-discord-links"] = true
 Defaults["chat-enable-email-links"] = true
 Defaults["chat-enable-friend-links"] = true
+Defaults["chat-font"] = "PT Sans"
+Defaults["chat-font-size"] = 12
+Defaults["chat-font-flags"] = ""
 
 -- Experience
 Defaults["experience-enable"] = true

@@ -119,7 +119,7 @@ local SetStyle = function(self)
 		self.Backdrop:SetBackdropBorderColor(0, 0, 0)
 		self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
 		
-		if self:GetUnit() then
+		if (self.GetUnit and self:GetUnit()) then
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
 		else
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
@@ -131,13 +131,14 @@ local SetStyle = function(self)
 	end
 	
 	self:SetBackdrop(nil) -- To stop blue tooltips
+	self:SetFrameLevel(3)
 	
 	self.Backdrop = CreateFrame("Frame", nil, self)
 	self.Backdrop:SetAllPoints(self)
 	self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
-	self.Backdrop:SetFrameLevel(self:GetFrameLevel() - 1)
+	self.Backdrop:SetFrameLevel(2)
 	self.Backdrop:SetFrameStrata("TOOLTIP")
 	
 	self.OuterBG = CreateFrame("Frame", nil, self)
@@ -145,7 +146,7 @@ local SetStyle = function(self)
 	self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
 	self.OuterBG:SetBackdrop(vUI.BackdropAndBorder)
 	self.OuterBG:SetBackdropBorderColor(0, 0, 0)
-	self.OuterBG:SetFrameLevel(self:GetFrameLevel() - 1)
+	self.OuterBG:SetFrameLevel(1)
 	self.OuterBG:SetFrameStrata("TOOLTIP")
 	self.OuterBG:SetBackdropColorHex(Settings["ui-window-bg-color"])
 	
