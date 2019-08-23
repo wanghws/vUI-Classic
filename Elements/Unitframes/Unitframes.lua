@@ -240,8 +240,8 @@ Methods["Name20"] = function(unit)
 	return sub(Name, 1, 20)
 end
 
-Events["ClassReaction"] = "UNIT_NAME_UPDATE"
-Methods["ClassReaction"] = function(unit)
+Events["NameColor"] = "UNIT_NAME_UPDATE"
+Methods["NameColor"] = function(unit)
 	if UnitIsPlayer(unit) then
 		local _, Class = UnitClass(unit)
 		
@@ -351,39 +351,29 @@ local StyleNamePlate = function(self, unit)
 	RaidTargetIndicator:SetPoint("RIGHT", Health, "LEFT", -5, 0)
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
-	TopLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	TopLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 3)
 	TopLeft:SetJustifyH("LEFT")
-	TopLeft:SetShadowColor(0, 0, 0)
-	TopLeft:SetShadowOffset(1, -1)
 	
 	local Top = Health:CreateFontString(nil, "OVERLAY")
-	Top:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	Top:SetFontInfo(Settings["ui-widget-font"], 12)
 	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 3)
 	Top:SetJustifyH("CENTER")
-	Top:SetShadowColor(0, 0, 0)
-	Top:SetShadowOffset(1, -1)
 	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
-	TopRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	TopRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
 	TopRight:SetJustifyH("RIGHT")
-	TopRight:SetShadowColor(0, 0, 0)
-	TopRight:SetShadowOffset(1, -1)
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
-	BottomRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	BottomRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
 	BottomRight:SetJustifyH("RIGHT")
-	BottomRight:SetShadowColor(0, 0, 0)
-	BottomRight:SetShadowOffset(1, -1)
 	
 	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
-	BottomLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	BottomLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	BottomLeft:SetScaledPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
 	BottomLeft:SetJustifyH("LEFT")
-	BottomLeft:SetShadowColor(0, 0, 0)
-	BottomLeft:SetShadowOffset(1, -1)
 	
 	Health.colorTapping = true
 	Health.colorDisconnected = true
@@ -437,18 +427,14 @@ local StylePlayer = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
-	HealthLeft:SetShadowColor(0, 0, 0)
-	HealthLeft:SetShadowOffset(1, -1)
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
-	HealthRight:SetShadowColor(0, 0, 0)
-	HealthRight:SetShadowOffset(1, -1)
 	
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
 	Combat:SetScaledSize(20, 20)
@@ -484,18 +470,14 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	PowerRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
-	PowerRight:SetShadowColor(0, 0, 0)
-	PowerRight:SetShadowOffset(1, -1)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	PowerLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
-	PowerLeft:SetShadowColor(0, 0, 0)
-	PowerLeft:SetShadowOffset(1, -1)
 	
 	-- Attributes
 	Power.frequentUpdates = true
@@ -530,19 +512,15 @@ local StylePlayer = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Time:SetFontInfo(Settings["ui-widget-font"], 12)
 	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
-	Time:SetShadowColor(0, 0, 0)
-	Time:SetShadowOffset(1, -1)
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
 	Text:SetJustifyH("LEFT")
-	Text:SetShadowColor(0, 0, 0)
-	Text:SetShadowOffset(1, -1)
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
@@ -647,18 +625,14 @@ local StyleTarget = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
-	HealthLeft:SetShadowColor(0, 0, 0)
-	HealthLeft:SetShadowOffset(1, -1)
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
-	HealthRight:SetShadowColor(0, 0, 0)
-	HealthRight:SetShadowOffset(1, -1)
 	
 	-- Target Icon
 	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
@@ -681,7 +655,7 @@ local StyleTarget = function(self, unit)
 	else
 		Health.colorHealth = true
 		
-		self:Tag(HealthLeft, "[ClassReaction][Name15]")
+		self:Tag(HealthLeft, "[NameColor][Name15]")
 		--self:Tag(HealthLeft, "[Name15]")
 	end
 	
@@ -698,18 +672,14 @@ local StyleTarget = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	PowerLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
-	PowerLeft:SetShadowColor(0, 0, 0)
-	PowerLeft:SetShadowOffset(1, -1)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	PowerRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
-	PowerRight:SetShadowColor(0, 0, 0)
-	PowerRight:SetShadowOffset(1, -1)
 	
 	-- Attributes
 	Power.frequentUpdates = true
@@ -744,19 +714,15 @@ local StyleTarget = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Time:SetFontInfo(Settings["ui-widget-font"], 12)
 	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
-	Time:SetShadowColor(0, 0, 0)
-	Time:SetShadowOffset(1, -1)
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
 	Text:SetJustifyH("LEFT")
-	Text:SetShadowColor(0, 0, 0)
-	Text:SetShadowOffset(1, -1)
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
@@ -830,18 +796,14 @@ local StyleTargetTarget = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
-	HealthLeft:SetShadowColor(0, 0, 0)
-	HealthLeft:SetShadowOffset(1, -1)
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
-	HealthRight:SetShadowColor(0, 0, 0)
-	HealthRight:SetShadowOffset(1, -1)
 	
 	-- Target Icon
 	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
@@ -865,7 +827,7 @@ local StyleTargetTarget = function(self, unit)
 	else
 		Health.colorHealth = true
 		
-		self:Tag(HealthLeft, "[ClassReaction][Name10]")
+		self:Tag(HealthLeft, "[NameColor][Name10]")
 		--self:Tag(HealthLeft, "[Name10]")
 	end
 	
@@ -902,18 +864,14 @@ local StylePet = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
-	HealthLeft:SetShadowColor(0, 0, 0)
-	HealthLeft:SetShadowOffset(1, -1)
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
-	HealthRight:SetShadowColor(0, 0, 0)
-	HealthRight:SetShadowOffset(1, -1)
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	

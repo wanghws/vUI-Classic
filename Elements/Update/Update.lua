@@ -27,7 +27,7 @@ local RecentVersions = { -- I guess I only need to put major versions in here, m
 	},
 }
 ]]
-local GetRecentVersionTypes = function(compare)
+local GetRecentMajorVersion = function(compare)
 	local Major = 0
 	
 	for Version, Importance in pairs(RecentVersions) do
@@ -111,7 +111,7 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 		local SenderVersion = tonumber(message)
 		
 		if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
-			local Count = GetRecentVersionTypes(SenderVersion)
+			local Count = GetRecentMajorVersion(SenderVersion)
 			
 			SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
 		end

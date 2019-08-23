@@ -254,8 +254,6 @@ function vUI:Reset()
 	ReloadUI()
 end
 
-vUI.Delimiter = " "
-
 print = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
@@ -267,7 +265,7 @@ print = function(...)
 			if (i == 1) then
 				String = tostring(select(i, ...))
 			else
-				String = String..vUI.Delimiter..tostring(select(i, ...))
+				String = String .. " " .. tostring(select(i, ...))
 			end
 		end
 		
@@ -289,9 +287,9 @@ end
 
 function vUI:print(...)
 	if Core[5]["ui-widget-color"] then
-		print("|cFF"..Core[5]["ui-widget-color"].."vUI|r:", ...)
+		print("|cFF" .. Core[5]["ui-widget-color"] .. "vUI|r:", ...)
 	else
-		print("|cFF"..Core[6]["ui-widget-color"].."vUI|r:", ...)
+		print("|cFF" .. Core[6]["ui-widget-color"] .. "vUI|r:", ...)
 	end
 end
 
@@ -354,6 +352,20 @@ local SetStatusBarColorHex = function(self, hex)
 	end
 end
 
+-- AddMethodByReference(Metatable, "SetFont", "SetFontInfo", SetFontInfo)
+local SetFontInfo = function(self, font, size, flags)
+	local Font, IsPixel = Core[4]:GetFont(font)
+	
+	if IsPixel then
+		self:SetFont(Font, size, "MONOCHROME, OUTLINE")
+		self:SetShadowColor(0, 0, 0, 0)
+	else
+		self:SetFont(Font, size, flags)
+		self:SetShadowColor(0, 0, 0)
+		self:SetShadowOffset(1, -1)
+	end
+end
+
 local AddMethodByReference = function(self, key, newkey, value)
 	if (self[key] and not self[newkey]) then
 		rawset(self, newkey, value)
@@ -382,6 +394,7 @@ local AddMethodsToObject = function(object)
 	AddMethodByReference(Metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
 	AddMethodByReference(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
 	AddMethodByReference(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
+	AddMethodByReference(Metatable, "SetFont", "SetFontInfo", SetFontInfo)
 	
 	Handled[object:GetObjectType()] = true
 end

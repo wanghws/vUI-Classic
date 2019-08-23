@@ -15,10 +15,13 @@ Media.TemplateList = {}
 Media.PaletteList = {}
 Media.SoundList = {}
 
+Media.FontIsPixel = {}
+
 Media.FlagsList = {
 	["Outline"] = "OUTLINE",
 	["Thick Outline"] = "THICKOUTLINE",
 	["Monochrome"] = "MONOCHROME",
+	["Monochrome Outline"] = "MONOCHROME, OUTLINE",
 	["None"] = "",
 }
 
@@ -27,12 +30,16 @@ function Media:GetFlagsList()
 end
 
 -- Fonts
-function Media:SetFont(name, path, silent)
+function Media:SetFont(name, path, silent, ispixel)
 	if self.Fonts[name] then
 		return
 	end
 	
 	self.Fonts[name] = path
+	
+	if ispixel then
+		self.FontIsPixel[name] = true
+	end
 	
 	if (not silent) then
 		self.FontList[name] = path
@@ -43,7 +50,7 @@ end
 
 function Media:GetFont(name)
 	if self.Fonts[name] then
-		return self.Fonts[name]
+		return self.Fonts[name], self.FontIsPixel[name]
 	else
 		return self.Fonts["PT Sans"]
 	end
@@ -52,6 +59,19 @@ end
 function Media:GetFontList()
 	return self.FontList
 	--return LSM:HashTable("font")
+end
+
+function Media:SetFontInfo(fs, font, size, flags)
+	local Font, IsPixel = self:GetFont(font)
+	
+	if IsPixel then
+		fs:SetFont(Font, size, "MONOCHROME, OUTLINE")
+		fs:SetShadowColor(0, 0, 0, 0)
+	else
+		fs:SetFont(Font, size, flags)
+		fs:SetShadowColor(0, 0, 0)
+		fs:SetShadowOffset(1, -1)
+	end
 end
 
 -- Textures
@@ -196,6 +216,7 @@ Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.tt
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
 Media:SetFont("Noto Sans Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedBold.ttf")
+Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", nil, true)
 
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")
@@ -327,6 +348,10 @@ Media:SetTemplate("vUI", {
 	
 	["ui-button-font-color"] = "FFC44D",
 	["ui-button-texture-color"] = "616161",
+	
+	["chat-font"] = "Roboto",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
 
 -- vUI 2
@@ -352,6 +377,10 @@ Media:SetTemplate("vUI 2", {
 	
 	["ui-button-font-color"] = "FFB74D",
 	["ui-button-texture-color"] = "666666",
+	
+	["chat-font"] = "PT Sans",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
 
 -- Conjured Muffin
@@ -377,6 +406,10 @@ Media:SetTemplate("Conjured Muffin", {
 	
 	["ui-button-font-color"] = "3EC5E9",
 	["ui-button-texture-color"] = "757575",
+	
+	["chat-font"] = "Roboto",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
 
 -- Zen
@@ -402,6 +435,10 @@ Media:SetTemplate("Zen", {
 	
 	["ui-button-font-color"] = "00FF99", -- 81D4FA
 	["ui-button-texture-color"] = "757575",
+	
+	["chat-font"] = "Prototype",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
 
 -- Slate
@@ -427,6 +464,10 @@ Media:SetTemplate("Slate", {
 	
 	["ui-button-font-color"] = "FAFAFA",
 	["ui-button-texture-color"] = "78909C",
+	
+	["chat-font"] = "PT Sans",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
 
 -- Unnamed
@@ -452,4 +493,8 @@ Media:SetTemplate("Unnamed", {
 	
 	["ui-button-font-color"] = "A2D471",
 	["ui-button-texture-color"] = "616161",
+	
+	["chat-font"] = "Roboto",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
 })
