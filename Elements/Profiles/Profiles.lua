@@ -218,7 +218,7 @@ function Profiles:CreateProfile(name)
 	return vUIProfiles[name]
 end
 
-function Profiles:RestoreToDefault(name) -- /run vUI:get(7):RestoreToDefault("Test")
+function Profiles:RestoreToDefault(name)
 	if (not vUIProfiles[name]) then
 		return
 	end

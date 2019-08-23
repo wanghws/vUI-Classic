@@ -1,9 +1,8 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
--- Just laying out a super basic throttle system for now, I can add to it later if needed
-local Throttles = CreateFrame("Frame")
-Throttles.Inactive = {}
-Throttles.Active = {}
+local Throttle = vUI:NewModule("Throttle")
+Throttle.Inactive = {}
+Throttle.Active = {}
 
 local tinsert = table.insert
 local tremove = table.remove
@@ -22,7 +21,7 @@ local OnUpdate = function(self, ela)
 	end
 end
 
-function Throttles:Create(name, duration)
+function Throttle:Create(name, duration)
 	if self:Exists(name) then
 		--vUI:print(format('A throttle already exists with the name "%s".', name))
 		
@@ -32,7 +31,7 @@ function Throttles:Create(name, duration)
 	tinsert(self.Inactive, {Name = name, Time = duration, Duration = duration})
 end
 
-function Throttles:IsThrottled(name)
+function Throttle:IsThrottled(name)
 	for i = 1, #self.Active do
 		if (self.Active[i].Name == name) then
 			return true
@@ -42,7 +41,7 @@ function Throttles:IsThrottled(name)
 	return false
 end
 
-function Throttles:GetRemaining(name)
+function Throttle:GetRemaining(name)
 	for i = 1, #self.Active do
 		if (self.Active[i].Name == name) then
 			return self.Active[i].Time
@@ -50,7 +49,7 @@ function Throttles:GetRemaining(name)
 	end
 end
 
-function Throttles:Exists(name)
+function Throttle:Exists(name)
 	for i = 1, #self.Active do
 		if (self.Active[i].Name == name) then
 			return true
@@ -66,7 +65,7 @@ function Throttles:Exists(name)
 	return false
 end
 
-function Throttles:Start(name)
+function Throttle:Start(name)
 	for i = 1, #self.Inactive do
 		if (self.Inactive[i].Name == name) then
 			local Throttle = tremove(self.Inactive, i)
@@ -83,7 +82,7 @@ function Throttles:Start(name)
 	end
 end
 
-function Throttles:Stop(name)
+function Throttle:Stop(name)
 	for i = 1, #self.Active do
 		if (self.Active[i].Name == name) then
 			tinsert(self.Inactive, tremove(self.Active, i))
@@ -96,5 +95,3 @@ function Throttles:Stop(name)
 		self:SetScript("OnUpdate", nil)
 	end
 end
-
-vUI.Throttle = Throttles

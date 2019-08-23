@@ -1,5 +1,7 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
+local Throttle = vUI:GetModule("Throttle")
+
 local HasPrinted = false
 local DevTools = Language["|Hcommand:/reload|h|cFF%s[Reload UI]|r|h |Hcommand:/eventtrace|h|cFF%s[Event Trace]|r|h |Hplayer:%s|h|cFF%s[Whisper Self]|r|h |Hcommand:/framestack|h|cFF%s[Frame Stack]|r|h"]
 
@@ -35,14 +37,14 @@ local UpdateUIScale = function(value)
 end
 
 local GetDiscordLink = function()
-	if (not vUI.Throttle:Exists("get-discord-link")) then
-		vUI.Throttle:Create("get-discord-link", 10)
+	if (not Throttle:Exists("get-discord-link")) then
+		Throttle:Create("get-discord-link", 10)
 	end
 	
-	if (not vUI.Throttle:IsThrottled("get-discord-link")) then
+	if (not Throttle:IsThrottled("get-discord-link")) then
 		print("https://discord.gg/SmT6Yk")
 		
-		vUI.Throttle:Start("get-discord-link")
+		Throttle:Start("get-discord-link")
 	end
 end
 

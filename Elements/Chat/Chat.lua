@@ -520,14 +520,11 @@ local StyleChatFrame = function(frame)
 	local Tab = _G[FrameName.."Tab"]
 	local TabText = _G[FrameName.."TabText"]
 	local EditBox = _G[FrameName.."EditBox"]
-	local ScrollBar = frame.ScrollBar
-	local ScrollToBottom = frame.ScrollToBottomButton
-	local ThumbTexture = _G[FrameName.."ThumbTexture"]
 	
-	if ScrollBar then
-		Kill(ScrollBar)
-		Kill(ScrollToBottom)
-		Kill(ThumbTexture)
+	if frame.ScrollBar then
+		Kill(frame.ScrollBar)
+		Kill(frame.ScrollToBottomButton)
+		Kill(_G[FrameName.."ThumbTexture"])
 	end
 	
 	if Tab.conversationIcon then

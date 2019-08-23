@@ -138,3 +138,10 @@ UpdateZone:SetScript("OnEvent", function(self)
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
 	end
 end)
+
+	local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
+	
+	UNIT_NAME_FONT = WidgetFont
+	NAMEPLATE_FONT = WidgetFont
+	DAMAGE_TEXT_FONT = WidgetFont
+	STANDARD_TEXT_FONT = WidgetFont

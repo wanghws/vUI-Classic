@@ -227,26 +227,31 @@ local OnEnter = function(self)
 		end
 	end
 	
-	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -8)
-	
-	Rested = GetXPExhaustion()
-    XP = UnitXP("player")
-    Max = UnitXPMax("player")
-	
-	local XPColor = Settings["experience-bar-color"]
-	local RestedColor = Settings["experience-rested-color"]
-	
-	if Rested then
-		GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r", XPColor, Comma(XP), Comma(Max), RestedColor, Comma(Rested)))
-	else
-		GameTooltip:AddLine(format("cFF%s%s / %s|r", XPColor, Comma(XP), Comma(Max)))
+	if Settings["experience-show-tooltip"] then
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -8)
+		
+		Rested = GetXPExhaustion()
+		XP = UnitXP("player")
+		Max = UnitXPMax("player")
+		
+		local XPColor = Settings["experience-bar-color"]
+		local RestedColor = Settings["experience-rested-color"]
+		
+		local Perc = floor(XP / Max * 100 + 0.5)
+		if Rested then
+			GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r - |cFF%s%s%%|r", XPColor, Comma(XP), Comma(Max), RestedColor, Comma(Rested), XPColor, Perc))
+		else
+			GameTooltip:AddLine(format("|cFF%s%s / %s|r - |cFF%s%s%%|r", XPColor, Comma(XP), Comma(Max), XPColor, Perc))
+		end
+		
+		GameTooltip:Show()
 	end
-	
-	GameTooltip:Show()
 end
 
 local OnLeave = function(self)
-	GameTooltip:Hide()
+	if Settings["experience-show-tooltip"] then
+		GameTooltip:Hide()
+	end
 	
 	if (Settings["experience-display-progress"] and Settings["experience-progress-visibility"] == "MOUSEOVER") then
 		if self.Progress:IsShown() then
@@ -301,6 +306,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
+	
 	self.LastXP = 0
 	
 	self.HeaderBG = CreateFrame("Frame", nil, self)
@@ -311,7 +317,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.HeaderBG:SetBackdropBorderColor(0, 0, 0)
 	--self.HeaderBG:SetFrameStrata("MEDIUM")
 	
-	self.HeaderBG.Texture = self.HeaderBG:CreateTexture(nil, "OVERLAY")
+	self.HeaderBG.Texture = self.HeaderBG:CreateTexture(nil, "ARTWORK")
 	self.HeaderBG.Texture:SetScaledPoint("TOPLEFT", self.HeaderBG, 1, -1)
 	self.HeaderBG.Texture:SetScaledPoint("BOTTOMRIGHT", self.HeaderBG, -1, 1)
 	self.HeaderBG.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
@@ -333,7 +339,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.BarBG:SetBackdropBorderColor(0, 0, 0)
 	self.BarBG:SetFrameStrata("MEDIUM")
 	
-	self.Texture = self.BarBG:CreateTexture(nil, "OVERLAY")
+	self.Texture = self.BarBG:CreateTexture(nil, "ARTWORK")
 	self.Texture:SetScaledPoint("TOPLEFT", self.BarBG, 1, -1)
 	self.Texture:SetScaledPoint("BOTTOMRIGHT", self.BarBG, -1, 1)
 	self.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
@@ -346,15 +352,21 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.BGAll:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self.BGAll:SetBackdropBorderColor(0, 0, 0)
 	
-	local R, G, B = vUI:HexToRGB("1AE045")
+	--local R, G, B = vUI:HexToRGB("1AE045")
 	
 	self.Bar = CreateFrame("StatusBar", nil, self.BarBG)
 	self.Bar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	self.Bar:SetStatusBarColor(R, G, B)
+	self.Bar:SetStatusBarColorHex(Settings["experience-bar-color"])
 	self.Bar:SetScaledPoint("TOPLEFT", self.BarBG, 1, -1)
 	self.Bar:SetScaledPoint("BOTTOMRIGHT", self.BarBG, -1, 1)
 	self.Bar:SetFrameStrata("MEDIUM")
 	self.Bar:SetFrameLevel(6)
+	
+	self.Bar.Spark = self.Bar:CreateTexture(nil, "OVERLAY")
+	self.Bar.Spark:SetScaledSize(1, Settings["experience-height"])
+	self.Bar.Spark:SetScaledPoint("LEFT", self.Bar:GetStatusBarTexture(), "RIGHT", 0, 0)
+	self.Bar.Spark:SetTexture(Media:GetTexture("Blank"))
+	self.Bar.Spark:SetVertexColor(0, 0, 0)
 	
 	self.Bar.BG = self.Bar:CreateTexture(nil, "ARTWORK")
 	self.Bar.BG:SetAllPoints(self.Bar)
@@ -362,12 +374,6 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	--self.Bar.BG:SetVertexColorHex(Settings["ui-window-main-color"])
 	self.Bar.BG:SetVertexColorHex(Settings["ui-window-main-color"])
 	self.Bar.BG:SetAlpha(0.2)
-	
-	self.Bar.Spark = self.Bar:CreateTexture(nil, "ARTWORK")
-	self.Bar.Spark:SetScaledSize(1, Settings["experience-height"])
-	self.Bar.Spark:SetScaledPoint("LEFT", self.Bar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	self.Bar.Spark:SetTexture(Media:GetTexture("Blank"))
-	self.Bar.Spark:SetVertexColor(0, 0, 0)
 	
 	self.Shine = self.Bar:CreateTexture(nil, "ARTWORK")
 	self.Shine:SetAllPoints(self.Bar:GetStatusBarTexture())
@@ -395,17 +401,15 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Flash.Out:SetDuration(0.5)
 	self.Flash.Out:SetChange(0)
 	
-	local RR, RG, RB = vUI:HexToRGB("00B4FF")
-	
 	self.Bar.Rested = CreateFrame("StatusBar", nil, self.Bar)
 	self.Bar.Rested:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	self.Bar.Rested:SetFrameLevel(5)
 	self.Bar.Rested:SetAllPoints(self.Bar)
-	self.Bar.Rested:SetStatusBarColor(RR, RG, RB)
-	self.Bar.Rested:SetFrameStrata("MEDIUM")
-	self.Bar.Rested:SetAlpha(0.5)
+	self.Bar.Rested:SetStatusBarColorHex("00B4FF")
+	--self.Bar.Rested:SetFrameStrata("MEDIUM")
+	--self.Bar.Rested:SetAlpha(0.5)
 	
-	self.Bar.Rested.Spark = self.Bar.Rested:CreateTexture(nil, "ARTWORK")
+	self.Bar.Rested.Spark = self.Bar.Rested:CreateTexture(nil, "OVERLAY")
 	self.Bar.Rested.Spark:SetScaledSize(1, Settings["experience-height"])
 	self.Bar.Rested.Spark:SetScaledPoint("LEFT", self.Bar.Rested:GetStatusBarTexture(), "RIGHT", 0, 0)
 	self.Bar.Rested.Spark:SetTexture(Media:GetTexture("Blank"))
@@ -478,6 +482,7 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "", UpdateDisplayLevel)
 	Left:CreateCheckbox("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "", UpdateDisplayProgress)
 	Left:CreateCheckbox("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "", UpdateDisplayPercent)
+	Left:CreateCheckbox("experience-show-tooltip", Settings["experience-show-tooltip"], Language["Display Tooltip"], "")
 	Left:CreateCheckbox("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "")
 	
 	Right:CreateHeader(Language["Size"])

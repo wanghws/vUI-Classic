@@ -296,7 +296,7 @@ local OnValueChanged = function(self)
 	
 	if Unit then
 		if UnitIsDead(Unit) then
-			self.HealthValue:SetText("|cFFEE4D4D" .. Language["Dead"] .. "|r")
+			self.HealthValue:SetText("|cFFD64545" .. Language["Dead"] .. "|r")
 		elseif UnitIsGhost(Unit) then
 			self.HealthValue:SetText("|cFFEEEEEE" .. Language["Ghost"] .. "|r")
 		else
@@ -336,14 +336,14 @@ function Tooltips:StyleStatusBar()
 	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
 	
 	HealthBar.HealthValue = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthValue:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	HealthBar.HealthValue:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	HealthBar.HealthValue:SetScaledPoint("LEFT", HealthBar, 3, 0)
 	HealthBar.HealthValue:SetJustifyH("LEFT")
 	HealthBar.HealthValue:SetShadowColor(0, 0, 0)
 	HealthBar.HealthValue:SetShadowOffset(1, -1)
 	
 	HealthBar.HealthPercent = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthPercent:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	HealthBar.HealthPercent:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	HealthBar.HealthPercent:SetScaledPoint("RIGHT", HealthBar, -3, 0)
 	HealthBar.HealthPercent:SetJustifyH("RIGHT")
 	HealthBar.HealthPercent:SetShadowColor(0, 0, 0)

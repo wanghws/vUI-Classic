@@ -76,8 +76,8 @@ Defaults["color-runes"] = "7F7F7F"
 Defaults["color-combo-points"] = "FFF468"
 
 -- Reactions
-Defaults["color-reaction-1"] = "CC4C38" -- Hated
-Defaults["color-reaction-2"] = "CC4C38" -- Hostile
+Defaults["color-reaction-1"] = "BF4400" -- Hated
+Defaults["color-reaction-2"] = "BF4400" -- Hostile
 Defaults["color-reaction-3"] = "BF4400" -- Unfriendly
 Defaults["color-reaction-4"] = "E5B200" -- Neutral
 Defaults["color-reaction-5"] = "009919" -- Friendly
@@ -102,16 +102,16 @@ Defaults["color-poison"] = "009900"
 Defaults["color-none"] = "CC0000"
 
 -- Happiness
-Defaults["color-happiness-1"] = "FF6666"
-Defaults["color-happiness-2"] = "FFFF66"
+Defaults["color-happiness-1"] = "FF3333"
+Defaults["color-happiness-2"] = "FFFF33"
 Defaults["color-happiness-3"] = "66FF66"
 
 -- Difficulty
-Defaults["color-trivial"] = "9E9E9E"
+Defaults["color-trivial"] = "808080"
 Defaults["color-standard"] = "27AE60"
 Defaults["color-difficult"] = "F1C40F"
 Defaults["color-verydifficult"] = "E57A45"
-Defaults["color-impossible"] = "EE4D4D"
+Defaults["color-impossible"] = "FF4444"
 
 -- Action Bars
 Defaults["action-bars-enable"] = true
@@ -138,13 +138,14 @@ Defaults["experience-enable"] = true
 Defaults["experience-display-level"] = false
 Defaults["experience-display-progress"] = false
 Defaults["experience-display-percent"] = false
+Defaults["experience-show-tooltip"] = true
 Defaults["experience-animate"] = true
 Defaults["experience-width"] = 310
 Defaults["experience-height"] = 16
 Defaults["experience-position"] = "TOP"
 Defaults["experience-progress-visibility"] = "ALWAYS"
 Defaults["experience-percent-visibility"] = "ALWAYS"
-Defaults["experience-bar-color"] = "66BB6A" -- 1AE045
+Defaults["experience-bar-color"] = "7DB545" -- 1AE045
 Defaults["experience-rested-color"] = "00B4FF"
 
 -- Minimap

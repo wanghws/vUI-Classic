@@ -145,7 +145,7 @@ end
 Events["HealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
 Methods["HealthValues"] = function(unit)
 	if UnitIsDead(unit) then
-		return "|cFFEE4D4D" .. Language["Dead"] .. "|r"
+		return "|cFFD64545" .. Language["Dead"] .. "|r"
 	elseif UnitIsGhost(unit) then
 		return "|cFFEEEEEE" .. Language["Ghost"] .. "|r"
 	elseif (not UnitIsConnected(unit)) then
@@ -224,7 +224,7 @@ Events["Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 18)
+	return sub(Name, 1, 15)
 end
 
 Events["Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
@@ -478,14 +478,14 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	PowerRight:SetShadowColor(0, 0, 0)
 	PowerRight:SetShadowOffset(1, -1)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	PowerLeft:SetShadowColor(0, 0, 0)
@@ -693,14 +693,14 @@ local StyleTarget = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerLeft:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	PowerLeft:SetShadowColor(0, 0, 0)
 	PowerLeft:SetShadowOffset(1, -1)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	PowerRight:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	PowerRight:SetShadowColor(0, 0, 0)
