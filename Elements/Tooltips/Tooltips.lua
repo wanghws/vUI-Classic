@@ -49,9 +49,7 @@ local UpdateFonts = function(self)
 		local Region = select(i, self:GetRegions())
 		
 		if (Region:GetObjectType() == "FontString" and not Region.Handled) then
-			Region:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-			Region:SetShadowColor(0, 0, 0)
-			Region:SetShadowOffset(1, -1)
+			Region:SetFontInfo(Settings["ui-widget-font"], 12)
 			Region.Handled = true
 		end
 	end
@@ -65,18 +63,14 @@ local UpdateFonts = function(self)
 			local Suffix = _G[Child:GetName() .. "SuffixText"]
 			
 			if (Prefix and not Prefix.Handled) then
-				Prefix:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-				Prefix:SetShadowColor(0, 0, 0)
-				Prefix:SetShadowOffset(1, -1)
+				Prefix:SetFontInfo(Settings["ui-widget-font"], 12)
 				Prefix.SetFont = function() end
 				Prefix.SetFontObject = function() end
 				Prefix.Handled = true
 			end
 			
 			if (Suffix and not Suffix.Handled) then
-				Suffix:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-				Suffix:SetShadowColor(0, 0, 0)
-				Suffix:SetShadowOffset(1, -1)
+				Suffix:SetFontInfo(Settings["ui-widget-font"], 12)
 				Suffix.SetFont = function() end
 				Suffix.SetFontObject = function() end
 				Suffix.Handled = true
@@ -98,9 +92,7 @@ local UpdateFonts = function(self)
 						local Text = _G[Region:GetName() .. "Text"]
 						
 						if Text then
-							Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
-							Text:SetShadowColor(0, 0, 0)
-							Text:SetShadowOffset(1, -1)
+							Text:SetFontInfo(Settings["ui-widget-font"], 12)
 							Text.SetFont = function() end
 							Text.SetFontObject = function() end
 						end
@@ -337,18 +329,14 @@ function Tooltips:StyleStatusBar()
 	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
 	
 	HealthBar.HealthValue = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthValue:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthBar.HealthValue:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthBar.HealthValue:SetScaledPoint("LEFT", HealthBar, 3, 0)
 	HealthBar.HealthValue:SetJustifyH("LEFT")
-	HealthBar.HealthValue:SetShadowColor(0, 0, 0)
-	HealthBar.HealthValue:SetShadowOffset(1, -1)
 	
 	HealthBar.HealthPercent = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthPercent:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	HealthBar.HealthPercent:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthBar.HealthPercent:SetScaledPoint("RIGHT", HealthBar, -3, 0)
 	HealthBar.HealthPercent:SetJustifyH("RIGHT")
-	HealthBar.HealthPercent:SetShadowColor(0, 0, 0)
-	HealthBar.HealthPercent:SetShadowOffset(1, -1)
 	
 	HealthBar:HookScript("OnValueChanged", OnValueChanged)
 	

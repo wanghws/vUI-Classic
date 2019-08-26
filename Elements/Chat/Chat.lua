@@ -361,11 +361,9 @@ local CreateChatFramePanels = function()
 		
 		Button.Text = Button:CreateFontString(nil, "OVERLAY")
 		Button.Text:SetScaledPoint("CENTER", Button, 0, 0)
-		Button.Text:SetFont(Media:GetFont(Settings["ui-button-font"]), 12)
+		Button.Text:SetFontInfo(Settings["ui-button-font"], 12)
 		Button.Text:SetText(TabNames[i])
 		Button.Text:SetTextColor(vUI:HexToRGB(Settings["ui-button-font-color"]))
-		Button.Text:SetShadowColor(0, 0, 0)
-		Button.Text:SetShadowOffset(1, -1)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("LEFT", LeftChatFrameTop, 0, 0)
@@ -549,7 +547,7 @@ local StyleChatFrame = function(frame)
 	Tab:Hide()
 	Tab.Show = function() end
 	
-	TabText:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	TabText:SetFontInfo(Settings["ui-widget-font"], 12)
 	TabText.SetFont = function() end
 	
 	TabText:SetTextColor(1, 1, 1)
@@ -575,7 +573,7 @@ local StyleChatFrame = function(frame)
 	EditBox:ClearAllPoints()
 	EditBox:SetScaledPoint("TOPLEFT", vUIChatFrameBottom, 5, -2)
 	EditBox:SetScaledPoint("BOTTOMRIGHT", vUIChatFrameBottom, -1, 2)
-	EditBox:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
+	EditBox:SetFontInfo(Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
 	EditBox:SetAltArrowKeyMode(false)
 	EditBox:Hide()
 	EditBox:HookScript("OnEditFocusLost", OnEditFocusLost)
@@ -624,10 +622,8 @@ local StyleChatFrame = function(frame)
 	
 	EditBox.header:ClearAllPoints()
 	EditBox.header:SetScaledPoint("CENTER", EditBox.HeaderBackdrop, 0, 0)
-	EditBox.header:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
+	EditBox.header:SetFontInfo(Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
 	EditBox.header:SetJustifyH("CENTER")
-	EditBox.header:SetShadowColor(0, 0, 0)
-	EditBox.header:SetShadowOffset(1, -1)
 	
 	for i = 1, #CHAT_FRAME_TEXTURES do
 		_G[FrameName..CHAT_FRAME_TEXTURES[i]]:SetTexture(nil)
@@ -670,9 +666,18 @@ local MoveChatFrames = function()
 			FCF_SetLocked(Frame, 1)
 		end
 		
-		FCF_SetChatWindowFontSize(nil, Frame, 12)
+		FCF_SetChatWindowFontSize(nil, Frame, Settings["chat-font-size"])
 		
-		Frame:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
+		local Font, IsPixel = Media:GetFont(Settings["chat-font"])
+		
+		if IsPixel then
+			Frame:SetFont(Font, Settings["chat-font-size"], "MONOCHROME, OUTLINE")
+			Frame:SetShadowColor(0, 0, 0, 0)
+		else
+			Frame:SetFont(Font, Settings["chat-font-size"], Settings["chat-font-flags"])
+			Frame:SetShadowColor(0, 0, 0)
+			Frame:SetShadowOffset(1, -1)
+		end
 	end
 	
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
@@ -828,10 +833,7 @@ vUI_ChatInstall = function() -- /run vUI_ChatInstall()
 end
 
 -- Fix Shaman
-RAID_CLASS_COLORS["SHAMAN"].r = 0
-RAID_CLASS_COLORS["SHAMAN"].g = 0.44
-RAID_CLASS_COLORS["SHAMAN"].b = 0.87
-RAID_CLASS_COLORS["SHAMAN"].colorStr = "0070DE"
+RAID_CLASS_COLORS["SHAMAN"] = CreateColor(0, 0.44, 0.87)
 
 ChatClassColorOverrideShown = function()
 	return true
@@ -956,10 +958,19 @@ end
 local UpdateChatFont = function()
 	for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
-		
+
 		FCF_SetChatWindowFontSize(nil, Frame, Settings["chat-font-size"])
 		
-		Frame:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
+		local Font, IsPixel = Media:GetFont(Settings["chat-font"])
+		
+		if IsPixel then
+			Frame:SetFont(Font, Settings["chat-font-size"], "MONOCHROME, OUTLINE")
+			Frame:SetShadowColor(0, 0, 0, 0)
+		else
+			Frame:SetFont(Font, Settings["chat-font-size"], Settings["chat-font-flags"])
+			Frame:SetShadowColor(0, 0, 0)
+			Frame:SetShadowOffset(1, -1)
+		end
 	end
 end
 
@@ -982,7 +993,6 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Chat Font"], "", UpdateChatFont, "Font")
 	Left:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "", UpdateChatFont)
 	Left:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "", UpdateChatFont)
-	--:SetFont(Media:GetFont(Settings["chat-font"]), Settings["chat-font-size"], Settings["chat-font-flags"])
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

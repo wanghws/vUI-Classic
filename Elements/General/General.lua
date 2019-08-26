@@ -42,7 +42,7 @@ local GetDiscordLink = function()
 	end
 	
 	if (not Throttle:IsThrottled("get-discord-link")) then
-		print("https://discord.gg/SmT6Yk")
+		vUI:print("Join our Discord community! https://discord.gg/BKzWPhT")
 		
 		Throttle:Start("get-discord-link")
 	end

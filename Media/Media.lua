@@ -168,7 +168,7 @@ function Media:ApplyTemplate(name)
 	
 	if Profile then
 		for ID, Value in pairs(self.Templates[name]) do
-			if (Value ~= Defaults[ID]) then -- Only saving a value if it's different than default
+			if (Value ~= Defaults[ID]) then
 				Profile[ID] = Value
 			else
 				Profile[ID] = nil
