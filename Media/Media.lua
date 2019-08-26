@@ -487,12 +487,12 @@ Media:SetStyle("Unnamed", {
 	["ui-window-bg-color"] = "3C3C3C",
 	["ui-window-main-color"] = "2C2C2C",
 	
-	["ui-widget-color"] = "A2D471",
+	["ui-widget-color"] = "00CC6A",
 	["ui-widget-bright-color"] = "797D7F",
 	["ui-widget-bg-color"] = "424242",
 	["ui-widget-font-color"] = "FAFAFA",
 	
-	["ui-button-font-color"] = "A2D471",
+	["ui-button-font-color"] = "00CC6A",
 	["ui-button-texture-color"] = "616161",
 	
 	["chat-font"] = "Roboto",

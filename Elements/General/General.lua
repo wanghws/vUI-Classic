@@ -49,7 +49,7 @@ local GetDiscordLink = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["General"])
+	local Left, Right = self:CreateWindow(Language["General"], true)
 	
 	Left:CreateHeader(Language["Welcome"])
 	Left:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")

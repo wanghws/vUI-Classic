@@ -3519,7 +3519,7 @@ SlashCmdList["VUI"] = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Styles"], true)
+	local Left, Right = self:CreateWindow(Language["Styles"])
 	
 	Left:CreateHeader(Language["Styles"])
 	Left:CreateDropdown("ui-style", Settings["ui-style"], Media:GetStyleList(), Language["Select Style"], "", function(v) Media:ApplyStyle(v); ReloadUI(); end):RequiresReload(true)
