@@ -8,8 +8,6 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 local BUTTON_SIZE = 32
 local SPACING = 2
 
-local PET_BUTTON_SIZE = 26
-
 local BOTTOM_WIDTH = ((BUTTON_SIZE * 12) + (SPACING * 14))
 local BOTTOM_HEIGHT = ((BUTTON_SIZE * 2) + (SPACING * 4))
 
@@ -17,7 +15,7 @@ local SIDE_WIDTH = ((BUTTON_SIZE * 3) + (SPACING * 5))
 local SIDE_HEIGHT = ((BUTTON_SIZE * 12) + (SPACING * 14))
 
 local PET_WIDTH = ((BUTTON_SIZE * 1) + (SPACING * 3))
-local PET_HEIGHT = ((PET_BUTTON_SIZE * 12) + (SPACING * 14))
+local PET_HEIGHT = ((BUTTON_SIZE * 10) + (SPACING * 12))
 
 local Num = NUM_ACTIONBAR_BUTTONS
 
@@ -34,18 +32,15 @@ local Kill = function(object)
 	object:Hide()
 end
 
-local SkinButton = function(button, pet)
+local SkinButton = function(button)
 	if button.IsSkinned then
 		return
 	end
-	
-	local FloatingBG = _G[button:GetName() .. "FloatingBG"]
 	
 	button:SetNormalTexture("")
 	
 	if button.Border then
 		button.Border:SetTexture(nil)
-		--button.Border.SetTexture = function() end
 	end
 	
 	if button.icon then
@@ -55,12 +50,11 @@ local SkinButton = function(button, pet)
 		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	end
 	
+	if _G[button:GetName() .. "FloatingBG"] then
+		Kill(_G[button:GetName() .. "FloatingBG"])
+	end
+	
 	if button.HotKey then
-		--[[if (not HKOn) then
-			button.HotKey:Hide()
-			button.HotKey.Show = function() end
-		end]]
-		
 		button.HotKey:ClearAllPoints()
 		button.HotKey:SetScaledPoint("TOPLEFT", button, 2, -2)
 		button.HotKey:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
@@ -123,10 +117,6 @@ local SkinButton = function(button, pet)
 		if (not Settings["action-bars-show-count"]) then
 			button.Count:Hide()
 		end
-	end
-	
-	if FloatingBG then
-		Kill(FloatingBG)
 	end
 	
 	button.Backdrop = CreateFrame("Frame", nil, button)
@@ -197,16 +187,6 @@ local SkinButton = function(button, pet)
 	button:SetFrameLevel(15)
 	button:SetFrameStrata("MEDIUM")
 	
-	--[[if button.CountBG then
-		if (button.Count and button.Count.GetText and button.Count:GetText()) then
-			button.CountBG:SetScaledWidth(button.Count:GetWidth() + 6)
-			
-			button.CountBG:Show()
-		else
-			button.CountBG:Hide()
-		end
-	end]]
-	
 	button.IsSkinned = true
 end
 
@@ -218,35 +198,30 @@ local ShowGridAndSkin = function()
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", 1)
 		Button:SetAttribute("statehidden", true)
 		Button:Show()
-		--ActionButton_ShowGrid(Button)
 		SkinButton(Button)
 	end
 end
@@ -425,6 +400,77 @@ local CreateBar5 = function()
 	end
 end
 
+local SkinPetButton = function(button)
+	if button.Styled then
+		return
+	end
+	
+	local Name = button:GetName()
+	local Icon = _G[Name .. "Icon"]
+	local Normal2 = _G[Name .. "NormalTexture2"]
+	local HotKey = _G[Name .. "HotKey"]
+	local Shine = _G[Name .. "Shine"]
+	
+	Shine:SetScaledSize(BUTTON_SIZE - 6, BUTTON_SIZE - 6)
+	Shine:ClearAllPoints()
+	Shine:SetPoint("CENTER", button, 0, 0)
+	
+	--SkinButton(button)
+	
+	Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	Icon:SetDrawLayer("BACKGROUND", 7)
+	
+	button:SetNormalTexture("")
+	button.SetNormalTexture = function() end
+	
+	_G[Name.."Flash"]:SetTexture("")
+	
+	if Normal2 then
+		Normal2:ClearAllPoints()
+		Normal2:SetPoint("TOPLEFT")
+		Normal2:SetPoint("BOTTOMRIGHT")
+	end
+	
+	button.Styled = true
+end
+
+local CreatePetBar = function()
+	PetActionBarFrame:UnregisterEvent("PET_BAR_SHOWGRID")
+	PetActionBarFrame:UnregisterEvent("PET_BAR_HIDEGRID")
+	PetActionBarFrame.showgrid = 1
+	
+	local Max = NUM_PET_ACTION_SLOTS
+	
+	local PetActionBar = CreateFrame("Frame", "vUIPetActionBar", vUIPetActionBarsPanel, "SecureHandlerStateTemplate")
+	PetActionBar:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * Max) + (SPACING * (Max - 1))))
+	PetActionBar:SetScaledPoint("CENTER", vUIPetActionBarsPanel, 0, 0)
+	PetActionBar:SetFrameStrata("MEDIUM")
+	
+	for i = 1, Max do
+		local Button = _G["PetActionButton"..i]
+		Button:SetScaledSize(BUTTON_SIZE, BUTTON_SIZE)
+		Button:SetParent(vUIPetActionBarsPanel)
+		Button:ClearAllPoints()
+		
+		SkinPetButton(Button)
+		
+		if (i == 1) then
+			Button:SetScaledPoint("TOP", PetActionBar, 0, 0)
+		else
+			Button:SetScaledPoint("TOP", PetActionBar[i-1], "BOTTOM", 0, -SPACING)
+		end
+		
+		PetActionBar:SetAttribute("addchild", Button)
+		PetActionBar[i] = Button
+	end
+	
+	RegisterStateDriver(vUIPetActionBarsPanel, "visibility", "[pet,nooverridebar,nobonusbar:5] show; hide")
+end
+
+local CreateStanceBar = function()
+	
+end
+
 local CreateBarPanels = function()
 	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
 	BottomPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
@@ -452,7 +498,6 @@ local CreateBarPanels = function()
 	PetPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	PetPanel:SetBackdropBorderColor(0, 0, 0)
 	PetPanel:SetFrameStrata("LOW")
-	PetPanel:Hide()
 	
 	if (not Settings["action-bars-show-side-bg"]) then
 		SidePanel:SetAlpha(0)
@@ -645,6 +690,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBar3()
 	CreateBar4()
 	CreateBar5()
+	CreatePetBar()
 	
 	SetActionBarToggles(1, 1, 1, 1)
 	MultiActionBar_Update()
