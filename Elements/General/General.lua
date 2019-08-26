@@ -54,14 +54,14 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Welcome"])
 	Left:CreateCheckbox("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "")
 	Left:CreateCheckbox("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
-	Left:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Tools"], "", UpdateDisplayDevTools)
+	Left:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Chat Tools"], "", UpdateDisplayDevTools)
 	
 	Left:CreateHeader("Discord")
 	Left:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
 	
-	Right:CreateHeader(Language["Language"])
+	--[[Right:CreateHeader(Language["Language"])
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
-	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("put something here. print a link, or pop up a window or something.") end)
+	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
 	
 	Right:CreateHeader(Language["Scale"])
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale)

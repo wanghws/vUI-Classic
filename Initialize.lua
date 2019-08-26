@@ -126,6 +126,20 @@ local Resolution = GetCurrentResolution()
 local ScreenHeight
 local Scale = 1
 
+function vUI:UpdateScreenHeight()
+	Resolution = GetCurrentResolution()
+
+	if (Resolution > 0) then -- A fullscreen resolution
+		self.ScreenResolution = select(Resolution, GetScreenResolutions())
+		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+	else -- Windowed
+		ScreenHeight = UIParent:GetHeight()
+		self.ScreenResolution = UIParent:GetWidth() .. "x" .. ScreenHeight
+	end
+end
+
+vUI:UpdateScreenHeight()
+
 local GetScale = function(x)
 	return Scale * x
 end
@@ -136,15 +150,7 @@ function vUI:SetScale(x)
 	
 	UIParent:SetScale(x)
 	
-	Resolution = GetCurrentResolution()
-	
-	if (Resolution > 0) then -- A fullscreen resolution
-		vUI.ScreenResolution = select(Resolution, GetScreenResolutions())
-		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
-	else -- Windowed
-		ScreenHeight = UIParent:GetHeight()
-		vUI.ScreenResolution = UIParent:GetWidth() .. "x" .. ScreenHeight
-	end
+	self:UpdateScreenHeight()
 	
 	Scale = (768 / ScreenHeight) / x
 	
@@ -184,15 +190,15 @@ function vUI:UnitDifficultyColor(unit)
 	local Difference = UnitLevel(unit) - UnitLevel("player")
 	
 	if (Difference >= 5) then
-		return "|cFF"..Core[5]["color-impossible"]
+		return "|cFF" .. Core[5]["color-impossible"]
 	elseif (Difference >= 3) then
-		return "|cFF"..Core[5]["color-verydifficult"]
+		return "|cFF" .. Core[5]["color-verydifficult"]
 	elseif (Difference >= -2) then
-		return "|cFF"..Core[5]["color-difficult"]
+		return "|cFF" .. Core[5]["color-difficult"]
 	elseif (-Difference <= GetQuestGreenRange()) then
-		return "|cFF"..Core[5]["color-standard"]
+		return "|cFF" .. Core[5]["color-standard"]
 	else
-		return "|cFF"..Core[5]["color-trivial"]
+		return "|cFF" .. Core[5]["color-trivial"]
 	end
 end
 
@@ -220,15 +226,6 @@ end
 
 function vUI:RGBToHex(r, g, b)
 	return format("%02x%02x%02x", r * 255, g * 255, b * 255)
-end
-
-function vUI:RGBToHSV(r, g, b) -- https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-	local R = r / 255
-	local G = g / 255
-	local B = b / 255
-	
-	local Min = min(R, G, B)
-	local Max = max(R, G, B)
 end
 
 function vUI:FormatTime(seconds)

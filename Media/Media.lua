@@ -4,14 +4,14 @@ local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 Media.Fonts = {}
 Media.Textures = {}
 Media.Highlights = {}
-Media.Templates = {}
+Media.Styles = {}
 Media.Palettes = {}
 Media.Sounds = {}
 
 Media.FontList = {}
 Media.TextureList = {}
 Media.HighlightList = {}
-Media.TemplateList = {}
+Media.StyleList = {}
 Media.PaletteList = {}
 Media.SoundList = {}
 
@@ -128,12 +128,12 @@ function Media:GetHighlightList()
 end
 
 -- Templates
-function Media:SetTemplate(name, info, silent)
-	if self.Templates[name] then
+function Media:SetStyle(name, info, silent)
+	if self.Styles[name] then
 		return
 	end
 	
-	self.Templates[name] = info
+	self.Styles[name] = info
 	
 	if (not silent) then
 		local Key = name
@@ -143,31 +143,31 @@ function Media:SetTemplate(name, info, silent)
 			Key = format("|cFF%s%s|r", info["ui-widget-color"], name)
 		end
 		
-		self.TemplateList[Key] = name
+		self.StyleList[Key] = name
 	end
 end
 
-function Media:GetTemplate(name)
-	if self.Templates[name] then
-		return self.Templates[name]
+function Media:GetStyle(name)
+	if self.Styles[name] then
+		return self.Styles[name]
 	else
-		return self.Templates["|cFFFFD54FvUI|r"]
+		return self.Styles["|cFFFFD54FvUI|r"]
 	end
 end
 
-function Media:GetTemplateList()
-	return self.TemplateList
+function Media:GetStyleList()
+	return self.StyleList
 end
 
-function Media:ApplyTemplate(name)
-	if (not self.Templates[name]) then
+function Media:ApplyStyle(name)
+	if (not self.Styles[name]) then
 		return vUI:print(format('No template exists with the name "%s"', name))
 	end
 	
 	local Profile = Profiles:GetActiveProfile()
 	
 	if Profile then
-		for ID, Value in pairs(self.Templates[name]) do
+		for ID, Value in pairs(self.Styles[name]) do
 			if (Value ~= Defaults[ID]) then
 				Profile[ID] = Value
 			else
@@ -323,10 +323,10 @@ Media:SetPalette("Flat", Flat)
 -- Templates
 
 -- None
-Media:SetTemplate("None", {})
+Media:SetStyle("None", {})
 
 -- vUI Default
-Media:SetTemplate("vUI", {
+Media:SetStyle("vUI", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
@@ -355,7 +355,7 @@ Media:SetTemplate("vUI", {
 })
 
 -- vUI 2
-Media:SetTemplate("vUI 2", {
+Media:SetStyle("vUI 2", {
 	["ui-widget-font"] = "PT Sans",
 	["ui-header-font"] = "PT Sans",
 	["ui-button-font"] = "PT Sans",
@@ -384,7 +384,7 @@ Media:SetTemplate("vUI 2", {
 })
 
 -- Conjured Muffin
-Media:SetTemplate("Conjured Muffin", {
+Media:SetStyle("Conjured Muffin", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
@@ -413,7 +413,7 @@ Media:SetTemplate("Conjured Muffin", {
 })
 
 -- Zen
-Media:SetTemplate("Zen", {
+Media:SetStyle("Zen", {
 	["ui-widget-font"] = "Prototype",
 	["ui-header-font"] = "Prototype",
 	["ui-button-font"] = "Prototype",
@@ -442,7 +442,7 @@ Media:SetTemplate("Zen", {
 })
 
 -- Slate
-Media:SetTemplate("Slate", {
+Media:SetStyle("Slate", {
 	["ui-widget-font"] = "PT Sans",
 	["ui-header-font"] = "PT Sans",
 	["ui-button-font"] = "PT Sans",
@@ -471,7 +471,7 @@ Media:SetTemplate("Slate", {
 })
 
 -- Unnamed
-Media:SetTemplate("Unnamed", {
+Media:SetStyle("Unnamed", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",

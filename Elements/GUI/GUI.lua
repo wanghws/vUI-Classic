@@ -176,7 +176,7 @@ GUI.Widgets.CreateLine = function(self, text)
 	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Anchor.Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Text:SetJustifyH("LEFT")
-	Anchor.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
+	Anchor.Text:SetText("|cFF" .. Settings["ui-widget-font-color"] .. text .. "|r")
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -192,7 +192,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
 	Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Text:SetJustifyH("LEFT")
-	Text:SetText("|cFF"..Settings["ui-widget-font-color"]..text.."|r")
+	Text:SetText("|cFF" .. Settings["ui-widget-font-color"] .. text .. "|r")
 	
 	tinsert(self.Widgets, Anchor)]]
 	
@@ -209,14 +209,14 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	Anchor.Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Anchor.Left:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Left:SetJustifyH("LEFT")
-	Anchor.Left:SetText("|cFF"..Settings["ui-widget-font-color"]..left.."|r")
+	Anchor.Left:SetText("|cFF" .. Settings["ui-widget-font-color"] .. left .. "|r")
 	
 	Anchor.Right = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
 	Anchor.Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Anchor.Right:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Right:SetJustifyH("RIGHT")
-	Anchor.Right:SetText("|cFF"..Settings["ui-widget-font-color"]..right.."|r")
+	Anchor.Right:SetText("|cFF" .. Settings["ui-widget-font-color"] .. right .. "|r")
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -3519,10 +3519,10 @@ SlashCmdList["VUI"] = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Templates"], true)
+	local Left, Right = self:CreateWindow(Language["Styles"], true)
 	
-	Left:CreateHeader(Language["Templates"])
-	Left:CreateDropdown("ui-template", Settings["ui-template"], Media:GetTemplateList(), Language["Select Template"], "", function(v) Media:ApplyTemplate(v); ReloadUI(); end):RequiresReload(true)
+	Left:CreateHeader(Language["Styles"])
+	Left:CreateDropdown("ui-style", Settings["ui-style"], Media:GetStyleList(), Language["Select Style"], "", function(v) Media:ApplyStyle(v); ReloadUI(); end):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Headers"])
 	Left:CreateColorSelection("ui-header-font-color", Settings["ui-header-font-color"], Language["Text Color"], "")
@@ -3538,8 +3538,8 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
-	Right:CreateHeader("What is a template?")
-	Right:CreateLine("Templates store media settings such as fonts,")
+	Right:CreateHeader("What is a style?")
+	Right:CreateLine("Styles store media settings such as fonts,")
 	Right:CreateLine("textures, and colors to create an overall theme.")
 	
 	Right:CreateHeader(Language["Console"])

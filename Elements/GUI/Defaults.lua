@@ -14,7 +14,7 @@ Defaults["ui-picker-palette"] = "Default"
 Defaults["ui-picker-format"] = "Hex"
 Defaults["ui-picker-show-texture"] = true
 
-Defaults["ui-template"] = "None"
+Defaults["ui-style"] = "vUI"
 
 Defaults["ui-header-font"] = "Roboto"
 Defaults["ui-widget-font"] = "Roboto"
@@ -58,7 +58,7 @@ Defaults["color-warrior"] = "C79C6E" -- B28B62
 -- Power Types
 Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
 Defaults["color-rage"] = "E53935" -- FF0000 ^
-Defaults["color-energy"] = "#FFEB3B" -- FFFF00 ^
+Defaults["color-energy"] = "FFEB3B" -- FFFF00 ^
 Defaults["color-focus"] = "FF7F3F"
 Defaults["color-fuel"] = "008C7F"
 Defaults["color-insanity"] = "6600CC"
