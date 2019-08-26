@@ -130,9 +130,9 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 	end
 end
 
-Update:RegisterEvent("VARIABLES_LOADED")
+--[[Update:RegisterEvent("VARIABLES_LOADED")
 Update:RegisterEvent("PLAYER_ENTERING_WORLD")
-Update:RegisterEvent("CHAT_MSG_ADDON")
+Update:RegisterEvent("CHAT_MSG_ADDON")]]
 Update:SetScript("OnEvent", function(self, event, ...)
 	if self[event] then
 		self[event](self, event, ...)
