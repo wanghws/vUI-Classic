@@ -325,10 +325,8 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.HeaderBG.Text = self.HeaderBG:CreateFontString(nil, "OVERLAY")
 	self.HeaderBG.Text:SetScaledPoint("CENTER", self.HeaderBG, 0, 0)
-	self.HeaderBG.Text:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	self.HeaderBG.Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	self.HeaderBG.Text:SetJustifyH("CENTER")
-	self.HeaderBG.Text:SetShadowColor(0, 0, 0)
-	self.HeaderBG.Text:SetShadowOffset(1, -1)
 	self.HeaderBG.Text:SetText(format("|cFF%s%s:|r", Settings["ui-widget-color"], Language["Level"]))
 	
 	self.BarBG = CreateFrame("Frame", nil, self)
@@ -414,27 +412,21 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.Progress = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Progress:SetScaledPoint("LEFT", self.Bar, 5, 0)
-	self.Progress:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	self.Progress:SetFontInfo(Settings["ui-widget-font"], 12)
 	self.Progress:SetJustifyH("LEFT")
-	self.Progress:SetShadowColor(0, 0, 0)
-	self.Progress:SetShadowOffset(1, -1)
 	
 	self.Resting = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Resting:SetScaledPoint("CENTER", self.Bar, 0, 0)
-	self.Resting:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	self.Resting:SetFontInfo(Settings["ui-widget-font"], 12)
 	self.Resting:SetJustifyH("CENTER")
-	self.Resting:SetShadowColor(0, 0, 0)
-	self.Resting:SetShadowOffset(1, -1)
 	self.Resting:SetTextColorHex(Settings["experience-rested-color"])
 	
 	-- Add fade to self.Progress
 	
 	self.Percentage = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Percentage:SetScaledPoint("RIGHT", self.Bar, -5, 0)
-	self.Percentage:SetFont(Media:GetFont(Settings["ui-widget-font"]), 12)
+	self.Percentage:SetFontInfo(Settings["ui-widget-font"], 12)
 	self.Percentage:SetJustifyH("RIGHT")
-	self.Percentage:SetShadowColor(0, 0, 0)
-	self.Percentage:SetShadowOffset(1, -1)
 	
 	-- Add fade to self.Percentage
 	

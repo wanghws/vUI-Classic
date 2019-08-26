@@ -1045,14 +1045,14 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], ""):RequiresReload(true)
 	
-	Left:CreateHeader(Language["Player"])
+	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	Left:CreateCheckbox("unitframes-player-cc-health", Settings["unitframes-player-cc-health"], Language["Dark Scheme"], "")
 	
 	Right:CreateHeader(Language["Target"])
 	Right:CreateCheckbox("unitframes-target-show-name", Settings["unitframes-target-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	Right:CreateCheckbox("unitframes-target-cc-health", Settings["unitframes-target-cc-health"], Language["Dark Scheme"], "")
-	
+	]]
 	Left:CreateFooter()
 	Right:CreateFooter()
 end)

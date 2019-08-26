@@ -4,7 +4,7 @@ local Tracker = CreateFrame("Frame")
 Tracker:RegisterEvent("PLAYER_ENTERING_WORLD")
 Tracker:SetScript("OnEvent", function(self, event)
 	ObjectiveTrackerFrame:ClearAllPoints()
-	ObjectiveTrackerFrame:SetScaledPoint("RIGHT", UIParent, -260, 0)
+	ObjectiveTrackerFrame:SetScaledPoint("RIGHT", UIParent, -300, 0)
 	
 	self:UnregisterEvent(event)
 end)

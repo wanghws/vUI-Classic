@@ -50,10 +50,8 @@ local CreateMinimap = function()
 	
 	ZoneFrame.Text = ZoneFrame:CreateFontString(nil, "OVERLAY", 7)
 	ZoneFrame.Text:SetScaledPoint("CENTER", ZoneFrame, 0, -1)
-	ZoneFrame.Text:SetFont(Media:GetFont(Settings["ui-header-font"]), 12)
+	ZoneFrame.Text:SetFontInfo(Settings["ui-header-font"], 12)
 	ZoneFrame.Text:SetScaledSize(ZoneFrame:GetWidth() - 12, 20)
-	ZoneFrame.Text:SetShadowColor(0, 0, 0)
-	ZoneFrame.Text:SetShadowOffset(1, -1)
 	
 	Frame.Stats = CreateFrame("Frame", nil, Minimap)
 	Frame.Stats:SetAllPoints(ZoneFrame)
