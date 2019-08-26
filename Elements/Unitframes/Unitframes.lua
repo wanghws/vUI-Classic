@@ -440,6 +440,13 @@ local StylePlayer = function(self, unit)
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
 	
+    local LeaderIndicator = Health:CreateTexture(nil, "OVERLAY")
+    LeaderIndicator:SetSize(16, 16)
+    LeaderIndicator:SetPoint("LEFT", Health, "TOPLEFT", 3, 0)
+    LeaderIndicator:SetTexture(Media:GetTexture("Leader"))
+    LeaderIndicator:SetVertexColorHex("FFEB3B")
+    LeaderIndicator:Hide()
+	
 	--[[local RaidTargetIndicator = Health:CreateTexture(nil, "OVERLAY")
 	RaidTargetIndicator:SetScaledSize(16, 16)
 	RaidTargetIndicator:SetScaledPoint("CENTER", Health, "TOP")]]
@@ -596,8 +603,44 @@ local StylePlayer = function(self, unit)
 	self.Combat = Combat
 	self.Castbar = Castbar
 	--self.RaidTargetIndicator = RaidTargetIndicator
+	self.LeaderIndicator = LeaderIndicator
 	
 	self:UpdateTags()
+end
+
+local PostCreateIcon = function(unit, button)
+	button:SetBackdrop(vUI.Backdrop)
+	button:SetBackdropColor(0, 0, 0)
+	button:SetFrameLevel(6)
+	
+	--[[button.remaining = button:CreateFontString(nil, "OVERLAY")
+	button.remaining:SetFont(Font, 12, "OUTLINE")
+	button.remaining:SetScaledPoint("TOPLEFT", 2, -1)
+	button.remaining:SetJustifyH("LEFT")
+	]]
+	button.cd.noOCC = true
+	button.cd.noCooldownCount = true
+	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
+	button.cd:ClearAllPoints()
+	button.cd:SetScaledPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+	button.cd:SetScaledPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
+	button.cd:SetHideCountdownNumbers(true)
+	
+	button.icon:SetScaledPoint("TOPLEFT", 1, -1)
+	button.icon:SetScaledPoint("BOTTOMRIGHT", -1, 1)
+	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	button.icon:SetDrawLayer("ARTWORK")
+	
+	button.count:SetScaledPoint("BOTTOMRIGHT", 2, 2)
+	button.count:SetJustifyH("RIGHT")
+	button.count:SetFontInfo(Settings["ui-widget-font"], 12)
+	
+	button.overlayFrame = CreateFrame("Frame", nil, button)
+	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	 
+	
+	button.overlay:SetParent(button.overlayFrame)
+	button.count:SetParent(button.overlayFrame)
+	--button.remaining:SetParent(button.overlayFrame)
 end
 
 local StyleTarget = function(self, unit)
@@ -691,6 +734,33 @@ local StyleTarget = function(self, unit)
 		Power.colorClass = true
 	end
 	
+	-- Auras
+	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
+	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+	
+	Buffs:SetScaledSize(230, 30)
+	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
+	Buffs.size = 30
+	Buffs.num = 8
+	Buffs.spacing = -1
+	Buffs.initialAnchor = "TOPLEFT"
+	Buffs["growth-y"] = "UP"
+	Buffs["growth-x"] = "RIGHT"
+	Buffs.PostCreateIcon = PostCreateIcon
+	--Buffs.PostUpdateIcon = vUI_UF.PostUpdateAura
+	
+	Debuffs:SetScaledSize(230, 30)
+	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
+	Debuffs.size = 30
+	Debuffs.num = 8
+	Debuffs.spacing = -1
+	Debuffs.initialAnchor = "TOPRIGHT"
+	Debuffs["growth-y"] = "UP"
+	Debuffs["growth-x"] = "LEFT"
+	Debuffs.PostCreateIcon = PostCreateIcon
+	--Debuffs.PostUpdateIcon = vUI_UF.PostUpdateAura
+	Debuffs.onlyShowPlayer = true
+	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
     Castbar:SetScaledSize(250, 20)
@@ -768,6 +838,8 @@ local StyleTarget = function(self, unit)
 	self.PowerLeft = PowerLeft
 	self.PowerRight = PowerRight
 	self.Combat = Combat
+	self.Buffs = Buffs
+	self.Debuffs = Debuffs
 	self.Castbar = Castbar
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
