@@ -18,7 +18,7 @@ end
 
 local Languages = {
 	["English"] = "enUS",
-	--[[["German"] = "deDE",
+	["German"] = "deDE",
 	["Spanish (Spain)"] = "esES",
 	["Spanish (Mexico)"] = "esMX",
 	["French"] = "frFR",
@@ -27,7 +27,7 @@ local Languages = {
 	["Portuguese (Brazil)"] = "ptBR",
 	["Russian"] = "ruRU",
 	["Chinese (Simplified)"] = "zhCN",
-	["Chinese (Traditional)"] = "zhTW",]]
+	["Chinese (Traditional)"] = "zhTW",
 }
 
 local UpdateUIScale = function(value)
@@ -59,9 +59,9 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader("Discord")
 	Left:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
 	
-	--[[Right:CreateHeader(Language["Language"])
+	Right:CreateHeader(Language["Language"])
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
-	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
+	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)
 	
 	Right:CreateHeader(Language["Scale"])
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale)

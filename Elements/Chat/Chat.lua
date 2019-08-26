@@ -122,14 +122,14 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", FindLinks)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_CONVERSATION", FindLinks)
 
 -- Scooping the GMOTD to see if there's any yummy links.
-ChatFrame_DisplayGMOTD = function(frame, gmotd)
-	if (gmotd and (gmotd ~= "")) then
-		local info = ChatTypeInfo["GUILD"]
+ChatFrame_DisplayGMOTD = function(frame, message)
+	if (message and (message ~= "")) then
+		local Info = ChatTypeInfo["GUILD"]
 		
-		gmotd = format(GUILD_MOTD_TEMPLATE, gmotd)
-		gmotd = FormatLinks(gmotd)
+		message = format(GUILD_MOTD_TEMPLATE, message)
+		message = FormatLinks(message)
 		
-		frame:AddMessage(gmotd, info.r, info.g, info.b, info.id)
+		frame:AddMessage(message, Info.r, Info.g, Info.b, Info.id)
 	end
 end
 
@@ -194,64 +194,6 @@ ItemRefTooltip.SetHyperlink = function(self, link, text, button, chatFrame)
 	end
 end
 
-local TabButton_OnEnter = function(self)
-	self.Text:SetTextColor(vUI:HexToRGB(Settings["ui-widget-font-color"]))
-end
-
-local TabButton_OnLeave = function(self)
-	self.Text:SetTextColor(vUI:HexToRGB(Settings["ui-button-font-color"]))
-end
-
-local TabButton_OnMouseDown = function(self)
-	self.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-bright-color"]))
-end
-
-local TabButton_OnMouseUp = function(self, button)
-	self.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
-	
-	if (self.ID == 3) then
-		if (self.Anim and self.Anim:IsPlaying()) then
-			self.Anim:Stop()
-			self.GlowParent:SetAlpha(0)
-		end
-	end
-	
-    SELECTED_CHAT_FRAME = self.Frame
-	FCF_SelectDockFrame(self.Frame)
-	FCF_DockUpdate()
-end
-
-local TabButton_OnEvent = function(self, event)
-	if self.Frame:IsShown() then
-		return
-	end
-	
-	if (not self.Anim) then
-		self.Anim = CreateAnimationGroup(self.GlowParent)
-		self.Anim:SetLooping(true)
-		
-		self.FadeIn = self.Anim:CreateAnimation("Fade")
-		self.FadeIn:SetDuration(1)
-		self.FadeIn:SetEasing("inout")
-		self.FadeIn:SetChange(1)
-		self.FadeIn:SetOrder(1)
-		
-		self.FadeOut = self.Anim:CreateAnimation("Fade")
-		self.FadeOut:SetDuration(1)
-		self.FadeOut:SetEasing("inout")
-		self.FadeOut:SetChange(0)
-		self.FadeOut:SetOrder(2)
-	end
-	
-	if (event == "CHAT_MSG_WHISPER") then
-		self.Glow:SetVertexColor(ChatTypeInfo["WHISPER"].r, ChatTypeInfo["WHISPER"].g, ChatTypeInfo["WHISPER"].b)
-	else
-		self.Glow:SetVertexColor(ChatTypeInfo["BN_WHISPER"].r, ChatTypeInfo["BN_WHISPER"].g, ChatTypeInfo["BN_WHISPER"].b)
-	end
-	
-	self.Anim:Play()
-end
-
 local CreateChatFramePanels = function()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
@@ -283,7 +225,7 @@ local CreateChatFramePanels = function()
 	LeftChatFrameTop:SetBackdrop(vUI.BackdropAndBorder)
 	LeftChatFrameTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	LeftChatFrameTop:SetBackdropBorderColor(0, 0, 0)
-	LeftChatFrameTop:SetFrameStrata("LOW")
+	LeftChatFrameTop:SetFrameStrata("MEDIUM")
 	
 	LeftChatFrameTop.Texture = LeftChatFrameTop:CreateTexture(nil, "OVERLAY")
 	LeftChatFrameTop.Texture:SetScaledPoint("TOPLEFT", LeftChatFrameTop, 1, -1)
@@ -337,68 +279,6 @@ local CreateChatFramePanels = function()
 	InnerOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 0, 0)
 	InnerOutline:SetBackdrop(vUI.Outline)
 	InnerOutline:SetBackdropBorderColor(0, 0, 0)
-	
-	for i = 1, 4 do
-		local TabID = TabIDs[i]
-		
-		local Button = CreateFrame("Frame", "vUI_CustomTab"..i, LeftChatFrameTop)
-		Button:SetScaledSize(BUTTON_WIDTH, 22)
-		Button:SetFrameStrata("MEDIUM")
-		Button:SetBackdrop(vUI.BackdropAndBorder)
-		Button:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-		Button:SetBackdropBorderColor(0, 0, 0)
-		Button.ID = TabID
-		Button.Frame = _G["ChatFrame"..TabID]
-		
-		_G["ChatFrame"..TabID.."Tab"]:EnableMouse(false)
-		_G["ChatFrame"..TabID.."Tab"]:SetAlpha(0)
-		
-		Button.Tex = Button:CreateTexture(nil, "BORDER")
-		Button.Tex:SetScaledPoint("TOPLEFT", Button, 1, -1)
-		Button.Tex:SetScaledPoint("BOTTOMRIGHT", Button, -1, 1)
-		Button.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-		Button.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
-		
-		Button.Text = Button:CreateFontString(nil, "OVERLAY")
-		Button.Text:SetScaledPoint("CENTER", Button, 0, 0)
-		Button.Text:SetFontInfo(Settings["ui-button-font"], 12)
-		Button.Text:SetText(TabNames[i])
-		Button.Text:SetTextColor(vUI:HexToRGB(Settings["ui-button-font-color"]))
-		
-		if (i == 1) then
-			Button:SetScaledPoint("LEFT", LeftChatFrameTop, 0, 0)
-			Button:SetScaledWidth(BUTTON_WIDTH - 1)
-		else
-			Button:SetScaledPoint("LEFT", TabButtons[i-1], "RIGHT", -1, 0)
-		end
-		
-		if (i == 2) then
-			Button.GlowParent = CreateFrame("Frame", nil, Button)
-			Button.GlowParent:SetAllPoints(Button)
-			Button.GlowParent:SetAlpha(0)
-			Button.GlowParent:SetFrameStrata("MEDIUM")
-			Button.GlowParent:SetFrameLevel(Button:GetFrameLevel())
-			
-			Button.Glow = Button.GlowParent:CreateTexture(nil, "OVERLAY")
-			Button.Glow:SetTexture(Media:GetTexture("RenHorizonUp"))
-			Button.Glow:SetScaledSize(76, 16)
-			Button.Glow:SetScaledPoint("BOTTOM", Button, 0, 1)
-			Button.Glow:SetBlendMode("ADD")
-			
-			Button:RegisterEvent("CHAT_MSG_WHISPER")
-			Button:RegisterEvent("CHAT_MSG_BN_WHISPER")
-			Button:SetScript("OnEvent", TabButton_OnEvent)
-		end
-		
-		Button:SetScript("OnEnter", TabButton_OnEnter)
-		Button:SetScript("OnLeave", TabButton_OnLeave)
-		Button:SetScript("OnMouseDown", TabButton_OnMouseDown)
-		Button:SetScript("OnMouseUp", TabButton_OnMouseUp)
-		
-		TabButtons[i] = Button
-	end
-	
-	_G["ChatFrame2Tab"]:EnableMouse(false)
 end
 
 local Kill = function(object)
@@ -529,29 +409,27 @@ local StyleChatFrame = function(frame)
 		Kill(Tab.conversationIconKill)
 	end
 	
-	if Tab.glow then
-		Kill(Tab.glow)
-	end
-	
 	-- Hide editbox every time we click on a tab
 	Tab:HookScript("OnClick", function()
 		EditBox:Hide()
 	end)
 	
 	-- Tabs Alpha
-	Tab.mouseOverAlpha = 0
-	Tab.noMouseAlpha = 0
-	Tab:SetAlpha(0)
+	Tab.mouseOverAlpha = 1
+	Tab.noMouseAlpha = 1
+	Tab:SetAlpha(1)
 	Tab.SetAlpha = UIFrameFadeRemoveFrame
-	
-	Tab:Hide()
-	Tab.Show = function() end
 	
 	TabText:SetFontInfo(Settings["ui-widget-font"], 12)
 	TabText.SetFont = function() end
 	
-	TabText:SetTextColor(1, 1, 1)
+	TabText:SetTextColorHex(Settings["ui-widget-color"])
 	TabText.SetTextColor = function() end
+	
+	if Tab.glow then
+		Tab.glow:SetScaledPoint("CENTER", Tab, 0, 1)
+		Tab.glow:SetScaledWidth(TabText:GetWidth() + 6)
+	end
 	
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetClampRectInsets(0, 0, 0, 0)
@@ -680,6 +558,11 @@ local MoveChatFrames = function()
 		end
 	end
 	
+	GeneralDockManager:ClearAllPoints()
+	GeneralDockManager:SetScaledWidth(FRAME_WIDTH)
+	GeneralDockManager:SetScaledPoint("CENTER", vUIChatFrameTop, 0, 6)
+	GeneralDockManager:SetFrameStrata("MEDIUM")
+	
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
 end
 
@@ -706,35 +589,34 @@ local Setup = function()
 	Kill(ChatFrameToggleVoiceMuteButton)
 end
 
-vUI_ChatInstall = function() -- /run vUI_ChatInstall()
+local Install = function() -- /run vUI_ChatInstall()
 	-- General
 	FCF_ResetChatWindows()
 	FCF_SetLocked(ChatFrame1, 1)
-	FCF_SetWindowName(ChatFrame1, "General")
+	FCF_SetWindowName(ChatFrame1, Language["General"])
 	ChatFrame1:Show()
-	
-	ChatFrame_RemoveChannel(ChatFrame1, TRADE)
-	ChatFrame_RemoveChannel(ChatFrame1, GENERAL)
 	
 	-- Combat Log
 	FCF_DockFrame(ChatFrame2)
 	FCF_SetLocked(ChatFrame2, 1)
-	FCF_SetWindowName(ChatFrame2, "Combat")
+	FCF_SetWindowName(ChatFrame2, Language["Combat"])
 	ChatFrame2:Show()
 	
 	-- Whispers
-	FCF_OpenNewWindow("Whispers")
+	FCF_OpenNewWindow(Language["Whispers"])
 	FCF_SetLocked(ChatFrame3, 1)
 	FCF_DockFrame(ChatFrame3)
 	ChatFrame3:Show()
 	
-	-- Loot
-	FCF_OpenNewWindow("Loot")
+	-- Trade
+	FCF_OpenNewWindow(Language["Trade"])
+	FCF_SetLocked(ChatFrame4, 1)
 	FCF_DockFrame(ChatFrame4)
 	ChatFrame4:Show()
 	
-	-- Trade
-	FCF_OpenNewWindow("Trade")
+	-- Loot
+	FCF_OpenNewWindow(Language["Loot"])
+	FCF_SetLocked(ChatFrame5, 1)
 	FCF_DockFrame(ChatFrame5)
 	ChatFrame5:Show()
 	
@@ -745,6 +627,7 @@ vUI_ChatInstall = function() -- /run vUI_ChatInstall()
 	ChatFrame_RemoveChannel(ChatFrame1, "LocalDefense")
 	ChatFrame_RemoveChannel(ChatFrame1, "GuildRecruitment")
 	ChatFrame_RemoveChannel(ChatFrame1, "LookingForGroup")
+	
 	ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
 	ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
 	ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
@@ -780,18 +663,17 @@ vUI_ChatInstall = function() -- /run vUI_ChatInstall()
 	ChatFrame_AddMessageGroup(ChatFrame3, "BN_WHISPER")
 	ChatFrame_AddMessageGroup(ChatFrame3, "BN_CONVERSATION")
 	
-	-- Loot & Reputation
-	ChatFrame_RemoveAllMessageGroups(ChatFrame4)
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_XP_GAIN")
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_HONOR_GAIN")
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_FACTION_CHANGE")
-	ChatFrame_AddMessageGroup(ChatFrame4, "LOOT")
-	ChatFrame_AddMessageGroup(ChatFrame4, "MONEY")
-	
 	-- Trade
-	ChatFrame_RemoveAllMessageGroups(ChatFrame5)
-	ChatFrame_AddChannel(ChatFrame5, TRADE)
-	ChatFrame_AddChannel(ChatFrame5, GENERAL)
+	ChatFrame_RemoveAllMessageGroups(ChatFrame4)
+	ChatFrame_AddChannel(ChatFrame4, TRADE)
+	ChatFrame_AddChannel(ChatFrame4, GENERAL)
+	
+	-- Loot
+	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_XP_GAIN")
+	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_HONOR_GAIN")
+	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_FACTION_CHANGE")
+	ChatFrame_AddMessageGroup(ChatFrame5, "LOOT")
+	ChatFrame_AddMessageGroup(ChatFrame5, "MONEY")
 	
 	-- Enable Classcolor
 	ToggleChatColorNamesByClassGroup(true, "SAY")
@@ -826,10 +708,10 @@ vUI_ChatInstall = function() -- /run vUI_ChatInstall()
 	--SetCVar("BnWhisperMode", "inline")
 	SetCVar("removeChatDelay", 1)
 	
-	MoveChatFrames()
+	--MoveChatFrames()
 	FCF_SelectDockFrame(ChatFrame1)
 	
-	ReloadUI()
+	--ReloadUI()
 end
 
 -- Fix Shaman
@@ -891,7 +773,7 @@ EventFrame:SetScript("OnEvent", function(self, event)
 	
 	CreateChatFramePanels()
 	Setup()
-	--Install()
+	Install()
 	MoveChatFrames()
 	
 	CHAT_DISCORD_SEND = Language["Discord: "]
@@ -906,8 +788,6 @@ EventFrame:SetScript("OnEvent", function(self, event)
 	ChatTypeInfo["DISCORD"] = {sticky = 0, r = 114/255, g = 137/255,  b = 218/255}
 	ChatTypeInfo["FRIEND"] = {sticky = 0, r = 0, g = 170/255,  b = 255/255}
 	ChatTypeInfo["PRINT"] = {sticky = 1, r = 0.364, g = 0.780,  b = 1}
-	
-	TabButton_OnMouseUp(TabButtons[1])
 	
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)

@@ -15,7 +15,7 @@ local tostring = tostring
 
 local GetFramerate = GetFramerate
 
--- This is currently just a test page to see how GUI controls work, and debug them.
+--[[ This is currently just a test page to see how GUI controls work, and debug them.
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow("Test")
 	
@@ -101,7 +101,7 @@ GUI:AddOptions(function(self)
 	self:CreateWindow("Misc.")
 	self:CreateWindow("Search")
 end)
-
+]]
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Debug"])
 	
@@ -127,12 +127,15 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
+	
+	self:CreateWindow("Misc.")
 end)
 
 local UpdateZone = CreateFrame("Frame")
 UpdateZone:RegisterEvent("ZONE_CHANGED")
 UpdateZone:RegisterEvent("ZONE_CHANGED_INDOORS")
 UpdateZone:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+UpdateZone:RegisterEvent("PLAYER_ENTERING_WORLD")
 UpdateZone:SetScript("OnEvent", function(self)
 	if GUI:IsShown() then
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
@@ -140,9 +143,9 @@ UpdateZone:SetScript("OnEvent", function(self)
 	end
 end)
 
-	local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
-	
-	UNIT_NAME_FONT = WidgetFont
-	NAMEPLATE_FONT = WidgetFont
-	DAMAGE_TEXT_FONT = WidgetFont
-	STANDARD_TEXT_FONT = WidgetFont
+local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
+
+UNIT_NAME_FONT = WidgetFont
+--NAMEPLATE_FONT = WidgetFont
+DAMAGE_TEXT_FONT = WidgetFont
+STANDARD_TEXT_FONT = WidgetFont

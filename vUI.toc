@@ -43,4 +43,5 @@ Elements\Alerts\Alerts.lua
 Elements\Popup\Popup.lua
 Elements\Update\Update.lua
 Elements\Cooldowns\Cooldowns.lua
+Elements\ObjectiveTracker\ObjectiveTracker.lua
 Elements\Test\Test.lua
