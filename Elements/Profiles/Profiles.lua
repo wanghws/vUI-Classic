@@ -25,24 +25,6 @@ Profiles.Metadata = {
 Profiles.Preserve = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
-	
-	--[[ To be decided. I think I should leave these to Templates exclusively, but will that feel restrictive?
-	["ui-widget-font"] = true,
-	["ui-header-font"] = true,
-	["ui-button-font"] = true,
-	["ui-widget-texture"] = true,
-	["ui-header-texture"] = true,
-	["ui-button-texture"] = true,
-	["ui-header-font-color"] = true,
-	["ui-header-texture-color"] = true,
-	["ui-window-bg-color"] = true,
-	["ui-window-main-color"] = true,
-	["ui-widget-color"] = true,
-	["ui-widget-bright-color"] = true,
-	["ui-widget-bg-color"] = true,
-	["ui-widget-font-color"] = true,
-	["ui-button-font-color"] = true,
-	["ui-button-texture-color"] = true,]]
 }
 
 function Profiles:GetCurrentDate()

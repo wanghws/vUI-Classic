@@ -590,6 +590,14 @@ local Setup = function()
 end
 
 local Install = function() -- /run vUI_ChatInstall()
+	if (not vUIData) then
+		vUIData = {}
+	end
+	
+	if vUIData.ChatInstalled then
+		return
+	end
+	
 	-- General
 	FCF_ResetChatWindows()
 	FCF_SetLocked(ChatFrame1, 1)
@@ -711,7 +719,7 @@ local Install = function() -- /run vUI_ChatInstall()
 	--MoveChatFrames()
 	FCF_SelectDockFrame(ChatFrame1)
 	
-	--ReloadUI()
+	vUIData.ChatInstalled = true
 end
 
 -- Fix Shaman
