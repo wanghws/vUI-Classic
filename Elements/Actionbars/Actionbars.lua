@@ -47,7 +47,7 @@ local SkinButton = function(button)
 		button.icon:ClearAllPoints()
 		button.icon:SetScaledPoint("TOPLEFT", button, 1, -1)
 		button.icon:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
-		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+		button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	end
 	
 	if _G[button:GetName() .. "FloatingBG"] then

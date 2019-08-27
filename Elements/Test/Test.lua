@@ -177,6 +177,7 @@ function BagsFrame:Load()
 		Object:SetParent(Panel)
 		Object:ClearAllPoints()
 		Object:SetScaledSize(32, 32)
+		
 		local Normal = _G[Object:GetName() .. "NormalTexture"]
 		
 		if Normal then
@@ -191,6 +192,30 @@ function BagsFrame:Load()
 		Object.BG:SetScaledPoint("TOPLEFT", Object, -1, 1)
 		Object.BG:SetScaledPoint("BOTTOMRIGHT", Object, 1, -1)
 		Object.BG:SetColorTexture(0, 0, 0)
+		
+		local Checked = Object:CreateTexture(nil, "ARTWORK")
+		Checked:SetScaledPoint("TOPLEFT", Object, 0, 0)
+		Checked:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
+		Checked:SetColorTexture(1, 1, 1)
+		Checked:SetAlpha(0.2)
+		
+		Object:SetCheckedTexture(Checked)
+		
+		local Highlight = Object:CreateTexture(nil, "ARTWORK")
+		Highlight:SetScaledPoint("TOPLEFT", Object, 0, 0)
+		Highlight:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
+		Highlight:SetColorTexture(1, 1, 1)
+		Highlight:SetAlpha(0.2)
+		
+		Object:SetHighlightTexture(Highlight)
+		
+		local Pushed = Object:CreateTexture(nil, "ARTWORK", 7)
+		Pushed:SetScaledPoint("TOPLEFT", Object, 0, 0)
+		Pushed:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
+		Pushed:SetColorTexture(0.2, 0.9, 0.2)
+		Pushed:SetAlpha(0.4)
+		
+		Object:SetPushedTexture(Pushed)
 		
 		if (i == 1) then
 			Object:SetScaledPoint("LEFT", Panel, 4, 0)
