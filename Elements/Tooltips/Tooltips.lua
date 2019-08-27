@@ -193,6 +193,7 @@ local OnTooltipSetUnit = function(self)
 		local Color = GetUnitColor(UnitID)
 		local Flag = ""
 		local Line
+		local Info
 		
 		if (Class == Name) then
 			Class = ""
@@ -203,24 +204,45 @@ local OnTooltipSetUnit = function(self)
 		elseif UnitIsDND(UnitID) then 
 			Flag = "|cFFF44336" .. CHAT_FLAG_DND .. "|r "
 		end
-	
+		
+		print(Title, Name, Guild)
+		
+		if Guild then
+			if (Guild == MyGuild) then
+				Info = format("|cFF5DADE2%s|r", Guild)
+			else
+				Info = format("|cFF66BB6A%s|r", Guild)
+			end
+		elseif Realm then
+			--Info = format("%s|cFF%s%s - %s|r", Flag, Color, (Title or Name), Realm)
+		else
+			Info = Title
+		end
+		
+		--[[if (Title == Name) then
+			print(Guild)
+		else
+			print(Title)
+		end]]
+		
 		if Realm then
 			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s - %s|r", Flag, Color, (Title or Name), Realm))
 		else
 			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s|r", Flag, Color, (Title or Name)))
 		end
 		
-		for i = 1, self:NumLines() do
-			Line = _G[self:GetName() .. "TextLeft" .. i]
+		if Guild then
+			if (Guild == MyGuild) then
+				GameTooltipTextLeft2:SetText(format("|cFF5DADE2%s|r", Guild))
+			else
+				GameTooltipTextLeft2:SetText(format("|cFF66BB6A%s|r", Guild))
+			end
+		end
+		
+		for i = 3, self:NumLines() do
+			Line = _G["GameTooltipTextLeft" .. i]
 			
-			if (Line and Guild and (i == 2)) then
-				if (Guild == MyGuild) then
-					Line:SetText(format("|cFF5DADE2%s|r", Guild))
-				else
-					Line:SetText(format("|cFF66BB6A%s|r", Guild))
-				end
-				
-			elseif (Line and Line.GetText and find(Line:GetText(), "^" .. LEVEL)) then
+			if (Line and Line.GetText and find(Line:GetText(), "^" .. LEVEL)) then
 				local LevelColor = vUI:UnitDifficultyColor(UnitID)
 				
 				if Race then

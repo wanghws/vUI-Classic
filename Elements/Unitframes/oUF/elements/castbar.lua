@@ -89,13 +89,8 @@ local vUI = ns:get()
 
 local GetNetStats = GetNetStats
 local GetTime = GetTime
-local CastingInfo = UnitCastingInfo
-local ChannelInfo = UnitChannelInfo
-
-if vUI:IsClassic() then
-	CastingInfo = CastingInfo
-	ChannelInfo = ChannelInfo
-end
+local CastingInfo = CastingInfo
+local ChannelInfo = ChannelInfo
 
 local function updateSafeZone(self)
 	local safeZone = self.SafeZone
