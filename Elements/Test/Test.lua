@@ -149,3 +149,53 @@ UNIT_NAME_FONT = WidgetFont
 --NAMEPLATE_FONT = WidgetFont
 DAMAGE_TEXT_FONT = WidgetFont
 STANDARD_TEXT_FONT = WidgetFont
+
+local BagsFrame = vUI:NewModule("Bags Frame")
+
+BagsFrame.Objects = {
+	MainMenuBarBackpackButton,
+	CharacterBag0Slot,
+	CharacterBag1Slot,
+	CharacterBag2Slot,
+	CharacterBag3Slot,
+}
+
+function BagsFrame:Load()
+	local Panel = CreateFrame("Frame", nil, UIParent)
+	Panel:SetScaledSize(184, 40)
+	Panel:SetScaledPoint("BOTTOMRIGHT", -10, 10)
+	Panel:SetBackdrop(vUI.BackdropAndBorder)
+	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	Panel:SetBackdropBorderColor(0, 0, 0)
+	Panel:SetFrameStrata("LOW")
+	
+	local Object
+	
+	for i = 1, #self.Objects do
+		Object = self.Objects[i]
+		
+		Object:SetParent(Panel)
+		Object:ClearAllPoints()
+		Object:SetScaledSize(32, 32)
+		local Normal = _G[Object:GetName() .. "NormalTexture"]
+		
+		if Normal then
+			Normal:SetTexture(nil)
+		end
+		
+		if Object.icon then
+			Object.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		end
+		
+		Object.BG = Object:CreateTexture(nil, "BACKGROUND")
+		Object.BG:SetScaledPoint("TOPLEFT", Object, -1, 1)
+		Object.BG:SetScaledPoint("BOTTOMRIGHT", Object, 1, -1)
+		Object.BG:SetColorTexture(0, 0, 0)
+		
+		if (i == 1) then
+			Object:SetScaledPoint("LEFT", Panel, 4, 0)
+		else
+			Object:SetScaledPoint("LEFT", self.Objects[i-1], "RIGHT", 4, 0)
+		end
+	end
+end

@@ -9,6 +9,11 @@ vUI.PowerColors = {}
 vUI.DebuffColors = {}
 vUI.HappinessColors = {}
 vUI.ClassificationColors = {}
+vUI.OtherColors = {}
+
+function vUI:UpdateOtherColors()
+	self.OtherColors["TAPPED"] = {self:HexToRGB(Settings["color-tapped"])}
+end
 
 function vUI:UpdateClassColors()
 	self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}

@@ -499,7 +499,7 @@ local StylePlayer = function(self, unit)
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
     Castbar:SetScaledSize(250, 20)
-    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 130)
+    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, Settings["unitframes-player-castbar-y"])
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
     Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
@@ -764,7 +764,7 @@ local StyleTarget = function(self, unit)
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
     Castbar:SetScaledSize(250, 20)
-    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 156)
+    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, Settings["unitframes-target-castbar-y"])
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
     Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
@@ -810,7 +810,6 @@ local StyleTarget = function(self, unit)
 	SafeZone:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	SafeZone:SetVertexColor(vUI:HexToRGB("C0392B"))
 	
-    -- Register it with oUF
     --Castbar.bg = Background
     Castbar.Time = Time
     Castbar.Text = Text
@@ -1039,11 +1038,23 @@ local TogglePlayerName = function(value)
 	end
 end
 
+local UpdatePlayerCastBarY = function(value)
+	oUF_vUIPlayer.Castbar:SetScaledPoint("BOTTOM", UIParent, 0, value)
+end
+
+local UpdateTargetCastBarY = function(value)
+	oUF_vUITarget.Castbar:SetScaledPoint("BOTTOM", UIParent, 0, value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], ""):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Cast Bars"])
+	Left:CreateSlider("unitframes-player-castbar-y", Settings["unitframes-player-castbar-y"], 40, 400, 1, Language["Player Cast Bar Y-Offset"], "", UpdatePlayerCastBarY)
+	Left:CreateSlider("unitframes-target-castbar-y", Settings["unitframes-target-castbar-y"], 40, 400, 1, Language["Target Cast Bar Y-Offset"], "", UpdateTargetCastBarY)
 	
 	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)

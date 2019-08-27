@@ -113,6 +113,9 @@ Defaults["color-difficult"] = "F1C40F"
 Defaults["color-verydifficult"] = "E57A45"
 Defaults["color-impossible"] = "FF4444"
 
+-- Other
+Defaults["color-tapped"] = "666666"
+
 -- Action Bars
 Defaults["action-bars-enable"] = true
 Defaults["action-bars-layout"] = "DEFAULT"
@@ -163,6 +166,8 @@ Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false
 Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false
+Defaults["unitframes-player-castbar-y"] = 130
+Defaults["unitframes-target-castbar-y"] = 156
 
 -- Name Plates
 Defaults["nameplates-enable"] = true

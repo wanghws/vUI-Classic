@@ -193,7 +193,6 @@ local OnTooltipSetUnit = function(self)
 		local Color = GetUnitColor(UnitID)
 		local Flag = ""
 		local Line
-		local Info
 		
 		if (Class == Name) then
 			Class = ""
@@ -205,41 +204,23 @@ local OnTooltipSetUnit = function(self)
 			Flag = "|cFFF44336" .. CHAT_FLAG_DND .. "|r "
 		end
 		
-		print(Title, Name, Guild)
-		
 		if Guild then
 			if (Guild == MyGuild) then
-				Info = format("|cFF5DADE2%s|r", Guild)
+				Guild = format("|cFF5DADE2<%s>|r", Guild)
 			else
-				Info = format("|cFF66BB6A%s|r", Guild)
+				Guild = format("|cFF66BB6A<%s>|r", Guild)
 			end
-		elseif Realm then
-			--Info = format("%s|cFF%s%s - %s|r", Flag, Color, (Title or Name), Realm)
 		else
-			Info = Title
+			Guild = ""
 		end
-		
-		--[[if (Title == Name) then
-			print(Guild)
-		else
-			print(Title)
-		end]]
 		
 		if Realm then
-			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s - %s|r", Flag, Color, (Title or Name), Realm))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s - %s %s|r", Flag, Color, (Title or Name), Realm, Guild))
 		else
-			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s|r", Flag, Color, (Title or Name)))
+			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s %s|r", Flag, Color, (Title or Name), Guild))
 		end
 		
-		if Guild then
-			if (Guild == MyGuild) then
-				GameTooltipTextLeft2:SetText(format("|cFF5DADE2%s|r", Guild))
-			else
-				GameTooltipTextLeft2:SetText(format("|cFF66BB6A%s|r", Guild))
-			end
-		end
-		
-		for i = 3, self:NumLines() do
+		for i = 2, self:NumLines() do
 			Line = _G["GameTooltipTextLeft" .. i]
 			
 			if (Line and Line.GetText and find(Line:GetText(), "^" .. LEVEL)) then
@@ -270,6 +251,23 @@ local OnTooltipSetUnit = function(self)
 	end
 end
 
+local OnTooltipSetItem = function(self)
+	local Item, Link = self:GetItem()
+	local Count = GetItemCount(Link)
+	local SellValue = select(11, GetItemInfo(Link))
+	local CopperValue = SellValue * Count
+	
+	if (CopperValue == 0) then
+		return
+	end
+	
+	local FormattedString = GetCoinTextureString(CopperValue)
+	
+	if FormattedString then
+		GameTooltip:AddLine(format("%s %s", Language["Sell Value:"], FormattedString), 1, 1, 1)
+	end
+end
+
 local SetTooltipDefaultAnchor = function(self) -- Not actually moving them yet, not sure where to place it.
 	local Unit, UnitID = self:GetUnit()
 	
@@ -294,6 +292,7 @@ function Tooltips:AddHooks()
 	end
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+	GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
 	
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", SetTooltipDefaultAnchor)
 end
