@@ -48,6 +48,12 @@ local GetDiscordLink = function()
 	end
 end
 
+local Move = vUI:GetModule("Move")
+
+local ToggleMove = function()
+	Move:Toggle()
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["General"], true)
 	
@@ -59,13 +65,16 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader("Discord")
 	Left:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
 	
-	Right:CreateHeader(Language["Language"])
+	--[[Right:CreateHeader(Language["Language"])
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
-	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)
+	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
 	
 	Right:CreateHeader(Language["Scale"])
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale)
 	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
+	
+	--Left:CreateHeader("Move")
+	--Left:CreateButton("Toggle", "Move UI", "", ToggleMove)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

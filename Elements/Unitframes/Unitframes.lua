@@ -24,6 +24,8 @@ local GetPetHappiness = GetPetHappiness
 local IsResting = IsResting
 local GetQuestGreenRange = GetQuestGreenRange
 
+local LCMH = LibStub("LibClassicMobHealth-1.0")
+
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
 local Methods = oUF.Tags.Methods
@@ -127,17 +129,29 @@ end
 
 Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
 Methods["HealthPercent"] = function(unit)
-	return floor((UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
+	
+	return floor((Current / Max * 100 + 0.05) * 10) / 10 .. "%"
 end
 
 Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
 Methods["HealthPercent"] = function(unit)
-	local Max = UnitHealthMax(unit)
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
 	
 	if (Max == 0) then
 		return 0
 	else
-		return floor(UnitHealth(unit) / Max * 100 + 0.5)
+		return floor(Current / Max * 100 + 0.5)
 	end
 end
 
@@ -151,7 +165,14 @@ Methods["HealthValues"] = function(unit)
 		return "|cFFBBBBBB" .. Language["Offline"] .. "|r"
 	end
 	
-	return vUI:ShortValue(UnitHealth(unit)) .. " / " .. vUI:ShortValue(UnitHealthMax(unit))
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
+	
+	return vUI:ShortValue(Current) .. " / " .. vUI:ShortValue(Max)
 end
 
 Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
@@ -164,7 +185,14 @@ Methods["ColoredHealthValues"] = function(unit)
 		return "|cFFBBBBBB" .. Language["Offline"]
 	end
 	
-	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(UnitHealth(unit)) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(UnitHealthMax(unit))
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
+	
+	return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(Current) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(Max)
 end
 
 Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
@@ -993,6 +1021,8 @@ local PlateCVars = {
     nameplateSelfScale = 1,
 }
 
+local Move = vUI:GetModule("Move")
+
 local Frame = CreateFrame("Frame")
 Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Frame:SetScript("OnEvent", function(self, event)
@@ -1003,18 +1033,22 @@ Frame:SetScript("OnEvent", function(self, event)
 	local Player = oUF:Spawn("player")
 	Player:SetScaledSize(230, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
+	Move:Add(Player)
 	
 	local Target = oUF:Spawn("target")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
+	Move:Add(Target)
 	
 	local TargetTarget = oUF:Spawn("targettarget")
 	TargetTarget:SetScaledSize(110, 26)
 	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
+	Move:Add(TargetTarget)
 	
 	local Pet = oUF:Spawn("pet")
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
+	Move:Add(Pet)
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target

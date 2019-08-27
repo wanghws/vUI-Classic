@@ -168,6 +168,10 @@ Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-player-castbar-y"] = 130
 Defaults["unitframes-target-castbar-y"] = 156
+Defaults["unitframes-player-x"] = 156
+Defaults["unitframes-player-y"] = 156
+Defaults["unitframes-target-x"] = 156
+Defaults["unitframes-target-y"] = 156
 
 -- Name Plates
 Defaults["nameplates-enable"] = true

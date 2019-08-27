@@ -349,7 +349,6 @@ local SetStatusBarColorHex = function(self, hex)
 	end
 end
 
--- AddMethodByReference(Metatable, "SetFont", "SetFontInfo", SetFontInfo)
 local SetFontInfo = function(self, font, size, flags)
 	local Font, IsPixel = Core[4]:GetFont(font)
 	

@@ -126,15 +126,15 @@ local SkinButton = function(button)
 	button.Backdrop.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	button.Backdrop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
-	if (button.SetHighlightTexture and not button.Hover) then
-		local Hover = button:CreateTexture(nil, "ARTWORK", button)
-		Hover:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
-		Hover:SetVertexColor(1, 1, 1, 0.3)
-		Hover:SetScaledPoint("TOPLEFT", button, 1, -1)
-		Hover:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
+	if (button.SetHighlightTexture and not button.Highlight) then
+		local Highlight = button:CreateTexture(nil, "ARTWORK", button)
+		Highlight:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
+		Highlight:SetVertexColor(1, 1, 1, 0.2)
+		Highlight:SetScaledPoint("TOPLEFT", button, 1, -1)
+		Highlight:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
 		
-		button.Hover = Hover
-		button:SetHighlightTexture(Hover)
+		button.Highlight = Highlight
+		button:SetHighlightTexture(Highlight)
 	end
 	
 	if (button.SetPushedTexture and not button.Pushed) then
@@ -151,7 +151,7 @@ local SkinButton = function(button)
 	if (button.SetCheckedTexture and not button.Checked) then
 		local Checked = button:CreateTexture(nil, "ARTWORK", button)
 		Checked:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
-		Checked:SetVertexColor(0, 1, 0, 0.3)
+		Checked:SetVertexColor(0.1, 1, 0.1, 0.2)
 		Checked:SetScaledPoint("TOPLEFT", button, 1, -1)
 		Checked:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
 		

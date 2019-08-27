@@ -20,11 +20,8 @@ GUI.Widgets = {}
 	
 	Thoughts:
 	
-	- Test different resolutions and find the pixel perfect scale for each. Then either set or suggest the scale
 	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
 	- Rename RequiresReload to RequiresWarning etc
-	
-	-- Templates Enable option. If Templates are enabled then it will apply those colors, otherwise use a default. I'll need a system to determine which to retrieve though... bad idea maybe.
 	
 	To do:
 	- widgets:

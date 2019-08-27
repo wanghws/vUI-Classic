@@ -1,7 +1,7 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Tooltips = vUI:NewModule("Tooltips")
-
+local LCMH = LibStub("LibClassicMobHealth-1.0")
 local MyGuild
 
 local select = select
@@ -302,11 +302,20 @@ local GetColor = function(p, r1, g1, b1, r2, g2, b2)
 end
 
 local OnValueChanged = function(self)
-	local Min, Max = self:GetMinMaxValues()
-	local Value = self:GetValue()
-	
 	local Unit = select(2, self:GetParent():GetUnit())
-	local Color = vUI:RGBToHex(GetColor(Value / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	
+	if (not Unit) then
+		return
+	end
+	
+	local Current, Max, Found = LCMH:GetUnitHealth(Unit)
+	
+	if (not Found) then
+		Current = self:GetValue()
+		Max = select(2, self:GetMinMaxValues())
+	end
+	
+	local Color = vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
 	
 	if Unit then
 		if UnitIsDead(Unit) then
@@ -314,13 +323,13 @@ local OnValueChanged = function(self)
 		elseif UnitIsGhost(Unit) then
 			self.HealthValue:SetText("|cFFEEEEEE" .. Language["Ghost"] .. "|r")
 		else
-			self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Value), vUI:ShortValue(Max)))
+			self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Current), vUI:ShortValue(Max)))
 		end
 		
-		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Value / Max * 100 + 0.5)))
+		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Current / Max * 100 + 0.5)))
 	else
-		self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Value), vUI:ShortValue(Max)))
-		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Value / Max * 100 + 0.5)))
+		self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Current), vUI:ShortValue(Max)))
+		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Current / Max * 100 + 0.5)))
 	end
 end
 
@@ -360,6 +369,7 @@ function Tooltips:StyleStatusBar()
 	HealthBar.HealthPercent:SetJustifyH("RIGHT")
 	
 	HealthBar:HookScript("OnValueChanged", OnValueChanged)
+	HealthBar:HookScript("OnShow", OnValueChanged)
 	
 	HealthBar.OldSetStatusBarColor = HealthBar.SetStatusBarColor
 	HealthBar.SetStatusBarColor = function() end
