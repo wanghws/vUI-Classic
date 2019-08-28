@@ -429,15 +429,6 @@ local StyleNamePlate = function(self, unit)
 	self.Health.bg = HealthBG
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
-	
--- Temp
-local ComboPointColors = {
-	[1] = "FF6666",
-	[2] = "FFB266",
-	[3] = "FFFF66",
-	[4] = "B2FF66",
-	[5] = "66FF66",
-}
 
 local StylePlayer = function(self, unit)
 	-- General
@@ -627,7 +618,7 @@ local StylePlayer = function(self, unit)
 			ComboPoints[i] = CreateFrame("StatusBar", nil, ComboPoints)
 			ComboPoints[i]:SetScaledSize(Width + 1, 8)
 			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			ComboPoints[i]:SetStatusBarColorHex(ComboPointColors[i])
+			ComboPoints[i]:SetStatusBarColorHex(vUI.ComboPoints[i])
 			ComboPoints[i]:SetAlpha(0.2)
 			
 			if (i == 1) then
