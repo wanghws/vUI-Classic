@@ -41,7 +41,6 @@ Tooltips.Classifications = {
 	["elite"] = Language["Elite"],
 	["rareelite"] = Language["Rare Elite"],
 	["worldboss"] = Language["Boss"],
-	["minus"] = Language["Affix"],
 }
 
 local UpdateFonts = function(self)
@@ -54,7 +53,6 @@ local UpdateFonts = function(self)
 		end
 	end
 	
-	-- What a pain in the ass
 	for i = 1, self:GetNumChildren() do
 		local Child = select(i, self:GetChildren())
 		

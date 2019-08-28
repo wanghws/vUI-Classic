@@ -70,7 +70,7 @@ GUI:AddOptions(function(self)
 	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
 	
 	Right:CreateHeader(Language["Scale"])
-	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale)
+	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale).Box:Save()
 	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
 	
 	--Left:CreateHeader("Move")

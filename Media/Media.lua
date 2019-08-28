@@ -61,19 +61,6 @@ function Media:GetFontList()
 	--return LSM:HashTable("font")
 end
 
-function Media:SetFontInfo(fs, font, size, flags)
-	local Font, IsPixel = self:GetFont(font)
-	
-	if IsPixel then
-		fs:SetFont(Font, size, "MONOCHROME, OUTLINE")
-		fs:SetShadowColor(0, 0, 0, 0)
-	else
-		fs:SetFont(Font, size, flags)
-		fs:SetShadowColor(0, 0, 0)
-		fs:SetShadowOffset(1, -1)
-	end
-end
-
 -- Textures
 function Media:SetTexture(name, path, silent)
 	if self.Textures[name] then

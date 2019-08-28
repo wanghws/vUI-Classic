@@ -148,7 +148,7 @@ function vUI:SetScale(x)
 	x = max(0.4, x)
 	x = min(8, x)
 	
-	UIParent:SetScale(x)
+	--UIParent:SetScale(x)
 	
 	self:UpdateScreenHeight()
 	

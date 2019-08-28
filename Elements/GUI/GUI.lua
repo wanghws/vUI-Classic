@@ -889,6 +889,10 @@ local InputOnEnterPressed = function(self)
 	self:SetAutoFocus(false)
 	self:ClearFocus()
 	
+	if self.SaveInput then
+		SetVariable(self.ID, Value)
+	end
+	
 	if self.ReloadFlag then
 		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, Value, self.ID)
 	elseif self.Hook then
@@ -922,6 +926,12 @@ end
 
 local InputRequiresReload = function(self, flag)
 	self.ReloadFlag = flag
+	
+	return self
+end
+
+local InputSave = function(self)
+	self.SaveInput = true
 	
 	return self
 end
@@ -977,6 +987,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Box.Hook = hook
 	Input.Box.Parent = Input
 	Input.Box.RequiresReload = InputRequiresReload
+	Input.Box.Save = InputSave
 	
 	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
 	Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
@@ -3441,7 +3452,8 @@ function GUI:VARIABLES_LOADED()
 		
 		-- Write the template into the Defaults table?
 	--]]
-	
+	--vUI:SetScale(Settings["ui-scale"])
+	vUI:SetScale(Settings["ui-scale"])
 	vUI:UpdateoUFColors()
 	
 	-- Load the GUI
