@@ -107,7 +107,7 @@ Defaults["color-happiness-2"] = "FFFF33"
 Defaults["color-happiness-3"] = "66FF66"
 
 -- Difficulty
-Defaults["color-trivial"] = "808080"
+Defaults["color-trivial"] = "9A9A9A"
 Defaults["color-standard"] = "27AE60"
 Defaults["color-difficult"] = "F1C40F"
 Defaults["color-verydifficult"] = "E57A45"
@@ -146,6 +146,10 @@ Defaults["chat-enable-friend-links"] = true
 Defaults["chat-font"] = "PT Sans"
 Defaults["chat-font-size"] = 12
 Defaults["chat-font-flags"] = ""
+Defaults["chat-tab-font"] = "PT Sans"
+Defaults["chat-tab-font-size"] = 12
+Defaults["chat-tab-font-flags"] = ""
+Defaults["chat-tab-font-color"] = "F1C40F"
 
 -- Experience
 Defaults["experience-enable"] = true

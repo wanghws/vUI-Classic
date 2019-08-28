@@ -2291,7 +2291,7 @@ local ColorPickerAccept = function(self)
 end
 
 local ColorPickerCancel = function(self)
-	self.Texture:SetVertexColor(Settings["ui-button-texture-color"])
+	self.Texture:SetVertexColorHex(Settings["ui-button-texture-color"])
 	
 	GUI.ColorPicker.FadeOut:Play()
 end

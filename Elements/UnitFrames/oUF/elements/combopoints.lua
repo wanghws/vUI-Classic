@@ -4,6 +4,10 @@ local oUF = ns.oUF
 local GetComboPoints = GetComboPoints
 
 local Update = function(self, event, unit)
+	if (unit ~= self.unit) then
+		return
+	end
+	
 	local element = self.ComboPoints
 	
 	if element.PreUpdate then

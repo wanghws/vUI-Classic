@@ -430,15 +430,6 @@ local StyleNamePlate = function(self, unit)
 	self.Health.bg = HealthBG
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
-	
--- Temp
-local ComboPointColors = {
-	[1] = "FF6666",
-	[2] = "FFB266",
-	[3] = "FFFF66",
-	[4] = "B2FF66",
-	[5] = "66FF66",
-}
 
 local StylePlayer = function(self, unit)
 	-- General
@@ -485,9 +476,9 @@ local StylePlayer = function(self, unit)
     Leader:SetVertexColorHex("FFEB3B")
     Leader:Hide()
 	
-	--[[local RaidTargetIndicator = Health:CreateTexture(nil, "OVERLAY")
-	RaidTargetIndicator:SetScaledSize(16, 16)
-	RaidTargetIndicator:SetScaledPoint("CENTER", Health, "TOP")]]
+	local RaidTarget = Health:CreateTexture(nil, "OVERLAY")
+	RaidTarget:SetScaledSize(16, 16)
+	RaidTarget:SetScaledPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -669,7 +660,7 @@ local StylePlayer = function(self, unit)
 	self.PowerRight = PowerRight
 	self.Combat = Combat
 	self.Castbar = Castbar
-	--self.RaidTargetIndicator = RaidTargetIndicator
+	--self.RaidTargetIndicator = RaidTarget
 	self.LeaderIndicator = Leader
 	
 	self:UpdateTags()
@@ -1048,12 +1039,12 @@ local StyleParty = function(self, unit)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
 	Health:SetScaledHeight(29)
 	Health:SetFrameLevel(5)
-	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
 	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
-	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
@@ -1124,26 +1115,79 @@ local StyleParty = function(self, unit)
 	self.RaidTargetIndicator = RaidTarget
 end
 
+local StyleRaid = function(self, unit)
+	-- General
+	self:RegisterForClicks("AnyUp")
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
+	self:SetBackdrop(vUI.BackdropAndBorder)
+	self:SetBackdropColor(0, 0, 0)
+	self:SetBackdropBorderColor(0, 0, 0)
+	
+	-- Health Bar
+	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
+	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetFrameLevel(5)
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local HealthBG = self:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-target-cc-health"] then
+		Health.colorReaction = true
+	else
+		Health.colorHealth = true
+	end
+	
+	self:Tag(HealthLeft, "[NameColor][Name5]")
+	self:Tag(HealthRight, "[HealthColor][perhp]")
+	
+	self.Health = Health
+	self.Health.bg = HealthBG
+	self.HealthLeft = HealthLeft
+end
+
 local PartyAttributes = function()
 	return
-	"vUIParty",
-	nil,
-	"party,solo",
-	"initial-width", 160,
-	"initial-height", 38,
+	"vUIParty", nil, "party,solo",
+	"initial-width", vUI.GetScale(160),
+	"initial-height", vUI.GetScale(38),
 	"showParty", true,
 	"showRaid", false,
 	"showPlayer", true,
 	"showSolo", false,
-	"xoffset", 3,
-	"yOffset", -3,
+	"xoffset", vUI.GetScale(2),
+	"yOffset", vUI.GetScale(-2),
 	"point", "TOP",
 	"groupFilter", "1,2,3,4,5,6,7,8",
 	"groupingOrder", "1,2,3,4,5,6,7,8",
 	"groupBy", "GROUP",
 	"maxColumns", 8,
 	"unitsPerColumn", 5,
-	"columnSpacing", 3,
+	"columnSpacing", vUI.GetScale(3),
 	"columnAnchorPoint", "TOP",
 	"oUF-initialConfigFunction", [[
 		local Header = self:GetParent()
@@ -1155,24 +1199,22 @@ end
 
 local RaidAttributes = function()
 	return
-	"vUIRaid",
-	nil,
-	"raid,solo",
-	"initial-width", 76,
-	"initial-height", 26,
+	"vUIRaid", nil, "raid,solo",
+	"initial-width", vUI.GetScale(76),
+	"initial-height", vUI.GetScale(22),
 	"showParty", false,
 	"showRaid", true,
 	"showPlayer", true,
 	"showSolo", false,
-	"xoffset", 3,
-	"yOffset", -3,
+	"xoffset", vUI.GetScale(3),
+	"yOffset", vUI.GetScale(-3),
 	"point", "LEFT",
 	"groupFilter", "1,2,3,4,5,6,7,8",
 	"groupingOrder", "1,2,3,4,5,6,7,8",
 	"groupBy", "GROUP",
 	"maxColumns", 8,
 	"unitsPerColumn", 5,
-	"columnSpacing", 3,
+	"columnSpacing", vUI.GetScale(3),
 	"columnAnchorPoint", "TOP",
 	"oUF-initialConfigFunction", [[
 		local Header = self:GetParent()
@@ -1191,8 +1233,10 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
-	--elseif (find(unit, "party") or find(unit, "raid")) then
-		--StyleParty(self, unit)
+	elseif find(unit, "party") then
+		StyleParty(self, unit)
+	elseif find(unit, "raid") then
+		StyleRaid(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
 	end
@@ -1241,10 +1285,10 @@ Frame:SetScript("OnEvent", function(self, event)
 	Move:Add(Pet)
 	
 	local Party = oUF:SpawnHeader(PartyAttributes())
-	Party:SetPoint("LEFT", UIParent, 10, 0)
+	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	
 	local Raid = oUF:SpawnHeader(RaidAttributes())
-	Raid:SetPoint("LEFT", UIParent, 10, 0)
+	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target

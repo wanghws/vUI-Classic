@@ -144,6 +144,8 @@ local GetScale = function(x)
 	return Scale * x
 end
 
+vUI.GetScale = GetScale
+
 function vUI:SetScale(x)
 	x = max(0.64, x)
 	x = min(1, x)
