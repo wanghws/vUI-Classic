@@ -622,12 +622,15 @@ local StylePlayer = function(self, unit)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
 		
 		local Width = (230 / 5) - 2
+		local Color
 		
 		for i = 1, 5 do
+			Color = vUI.ComboPoints[i]
+			
 			ComboPoints[i] = CreateFrame("StatusBar", nil, ComboPoints)
 			ComboPoints[i]:SetScaledSize(Width + 1, 8)
 			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			ComboPoints[i]:SetStatusBarColorHex(ComboPointColors[i])
+			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
 			ComboPoints[i]:SetAlpha(0.2)
 			
 			if (i == 1) then
