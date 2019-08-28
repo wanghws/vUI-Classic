@@ -1508,7 +1508,7 @@ local MenuItemOnMouseUp = function(self)
 	if (self.GrandParent.SpecificType == "Texture") then
 		self.GrandParent.Texture:SetTexture(Media:GetTexture(self.Key))
 	elseif (self.GrandParent.SpecificType == "Font") then
-		Media:SetFontInfo(self.GrandParent.Current, self.Key, 12)
+		self.GrandParent.Current:SetFontInfo(self.Key, 12)
 	end
 	
 	self.GrandParent.Current:SetText(self.Key)
