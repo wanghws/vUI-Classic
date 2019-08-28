@@ -6,6 +6,7 @@ local format = string.format
 local match = string.match
 local floor = math.floor
 local sub = string.sub
+local find = string.find
 local UnitName = UnitName
 local UnitPower = UnitPower
 local UnitHealth = UnitHealth
@@ -477,12 +478,12 @@ local StylePlayer = function(self, unit)
 	Combat:SetScaledSize(20, 20)
 	Combat:SetScaledPoint("CENTER", Health)
 	
-    local LeaderIndicator = Health:CreateTexture(nil, "OVERLAY")
-    LeaderIndicator:SetSize(16, 16)
-    LeaderIndicator:SetPoint("LEFT", Health, "TOPLEFT", 3, 0)
-    LeaderIndicator:SetTexture(Media:GetTexture("Leader"))
-    LeaderIndicator:SetVertexColorHex("FFEB3B")
-    LeaderIndicator:Hide()
+    local Leader = Health:CreateTexture(nil, "OVERLAY")
+    Leader:SetSize(16, 16)
+    Leader:SetPoint("LEFT", Health, "TOPLEFT", 3, 0)
+    Leader:SetTexture(Media:GetTexture("Leader"))
+    Leader:SetVertexColorHex("FFEB3B")
+    Leader:Hide()
 	
 	--[[local RaidTargetIndicator = Health:CreateTexture(nil, "OVERLAY")
 	RaidTargetIndicator:SetScaledSize(16, 16)
@@ -669,7 +670,7 @@ local StylePlayer = function(self, unit)
 	self.Combat = Combat
 	self.Castbar = Castbar
 	--self.RaidTargetIndicator = RaidTargetIndicator
-	self.LeaderIndicator = LeaderIndicator
+	self.LeaderIndicator = Leader
 	
 	self:UpdateTags()
 end
@@ -744,9 +745,9 @@ local StyleTarget = function(self, unit)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	-- Target Icon
-	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
-	RaidTargetIndicator:SetSize(16, 16)
-	RaidTargetIndicator:SetPoint("CENTER", Health, "TOP")
+	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTarget:SetScaledSize(16, 16)
+	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -906,7 +907,7 @@ local StyleTarget = function(self, unit)
 	self.Buffs = Buffs
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
-	self.RaidTargetIndicator = RaidTargetIndicator
+	self.RaidTargetIndicator = RaidTarget
 end
 
 local StyleTargetTarget = function(self, unit)
@@ -1032,6 +1033,155 @@ local StylePet = function(self, unit)
 	self.HealthLeft = HealthLeft
 end
 
+local StyleParty = function(self, unit)
+	-- General
+	self:RegisterForClicks("AnyUp")
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
+	self:SetBackdrop(vUI.Backdrop)
+	self:SetBackdropColor(0, 0, 0)
+	
+	-- Health Bar
+	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
+	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
+	Health:SetScaledHeight(29)
+	Health:SetFrameLevel(5)
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	
+	local HealthBG = self:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	Health.colorClass = false
+	Health.colorHealth = true
+	
+	local Power = CreateFrame("StatusBar", nil, self)
+	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetScaledHeight(6)
+	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	
+	local PowerBG = Power:CreateTexture(nil, "BORDER")
+	PowerBG:SetScaledPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetScaledPoint("BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	PowerBG:SetAlpha(0.2)
+	
+	-- Attributes
+	Power.frequentUpdates = true
+	Power.colorClass = true
+	
+	-- Leader
+    local Leader = Health:CreateTexture(nil, "OVERLAY")
+    Leader:SetSize(16, 16)
+    Leader:SetScaledPoint("LEFT", Health, "TOPLEFT", 3, 0)
+    Leader:SetTexture(Media:GetTexture("Leader"))
+    Leader:SetVertexColorHex("FFEB3B")
+    Leader:Hide()
+	
+	-- Ready Check
+    local ReadyCheck = Health:CreateTexture(nil, 'OVERLAY')
+    ReadyCheck:SetScaledSize(16, 16)
+    ReadyCheck:SetScaledPoint("CENTER", Health, 0, 0)
+	
+	-- Target Icon
+	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTarget:SetScaledSize(16, 16)
+	RaidTarget:SetPoint("CENTER", Health, "TOP")
+	
+	-- Tags
+	self:Tag(HealthLeft, "[NameColor][Name10]")
+	self:Tag(HealthRight, "[HealthColor][perhp]")
+	
+	self.Health = Health
+	self.Health.bg = HealthBG
+	self.Power = Power
+	self.Power.bg = PowerBG
+	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
+	self.Leader = Leader
+	self.ReadyCheck = ReadyCheck
+	self.LeaderIndicator = Leader
+	self.ReadyCheckIndicator = ReadyCheck
+	self.RaidTargetIndicator = RaidTarget
+end
+
+local PartyAttributes = function()
+	return
+	"vUIParty",
+	nil,
+	"party,solo",
+	"initial-width", 160,
+	"initial-height", 38,
+	"showParty", true,
+	"showRaid", false,
+	"showPlayer", true,
+	"showSolo", false,
+	"xoffset", 3,
+	"yOffset", -3,
+	"point", "TOP",
+	"groupFilter", "1,2,3,4,5,6,7,8",
+	"groupingOrder", "1,2,3,4,5,6,7,8",
+	"groupBy", "GROUP",
+	"maxColumns", 8,
+	"unitsPerColumn", 5,
+	"columnSpacing", 3,
+	"columnAnchorPoint", "TOP",
+	"oUF-initialConfigFunction", [[
+		local Header = self:GetParent()
+		
+		self:SetWidth(Header:GetAttribute("initial-width"))
+		self:SetHeight(Header:GetAttribute("initial-height"))
+	]]
+end
+
+local RaidAttributes = function()
+	return
+	"vUIRaid",
+	nil,
+	"raid,solo",
+	"initial-width", 76,
+	"initial-height", 26,
+	"showParty", false,
+	"showRaid", true,
+	"showPlayer", true,
+	"showSolo", false,
+	"xoffset", 3,
+	"yOffset", -3,
+	"point", "LEFT",
+	"groupFilter", "1,2,3,4,5,6,7,8",
+	"groupingOrder", "1,2,3,4,5,6,7,8",
+	"groupBy", "GROUP",
+	"maxColumns", 8,
+	"unitsPerColumn", 5,
+	"columnSpacing", 3,
+	"columnAnchorPoint", "TOP",
+	"oUF-initialConfigFunction", [[
+		local Header = self:GetParent()
+		
+		self:SetWidth(Header:GetAttribute("initial-width"))
+		self:SetHeight(Header:GetAttribute("initial-height"))
+	]]
+end
+
 local Style = function(self, unit)
 	if (unit == "player") then
 		StylePlayer(self, unit)
@@ -1041,6 +1191,8 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
+	--elseif (find(unit, "party") or find(unit, "raid")) then
+		--StyleParty(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
 	end
@@ -1087,6 +1239,12 @@ Frame:SetScript("OnEvent", function(self, event)
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
 	Move:Add(Pet)
+	
+	local Party = oUF:SpawnHeader(PartyAttributes())
+	Party:SetPoint("LEFT", UIParent, 10, 0)
+	
+	local Raid = oUF:SpawnHeader(RaidAttributes())
+	Raid:SetPoint("LEFT", UIParent, 10, 0)
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
