@@ -677,6 +677,7 @@ local Install = function() -- /run vUI_ChatInstall()
 	ChatFrame_AddChannel(ChatFrame4, GENERAL)
 	
 	-- Loot
+	ChatFrame_RemoveAllMessageGroups(ChatFrame5)
 	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_XP_GAIN")
 	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_HONOR_GAIN")
 	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_FACTION_CHANGE")

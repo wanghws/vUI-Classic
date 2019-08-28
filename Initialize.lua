@@ -145,10 +145,10 @@ local GetScale = function(x)
 end
 
 function vUI:SetScale(x)
-	x = max(0.4, x)
-	x = min(8, x)
+	x = max(0.64, x)
+	x = min(1, x)
 	
-	--UIParent:SetScale(x)
+	SetCVar("uiScale", x)
 	
 	self:UpdateScreenHeight()
 	
