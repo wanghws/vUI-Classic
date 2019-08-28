@@ -11,8 +11,6 @@ local colors = {
 		1, 1, 0,
 		0, 1, 0
 	},
-	disconnected = {0.6, 0.6, 0.6},
-	tapped = {0.6, 0.6, 0.6},
 	selection = {
 		[ 0] = {255 / 255, 0 / 255, 0 / 255}, -- HOSTILE
 		[ 1] = {255 / 255, 129 / 255, 0 / 255}, -- UNFRIENDLY
@@ -52,6 +50,9 @@ function vUI:UpdateoUFColors()
 	colors.power[16] = colors.power.ARCANE_CHARGES
 	colors.power[17] = colors.power.FURY
 	colors.power[18] = colors.power.PAIN
+	
+	colors.tapped = {vUI:HexToRGB(Settings["color-tapped"])}
+	colors.disconnected = {vUI:HexToRGB(Settings["color-disconnected"])}
 	
 	colors.health = {vUI:HexToRGB(Settings["ui-header-texture-color"])}
 	

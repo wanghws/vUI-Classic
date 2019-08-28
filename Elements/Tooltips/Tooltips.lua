@@ -250,6 +250,10 @@ local OnTooltipSetUnit = function(self)
 end
 
 local OnTooltipSetItem = function(self)
+	if (not Settings["tooltips-show-sell-value"]) then
+		return
+	end
+	
 	local Item, Link = self:GetItem()
 	local Count = GetItemCount(Link)
 	local SellValue = select(11, GetItemInfo(Link))
@@ -391,4 +395,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("tooltips-enable", Settings["tooltips-enable"], Language["Enable Tooltips Module"], ""):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Styling"])
+	Left:CreateCheckbox("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
+	
+	Left:CreateFooter()
 end)

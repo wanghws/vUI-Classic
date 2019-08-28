@@ -9,10 +9,14 @@ vUI.PowerColors = {}
 vUI.DebuffColors = {}
 vUI.HappinessColors = {}
 vUI.ClassificationColors = {}
-vUI.OtherColors = {}
+vUI.ComboPoints = {}
 
-function vUI:UpdateOtherColors()
-	self.OtherColors["TAPPED"] = {self:HexToRGB(Settings["color-tapped"])}
+function vUI:UpdateComboColors()
+	self.ComboPoints[1] = {self:HexToRGB(Settings["color-combo-1"])}
+	self.ComboPoints[2] = {self:HexToRGB(Settings["color-combo-2"])}
+	self.ComboPoints[3] = {self:HexToRGB(Settings["color-combo-3"])}
+	self.ComboPoints[4] = {self:HexToRGB(Settings["color-combo-4"])}
+	self.ComboPoints[5] = {self:HexToRGB(Settings["color-combo-5"])}
 end
 
 function vUI:UpdateClassColors()
@@ -169,6 +173,17 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("color-verydifficult", Settings["color-verydifficult"], Language["Hard"], "")
 	Left:CreateColorSelection("color-impossible", Settings["color-impossible"], Language["Very Hard"], "")
 	
+	Left:CreateHeader(Language["Combo Points Colors"])
+	Left:CreateColorSelection("color-combo-1", Settings["color-combo-1"], Language["Combo Point 1"], "")
+	Left:CreateColorSelection("color-combo-2", Settings["color-combo-2"], Language["Combo Point 2"], "")
+	Left:CreateColorSelection("color-combo-3", Settings["color-combo-3"], Language["Combo Point 3"], "")
+	Left:CreateColorSelection("color-combo-4", Settings["color-combo-4"], Language["Combo Point 4"], "")
+	Left:CreateColorSelection("color-combo-5", Settings["color-combo-5"], Language["Combo Point 5"], "")
+	
+	Right:CreateHeader(Language["Misc Colors"])
+	Right:CreateColorSelection("color-tapped", Settings["color-tapped"], Language["Tagged"], "")
+	Right:CreateColorSelection("color-disconnected", Settings["color-disconnected"], Language["Disconnected"], "")
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 	
@@ -176,6 +191,7 @@ GUI:AddOptions(function(self)
 	vUI:UpdateReactionColors()
 	vUI:UpdateZoneColors()
 	vUI:UpdatePowerColors()
+	vUI:UpdateComboColors()
 	vUI:UpdateDebuffColors()
 	vUI:UpdateHappinessColors()
 	vUI:UpdateClassificationColors()

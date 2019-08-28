@@ -113,8 +113,16 @@ Defaults["color-difficult"] = "F1C40F"
 Defaults["color-verydifficult"] = "E57A45"
 Defaults["color-impossible"] = "FF4444"
 
+-- Combo Points
+Defaults["color-combo-1"] = "FF6666"
+Defaults["color-combo-2"] = "FFB266"
+Defaults["color-combo-3"] = "FFFF66"
+Defaults["color-combo-4"] = "B2FF66"
+Defaults["color-combo-5"] = "66FF66"
+
 -- Other
-Defaults["color-tapped"] = "666666"
+Defaults["color-tapped"] = "A6A6A6"
+Defaults["color-disconnected"] = "A6A6A6"
 
 -- Action Bars
 Defaults["action-bars-enable"] = true
@@ -185,3 +193,4 @@ Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
 
 -- Tooltips
 Defaults["tooltips-enable"] = true
+Defaults["tooltips-show-sell-value"] = true
