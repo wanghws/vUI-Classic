@@ -429,6 +429,15 @@ local StyleNamePlate = function(self, unit)
 	self.Health.bg = HealthBG
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
+	
+-- Temp
+local ComboPointColors = {
+	[1] = "FF6666",
+	[2] = "FFB266",
+	[3] = "FFFF66",
+	[4] = "B2FF66",
+	[5] = "66FF66",
+}
 
 local StylePlayer = function(self, unit)
 	-- General
@@ -604,6 +613,32 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.Totems = Totems
+	elseif (vUI.UserClass == "ROGUE") then
+		local ComboPoints = CreateFrame("Frame", nil, self)
+		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
+		ComboPoints:SetScaledSize(230, 10)
+		ComboPoints:SetBackdrop(vUI.Backdrop)
+		ComboPoints:SetBackdropColor(0, 0, 0)
+		ComboPoints:SetBackdropBorderColor(0, 0, 0)
+		
+		local Width = (230 / 5) - 2
+		
+		for i = 1, 5 do
+			ComboPoints[i] = CreateFrame("StatusBar", nil, ComboPoints)
+			ComboPoints[i]:SetScaledSize(Width + 1, 8)
+			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+			ComboPoints[i]:SetStatusBarColorHex(ComboPointColors[i])
+			ComboPoints[i]:SetAlpha(0.2)
+			
+			if (i == 1) then
+				ComboPoints[i]:SetScaledPoint("LEFT", ComboPoints, 1, 0)
+				ComboPoints[i]:SetScaledWidth(Width)
+			else
+				ComboPoints[i]:SetScaledPoint("TOPLEFT", ComboPoints[i-1], "TOPRIGHT", 1, 0)
+			end
+		end
+		
+		self.ComboPoints = ComboPoints
 	end
 	
 	-- Tags
@@ -646,13 +681,13 @@ local PostCreateIcon = function(unit, button)
 	button.remaining:SetScaledPoint("TOPLEFT", 2, -1)
 	button.remaining:SetJustifyH("LEFT")
 	]]
-	button.cd.noOCC = true
-	button.cd.noCooldownCount = true
+	--button.cd.noOCC = true
+	--button.cd.noCooldownCount = true
 	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
 	button.cd:ClearAllPoints()
 	button.cd:SetScaledPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
 	button.cd:SetScaledPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
-	button.cd:SetHideCountdownNumbers(true)
+	--button.cd:SetHideCountdownNumbers(true)
 	
 	button.icon:SetScaledPoint("TOPLEFT", 1, -1)
 	button.icon:SetScaledPoint("BOTTOMRIGHT", -1, 1)

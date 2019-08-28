@@ -589,15 +589,7 @@ local Setup = function()
 	Kill(ChatFrameToggleVoiceMuteButton)
 end
 
-local Install = function() -- /run vUI_ChatInstall()
-	if (not vUIData) then
-		vUIData = {}
-	end
-	
-	if vUIData.ChatInstalled then
-		return
-	end
-	
+local Install = function()
 	-- General
 	FCF_ResetChatWindows()
 	FCF_SetLocked(ChatFrame1, 1)
@@ -719,8 +711,6 @@ local Install = function() -- /run vUI_ChatInstall()
 	
 	--MoveChatFrames()
 	FCF_SelectDockFrame(ChatFrame1)
-	
-	vUIData.ChatInstalled = true
 end
 
 -- Fix Shaman
@@ -782,7 +772,17 @@ EventFrame:SetScript("OnEvent", function(self, event)
 	
 	CreateChatFramePanels()
 	Setup()
-	Install()
+	
+	if (not vUIData) then
+		vUIData = {}
+	end
+	
+	if (not vUIData.ChatInstalled) then
+		Install()
+		
+		vUIData.ChatInstalled = true
+	end
+	
 	MoveChatFrames()
 	
 	CHAT_DISCORD_SEND = Language["Discord: "]
@@ -863,6 +863,11 @@ local UpdateChatFont = function()
 	end
 end
 
+local RunChatInstall = function()
+	Install()
+	ReloadUI()
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
@@ -871,6 +876,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Opacity"])
 	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
+	
+	Right:CreateHeader(Language["Install"])
+	Right:CreateButton(Language["Install"], Language["Install Chat Defaults"], "", RunChatInstall):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Links"])
 	Right:CreateCheckbox("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "")
