@@ -150,6 +150,8 @@ Defaults["chat-tab-font"] = "PT Sans"
 Defaults["chat-tab-font-size"] = 12
 Defaults["chat-tab-font-flags"] = ""
 Defaults["chat-tab-font-color"] = "F1C40F"
+Defaults["chat-frame-width"] = 392
+Defaults["chat-frame-height"] = 104
 
 -- Experience
 Defaults["experience-enable"] = true

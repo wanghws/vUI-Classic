@@ -11,11 +11,6 @@ local FRAME_WIDTH = 392
 local FRAME_HEIGHT = 104
 local BAR_HEIGHT = 22
 
-local TabButtons = {}
-local TabNames = {"General", "Whispers", "Loot", "Trade"}
-local TabIDs = {1, 3, 4, 5}
-local BUTTON_WIDTH = (FRAME_WIDTH / 4) + 1
-
 local SetHyperlink = ItemRefTooltip.SetHyperlink
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat
@@ -197,8 +192,10 @@ end
 local CreateChatFramePanels = function()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
+	local Width = Settings["chat-frame-width"]
+	
 	local LeftChatFrameBottom = CreateFrame("Frame", "vUIChatFrameBottom", UIParent)
-	LeftChatFrameBottom:SetScaledSize(FRAME_WIDTH, BAR_HEIGHT)
+	LeftChatFrameBottom:SetScaledSize(Width, BAR_HEIGHT)
 	LeftChatFrameBottom:SetScaledPoint("BOTTOMLEFT", UIParent, 13, 13)
 	LeftChatFrameBottom:SetBackdrop(vUI.BackdropAndBorder)
 	LeftChatFrameBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
@@ -212,7 +209,7 @@ local CreateChatFramePanels = function()
 	LeftChatFrameBottom.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
 	local ChatFrameBG = CreateFrame("Frame", "vUIChatFrame", UIParent)
-	ChatFrameBG:SetScaledSize(FRAME_WIDTH, FRAME_HEIGHT)
+	ChatFrameBG:SetScaledSize(Width, Settings["chat-frame-height"])
 	ChatFrameBG:SetScaledPoint("BOTTOMLEFT", LeftChatFrameBottom, "TOPLEFT", 0, 2)
 	ChatFrameBG:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBG:SetBackdropColor(R, G, B, (Settings["chat-bg-opacity"] / 100))
@@ -220,7 +217,7 @@ local CreateChatFramePanels = function()
 	ChatFrameBG:SetFrameStrata("LOW")
 	
 	local LeftChatFrameTop = CreateFrame("Frame", "vUIChatFrameTop", UIParent)
-	LeftChatFrameTop:SetScaledSize(FRAME_WIDTH, BAR_HEIGHT)
+	LeftChatFrameTop:SetScaledSize(Width, BAR_HEIGHT)
 	LeftChatFrameTop:SetScaledPoint("BOTTOM", ChatFrameBG, "TOP", 0, 2)
 	LeftChatFrameTop:SetBackdrop(vUI.BackdropAndBorder)
 	LeftChatFrameTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -279,6 +276,15 @@ local CreateChatFramePanels = function()
 	InnerOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 0, 0)
 	InnerOutline:SetBackdrop(vUI.Outline)
 	InnerOutline:SetBackdropBorderColor(0, 0, 0)
+end
+
+local UpdateChatFrameSize = function()
+	local Width = Settings["chat-frame-width"]
+	
+	vUIChatFrame:SetScaledSize(Width, Settings["chat-frame-height"])
+	
+	vUIChatFrameTop:SetScaledSize(Width, BAR_HEIGHT)
+	vUIChatFrameBottom:SetScaledSize(Width, BAR_HEIGHT)
 end
 
 local Kill = function(object)
@@ -876,6 +882,10 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Opacity"])
 	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "", UpdateOpacity, nil, "%")
+	
+	Left:CreateHeader(Language["Chat Size"])
+	Left:CreateSlider("chat-frame-width", Settings["chat-frame-width"], 300, 500, 1, "Chat Width", "", UpdateChatFrameSize)
+	Left:CreateSlider("chat-frame-height", Settings["chat-frame-height"], 40, 200, 1, "Chat Height", "", UpdateChatFrameSize)
 	
 	Right:CreateHeader(Language["Install"])
 	Right:CreateButton(Language["Install"], Language["Install Chat Defaults"], "", RunChatInstall):RequiresReload(true)
