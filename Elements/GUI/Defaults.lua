@@ -154,8 +154,8 @@ Defaults["chat-tab-font-color"] = "F1C40F"
 -- Experience
 Defaults["experience-enable"] = true
 Defaults["experience-display-level"] = false
-Defaults["experience-display-progress"] = false
-Defaults["experience-display-percent"] = false
+Defaults["experience-display-progress"] = true
+Defaults["experience-display-percent"] = true
 Defaults["experience-show-tooltip"] = true
 Defaults["experience-animate"] = true
 Defaults["experience-width"] = 310

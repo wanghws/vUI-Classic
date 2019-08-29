@@ -687,7 +687,6 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreatePetBar()
 	
 	SetActionBarToggles(1, 1, 1, 1)
-	MultiActionBar_Update()
 	
 	SetActionBarLayout(Settings["action-bars-layout"])
 	
