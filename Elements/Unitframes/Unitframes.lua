@@ -1093,7 +1093,7 @@ local StyleParty = function(self, unit)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	-- Tags
-	self:Tag(HealthLeft, "[NameColor][Name10]")
+	self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Health = Health
