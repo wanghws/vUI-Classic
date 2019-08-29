@@ -127,8 +127,6 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
-	
-	self:CreateWindow("Misc.")
 end)
 
 local UpdateZone = CreateFrame("Frame")
@@ -187,9 +185,25 @@ function BagsFrame:Load()
 		Object:SetScaledSize(32, 32)
 		
 		local Normal = _G[Object:GetName() .. "NormalTexture"]
+		local Count = _G[Object:GetName() .. "Count"]
+		local Stock = _G[Object:GetName() .. "Stock"]
 		
 		if Normal then
 			Normal:SetTexture(nil)
+		end
+		
+		if Count then
+			Count:ClearAllPoints()
+			Count:SetScaledPoint("BOTTOMRIGHT", 0, 2)
+			Count:SetJustifyH("RIGHT")
+			Count:SetFontInfo(Settings["ui-widget-font"], 12)
+		end
+		
+		if Stock then
+			Stock:ClearAllPoints()
+			Stock:SetScaledPoint("TOPLEFT", 0, -2)
+			Stock:SetJustifyH("LEFT")
+			Stock:SetFontInfo(Settings["ui-widget-font"], 12)
 		end
 		
 		if Object.icon then
@@ -231,4 +245,83 @@ function BagsFrame:Load()
 			Object:SetScaledPoint("LEFT", self.Objects[i-1], "RIGHT", 4, 0)
 		end
 	end
+	
+	if (not Settings["bags-frame-show"]) then
+		Panel:Hide()
+	end
+	
+	self.Panel = Panel
 end
+
+local MicroButtons = vUI:NewModule("Micro Buttons")
+
+MicroButtons.Buttons = {
+	CharacterMicroButton,
+	SpellbookMicroButton,
+	TalentMicroButton,
+	QuestLogMicroButton,
+	SocialsMicroButton,
+	WorldMapMicroButton,
+	MainMenuMicroButton,
+	HelpMicroButton,
+}
+
+function MicroButtons:Load()
+	local Panel = CreateFrame("Frame", "vUI Micro Buttons", UIParent)
+	Panel:SetScaledSize(232, 38)
+	Panel:SetScaledPoint("BOTTOMRIGHT", BagsFrame.Panel, "BOTTOMLEFT", -2, 0)
+	Panel:SetBackdrop(vUI.BackdropAndBorder)
+	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	Panel:SetBackdropBorderColor(0, 0, 0)
+	Panel:SetFrameStrata("LOW")
+	Move:Add(Panel)
+	
+	local Button
+	
+	for i = 1, #self.Buttons do
+		Button = self.Buttons[i]
+		
+		Button:SetParent(Panel)
+		Button:ClearAllPoints()
+		
+		if (i == 1) then
+			Button:SetScaledPoint("TOPLEFT", Panel, 0, 20)
+		else
+			Button:SetScaledPoint("LEFT", self.Buttons[i-1], "RIGHT", 0, 0)
+		end
+	end
+	
+	if (not Settings["micro-buttons-show"]) then
+		Panel:Hide()
+	end
+	
+	self.Panel = Panel
+end
+
+local UpdateShowMicroButtons = function(value)
+	if value then
+		MicroButtons.Panel:Show()
+	else
+		MicroButtons.Panel:Hide()
+	end
+end
+
+local UpdateShowBagsFrame = function(value)
+	if value then
+		BagsFrame.Panel:Show()
+	else
+		BagsFrame.Panel:Hide()
+	end
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:CreateWindow(Language["Misc."])
+	
+	Left:CreateHeader(Language["Bags Frame"])
+	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "", UpdateShowBagsFrame)
+	
+	Left:CreateHeader(Language["Micro Buttons"])
+	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "", UpdateShowMicroButtons)
+	
+	Left:CreateFooter()
+end)

@@ -173,6 +173,12 @@ Defaults["minimap-size"] = 140
 -- Cooldowns
 Defaults["cooldowns-enable"] = true
 
+-- Micro Buttons
+Defaults["micro-buttons-show"] = false
+
+-- Bags Frame
+Defaults["bags-frame-show"] = true
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false
