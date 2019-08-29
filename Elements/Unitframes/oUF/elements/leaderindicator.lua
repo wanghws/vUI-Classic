@@ -81,7 +81,6 @@ local function Enable(self)
 		
 		self:RegisterEvent('PARTY_LEADER_CHANGED', Path, true)
 		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
-		self:RegisterEvent('PLAYER_ENTERING_WORLD', Path, true)
 
 		if (element:IsObjectType('Texture') and not element:GetTexture()) then
 			element:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])

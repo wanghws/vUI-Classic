@@ -54,6 +54,10 @@ local ToggleMove = function()
 	Move:Toggle()
 end
 
+local ResetMovers = function()
+	Move:ResetAll()
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["General"], true)
 	
@@ -73,8 +77,9 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale).Box:Save()
 	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
 	
-	--Left:CreateHeader("Move")
-	--Left:CreateButton("Toggle", "Move UI", "", ToggleMove)
+	Left:CreateHeader(Language["Move UI"])
+	Left:CreateButton(Language["Toggle"], Language["Move UI"], "", ToggleMove)
+	Left:CreateButton(Language["Restore"], Language["Restore To Defaults"], "", ResetMovers)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

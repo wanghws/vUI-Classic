@@ -1280,9 +1280,11 @@ Frame:SetScript("OnEvent", function(self, event)
 	
 	local Party = oUF:SpawnHeader(PartyAttributes())
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+	Move:Add(Party)
 	
 	local Raid = oUF:SpawnHeader(RaidAttributes())
 	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	Move:Add(Raid)
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target

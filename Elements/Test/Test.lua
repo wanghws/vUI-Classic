@@ -157,6 +157,7 @@ function Fonts:Load()
 end
 
 local BagsFrame = vUI:NewModule("Bags Frame")
+local Move = vUI:GetModule("Move")
 
 BagsFrame.Objects = {
 	MainMenuBarBackpackButton,
@@ -167,13 +168,14 @@ BagsFrame.Objects = {
 }
 
 function BagsFrame:Load()
-	local Panel = CreateFrame("Frame", nil, UIParent)
+	local Panel = CreateFrame("Frame", "vUI Bags Window", UIParent)
 	Panel:SetScaledSize(184, 40)
 	Panel:SetScaledPoint("BOTTOMRIGHT", -10, 10)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)
 	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Panel:SetBackdropBorderColor(0, 0, 0)
 	Panel:SetFrameStrata("LOW")
+	Move:Add(Panel)
 	
 	local Object
 	

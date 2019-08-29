@@ -25,7 +25,15 @@ end
 
 local OnMouseUp = function(self, button)
 	if (button == "RightButton") then
-		
+		if Move.Defaults[self.Name] then
+			local A1, Parent, A2, X, Y = unpack(Move.Defaults[self.Name])
+			local ParentObject = _G[Parent]
+			
+			self:ClearAllPoints()
+			self:SetScaledPoint(A1, ParentObject, A2, X, Y)
+			
+			vUIMove[self.Name] = {A1, Parent, A2, X, Y}
+		end
 	end
 end
 
@@ -59,6 +67,27 @@ function Move:Toggle()
 	end
 end
 
+function Move:ResetAll()
+	if (not vUIMove) then
+		vUIMove = {}
+	end
+	
+	local Frame
+	
+	for i = 1, #self.Frames do
+		Frame = self.Frames[i]
+		
+		if self.Defaults[Frame.Name] then
+			local A1, Parent, A2, X, Y = unpack(self.Defaults[Frame.Name])
+			
+			Frame:ClearAllPoints()
+			Frame:SetScaledPoint(A1, _G[Parent], A2, X, Y)
+			
+			vUIMove[Frame.Name] = {A1, Parent, A2, X, Y}
+		end
+	end
+end
+
 function Move:Add(frame)
 	if (not vUIMove) then
 		vUIMove = {}
@@ -66,6 +95,10 @@ function Move:Add(frame)
 	
 	local A1, Parent, A2, X, Y = frame:GetPoint()
 	local Name = frame:GetName()
+	
+	if (not Name) then
+		return
+	end
 	
 	if (not Parent) then
 		Parent = UIParent
@@ -76,7 +109,6 @@ function Move:Add(frame)
 	
 	local Mover = CreateFrame("Frame", nil, UIParent)
 	Mover:SetScaledSize(frame:GetSize())
-	Mover:SetScaledPoint(A1, ParentObject, A2, X, Y)
 	Mover:SetBackdrop(vUI.BackdropAndBorder)
 	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	Mover:SetBackdropBorderColor(0, 0, 0)
@@ -84,6 +116,7 @@ function Move:Add(frame)
 	Mover:SetFrameStrata("HIGH")
 	Mover:SetMovable(true)
 	Mover:SetUserPlaced(true)
+	Mover:SetScript("OnMouseUp", OnMouseUp)
 	Mover.Frame = frame
 	Mover.Name = Name
 	Mover:Hide()
@@ -95,6 +128,8 @@ function Move:Add(frame)
 	
 	frame:ClearAllPoints()
 	frame:SetScaledPoint("CENTER", Mover, 0, 0)
+	
+	self.Defaults[Name] = {A1, ParentName, A2, X, Y}
 	
 	if vUIMove[Name] then
 		local A1, Parent, A2, X, Y = unpack(vUIMove[Name])
