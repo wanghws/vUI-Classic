@@ -599,7 +599,7 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.Totems = Totems
-	elseif (vUI.UserClass == "ROGUE") then
+	elseif (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", nil, self)
 		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 		ComboPoints:SetScaledSize(230, 10)
