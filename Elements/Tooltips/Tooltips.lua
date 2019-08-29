@@ -257,6 +257,11 @@ local OnTooltipSetItem = function(self)
 	local Item, Link = self:GetItem()
 	local Count = GetItemCount(Link)
 	local SellValue = select(11, GetItemInfo(Link))
+	
+	if (not SellValue) then
+		return
+	end
+	
 	local CopperValue = SellValue * Count
 	
 	if (CopperValue == 0) then

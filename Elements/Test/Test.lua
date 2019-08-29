@@ -143,12 +143,18 @@ UpdateZone:SetScript("OnEvent", function(self)
 	end
 end)
 
-local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
+local Fonts = vUI:NewModule("Fonts")
 
-UNIT_NAME_FONT = WidgetFont
---NAMEPLATE_FONT = WidgetFont
-DAMAGE_TEXT_FONT = WidgetFont
-STANDARD_TEXT_FONT = WidgetFont
+function Fonts:Load()
+	local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
+
+	UNIT_NAME_FONT = WidgetFont
+	--NAMEPLATE_FONT = WidgetFont
+	DAMAGE_TEXT_FONT = WidgetFont
+	STANDARD_TEXT_FONT = WidgetFont
+	
+	AutoFollowStatusText:SetFontInfo(WidgetFont, 18)
+end
 
 local BagsFrame = vUI:NewModule("Bags Frame")
 

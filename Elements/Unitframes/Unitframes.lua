@@ -312,7 +312,7 @@ Methods["LevelColor"] = function(unit)
 	return vUI:UnitDifficultyColor(unit)
 end
 
-Events["PetColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP" -- UNIT_HAPPINESS
+Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP" -- UNIT_HAPPINESS
 Methods["PetColor"] = function(unit)
 	if (vUI.UserClass == "HUNTER") then
 		return Methods["HappinessColor"](unit)
@@ -321,36 +321,30 @@ Methods["PetColor"] = function(unit)
 	end
 end
 
--- Temporary so I can code on retail
-if vUI:IsClassic() then
-	Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
-	Methods["PetHappiness"] = function(unit)
-		if (unit == "pet") then
-			local Happiness = GetPetHappiness()
-			
-			if Happiness then
-				return HappinessLevels[Happiness]
-			end
+Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Methods["PetHappiness"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			return HappinessLevels[Happiness]
 		end
 	end
+end
 
-	Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
-	Methods["HappinessColor"] = function(unit)
-		if (unit == "pet") then
-			local Happiness = GetPetHappiness()
+Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Methods["HappinessColor"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			local Color = vUI.HappinessColors[Happiness]
 			
-			if Happiness then
-				local Color = vUI.HappinessColors[Happiness]
-				
-				if Color then
-					return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
-				end
+			if Color then
+				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
 			end
 		end
 	end
-else
-	Methods["PetHappiness"] = function() end
-	Methods["HappinessColor"] = function() end
 end
 
 local StyleNamePlate = function(self, unit)
