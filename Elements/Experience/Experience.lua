@@ -59,6 +59,12 @@ local UpdateXP = function(self, first)
 		self.Progress:SetText(Comma(XP) .. " / " .. Comma(Max))
 	end
 	
+	if IsResting() then
+		self.Resting:SetText("zZz")
+	else
+		self.Resting:SetText("")
+	end
+	
 	self.Percentage:SetText(floor((XP / Max * 100 + 0.05) * 10) / 10 .. "%")
 	
 	self.HeaderBG.Text:SetText(format("|cFF%s%s:|r %s", Settings["ui-header-font-color"], Language["Level"], UnitLevel("player")))

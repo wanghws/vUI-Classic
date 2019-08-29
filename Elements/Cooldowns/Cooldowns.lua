@@ -39,11 +39,21 @@ local Blacklist = {
 	},
 }
 
+local TextureFilter = {
+	[136235] = true
+}
+
 local GetTexture = function(cd, id)
+	local Texture
+	
 	if (cd == "item") then
-		return select(10, GetItemInfo(id))
+		Texture = select(10, GetItemInfo(id))
 	else
-		return GetSpellTexture(id)
+		Texture = GetSpellTexture(id)
+	end
+	
+	if (not TextureFilter[Texture]) then
+		return Texture
 	end
 end
 
@@ -102,8 +112,12 @@ local OnUpdate = function(self, ela)
 				local Remaining = Start + Duration - CurrentTime
 				
 				if (Remaining <= 0) then
-					Frame.Icon:SetTexture(GetTexture(CDType, ID))
-					PlayAnimation()
+					local Texture = GetTexture(CDType, ID)
+					
+					if Texture then
+						Frame.Icon:SetTexture(Texture)
+						PlayAnimation()
+					end
 					--PlaySound("MapPing", "master")
 					tremove(Data, Position)
 					ActiveCount = ActiveCount - 1
@@ -190,6 +204,8 @@ local UseContainerItem = function(bag, slot)
 		StartItem(ItemID)
 	end
 end
+
+local Move = vUI:GetModule("Move")
 
 function Cooldowns:Load()
 	if (not Settings["cooldowns-enable"]) then
