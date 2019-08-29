@@ -141,7 +141,7 @@ end
 vUI:UpdateScreenHeight()
 
 local GetScale = function(x)
-	return Scale * x
+	return floor(Scale * x + 0.5) 
 end
 
 vUI.GetScale = GetScale
