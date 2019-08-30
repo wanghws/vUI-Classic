@@ -196,6 +196,31 @@ Methods["ColoredHealthValues"] = function(unit)
 	return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(Current) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(Max)
 end
 
+Events["PartyInfo"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS"
+Methods["PartyInfo"] = function(unit)
+	if UnitIsDead(unit) then
+		return "|cFFEE4D4D" .. Language["Dead"]
+	elseif UnitIsGhost(unit) then
+		return "|cFFEEEEEE" .. Language["Ghost"]
+	elseif (not UnitIsConnected(unit)) then
+		return "|cFFBBBBBB" .. Language["Offline"]
+	end
+	
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	local Color = Methods["HealthColor"](unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
+	
+	if (Max == 0) then
+		return Color .. "0|r"
+	else
+		return Color .. floor(Current / Max * 100 + 0.5) .. "|r"
+	end
+end
+
 Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
 Methods["HealthColor"] = function(unit)
 	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
@@ -224,49 +249,63 @@ Events["Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name4"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 4)
+	if Name then
+		return sub(Name, 1, 4)
+	end
 end
 
 Events["Name5"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name5"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 5)
+	if Name then
+		return sub(Name, 1, 5)
+	end
 end
 
 Events["Name8"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 8)
+	if Name then
+		return sub(Name, 1, 8)
+	end
 end
 
 Events["Name10"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name10"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 10)
+	if Name then
+		return sub(Name, 1, 10)
+	end
 end
 
 Events["Name14"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name14"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 14)
+	if Name then
+		return sub(Name, 1, 14)
+	end
 end
 
 Events["Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 15)
+	if Name then
+		return sub(Name, 1, 15)
+	end
 end
 
 Events["Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Name20"] = function(unit)
 	local Name = UnitName(unit)
 	
-	return sub(Name, 1, 20)
+	if Name then
+		return sub(Name, 1, 20)
+	end
 end
 
 Events["NameColor"] = "UNIT_NAME_UPDATE"
@@ -657,7 +696,7 @@ local StylePlayer = function(self, unit)
 	--self.RaidTargetIndicator = RaidTarget
 	self.LeaderIndicator = Leader
 	
-	self:UpdateTags()
+	--self:UpdateTags()
 end
 
 local PostCreateIcon = function(unit, button)
@@ -746,11 +785,11 @@ local StyleTarget = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(HealthLeft, "[Name15]")
+		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name15]")
 	else
 		Health.colorHealth = true
 		
-		self:Tag(HealthLeft, "[NameColor][Name15]")
+		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name15]")
 		--self:Tag(HealthLeft, "[Name15]")
 	end
 	
@@ -880,6 +919,11 @@ local StyleTarget = function(self, unit)
 	self:Tag(PowerLeft, "[HealthValues]")
 	self:Tag(PowerRight, "[Power]")
 	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
+	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
@@ -956,6 +1000,11 @@ local StyleTargetTarget = function(self, unit)
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
+	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
@@ -1012,6 +1061,11 @@ local StylePet = function(self, unit)
 	
 	self:Tag(HealthLeft, "[PetColor][Name10]")
 	self:Tag(HealthRight, "[HealthColor][perhp]")
+	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -1094,7 +1148,12 @@ local StyleParty = function(self, unit)
 	
 	-- Tags
 	self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
-	self:Tag(HealthRight, "[HealthColor][perhp]")
+	self:Tag(HealthRight, "[PartyInfo]")
+	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -1106,6 +1165,66 @@ local StyleParty = function(self, unit)
 	self.ReadyCheck = ReadyCheck
 	self.LeaderIndicator = Leader
 	self.ReadyCheckIndicator = ReadyCheck
+	self.RaidTargetIndicator = RaidTarget
+end
+
+local StylePartyPet = function(self, unit)
+	-- General
+	self:RegisterForClicks("AnyUp")
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	
+	self:SetBackdrop(vUI.Backdrop)
+	self:SetBackdropColor(0, 0, 0)
+	
+	-- Health Bar
+	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
+	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetFrameLevel(5)
+	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local HealthBG = self:CreateTexture(nil, "BORDER")
+	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	HealthBG:SetAlpha(0.2)
+	
+	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
+	HealthLeft:SetJustifyH("LEFT")
+	
+	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
+	HealthRight:SetJustifyH("RIGHT")
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorTapping = true
+	Health.colorDisconnected = true
+	Health.colorClass = false
+	Health.colorHealth = true
+	
+	-- Target Icon
+	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
+	RaidTarget:SetScaledSize(16, 16)
+	RaidTarget:SetPoint("CENTER", Health, "TOP")
+	
+	-- Tags
+	self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
+	self:Tag(HealthRight, "[HealthColor][perhp]")
+	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
+	
+	self.Health = Health
+	self.Health.bg = HealthBG
+	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
 	self.RaidTargetIndicator = RaidTarget
 end
 
@@ -1159,6 +1278,11 @@ local StyleRaid = function(self, unit)
 	self:Tag(HealthLeft, "[NameColor][Name5]")
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
+	
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
@@ -1166,7 +1290,7 @@ end
 
 local PartyAttributes = function()
 	return
-	"vUIParty", nil, "party,solo",
+	"vUI Party", nil, "party,solo",
 	"initial-width", vUI.GetScale(160),
 	"initial-height", vUI.GetScale(38),
 	"showParty", true,
@@ -1191,9 +1315,36 @@ local PartyAttributes = function()
 	]]
 end
 
+local PartyPetAttributes = function()
+	return
+	"vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
+	"initial-width", vUI.GetScale(160),
+	"initial-height", vUI.GetScale(22),
+	"showParty", true,
+	"showRaid", false,
+	"showPlayer", true,
+	"showSolo", false,
+	"xoffset", vUI.GetScale(2),
+	"yOffset", vUI.GetScale(-2),
+	"point", "TOP",
+	"groupFilter", "1,2,3,4,5,6,7,8",
+	"groupingOrder", "1,2,3,4,5,6,7,8",
+	"groupBy", "GROUP",
+	"maxColumns", 8,
+	"unitsPerColumn", 5,
+	"columnSpacing", vUI.GetScale(3),
+	"columnAnchorPoint", "TOP",
+	"oUF-initialConfigFunction", [[
+		local Header = self:GetParent()
+		
+		self:SetWidth(Header:GetAttribute("initial-width"))
+		self:SetHeight(Header:GetAttribute("initial-height"))
+	]]
+end
+
 local RaidAttributes = function()
 	return
-	"vUIRaid", nil, "raid,solo",
+	"vUI Raid", nil, "raid,solo",
 	"initial-width", vUI.GetScale(76),
 	"initial-height", vUI.GetScale(22),
 	"showParty", false,
@@ -1227,6 +1378,8 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
+	elseif find(unit, "partypet") then
+		StylePartyPet(self, unit)
 	elseif find(unit, "party") then
 		StyleParty(self, unit)
 	elseif find(unit, "raid") then
@@ -1258,22 +1411,22 @@ Frame:SetScript("OnEvent", function(self, event)
 		return
 	end
 	
-	local Player = oUF:Spawn("player")
+	local Player = oUF:Spawn("player", "vUI Player")
 	Player:SetScaledSize(230, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 	Move:Add(Player)
 	
-	local Target = oUF:Spawn("target")
+	local Target = oUF:Spawn("target", "vUI Target")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 	Move:Add(Target)
 	
-	local TargetTarget = oUF:Spawn("targettarget")
+	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
 	TargetTarget:SetScaledSize(110, 26)
 	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
 	Move:Add(TargetTarget)
 	
-	local Pet = oUF:Spawn("pet")
+	local Pet = oUF:Spawn("pet", "vUI Pet")
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
 	Move:Add(Pet)
@@ -1282,9 +1435,34 @@ Frame:SetScript("OnEvent", function(self, event)
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	Move:Add(Party)
 	
+	for i = 1, 5 do
+		local PartyFrame = select(i, Party:GetChildren())
+		
+		if PartyFrame then
+			PartyFrame:UpdateAllElements("ForceUpdate")
+		end
+	end
+	
+	local PartyPet = oUF:SpawnHeader(PartyPetAttributes())
+	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
+	Move:Add(PartyPet)
+	
 	local Raid = oUF:SpawnHeader(RaidAttributes())
 	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
 	Move:Add(Raid)
+	
+	for i = 1, 40 do
+		local RaidFrame = select(i, Raid:GetChildren())
+		
+		if RaidFrame then
+			RaidFrame:UpdateAllElements("ForceUpdate")
+		end
+	end
+	
+	Player:UpdateAllElements("ForceUpdate")
+	Target:UpdateAllElements("ForceUpdate")
+	TargetTarget:UpdateAllElements("ForceUpdate")
+	Pet:UpdateAllElements("ForceUpdate")
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
