@@ -33,14 +33,17 @@ local Methods = oUF.Tags.Methods
 
 vUI.UnitFrames = {}
 
-local HappinessLevels = {Language["Unhappy"], Language["Content"], Language["Happy"]}
+local HappinessLevels = {
+	[1] = Language["Unhappy"],
+	[2] = Language["Content"],
+	[3] = Language["Happy"]
+}
 
 local Classes = {
 	["rare"] = Language["Rare"],
 	["elite"] = Language["Elite"],
 	["rareelite"] = Language["Rare Elite"],
 	["worldboss"] = Language["Boss"],
-	["minus"] = Language["Affix"],
 }
 
 local ShortClasses = {

@@ -158,11 +158,11 @@ local BagsFrame = vUI:NewModule("Bags Frame")
 local Move = vUI:GetModule("Move")
 
 BagsFrame.Objects = {
-	MainMenuBarBackpackButton,
-	CharacterBag0Slot,
-	CharacterBag1Slot,
-	CharacterBag2Slot,
 	CharacterBag3Slot,
+	CharacterBag2Slot,
+	CharacterBag1Slot,
+	CharacterBag0Slot,
+	MainMenuBarBackpackButton,
 }
 
 function BagsFrame:Load()
