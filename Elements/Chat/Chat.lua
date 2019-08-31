@@ -879,6 +879,7 @@ local UpdateChatFont = function()
 end
 
 local UpdateChatTabFont = function()
+	local R, G, B = vUI:HexToRGB(Settings["chat-tab-font-color"])
 
 	for i = 1, NUM_CHAT_WINDOWS do
 		local TabText = _G["ChatFrame" .. i .. "TabText"]
