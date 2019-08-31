@@ -8,7 +8,7 @@ local format = format
 local select = select
 local floor = floor
 
-local Frame = CreateFrame("Frame", "vUIMinimap", UIParent)
+local Frame = CreateFrame("Frame", "vUI Minimap", UIParent)
 
 local ZoneUpdate = function(self)
 	local Zone = GetMinimapZoneText()
@@ -19,6 +19,8 @@ local ZoneUpdate = function(self)
 	self.Text:SetTextColor(Color[1], Color[2], Color[3])
 end
 
+local Move = vUI:GetModule("Move")
+
 local CreateMinimap = function()
 	Frame:SetScaledSize(Settings["minimap-size"] + 8, (22 + 8 + Settings["minimap-size"]))
 	Frame:SetScaledPoint("TOPRIGHT", UIParent, -12, -12)
@@ -26,6 +28,8 @@ local CreateMinimap = function()
 	Frame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Frame:SetBackdropBorderColor(0, 0, 0)
 	Frame.Ela = 0
+	
+	Move:Add(Frame)
 	
 	local ZoneFrame = CreateFrame("Frame", "vUIZoneFrame", Frame)
 	ZoneFrame:SetScaledHeight(20)

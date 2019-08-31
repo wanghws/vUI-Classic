@@ -230,6 +230,7 @@ Media:SetTexture("pHishTex12", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTe
 Media:SetTexture("pHishTex28", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex28.tga", true)
 Media:SetTexture("Warning", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIWarning.tga", true)
 Media:SetTexture("Leader", "Interface\\AddOns\\vUI\\Media\\Textures\\vUILeader.tga", true)
+Media:SetTexture("Heart", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIHeart.tga", true)
 
 -- Highlights
 Media:SetHighlight("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")

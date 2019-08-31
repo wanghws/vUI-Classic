@@ -88,6 +88,10 @@ function Move:ResetAll()
 	end
 end
 
+local OnSizeChanged = function(self)
+	self.Mover:SetScaledSize(self:GetSize())
+end
+
 function Move:Add(frame)
 	if (not vUIMove) then
 		vUIMove = {}
@@ -128,6 +132,8 @@ function Move:Add(frame)
 	
 	frame:ClearAllPoints()
 	frame:SetScaledPoint("CENTER", Mover, 0, 0)
+	frame.Mover = Mover
+	frame:HookScript("OnSizeChanged", OnSizeChanged)
 	
 	self.Defaults[Name] = {A1, ParentName, A2, X, Y}
 	

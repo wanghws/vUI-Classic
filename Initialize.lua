@@ -189,6 +189,10 @@ function vUI:ShortValue(num)
 end
 
 function vUI:UnitDifficultyColor(unit)
+	if (not Core[5]) then
+		return "|cFFFFFFFF"
+	end
+	
 	local Difference = UnitLevel(unit) - UnitLevel("player")
 	
 	if (Difference >= 5) then
@@ -377,7 +381,7 @@ local Handled = {
 }
 
 local Object = vUI
---local HandledCount = 0
+local HandledCount = 0
 
 -- Thank you Tukz for letting me use this script!
 local AddMethodsToObject = function(object)

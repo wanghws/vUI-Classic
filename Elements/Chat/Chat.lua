@@ -532,14 +532,12 @@ local MoveChatFrames = function()
 	for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
 		
-		-- Set font size and chat frame size
 		Frame:SetScaledSize(vUIChatFrame:GetWidth() - 8, vUIChatFrame:GetHeight() - 8)
 		Frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 		Frame:SetFrameStrata("MEDIUM")
 		Frame:SetJustifyH("LEFT")
 		Frame:Hide()
 		
-		-- Set default chat frame position
 		if (Frame:GetID() == 1) then
 			Frame:ClearAllPoints()
 			Frame:SetScaledPoint("TOPLEFT", vUIChatFrame, 4, -4)
@@ -770,6 +768,16 @@ end
 local EventFrame = CreateFrame("Frame")
 EventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 EventFrame:SetScript("OnEvent", function(self, event)
+	if self[event] then
+		self[event](self, event)
+	end
+end)
+
+EventFrame["UI_SCALE_CHANGED"] = function(self, event)
+	MoveChatFrames()
+end
+
+EventFrame["PLAYER_ENTERING_WORLD"] = function(self, event)
 	if (not Settings["chat-enable"]) then
 		self:UnregisterEvent(event)
 		
@@ -811,8 +819,9 @@ EventFrame:SetScript("OnEvent", function(self, event)
 		ChatFrameOnEvent = DEFAULT_CHAT_FRAME:GetScript("OnEvent")
 	end
 	
+	self:RegisterEvent("UI_SCALE_CHANGED")
 	self:UnregisterEvent(event)
-end)
+end
 
 vUI.FormatLinks = FormatLinks
 

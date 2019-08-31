@@ -166,7 +166,7 @@ Methods["HealthValues"] = function(unit)
 	elseif UnitIsGhost(unit) then
 		return "|cFFEEEEEE" .. Language["Ghost"] .. "|r"
 	elseif (not UnitIsConnected(unit)) then
-		return "|cFFBBBBBB" .. Language["Offline"] .. "|r"
+		return "|cFFEEEEEE" .. Language["Offline"] .. "|r"
 	end
 	
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
@@ -186,7 +186,7 @@ Methods["ColoredHealthValues"] = function(unit)
 	elseif UnitIsGhost(unit) then
 		return "|cFFEEEEEE" .. Language["Ghost"]
 	elseif (not UnitIsConnected(unit)) then
-		return "|cFFBBBBBB" .. Language["Offline"]
+		return "|cFFEEEEEE" .. Language["Offline"]
 	end
 	
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
@@ -206,7 +206,7 @@ Methods["PartyInfo"] = function(unit)
 	elseif UnitIsGhost(unit) then
 		return "|cFFEEEEEE" .. Language["Ghost"]
 	elseif (not UnitIsConnected(unit)) then
-		return "|cFFBBBBBB" .. Language["Offline"]
+		return "|cFFEEEEEE" .. Language["Offline"]
 	end
 	
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
@@ -226,7 +226,16 @@ end
 
 Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
 Methods["HealthColor"] = function(unit)
-	return "|cFF" .. vUI:RGBToHex(GetColor(UnitHealth(unit) / UnitHealthMax(unit), 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	local Current, Max, Found = LCMH:GetUnitHealth(unit)
+	
+	if (not Found) then
+		Current = UnitHealth(unit)
+		Max = UnitHealthMax(unit)
+	end
+	
+	if (Current and Max) then
+		return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	end
 end
 
 Events["Power"] = "UNIT_POWER_FREQUENT"
@@ -520,6 +529,7 @@ local StylePlayer = function(self, unit)
 	
 	-- Attributes
 	Health.frequentUpdates = true
+	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
 	if Settings["unitframes-player-cc-health"] then
@@ -553,6 +563,7 @@ local StylePlayer = function(self, unit)
 	
 	-- Attributes
 	Power.frequentUpdates = true
+	Power.Smooth = true
 	
 	if Settings["unitframes-player-cc-health"] then
 		Power.colorPower = true
@@ -753,6 +764,8 @@ local StyleTarget = function(self, unit)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
 	Health:SetScaledHeight(28)
 	Health:SetFrameLevel(5)
+	Health:SetMinMaxValues(0, 1)
+	Health:SetValue(1)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
@@ -780,6 +793,7 @@ local StyleTarget = function(self, unit)
 	
 	-- Attributes
 	Health.frequentUpdates = true
+	Health.Smooth = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
 	self.colors.health = {R, G, B}
@@ -821,6 +835,7 @@ local StyleTarget = function(self, unit)
 	-- Attributes
 	Power.frequentUpdates = true
 	Power.colorReaction = true
+	Power.Smooth = true
 	
 	if Settings["unitframes-target-cc-health"] then
 		Power.colorPower = true
@@ -986,6 +1001,7 @@ local StyleTargetTarget = function(self, unit)
 	Health.frequentUpdates = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
+	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
 	if Settings["unitframes-target-cc-health"] then
@@ -1054,6 +1070,7 @@ local StylePet = function(self, unit)
 	Health.frequentUpdates = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
+	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
 	if Settings["unitframes-target-cc-health"] then
@@ -1114,6 +1131,7 @@ local StyleParty = function(self, unit)
 	Health.colorDisconnected = true
 	Health.colorClass = false
 	Health.colorHealth = true
+	Health.Smooth = true
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
@@ -1209,6 +1227,7 @@ local StylePartyPet = function(self, unit)
 	Health.colorDisconnected = true
 	Health.colorClass = false
 	Health.colorHealth = true
+	Health.Smooth = true
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
@@ -1270,6 +1289,7 @@ local StyleRaid = function(self, unit)
 	Health.frequentUpdates = true
 	Health.colorTapping = true
 	Health.colorDisconnected = true
+	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
 	if Settings["unitframes-target-cc-health"] then
@@ -1293,7 +1313,7 @@ end
 
 local PartyAttributes = function()
 	return
-	"vUI Party", nil, "party,solo",
+	"vUI Party", nil, "custom [@raid6,exists] hide;show",
 	"initial-width", vUI.GetScale(160),
 	"initial-height", vUI.GetScale(38),
 	"showParty", true,
@@ -1320,7 +1340,7 @@ end
 
 local PartyPetAttributes = function()
 	return
-	"vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
+	"vUI Party Pets", "SecureGroupPetHeaderTemplate", "custom [@raid6,exists] hide;show",
 	"initial-width", vUI.GetScale(160),
 	"initial-height", vUI.GetScale(22),
 	"showParty", true,
@@ -1347,7 +1367,7 @@ end
 
 local RaidAttributes = function()
 	return
-	"vUI Raid", nil, "raid,solo",
+	"vUI Raid", nil, "custom [@raid6,exists] show;hide",
 	"initial-width", vUI.GetScale(76),
 	"initial-height", vUI.GetScale(22),
 	"showParty", false,
@@ -1407,9 +1427,9 @@ local PlateCVars = {
 
 local Move = vUI:GetModule("Move")
 
-local Frame = CreateFrame("Frame")
-Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-Frame:SetScript("OnEvent", function(self, event)
+local UF = vUI:NewModule("Unit Frames")
+
+function UF:Load()
 	if (not Settings["unitframes-enable"]) then
 		return
 	end
@@ -1434,34 +1454,6 @@ Frame:SetScript("OnEvent", function(self, event)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
 	Move:Add(Pet)
 	
-	local Party = oUF:SpawnHeader(PartyAttributes())
-	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
-	Move:Add(Party)
-	
-	for i = 1, 5 do
-		local PartyFrame = select(i, Party:GetChildren())
-		
-		if PartyFrame then
-			PartyFrame:UpdateAllElements("ForceUpdate")
-		end
-	end
-	
-	local PartyPet = oUF:SpawnHeader(PartyPetAttributes())
-	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
-	Move:Add(PartyPet)
-	
-	local Raid = oUF:SpawnHeader(RaidAttributes())
-	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
-	Move:Add(Raid)
-	
-	for i = 1, 40 do
-		local RaidFrame = select(i, Raid:GetChildren())
-		
-		if RaidFrame then
-			RaidFrame:UpdateAllElements("ForceUpdate")
-		end
-	end
-	
 	Player:UpdateAllElements("ForceUpdate")
 	Target:UpdateAllElements("ForceUpdate")
 	TargetTarget:UpdateAllElements("ForceUpdate")
@@ -1476,8 +1468,19 @@ Frame:SetScript("OnEvent", function(self, event)
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)
 	end
 	
-	self:UnregisterEvent(event)
-end)
+	local Party = oUF:SpawnHeader(PartyAttributes())
+	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+	
+	local PartyPet = oUF:SpawnHeader(PartyPetAttributes())
+	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
+	
+	local Raid = oUF:SpawnHeader(RaidAttributes())
+	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	
+	Move:Add(Party)
+	Move:Add(PartyPet)
+	Move:Add(Raid)
+end
 
 local TogglePlayerName = function(value)
 	if value then
