@@ -18,6 +18,8 @@ local PET_WIDTH = ((BUTTON_SIZE * 1) + (SPACING * 3))
 local PET_HEIGHT = ((BUTTON_SIZE * 10) + (SPACING * 12))
 
 local Num = NUM_ACTIONBAR_BUTTONS
+local IsUsableAction = IsUsableAction
+local IsActionInRange = IsActionInRange
 
 local ActionBars = CreateFrame("Frame")
 
@@ -672,6 +674,24 @@ local SetHighlightTexture = function(value)
 	end
 end
 
+local UpdateButtonStatus = function(self)
+	local IsUsable, NoMana = IsUsableAction(self.action)
+	
+	if IsUsable then
+		local InRange = IsActionInRange(self.action)
+		
+		if (InRange == false) then
+			self.icon:SetVertexColorHex("FF4C19")
+		else
+			self.icon:SetVertexColorHex("FFFFFF")
+		end
+	elseif NoMana then
+		self.icon:SetVertexColorHex("3498D8")
+	else
+		self.icon:SetVertexColorHex("4C4C4C")
+	end
+end
+
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
 	if (not Settings["action-bars-enable"]) then
@@ -689,6 +709,10 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	SetActionBarToggles(1, 1, 1, 1)
 	
 	SetActionBarLayout(Settings["action-bars-layout"])
+	
+	hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
+	hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
+	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
 	
 	self:UnregisterEvent(event)
 end)
