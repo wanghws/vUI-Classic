@@ -679,6 +679,7 @@ local Install = function()
 	ChatFrame_AddMessageGroup(ChatFrame5, "COMBAT_FACTION_CHANGE")
 	ChatFrame_AddMessageGroup(ChatFrame5, "LOOT")
 	ChatFrame_AddMessageGroup(ChatFrame5, "MONEY")
+	ChatFrame_AddMessageGroup(ChatFrame5, "SKILL")
 	
 	-- Enable Classcolor
 	ToggleChatColorNamesByClassGroup(true, "SAY")
@@ -773,9 +774,7 @@ EventFrame:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-EventFrame["UI_SCALE_CHANGED"] = function(self, event)
-	MoveChatFrames()
-end
+EventFrame["UI_SCALE_CHANGED"] = MoveChatFrames
 
 EventFrame["PLAYER_ENTERING_WORLD"] = function(self, event)
 	if (not Settings["chat-enable"]) then
