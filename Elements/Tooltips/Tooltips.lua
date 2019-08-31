@@ -268,10 +268,10 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
-	local FormattedString = GetCoinTextureString(CopperValue)
+	local CoinString = GetCoinTextureString(CopperValue)
 	
-	if FormattedString then
-		GameTooltip:AddLine(format("%s %s", Language["Sell Value:"], FormattedString), 1, 1, 1)
+	if CoinString then
+		GameTooltip:AddLine(format("%s %s", Language["Sell Value:"], CoinString), 1, 1, 1)
 	end
 end
 

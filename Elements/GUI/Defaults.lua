@@ -181,6 +181,9 @@ Defaults["micro-buttons-show"] = false
 -- Bags Frame
 Defaults["bags-frame-show"] = true
 
+-- Auto Repair
+Defaults["auto-repair-enable"] = true
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false

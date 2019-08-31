@@ -451,6 +451,7 @@ local StyleNamePlate = function(self, unit)
 	
 	Health.colorTapping = true
 	Health.colorDisconnected = true
+	Health.Smooth = true
 	
 	if Settings["nameplates-cc-health"] then
 		Health.colorReaction = true
@@ -1437,22 +1438,18 @@ function UF:Load()
 	local Player = oUF:Spawn("player", "vUI Player")
 	Player:SetScaledSize(230, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
-	Move:Add(Player)
 	
 	local Target = oUF:Spawn("target", "vUI Target")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
-	Move:Add(Target)
 	
 	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
 	TargetTarget:SetScaledSize(110, 26)
 	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
-	Move:Add(TargetTarget)
 	
 	local Pet = oUF:Spawn("pet", "vUI Pet")
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
-	Move:Add(Pet)
 	
 	Player:UpdateAllElements("ForceUpdate")
 	Target:UpdateAllElements("ForceUpdate")
@@ -1477,6 +1474,10 @@ function UF:Load()
 	local Raid = oUF:SpawnHeader(RaidAttributes())
 	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
 	
+	Move:Add(Player)
+	Move:Add(Target)
+	Move:Add(TargetTarget)
+	Move:Add(Pet)
 	Move:Add(Party)
 	Move:Add(PartyPet)
 	Move:Add(Raid)

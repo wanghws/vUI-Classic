@@ -298,6 +298,36 @@ function MicroButtons:Load()
 	self.Panel = Panel
 end
 
+local AutoRepair = vUI:NewModule("Auto Repair")
+
+AutoRepair:SetScript("OnEvent", function(self, event)
+	if CanMerchantRepair() then
+		local Cost, Possible = GetRepairAllCost()
+		
+		if (Cost > 0) then
+			if Possible then
+				RepairAllItems()
+				
+				local CoinString = GetCoinTextureString(Cost)
+				
+				if CoinString then
+					vUI:print(format(Language["Your equipment has been repaired at a cost of %s."], CoinString))
+				end
+			else
+				vUI:print(Language["You don't have enough money to repair."])
+			end
+		end
+	end
+end)
+
+function AutoRepair:Load()
+	if Settings["auto-repair-enable"] then
+		self:RegisterEvent("MERCHANT_SHOW")
+	else
+		self:UnregisterEvent("MERCHANT_SHOW")
+	end
+end
+
 local UpdateShowMicroButtons = function(value)
 	if value then
 		MicroButtons.Panel:Show()
@@ -314,14 +344,21 @@ local UpdateShowBagsFrame = function(value)
 	end
 end
 
+local UpdateAutoRepair = function(value)
+	if value then
+		AutoRepair:RegisterEvent("MERCHANT_SHOW")
+	else
+		AutoRepair:UnregisterEvent("MERCHANT_SHOW")
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Misc."])
 	
-	Left:CreateHeader(Language["Bags Frame"])
+	Left:CreateHeader(Language["Miscellaneous Modules"])
 	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "", UpdateShowBagsFrame)
-	
-	Left:CreateHeader(Language["Micro Buttons"])
 	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "", UpdateShowMicroButtons)
+	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Enable Auto Repair"], "", UpdateAutoRepair)
 	
 	Left:CreateFooter()
 end)
