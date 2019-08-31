@@ -301,11 +301,14 @@ end
 local AutoRepair = vUI:NewModule("Auto Repair")
 
 AutoRepair:SetScript("OnEvent", function(self, event)
+	local Money = GetMoney()
+	
 	if CanMerchantRepair() then
-		local Cost, Possible = GetRepairAllCost()
+		local Cost = GetRepairAllCost()
+		local CoinString
 		
 		if (Cost > 0) then
-			if Possible then
+			if (Money > Cost) then
 				RepairAllItems()
 				
 				local CoinString = GetCoinTextureString(Cost)
@@ -314,7 +317,13 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 					vUI:print(format(Language["Your equipment has been repaired at a cost of %s"], CoinString))
 				end
 			else
-				vUI:print(Language["You don't have enough money to repair."])
+				local Required = Cost - Money
+				
+				CoinString = GetCoinTextureString(Required)
+				
+				if CoinString then
+					vUI:print(format(Language["You require %s to repair"], CoinString))
+				end
 			end
 		end
 	end
