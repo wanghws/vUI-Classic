@@ -47,10 +47,10 @@ local Classes = {
 }
 
 local ShortClasses = {
-	["rare"] = Language["R"],
+	["rare"] = Language[" R"],
 	["elite"] = Language["+"],
-	["rareelite"] = Language["R+"],
-	["worldboss"] = Language["B"],
+	["rareelite"] = Language[" R+"],
+	["worldboss"] = Language[" B"],
 }
 
 local GetColor = function(p, r1, g1, b1, r2, g2, b2)
@@ -1534,10 +1534,10 @@ GUI:AddOptions(function(self)
 	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "")
 	
 	Right:CreateHeader(Language["Information"])
-	Right:CreateInput("nameplates-topleft-text", Settings["nameplates-topleft-text"], Language["Top Left Text"], "")
-	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "")
-	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
-	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
+	Right:CreateInput("nameplates-topleft-text", Settings["nameplates-topleft-text"], Language["Top Left Text"], "").Box:Save()
+	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "").Box:Save()
+	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "").Box:Save()
+	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "").Box:Save()
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

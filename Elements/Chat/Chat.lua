@@ -426,10 +426,11 @@ local StyleChatFrame = function(frame)
 	Tab:SetAlpha(1)
 	Tab.SetAlpha = UIFrameFadeRemoveFrame
 	
-	TabText:SetFontInfo(Settings["ui-widget-font"], 12)
-	TabText.SetFont = function() end
+	TabText:SetFontInfo(Settings["chat-tab-font"], Settings["chat-tab-font-size"], Settings["chat-tab-font-flags"])
+	--TabText.SetFont = function() end
 	
-	TabText:SetTextColorHex(Settings["ui-widget-color"])
+	TabText:SetTextColorHex(Settings["chat-tab-font-color"])
+	TabText._SetTextColor = TabText.SetTextColor
 	TabText.SetTextColor = function() end
 	
 	if Tab.glow then
@@ -877,6 +878,25 @@ local UpdateChatFont = function()
 	end
 end
 
+local UpdateChatTabFont = function()
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local TabText = _G["ChatFrame" .. i .. "TabText"]
+		local Font, IsPixel = Media:GetFont(Settings["chat-tab-font"])
+		
+		TabText:_SetTextColor(R, G, B)
+		
+		if IsPixel then
+			TabText:SetFont(Font, Settings["chat-tab-font-size"], "MONOCHROME, OUTLINE")
+			TabText:SetShadowColor(0, 0, 0, 0)
+		else
+			TabText:SetFont(Font, Settings["chat-tab-font-size"], Settings["chat-tab-font-flags"])
+			TabText:SetShadowColor(0, 0, 0)
+			TabText:SetShadowOffset(1, -1)
+		end
+	end
+end
+
 local RunChatInstall = function()
 	Install()
 	ReloadUI()
@@ -904,10 +924,16 @@ GUI:AddOptions(function(self)
 	Right:CreateCheckbox("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "")
 	Right:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "")
 	
-	Left:CreateHeader(Language["Font"])
-	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Chat Font"], "", UpdateChatFont, "Font")
+	Left:CreateHeader(Language["Chat Frame Font"])
+	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Font"], "", UpdateChatFont, "Font")
 	Left:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "", UpdateChatFont)
 	Left:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "", UpdateChatFont)
+	
+	Left:CreateHeader(Language["Tab Font"])
+	Left:CreateDropdown("chat-tab-font", Settings["chat-tab-font"], Media:GetFontList(), Language["Font"], "", UpdateChatTabFont, "Font")
+	Left:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "", UpdateChatTabFont)
+	Left:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "", UpdateChatTabFont)
+	Left:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "", UpdateChatTabFont)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

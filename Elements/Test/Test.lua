@@ -311,7 +311,7 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 				local CoinString = GetCoinTextureString(Cost)
 				
 				if CoinString then
-					vUI:print(format(Language["Your equipment has been repaired at a cost of %s."], CoinString))
+					vUI:print(format(Language["Your equipment has been repaired at a cost of %s"], CoinString))
 				end
 			else
 				vUI:print(Language["You don't have enough money to repair."])

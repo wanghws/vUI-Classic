@@ -146,10 +146,10 @@ Defaults["chat-enable-friend-links"] = true
 Defaults["chat-font"] = "PT Sans"
 Defaults["chat-font-size"] = 12
 Defaults["chat-font-flags"] = ""
-Defaults["chat-tab-font"] = "PT Sans"
+Defaults["chat-tab-font"] = "Roboto"
 Defaults["chat-tab-font-size"] = 12
 Defaults["chat-tab-font-flags"] = ""
-Defaults["chat-tab-font-color"] = "F1C40F"
+Defaults["chat-tab-font-color"] = "FFCE54" -- F1C40F
 Defaults["chat-frame-width"] = 392
 Defaults["chat-frame-height"] = 104
 

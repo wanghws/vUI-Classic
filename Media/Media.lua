@@ -341,6 +341,11 @@ Media:SetStyle("vUI", {
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "Roboto",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "FFC44D",
 })
 
 -- vUI 2
@@ -370,6 +375,11 @@ Media:SetStyle("vUI 2", {
 	["chat-font"] = "PT Sans",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "PT Sans",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "FFB74D",
 })
 
 -- Conjured Muffin
@@ -399,6 +409,11 @@ Media:SetStyle("Conjured Muffin", {
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "Roboto",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "ECEFF1",
 })
 
 -- Zen
@@ -428,6 +443,11 @@ Media:SetStyle("Zen", {
 	["chat-font"] = "Prototype",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "Prototype",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "00FF99",
 })
 
 -- Slate
@@ -457,6 +477,11 @@ Media:SetStyle("Slate", {
 	["chat-font"] = "PT Sans",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "PT Sans",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "BBDEFB",
 })
 
 -- Unnamed
@@ -486,4 +511,9 @@ Media:SetStyle("Unnamed", {
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "Roboto",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "00CC6A",
 })
