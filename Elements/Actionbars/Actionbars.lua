@@ -601,6 +601,10 @@ local Set3x2Style = function()
 	end
 end
 
+local Set4x1Style = function()
+	
+end
+
 local SetActionBarLayout = function(value)
 	if (value == "2x3") then
 		Set2x3Style()

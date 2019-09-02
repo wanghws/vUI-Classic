@@ -160,6 +160,18 @@ local CreateID = function(text)
 	return text
 end
 
+local AnchorOnEnter = function(self)
+	if (self.Tooltip ~= "" or self.Tooltip ~= nil) then
+		GameTooltip:SetOwner(self, "ANCHOR_PRESERVE")
+		GameTooltip:AddLine(self.Tooltip, 1, 1, 1)
+		GameTooltip:Show()
+	end
+end
+
+local AnchorOnLeave = function(self)
+	GameTooltip:Hide()
+end
+
 -- Widgets
 
 -- Line
@@ -493,6 +505,10 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Button = CreateFrame("Frame", nil, Anchor)
 	Button:SetScaledSize(BUTTON_WIDTH, WIDGET_HEIGHT)
@@ -505,7 +521,6 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button:SetScript("OnEnter", ButtonWidgetOnEnter)
 	Button:SetScript("OnLeave", ButtonWidgetOnLeave)
 	Button.Hook = hook
-	Button.Tooltip = tooltip
 	Button.RequiresReload = ButtonRequiresReload
 	
 	Button.Texture = Button:CreateTexture(nil, "BORDER")
@@ -547,6 +562,10 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Backdrop = CreateFrame("Frame", nil, Anchor)
 	Backdrop:SetScaledSize(STATUSBAR_WIDTH, WIDGET_HEIGHT)
@@ -650,6 +669,10 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Checkbox = CreateFrame("Frame", nil, Anchor)
 	Checkbox:SetScaledSize(CHECKBOX_WIDTH, WIDGET_HEIGHT)
@@ -792,6 +815,10 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Switch = CreateFrame("Frame", nil, Anchor)
 	Switch:SetScaledSize(SWITCH_WIDTH, WIDGET_HEIGHT)
@@ -945,6 +972,10 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Input = CreateFrame("Frame", nil, Anchor)
 	Input:SetScaledSize(INPUT_WIDTH, WIDGET_HEIGHT)
@@ -1038,6 +1069,10 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
@@ -1679,6 +1714,10 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Dropdown = CreateFrame("Frame", nil, Anchor)
 	Dropdown:SetScaledSize(DROPDOWN_WIDTH, WIDGET_HEIGHT)
@@ -2106,6 +2145,10 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Anchor:SetScaledSize(GROUP_WIDTH, DROPDOWN_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	if prefix then
 		prefix = "|cFF"..Settings["ui-header-font-color"]..prefix.."|r"
@@ -2653,7 +2696,6 @@ local CreateColorPicker = function()
 	local PaletteDropdown = GUI.Widgets.CreateDropdown(ColorPicker, "ui-picker-palette", Settings["ui-picker-palette"], Media:GetPaletteList(), "Set Palette", "", UpdateColorPalette, "Palette")
 	PaletteDropdown:ClearAllPoints()
 	PaletteDropdown:SetScaledPoint("BOTTOMLEFT", ColorPicker, 2, 3)
---	PaletteDropdown:SetScaledPoint("BOTTOMLEFT", ColorPicker, 0, 3)
 	PaletteDropdown:GetParent():SetScaledPoint("BOTTOMLEFT", ColorPicker, 0, 3)
 	PaletteDropdown.Text:ClearAllPoints()
 	PaletteDropdown.Text:SetScaledPoint("LEFT", PaletteDropdown, "RIGHT", LABEL_SPACING, 0)
@@ -2800,6 +2842,10 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = id
 	Anchor.Text = label
+	Anchor.Tooltip = tooltip
+	
+	Anchor:SetScript("OnEnter", AnchorOnEnter)
+	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
 	local Swatch = CreateFrame("Frame", nil, Anchor)
 	Swatch:SetScaledSize(SWATCH_SIZE, SWATCH_SIZE)

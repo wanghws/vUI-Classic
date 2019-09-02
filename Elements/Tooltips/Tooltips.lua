@@ -293,7 +293,7 @@ local OnTooltipSetItem = function(self)
 	end
 end
 
-local SetTooltipDefaultAnchor = function(self) -- Not actually moving them yet, not sure where to place it.
+local SetTooltipDefaultAnchor = function(self)
 	local Unit, UnitID = self:GetUnit()
 	
 	if UnitID then

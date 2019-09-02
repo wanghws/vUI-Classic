@@ -47,22 +47,17 @@ local UpdateXP = function(self, first)
 	Rested = GetXPExhaustion()
     XP = UnitXP("player")
     Max = UnitXPMax("player")
+    Resting = IsResting() and ("|cFF" .. Settings["experience-rested-color"] .. "zZz|r") or ""
 	
 	self.Bar:SetMinMaxValues(0, Max)
 	self.Bar.Rested:SetMinMaxValues(0, Max)
 	
 	if Rested then
 		self.Bar.Rested:SetValue(XP + Rested)
-		self.Progress:SetText(Comma(XP) .. " / " .. Comma(Max) .. " (+" .. Comma(Rested) .. ")")
+		self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(Max), Comma(Rested), Resting))
 	else
 		self.Bar.Rested:SetValue(0)
-		self.Progress:SetText(Comma(XP) .. " / " .. Comma(Max))
-	end
-	
-	if IsResting() then
-		self.Resting:SetText("zZz")
-	else
-		self.Resting:SetText("")
+		self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(Max), Resting))
 	end
 	
 	self.Percentage:SetText(floor((XP / Max * 100 + 0.05) * 10) / 10 .. "%")
@@ -242,8 +237,8 @@ local OnEnter = function(self)
 		
 		local XPColor = Settings["experience-bar-color"]
 		local RestedColor = Settings["experience-rested-color"]
-		
 		local Perc = floor(XP / Max * 100 + 0.5)
+		
 		if Rested then
 			GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r - |cFF%s%s%%|r", XPColor, Comma(XP), Comma(Max), RestedColor, Comma(Rested), XPColor, Perc))
 		else
@@ -406,9 +401,9 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.Bar.Rested = CreateFrame("StatusBar", nil, self.Bar)
 	self.Bar.Rested:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	self.Bar.Rested:SetStatusBarColorHex(Settings["experience-rested-color"])
 	self.Bar.Rested:SetFrameLevel(5)
 	self.Bar.Rested:SetAllPoints(self.Bar)
-	self.Bar.Rested:SetStatusBarColorHex("00B4FF")
 	--self.Bar.Rested:SetFrameStrata("MEDIUM")
 	--self.Bar.Rested:SetAlpha(0.5)
 	
@@ -423,12 +418,6 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self.Progress:SetFontInfo(Settings["ui-widget-font"], 12)
 	self.Progress:SetJustifyH("LEFT")
 	
-	self.Resting = self.Bar:CreateFontString(nil, "OVERLAY")
-	self.Resting:SetScaledPoint("CENTER", self.Bar, 0, 0)
-	self.Resting:SetFontInfo(Settings["ui-widget-font"], 12)
-	self.Resting:SetJustifyH("CENTER")
-	self.Resting:SetTextColorHex(Settings["experience-rested-color"])
-	
 	-- Add fade to self.Progress
 	
 	self.Percentage = self.Bar:CreateFontString(nil, "OVERLAY")
@@ -441,7 +430,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	UpdateDisplayLevel(Settings["experience-display-level"])
 	UpdateDisplayProgress(Settings["experience-display-progress"])
 	UpdateDisplayPercent(Settings["experience-display-percent"])
-	--UpdateBarPosition(Settings["experience-position"])
+	UpdateBarPosition(Settings["experience-position"])
 	UpdateProgressVisibility(Settings["experience-progress-visibility"])
 	UpdatePercentVisibility(Settings["experience-percent-visibility"])
 	UpdateXP(self, true)
@@ -490,7 +479,6 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
 	
 	Right:CreateHeader(Language["Visibility"])
-	
 	Right:CreateDropdown("experience-progress-visibility", Settings["experience-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "", UpdateProgressVisibility)
 	Right:CreateDropdown("experience-percent-visibility", Settings["experience-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "", UpdatePercentVisibility)
 	

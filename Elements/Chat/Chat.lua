@@ -17,22 +17,20 @@ local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 local ChatEdit_ParseText = ChatEdit_ParseText
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
-local FormatDiscordHyperlink = function(id) -- /run print("https://discord.gg/1a2b3c")
-	local Link = format("https://discord.gg/%s", id)
-	
-	return format("|cFF7289DA|Hdiscord:%s|h[%s: %s]|h|r", Link, Language["Discord"], id)
+local FormatDiscordHyperlink = function(id)
+	return format("|cFF7289DA|Hdiscord:%s|h[%s: %s]|h|r", format("https://discord.gg/%s", id), Language["Discord"], id)
 end
 
-local FormatURLHyperlink = function(url) -- /run print("www.google.com")
+local FormatURLHyperlink = function(url)
 	return format("|cFF%s|Hurl:%s|h[%s]|h|r", Settings["ui-widget-color"], url, url)
 end
 
-local FormatEmailHyperlink = function(address) -- /run print("user@gmail.com")
+local FormatEmailHyperlink = function(address)
 	return format("|cFF%s|Hemail:%s|h[%s]|h|r", Settings["ui-widget-color"], address, address)
 end
 
 -- This can be b.net or discord, so just calling it a "friend tag" for now.
-local FormatFriendHyperlink = function(tag) -- /run print("Player#1111") -- /run print("Hydrazine#1152") -- /run print("Hydra#2948")
+local FormatFriendHyperlink = function(tag) -- /run print("Player#1111")
 	return format("|cFF00AAFF|Hfriend:%s|h[%s]|h|r", tag, tag)
 end
 
@@ -770,7 +768,7 @@ local NewChatFrameOnEvent = function(self, event, msg, ...)
 end
 
 local EventFrame = CreateFrame("Frame")
-EventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+EventFrame:RegisterEvent("PLAYER_LOGIN")
 EventFrame:SetScript("OnEvent", function(self, event)
 	if self[event] then
 		self[event](self, event)
@@ -779,7 +777,7 @@ end)
 
 EventFrame["UI_SCALE_CHANGED"] = MoveChatFrames
 
-EventFrame["PLAYER_ENTERING_WORLD"] = function(self, event)
+EventFrame["PLAYER_LOGIN"] = function(self, event)
 	if (not Settings["chat-enable"]) then
 		self:UnregisterEvent(event)
 		

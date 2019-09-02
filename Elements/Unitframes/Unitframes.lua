@@ -1407,22 +1407,19 @@ UF:SetScript("OnEvent", function(self, event)
 		return
 	end
 	
-	--self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	--self:SetScript("OnEvent", Update)
-	
-	local Player = oUF:Spawn("player", "vUIPlayer")
+	local Player = oUF:Spawn("player", "vUI Player")
 	Player:SetScaledSize(230, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 	
-	local Target = oUF:Spawn("target", "vUITarget")
+	local Target = oUF:Spawn("target", "vUI Target")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 	
-	local TargetTarget = oUF:Spawn("targettarget", "vUITargetTarget")
+	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
 	TargetTarget:SetScaledSize(110, 26)
 	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
 	
-	local Pet = oUF:Spawn("pet", "vUIPet")
+	local Pet = oUF:Spawn("pet", "vUI Pet")
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
 	

@@ -23,20 +23,6 @@ local OnDragStop = function(self)
 	vUIMove[self.Name] = {A1, Parent:GetName(), A2, X, Y}
 end
 
-local OnMouseUp = function(self, button)
-	if (button == "RightButton") then
-		if Move.Defaults[self.Name] then
-			local A1, Parent, A2, X, Y = unpack(Move.Defaults[self.Name])
-			local ParentObject = _G[Parent]
-			
-			self:ClearAllPoints()
-			self:SetScaledPoint(A1, ParentObject, A2, X, Y)
-			
-			vUIMove[self.Name] = {A1, Parent, A2, X, Y}
-		end
-	end
-end
-
 function Move:Toggle()
 	local Frame
 	
@@ -92,6 +78,28 @@ local OnSizeChanged = function(self)
 	self.Mover:SetScaledSize(self:GetSize())
 end
 
+local MoverOnMouseUp = function(self, button)
+	if (button == "RightButton") then
+		if Move.Defaults[self.Name] then
+			local A1, Parent, A2, X, Y = unpack(Move.Defaults[self.Name])
+			local ParentObject = _G[Parent]
+			
+			self:ClearAllPoints()
+			self:SetScaledPoint(A1, ParentObject, A2, X, Y)
+			
+			vUIMove[self.Name] = {A1, Parent, A2, X, Y}
+		end
+	end
+end
+
+local MoverOnEnter = function(self)
+	self:SetBackdropColorHex("FF4444")
+end
+
+local MoverOnLeave = function(self)
+	self:SetBackdropColorHex(Settings["ui-window-bg-color"])
+end
+
 function Move:Add(frame)
 	if (not vUIMove) then
 		vUIMove = {}
@@ -114,19 +122,28 @@ function Move:Add(frame)
 	local Mover = CreateFrame("Frame", nil, UIParent)
 	Mover:SetScaledSize(frame:GetSize())
 	Mover:SetBackdrop(vUI.BackdropAndBorder)
-	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Mover:SetBackdropBorderColor(0, 0, 0)
 	Mover:SetFrameLevel(20)
 	Mover:SetFrameStrata("HIGH")
 	Mover:SetMovable(true)
 	Mover:SetUserPlaced(true)
 	Mover:SetClampedToScreen(true)
-	Mover:SetScript("OnMouseUp", OnMouseUp)
+	Mover:SetScript("OnMouseUp", MoverOnMouseUp)
+	Mover:SetScript("OnEnter", MoverOnEnter)
+	Mover:SetScript("OnLeave", MoverOnLeave)
 	Mover.Frame = frame
 	Mover.Name = Name
 	Mover:Hide()
 	
-	Mover.Label = Mover:CreateFontString(nil, "OVERLAY")
+	Mover.BG = CreateFrame("Frame", nil, Mover)
+	Mover.BG:SetScaledSize(Mover:GetWidth() - 6, Mover:GetHeight() - 6)
+	Mover.BG:SetScaledPoint("CENTER", Mover)
+	Mover.BG:SetBackdrop(vUI.BackdropAndBorder)
+	Mover.BG:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	Mover.BG:SetBackdropBorderColor(0, 0, 0)
+	
+	Mover.Label = Mover.BG:CreateFontString(nil, "OVERLAY")
 	Mover.Label:SetFontInfo(Settings["ui-widget-font"], 12)
 	Mover.Label:SetScaledPoint("CENTER", Mover, 0, 0)
 	Mover.Label:SetText(Name)
