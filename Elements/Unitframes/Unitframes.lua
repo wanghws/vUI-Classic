@@ -1465,6 +1465,8 @@ UF:SetScript("OnEvent", function(self, event)
 	TargetTarget:UpdateAllElements("ForceUpdate")
 	Pet:UpdateAllElements("ForceUpdate")
 	]]
+	Pet:UpdateAllElements("ForceUpdate")
+	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
 	vUI.UnitFrames["targettarget"] = TargetTarget

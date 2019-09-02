@@ -698,6 +698,8 @@ ActionBars:SetScript("OnEvent", function(self, event)
 		return
 	end
 	
+	BUTTON_SIZE = Settings["action-bars-button-size"]
+	
 	CreateBarPanels()
 	CreateBar1()
 	CreateBar2()
