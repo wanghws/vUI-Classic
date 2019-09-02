@@ -486,8 +486,8 @@ GUI:AddOptions(function(self)
 	WidthWidget = Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
 	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 6, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
-	--Right:CreateHeader(Language["Positioning"])
-	--Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
+	Right:CreateHeader(Language["Positioning"])
+	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
 	
 	Right:CreateHeader(Language["Visibility"])
 	
