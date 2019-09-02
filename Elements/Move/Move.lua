@@ -120,6 +120,7 @@ function Move:Add(frame)
 	Mover:SetFrameStrata("HIGH")
 	Mover:SetMovable(true)
 	Mover:SetUserPlaced(true)
+	Mover:SetClampedToScreen(true)
 	Mover:SetScript("OnMouseUp", OnMouseUp)
 	Mover.Frame = frame
 	Mover.Name = Name

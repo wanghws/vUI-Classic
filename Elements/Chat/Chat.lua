@@ -719,9 +719,6 @@ local Install = function()
 	FCF_SelectDockFrame(ChatFrame1)
 end
 
--- Fix Shaman
-RAID_CLASS_COLORS["SHAMAN"] = CreateColor(0, 0.44, 0.87)
-
 ChatClassColorOverrideShown = function()
 	return true
 end

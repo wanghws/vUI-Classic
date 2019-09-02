@@ -1,6 +1,6 @@
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-oUF')
-local _VERSION = '9.2.2'
+local _VERSION = '@project-version@'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
@@ -18,11 +18,6 @@ local callback, objects, headers = {}, {}, {}
 
 local elements = {}
 local activeElements = {}
-
-local PetBattleFrameHider = CreateFrame('Frame', (global or parent) .. '_PetBattleFrameHider', UIParent, 'SecureHandlerStateTemplate')
-PetBattleFrameHider:SetAllPoints()
-PetBattleFrameHider:SetFrameStrata('LOW')
-RegisterStateDriver(PetBattleFrameHider, 'visibility', '[petbattle] hide; show')
 
 -- updating of "invalid" units.
 local function enableTargetUpdate(object)
@@ -427,6 +422,15 @@ function oUF:SetActiveStyle(name)
 	style = name
 end
 
+--[[ oUF:GetActiveStyle()
+Used to get the active style.
+
+* self - the global oUF object
+--]]
+function oUF:GetActiveStyle()
+	return style
+end
+
 do
 	local function iter(_, n)
 		-- don't expose the style functions.
@@ -626,7 +630,7 @@ do
 
 		local isPetHeader = template:match('PetHeader')
 		local name = overrideName or generateName(nil, ...)
-		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
+		local header = CreateFrame('Frame', name, UIParent, template)
 
 		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate')
 		for i = 1, select('#', ...), 2 do
@@ -718,7 +722,7 @@ function oUF:Spawn(unit, overrideName)
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate')
+	local object = CreateFrame('Button', name, UIParent, 'SecureUnitButtonTemplate')
 	Private.UpdateUnits(object, unit)
 
 	self:DisableBlizzard(unit)

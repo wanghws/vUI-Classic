@@ -310,6 +310,8 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 		return
 	end
 	
+	self:SetScaledSize(Settings["experience-width"], Settings["experience-height"])
+	self:SetScaledPoint("TOP", UIParent, 0, -13)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
 	
@@ -439,7 +441,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	UpdateDisplayLevel(Settings["experience-display-level"])
 	UpdateDisplayProgress(Settings["experience-display-progress"])
 	UpdateDisplayPercent(Settings["experience-display-percent"])
-	UpdateBarPosition(Settings["experience-position"])
+	--UpdateBarPosition(Settings["experience-position"])
 	UpdateProgressVisibility(Settings["experience-progress-visibility"])
 	UpdatePercentVisibility(Settings["experience-percent-visibility"])
 	UpdateXP(self, true)
@@ -484,8 +486,8 @@ GUI:AddOptions(function(self)
 	WidthWidget = Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "", UpdateBarWidth)
 	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 6, 30, 1, Language["Bar Height"], "", UpdateBarHeight)
 	
-	Right:CreateHeader(Language["Positioning"])
-	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
+	--Right:CreateHeader(Language["Positioning"])
+	--Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "", UpdateBarPosition)
 	
 	Right:CreateHeader(Language["Visibility"])
 	

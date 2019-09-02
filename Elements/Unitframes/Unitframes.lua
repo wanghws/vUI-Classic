@@ -58,7 +58,7 @@ local GetColor = function(p, r1, g1, b1, r2, g2, b2)
 end
 
 -- Tags
-Events["Status"] = "UNIT_HEALTH UNIT_CONNECTION"
+Events["Status"] = "UNIT_HEALTH UNIT_CONNECTION PLAYER_ENTERING_WORLD"
 Methods["Status"] = function(unit)
 	if UnitIsDead(unit) then
 		return Language["Dead"]
@@ -69,12 +69,18 @@ Methods["Status"] = function(unit)
 	end
 end
 
-Events["Level"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["Level"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["Level"] = function(unit)
-	return UnitLevel(unit)
+	local Level = UnitLevel(unit)
+	
+	if (Level == -1) then
+		return "??"
+	else
+		return Level
+	end
 end
 
-Events["LevelPlus"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["LevelPlus"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["LevelPlus"] = function(unit)
 	local Class = UnitClassification(unit)
 	
@@ -92,7 +98,7 @@ Methods["LevelPlus"] = function(unit)
 	end
 end
 
-Events["Classification"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["Classification"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["Classification"] = function(unit)
 	local Class = UnitClassification(unit)
 	
@@ -101,7 +107,7 @@ Methods["Classification"] = function(unit)
 	end
 end
 
-Events["ShortClassification"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["ShortClassification"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["ShortClassification"] = function(unit)
 	local Class = UnitClassification(unit)
 	
@@ -110,7 +116,7 @@ Methods["ShortClassification"] = function(unit)
 	end
 end
 
-Events["Plus"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["Plus"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["Plus"] = function(unit)
 	local Class = UnitClassification(unit)
 	
@@ -119,19 +125,19 @@ Methods["Plus"] = function(unit)
 	end
 end
 
-Events["Resting"] = "PLAYER_UPDATE_RESTING"
+Events["Resting"] = "PLAYER_UPDATE_RESTING PLAYER_ENTERING_WORLD"
 Methods["Resting"] = function(unit)
 	if (unit == "player" and IsResting()) then
 		return "zZz"
 	end
 end
 
-Events["Health"] = "UNIT_HEALTH_FREQUENT"
+Events["Health"] = "UNIT_HEALTH_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["Health"] = function(unit)
 	return vUI:ShortValue(UnitHealth(unit))
 end
 
-Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
+Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["HealthPercent"] = function(unit)
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
 	
@@ -143,7 +149,7 @@ Methods["HealthPercent"] = function(unit)
 	return floor((Current / Max * 100 + 0.05) * 10) / 10 .. "%"
 end
 
-Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT"
+Events["HealthPercent"] = "UNIT_HEALTH_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["HealthPercent"] = function(unit)
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
 	
@@ -159,7 +165,7 @@ Methods["HealthPercent"] = function(unit)
 	end
 end
 
-Events["HealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
+Events["HealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_ENTERING_WORLD"
 Methods["HealthValues"] = function(unit)
 	if UnitIsDead(unit) then
 		return "|cFFD64545" .. Language["Dead"] .. "|r"
@@ -179,7 +185,7 @@ Methods["HealthValues"] = function(unit)
 	return vUI:ShortValue(Current) .. " / " .. vUI:ShortValue(Max)
 end
 
-Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION "
+Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_ENTERING_WORLD"
 Methods["ColoredHealthValues"] = function(unit)
 	if UnitIsDead(unit) then
 		return "|cFFEE4D4D" .. Language["Dead"]
@@ -199,7 +205,7 @@ Methods["ColoredHealthValues"] = function(unit)
 	return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(Current) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(Max)
 end
 
-Events["PartyInfo"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS"
+Events["PartyInfo"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS PLAYER_ENTERING_WORLD"
 Methods["PartyInfo"] = function(unit)
 	if UnitIsDead(unit) then
 		return "|cFFEE4D4D" .. Language["Dead"]
@@ -224,7 +230,7 @@ Methods["PartyInfo"] = function(unit)
 	end
 end
 
-Events["HealthColor"] = "UNIT_HEALTH_FREQUENT"
+Events["HealthColor"] = "UNIT_HEALTH_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["HealthColor"] = function(unit)
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
 	
@@ -238,21 +244,21 @@ Methods["HealthColor"] = function(unit)
 	end
 end
 
-Events["Power"] = "UNIT_POWER_FREQUENT"
+Events["Power"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["Power"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
 		return vUI:ShortValue(UnitPower(unit))
 	end
 end
 
-Events["PowerPercent"] = "UNIT_POWER_FREQUENT"
+Events["PowerPercent"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["PowerPercent"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
 		return floor((UnitPower(unit) / UnitPowerMax(unit) * 100 + 0.05) * 10) / 10 .. "%"
 	end
 end
 
-Events["PowerColor"] = "UNIT_POWER_FREQUENT"
+Events["PowerColor"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["PowerColor"] = function(unit)
 	
 end
@@ -320,7 +326,7 @@ Methods["Name20"] = function(unit)
 	end
 end
 
-Events["NameColor"] = "UNIT_NAME_UPDATE"
+Events["NameColor"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["NameColor"] = function(unit)
 	if UnitIsPlayer(unit) then
 		local _, Class = UnitClass(unit)
@@ -345,7 +351,7 @@ Methods["NameColor"] = function(unit)
 	end
 end
 
-Events["Reaction"] = "UNIT_NAME_UPDATE"
+Events["Reaction"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
 Methods["Reaction"] = function(unit)
 	local Reaction = UnitReaction(unit, "player")
 	
@@ -358,12 +364,12 @@ Methods["Reaction"] = function(unit)
 	end
 end
 
-Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP"
+Events["LevelColor"] = "UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD"
 Methods["LevelColor"] = function(unit)
 	return vUI:UnitDifficultyColor(unit)
 end
 
-Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP" -- UNIT_HAPPINESS
+Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD" -- UNIT_HAPPINESS
 Methods["PetColor"] = function(unit)
 	if (vUI.UserClass == "HUNTER") then
 		return Methods["HappinessColor"](unit)
@@ -1264,7 +1270,8 @@ local StyleRaid = function(self, unit)
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
-	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
+	Health:SetScaledHeight(29)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1283,6 +1290,22 @@ local StyleRaid = function(self, unit)
 	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
+	
+	local Power = CreateFrame("StatusBar", nil, self)
+	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetScaledHeight(2)
+	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	
+	local PowerBG = Power:CreateTexture(nil, "BORDER")
+	PowerBG:SetScaledPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetScaledPoint("BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	PowerBG:SetAlpha(0.2)
+	
+	-- Attributes
+	Power.frequentUpdates = true
+	Power.colorClass = true
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -1310,87 +1333,8 @@ local StyleRaid = function(self, unit)
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
-end
-
-local PartyAttributes = function()
-	return
-	"vUI Party", nil, "custom [@raid6,exists] hide;show",
-	"initial-width", vUI.GetScale(160),
-	"initial-height", vUI.GetScale(38),
-	"showParty", true,
-	"showRaid", false,
-	"showPlayer", true,
-	"showSolo", false,
-	"xoffset", vUI.GetScale(2),
-	"yOffset", vUI.GetScale(-2),
-	"point", "TOP",
-	"groupFilter", "1,2,3,4,5,6,7,8",
-	"groupingOrder", "1,2,3,4,5,6,7,8",
-	"groupBy", "GROUP",
-	"maxColumns", 8,
-	"unitsPerColumn", 5,
-	"columnSpacing", vUI.GetScale(3),
-	"columnAnchorPoint", "TOP",
-	"oUF-initialConfigFunction", [[
-		local Header = self:GetParent()
-		
-		self:SetWidth(Header:GetAttribute("initial-width"))
-		self:SetHeight(Header:GetAttribute("initial-height"))
-	]]
-end
-
-local PartyPetAttributes = function()
-	return
-	"vUI Party Pets", "SecureGroupPetHeaderTemplate", "custom [@raid6,exists] hide;show",
-	"initial-width", vUI.GetScale(160),
-	"initial-height", vUI.GetScale(22),
-	"showParty", true,
-	"showRaid", false,
-	"showPlayer", true,
-	"showSolo", false,
-	"xoffset", vUI.GetScale(2),
-	"yOffset", vUI.GetScale(-2),
-	"point", "TOP",
-	"groupFilter", "1,2,3,4,5,6,7,8",
-	"groupingOrder", "1,2,3,4,5,6,7,8",
-	"groupBy", "GROUP",
-	"maxColumns", 8,
-	"unitsPerColumn", 5,
-	"columnSpacing", vUI.GetScale(3),
-	"columnAnchorPoint", "TOP",
-	"oUF-initialConfigFunction", [[
-		local Header = self:GetParent()
-		
-		self:SetWidth(Header:GetAttribute("initial-width"))
-		self:SetHeight(Header:GetAttribute("initial-height"))
-	]]
-end
-
-local RaidAttributes = function()
-	return
-	"vUI Raid", nil, "custom [@raid6,exists] show;hide",
-	"initial-width", vUI.GetScale(76),
-	"initial-height", vUI.GetScale(22),
-	"showParty", false,
-	"showRaid", true,
-	"showPlayer", true,
-	"showSolo", false,
-	"xoffset", vUI.GetScale(3),
-	"yOffset", vUI.GetScale(-3),
-	"point", "LEFT",
-	"groupFilter", "1,2,3,4,5,6,7,8",
-	"groupingOrder", "1,2,3,4,5,6,7,8",
-	"groupBy", "GROUP",
-	"maxColumns", 8,
-	"unitsPerColumn", 5,
-	"columnSpacing", vUI.GetScale(3),
-	"columnAnchorPoint", "TOP",
-	"oUF-initialConfigFunction", [[
-		local Header = self:GetParent()
-		
-		self:SetWidth(Header:GetAttribute("initial-width"))
-		self:SetHeight(Header:GetAttribute("initial-height"))
-	]]
+	self.Power = Power
+	self.Power.bg = PowerBG
 end
 
 local Style = function(self, unit)
@@ -1402,18 +1346,16 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
+	elseif find(unit, "raid") then
+		StyleRaid(self, unit)
 	elseif find(unit, "partypet") then
 		StylePartyPet(self, unit)
 	elseif find(unit, "party") then
 		StyleParty(self, unit)
-	elseif find(unit, "raid") then
-		StyleRaid(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
 	end
 end
-
-oUF:RegisterStyle("vUI", Style)
 
 local PlateCVars = {
     nameplateGlobalScale = 1,
@@ -1427,35 +1369,102 @@ local PlateCVars = {
 }
 
 local Move = vUI:GetModule("Move")
-
 local UF = vUI:NewModule("Unit Frames")
 
-function UF:Load()
+oUF:RegisterStyle("vUI", Style)
+
+UF:RegisterEvent("PLAYER_LOGIN")
+UF:SetScript("OnEvent", function(self, event)
 	if (not Settings["unitframes-enable"]) then
 		return
 	end
 	
-	local Player = oUF:Spawn("player", "vUI Player")
+	--self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	--self:SetScript("OnEvent", Update)
+	
+	local Player = oUF:Spawn("player", "vUIPlayer")
 	Player:SetScaledSize(230, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 	
-	local Target = oUF:Spawn("target", "vUI Target")
+	local Target = oUF:Spawn("target", "vUITarget")
 	Target:SetScaledSize(230, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 	
-	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
+	local TargetTarget = oUF:Spawn("targettarget", "vUITargetTarget")
 	TargetTarget:SetScaledSize(110, 26)
 	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
 	
-	local Pet = oUF:Spawn("pet", "vUI Pet")
+	local Pet = oUF:Spawn("pet", "vUIPet")
 	Pet:SetScaledSize(110, 26)
 	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
 	
-	Player:UpdateAllElements("ForceUpdate")
+	local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
+		"initial-width", 160,
+		"initial-height", 38,
+		"showSolo", false,
+		"showPlayer", true,
+		"showParty", true,
+		"showRaid", false,
+		"xoffset", 2,
+		"yOffset", -2,
+		"oUF-initialConfigFunction", [[
+			local Header = self:GetParent()
+			
+			self:SetWidth(Header:GetAttribute("initial-width"))
+			self:SetHeight(Header:GetAttribute("initial-height"))
+		]]
+	)
+	
+	local PartyPet = oUF:SpawnHeader("vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
+		"initial-width", 160,
+		"initial-height", 22,
+		"showSolo", false,
+		"showPlayer", true,
+		"showParty", true,
+		"showRaid", false,
+		"xoffset", 2,
+		"yOffset", -2,
+		"oUF-initialConfigFunction", [[
+			local Header = self:GetParent()
+			
+			self:SetWidth(Header:GetAttribute("initial-width"))
+			self:SetHeight(Header:GetAttribute("initial-height"))
+		]]
+	)
+	
+	local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
+		"initial-width", 76,
+		"initial-height", 22,
+		"showSolo", false,
+		"showPlayer", true,
+		"showParty", false,
+		"showRaid", true,
+		"xoffset", 2,
+		"yOffset", -2,
+		"groupFilter", "1,2,3,4,5,6,7,8",
+		"groupingOrder", "1,2,3,4,5,6,7,8",
+		"groupBy", "GROUP",
+		"maxColumns", 8,
+		"unitsPerColumn", 5,
+		"columnSpacing", 2,
+		"columnAnchorPoint", "TOP",
+		"oUF-initialConfigFunction", [[
+			local Header = self:GetParent()
+			
+			self:SetWidth(Header:GetAttribute("initial-width"))
+			self:SetHeight(Header:GetAttribute("initial-height"))
+		]]
+	)
+	
+	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
+	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	
+	--[[Player:UpdateAllElements("ForceUpdate")
 	Target:UpdateAllElements("ForceUpdate")
 	TargetTarget:UpdateAllElements("ForceUpdate")
 	Pet:UpdateAllElements("ForceUpdate")
-	
+	]]
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
 	vUI.UnitFrames["targettarget"] = TargetTarget
@@ -1464,24 +1473,23 @@ function UF:Load()
 	if Settings["nameplates-enable"] then
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)
 	end
+	--[[
+	CompactRaidFrameContainer:UnregisterAllEvents()
+	CompactRaidFrameContainer.Show = function() end
+	CompactRaidFrameContainer:Hide()
 	
-	local Party = oUF:SpawnHeader(PartyAttributes())
-	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
-	
-	local PartyPet = oUF:SpawnHeader(PartyPetAttributes())
-	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
-	
-	local Raid = oUF:SpawnHeader(RaidAttributes())
-	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	CompactRaidFrameManager:UnregisterAllEvents()
+	CompactRaidFrameManager.Show = function() end
+	CompactRaidFrameManager:Hide()]]
 	
 	Move:Add(Player)
 	Move:Add(Target)
 	Move:Add(TargetTarget)
 	Move:Add(Pet)
-	Move:Add(Party)
-	Move:Add(PartyPet)
-	Move:Add(Raid)
-end
+	--Move:Add(Party)
+	--Move:Add(PartyPet)
+	--Move:Add(Raid)
+end)
 
 local TogglePlayerName = function(value)
 	if value then

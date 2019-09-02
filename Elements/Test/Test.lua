@@ -184,9 +184,10 @@ function BagsFrame:Load()
 		Object:ClearAllPoints()
 		Object:SetScaledSize(32, 32)
 		
-		local Normal = _G[Object:GetName() .. "NormalTexture"]
-		local Count = _G[Object:GetName() .. "Count"]
-		local Stock = _G[Object:GetName() .. "Stock"]
+		local Name = Object:GetName()
+		local Normal = _G[Name .. "NormalTexture"]
+		local Count = _G[Name .. "Count"]
+		local Stock = _G[Name .. "Stock"]
 		
 		if Normal then
 			Normal:SetTexture(nil)
@@ -218,7 +219,7 @@ function BagsFrame:Load()
 		local Checked = Object:CreateTexture(nil, "ARTWORK")
 		Checked:SetScaledPoint("TOPLEFT", Object, 0, 0)
 		Checked:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
-		Checked:SetColorTexture(1, 1, 1)
+		Checked:SetColorTexture(0.1, 0.8, 0.1)
 		Checked:SetAlpha(0.2)
 		
 		Object:SetCheckedTexture(Checked)
@@ -298,7 +299,7 @@ function MicroButtons:Load()
 	self.Panel = Panel
 end
 
-local AutoRepair = vUI:NewModule("Auto Repair")
+local AutoRepair = vUI:NewModule("Auto Repair") -- Check against the rep with the faction of the merchant, add option to repair if honored +
 
 AutoRepair:SetScript("OnEvent", function(self, event)
 	local Money = GetMoney()
@@ -314,7 +315,7 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 				local CoinString = GetCoinTextureString(Cost)
 				
 				if CoinString then
-					vUI:print(format(Language["Your equipment has been repaired at a cost of %s"], CoinString))
+					vUI:print(format(Language["Your equipment has been repaired for %s"], CoinString))
 				end
 			else
 				local Required = Cost - Money

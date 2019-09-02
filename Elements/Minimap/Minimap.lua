@@ -134,6 +134,25 @@ local OnEvent = function(self, event)
 	
 	MinimapNorthTag:SetTexture(nil)
 	
+	if MiniMapTrackingFrame then
+		MiniMapTrackingFrame:ClearAllPoints()
+		MiniMapTrackingFrame:SetScaledSize(24, 24)
+		MiniMapTrackingFrame:SetScaledPoint("TOPLEFT", Minimap, 1, -1)
+		MiniMapTrackingFrame:SetFrameLevel(Minimap:GetFrameLevel() + 1)
+	end
+	
+	if MiniMapTrackingBorder then
+		MiniMapTrackingBorder:Hide()
+	end
+	
+	if MiniMapTrackingIcon then
+		MiniMapTrackingIcon:SetScaledSize(18, 18)
+		MiniMapTrackingIcon:ClearAllPoints()
+		MiniMapTrackingIcon:SetScaledPoint("TOPLEFT", MiniMapTrackingFrame, 1, -1)
+		MiniMapTrackingIcon:SetScaledPoint("BOTTOMRIGHT", MiniMapTrackingFrame, -1, 1)
+	--	MiniMapTrackingIcon:SetTexCoords(0.1, 0.9, 0.1, 0.9)
+	end
+	
 	Kill(MinimapCluster)
 	Kill(MinimapBorder)
 	Kill(MinimapBorderTop)

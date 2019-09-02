@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Author: Hydra
-## Version: 1.0028
+## Version: 1.0029
 ## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIMove
@@ -9,9 +9,7 @@ Initialize.lua
 Elements\Libraries\LibStub.lua
 Elements\Libraries\CallbackHandler-1.0.lua
 Elements\Libraries\LibSharedMedia-3.0.lua
-Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibClassicMobHealth-1.0.lua
-Elements\Libraries\LibCompress.lua
 Media\Media.lua
 Languages\Languages.lua
 Languages\deDE.lua

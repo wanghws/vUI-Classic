@@ -152,7 +152,10 @@ local function UpdateColor(element, unit, cur, min, max, displayType)
 		(element.colorClassNPC and not UnitIsPlayer(unit)) or
 		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
-		t = parent.colors.class[class]
+		
+		if class then
+			t = parent.colors.class[class]
+		end
 	elseif(element.colorSelection and unitSelectionType(unit, element.considerSelectionInCombatHostile)) then
 		t = parent.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then

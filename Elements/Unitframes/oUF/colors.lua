@@ -27,7 +27,87 @@ local colors = {
 		[12] = {255 / 255, 255 / 255, 139 / 255}, -- SELF, buggy
 		[13] = {0 / 255, 153 / 255, 0 / 255}, -- BATTLEGROUND_FRIENDLY_PVP
 	},
+	class = {},
+	debuff = {},
+	reaction = {},
+	power = {},
 }
+
+-- We do this because people edit the vars directly, and changing the default
+-- globals makes SPICE FLOW!
+local function customClassColors()
+	if(CUSTOM_CLASS_COLORS) then
+		local function updateColors()
+			for classToken, color in next, CUSTOM_CLASS_COLORS do
+				colors.class[classToken] = {color.r, color.g, color.b}
+			end
+
+			for _, obj in next, oUF.objects do
+				obj:UpdateAllElements('CUSTOM_CLASS_COLORS')
+			end
+		end
+
+		updateColors()
+		CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
+
+		return true
+	end
+end
+
+if(not customClassColors()) then
+	for classToken, color in next, RAID_CLASS_COLORS do
+		colors.class[classToken] = {color.r, color.g, color.b}
+	end
+
+	local eventHandler = CreateFrame('Frame')
+	eventHandler:RegisterEvent('ADDON_LOADED')
+	eventHandler:SetScript('OnEvent', function(self)
+		if(customClassColors()) then
+			self:UnregisterEvent('ADDON_LOADED')
+			self:SetScript('OnEvent', nil)
+		end
+	end)
+end
+
+for debuffType, color in next, DebuffTypeColor do
+	colors.debuff[debuffType] = {color.r, color.g, color.b}
+end
+
+for eclass, color in next, FACTION_BAR_COLORS do
+	colors.reaction[eclass] = {color.r, color.g, color.b}
+end
+
+for power, color in next, PowerBarColor do
+	if (type(power) == 'string') then
+		if(type(select(2, next(color))) == 'table') then
+			colors.power[power] = {}
+
+			for index, color in next, color do
+				colors.power[power][index] = {color.r, color.g, color.b}
+			end
+		else
+			colors.power[power] = {color.r, color.g, color.b, atlas = color.atlas}
+		end
+	end
+end
+
+-- sourced from FrameXML/Constants.lua
+colors.power[0] = colors.power.MANA
+colors.power[1] = colors.power.RAGE
+colors.power[2] = colors.power.FOCUS
+colors.power[3] = colors.power.ENERGY
+colors.power[4] = colors.power.COMBO_POINTS
+colors.power[5] = colors.power.RUNES
+colors.power[6] = colors.power.RUNIC_POWER
+colors.power[7] = colors.power.SOUL_SHARDS
+colors.power[8] = colors.power.LUNAR_POWER
+colors.power[9] = colors.power.HOLY_POWER
+colors.power[11] = colors.power.MAELSTROM
+colors.power[12] = colors.power.CHI
+colors.power[13] = colors.power.INSANITY
+colors.power[16] = colors.power.ARCANE_CHARGES
+colors.power[17] = colors.power.FURY
+colors.power[18] = colors.power.PAIN
 
 function vUI:UpdateoUFColors()
 	colors.class = vUI.ClassColors

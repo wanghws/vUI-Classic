@@ -189,22 +189,34 @@ function vUI:ShortValue(num)
 end
 
 function vUI:UnitDifficultyColor(unit)
-	if (not Core[5]) then
-		return "|cFFFFFFFF"
+	local T = 5
+	
+	if (not Core[T]) then
+		T = 6
 	end
 	
-	local Difference = UnitLevel(unit) - UnitLevel("player")
+	if (not Core[T]["color-standard"]) then
+		return
+	end
+	
+	local Level = UnitLevel("player")
+	
+	if (Level == -1) then
+		return "|cFF" .. Core[T]["color-impossible"]
+	end
+	
+	local Difference = UnitLevel(unit) - Level
 	
 	if (Difference >= 5) then
-		return "|cFF" .. Core[5]["color-impossible"]
+		return "|cFF" .. Core[T]["color-impossible"]
 	elseif (Difference >= 3) then
-		return "|cFF" .. Core[5]["color-verydifficult"]
+		return "|cFF" .. Core[T]["color-verydifficult"]
 	elseif (Difference >= -2) then
-		return "|cFF" .. Core[5]["color-difficult"]
+		return "|cFF" .. Core[T]["color-difficult"]
 	elseif (-Difference <= GetQuestGreenRange()) then
-		return "|cFF" .. Core[5]["color-standard"]
+		return "|cFF" .. Core[T]["color-standard"]
 	else
-		return "|cFF" .. Core[5]["color-trivial"]
+		return "|cFF" .. Core[T]["color-trivial"]
 	end
 end
 
@@ -227,6 +239,10 @@ vUI.Outline = {
 }
 
 function vUI:HexToRGB(hex)
+	if (not hex) then
+		return
+	end
+	
     return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
 end
 

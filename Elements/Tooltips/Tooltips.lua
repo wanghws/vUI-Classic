@@ -196,6 +196,10 @@ local OnTooltipSetUnit = function(self)
 			Class = ""
 		end
 		
+		if (Level == -1) then
+			Level = "??"
+		end
+		
 		if UnitIsAFK(UnitID) then
 			Flag = "|cFFFDD835" .. CHAT_FLAG_AFK .. "|r "
 		elseif UnitIsDND(UnitID) then 
@@ -249,17 +253,31 @@ local OnTooltipSetUnit = function(self)
 	end
 end
 
+local SELL_PRICE = SELL_PRICE
+local ITEM_UNSELLABLE = ITEM_UNSELLABLE
+local GetMouseFocus = GetMouseFocus
+
 local OnTooltipSetItem = function(self)
 	if (not Settings["tooltips-show-sell-value"]) then
 		return
 	end
 	
+	if (MerchantFrame and MerchantFrame:IsShown()) then
+		return
+	end
+	
 	local Item, Link = self:GetItem()
-	local Count = GetItemCount(Link)
 	local SellValue = select(11, GetItemInfo(Link))
 	
 	if (not SellValue) then
 		return
+	end
+	
+	local Count = 1
+	local MouseFocus = GetMouseFocus()
+	
+	if (MouseFocus and MouseFocus.count) then
+		Count = MouseFocus.count
 	end
 	
 	local CopperValue = SellValue * Count
@@ -271,7 +289,7 @@ local OnTooltipSetItem = function(self)
 	local CoinString = GetCoinTextureString(CopperValue)
 	
 	if CoinString then
-		GameTooltip:AddLine(format("%s %s", Language["Sell Value:"], CoinString), 1, 1, 1)
+		GameTooltip:AddLine(format("%s %s", SELL_PRICE, CoinString), 1, 1, 1)
 	end
 end
 
