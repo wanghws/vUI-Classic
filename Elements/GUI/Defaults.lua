@@ -195,6 +195,7 @@ Defaults["unitframes-player-x"] = 156
 Defaults["unitframes-player-y"] = 156
 Defaults["unitframes-target-x"] = 156
 Defaults["unitframes-target-y"] = 156
+Defaults["unitframes-class-color"] = true -- temporary
 
 -- Name Plates
 Defaults["nameplates-enable"] = true
@@ -205,6 +206,7 @@ Defaults["nameplates-topleft-text"] = "[NameColor][Name14]"
 Defaults["nameplates-topright-text"] = "[LevelColor][Level][Plus]"
 Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
+Defaults["nameplates-class-color"] = true -- temporary
 
 -- Tooltips
 Defaults["tooltips-enable"] = true

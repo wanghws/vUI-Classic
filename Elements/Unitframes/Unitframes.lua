@@ -459,17 +459,14 @@ local StyleNamePlate = function(self, unit)
 	Health.colorDisconnected = true
 	Health.Smooth = true
 	
-	if Settings["nameplates-cc-health"] then
+	if Settings["nameplates-class-color"] then
 		Health.colorReaction = true
 		Health.colorClass = true
-		
-		self:Tag(TopLeft, "[Name15]")
 	else
 		Health.colorHealth = true
-		
-		self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	end
 	
+	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
 	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
@@ -539,7 +536,7 @@ local StylePlayer = function(self, unit)
 	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
-	if Settings["unitframes-player-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
 		Health.colorClass = true
 	else
@@ -572,7 +569,7 @@ local StylePlayer = function(self, unit)
 	Power.frequentUpdates = true
 	Power.Smooth = true
 	
-	if Settings["unitframes-player-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Power.colorPower = true
 		Power.colorReaction = true
 	else
@@ -692,11 +689,7 @@ local StylePlayer = function(self, unit)
 	
 	-- Tags
 	if Settings["unitframes-player-show-name"] then
-		if Settings["unitframes-player-cc-health"] then
-			self:Tag(HealthLeft, "[Name15]")
-		else
-			self:Tag(HealthLeft, "[Name15]")
-		end
+		self:Tag(HealthLeft, "[Name15]")
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
@@ -805,16 +798,15 @@ local StyleTarget = function(self, unit)
 	Health.colorDisconnected = true
 	self.colors.health = {R, G, B}
 	
-	if Settings["unitframes-target-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name15]")
+		self:Tag(HealthLeft, "[LevelColor][Level][Plus]|r [Name15]")
 	else
 		Health.colorHealth = true
 		
 		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name15]")
-		--self:Tag(HealthLeft, "[Name15]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
@@ -844,7 +836,7 @@ local StyleTarget = function(self, unit)
 	Power.colorReaction = true
 	Power.Smooth = true
 	
-	if Settings["unitframes-target-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Power.colorPower = true
 	else
 		Power.colorClass = true
@@ -1011,7 +1003,7 @@ local StyleTargetTarget = function(self, unit)
 	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
-	if Settings["unitframes-target-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
 		Health.colorClass = true
 		Health.colorClassPet = true
@@ -1021,7 +1013,6 @@ local StyleTargetTarget = function(self, unit)
 		Health.colorHealth = true
 		
 		self:Tag(HealthLeft, "[NameColor][Name10]")
-		--self:Tag(HealthLeft, "[Name10]")
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
@@ -1080,7 +1071,7 @@ local StylePet = function(self, unit)
 	Health.Smooth = true
 	self.colors.health = {R, G, B}
 	
-	if Settings["unitframes-target-cc-health"] then
+	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
 	else
 		Health.colorHealth = true
@@ -1134,27 +1125,37 @@ local StyleParty = function(self, unit)
 	
 	-- Attributes
 	Health.frequentUpdates = true
-	Health.colorTapping = true
 	Health.colorDisconnected = true
-	Health.colorClass = false
-	Health.colorHealth = true
 	Health.Smooth = true
+	
+	if Settings["unitframes-class-color"] then
+		Health.colorReaction = true
+		Health.colorClass = true
+	else
+		Health.colorHealth = true
+	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
 	Power:SetScaledHeight(6)
-	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
 	PowerBG:SetScaledPoint("TOPLEFT", Power, 0, 0)
 	PowerBG:SetScaledPoint("BOTTOMRIGHT", Power, 0, 0)
-	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-color"]))
+	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
 	-- Attributes
 	Power.frequentUpdates = true
-	Power.colorClass = true
+	
+	if Settings["unitframes-class-color"] then
+		Power.colorPower = true
+		Power.colorReaction = true
+	else
+		Power.colorClass = true
+	end
 	
 	-- Leader
     local Leader = Health:CreateTexture(nil, "OVERLAY")
@@ -1175,7 +1176,13 @@ local StyleParty = function(self, unit)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	-- Tags
-	self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
+	
+	if Settings["unitframes-class-color"] then
+		self:Tag(HealthLeft, "[LevelColor][Level]|r [Name10]")
+	else
+		self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
+	end
+	
 	self:Tag(HealthRight, "[PartyInfo]")
 	
 	self.Range = {
@@ -1230,11 +1237,15 @@ local StylePartyPet = function(self, unit)
 	
 	-- Attributes
 	Health.frequentUpdates = true
-	Health.colorTapping = true
 	Health.colorDisconnected = true
-	Health.colorClass = false
-	Health.colorHealth = true
 	Health.Smooth = true
+	
+	if Settings["unitframes-class-color"] then
+		Health.colorClass = true
+		Health.colorReaction = true
+	else
+		Health.colorHealth = true
+	end
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
@@ -1242,7 +1253,12 @@ local StylePartyPet = function(self, unit)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	-- Tags
-	self:Tag(HealthLeft, "[LevelColor][Level] [Reaction][Name10]")
+	if Settings["unitframes-class-color"] then
+		self:Tag(HealthLeft, "[LevelColor][Level]|r [Name10]")
+	else
+		self:Tag(HealthLeft, "[LevelColor][Level] [Reaction][Name10]")
+	end
+	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Range = {
@@ -1291,6 +1307,21 @@ local StyleRaid = function(self, unit)
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
+	-- Attributes
+	Health.frequentUpdates = true
+	Health.colorDisconnected = true
+	Health.Smooth = true
+	self.colors.health = {R, G, B}
+	
+	if Settings["unitframes-class-color"] then
+		Health.colorClass = true
+		Health.colorReaction = true
+	else
+		Health.colorHealth = true
+	end
+	
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
@@ -1305,24 +1336,21 @@ local StyleRaid = function(self, unit)
 	
 	-- Attributes
 	Power.frequentUpdates = true
-	Power.colorClass = true
 	
-	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
-	
-	-- Attributes
-	Health.frequentUpdates = true
-	Health.colorTapping = true
-	Health.colorDisconnected = true
-	Health.Smooth = true
-	self.colors.health = {R, G, B}
-	
-	if Settings["unitframes-target-cc-health"] then
-		Health.colorReaction = true
+	if Settings["unitframes-class-color"] then
+		Power.colorPower = true
+		Power.colorReaction = true
 	else
-		Health.colorHealth = true
+		Power.colorClass = true
 	end
 	
-	self:Tag(HealthLeft, "[NameColor][Name5]")
+	-- Tags
+	if Settings["unitframes-class-color"] then
+		self:Tag(HealthLeft, "[Name5]")
+	else
+		self:Tag(HealthLeft, "[NameColor][Name5]")
+	end
+	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Range = {
@@ -1401,7 +1429,7 @@ UF:SetScript("OnEvent", function(self, event)
 	local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
 		"initial-width", 160,
 		"initial-height", 38,
-		"showSolo", false,
+		"showSolo", true,
 		"showPlayer", true,
 		"showParty", true,
 		"showRaid", false,
@@ -1435,7 +1463,7 @@ UF:SetScript("OnEvent", function(self, event)
 	local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
 		"initial-width", 76,
 		"initial-height", 22,
-		"showSolo", false,
+		"showSolo", true,
 		"showPlayer", true,
 		"showParty", false,
 		"showRaid", true,
@@ -1459,13 +1487,6 @@ UF:SetScript("OnEvent", function(self, event)
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
 	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
-	
-	--[[Player:UpdateAllElements("ForceUpdate")
-	Target:UpdateAllElements("ForceUpdate")
-	TargetTarget:UpdateAllElements("ForceUpdate")
-	Pet:UpdateAllElements("ForceUpdate")
-	]]
-	Pet:UpdateAllElements("ForceUpdate")
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
@@ -1521,6 +1542,9 @@ GUI:AddOptions(function(self)
 	Left:CreateSlider("unitframes-player-castbar-y", Settings["unitframes-player-castbar-y"], 40, 400, 1, Language["Player Cast Bar Y-Offset"], "", UpdatePlayerCastBarY)
 	Left:CreateSlider("unitframes-target-castbar-y", Settings["unitframes-target-castbar-y"], 40, 400, 1, Language["Target Cast Bar Y-Offset"], "", UpdateTargetCastBarY)
 	
+	Right:CreateHeader(Language["Colors"])
+	Right:CreateCheckbox("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "", ReloadUI):RequiresReload(true)
+	
 	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	Left:CreateCheckbox("unitframes-player-cc-health", Settings["unitframes-player-cc-health"], Language["Dark Scheme"], "")
@@ -1538,6 +1562,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateCheckbox("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], ""):RequiresReload(true)
+	
+	Right:CreateHeader(Language["Colors"])
+	Right:CreateCheckbox("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Sizes"])
 	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "")
