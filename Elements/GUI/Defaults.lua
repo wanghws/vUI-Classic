@@ -133,6 +133,7 @@ Defaults["action-bars-stance-size"] = 32
 Defaults["action-bars-button-highlight"] = "Blank"
 Defaults["action-bars-show-bottom-bg"] = true
 Defaults["action-bars-show-side-bg"] = true
+Defaults["action-bars-show-stance-bg"] = true
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-show-macro-names"] = true
 Defaults["action-bars-show-count"] = true

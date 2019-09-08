@@ -28,7 +28,7 @@ local GetQuestGreenRange = GetQuestGreenRange
 local LCMH = LibStub("LibClassicMobHealth-1.0")
 local LCD = LibStub("LibClassicDurations")
 
---LCD:Register("vUI")
+LCD:Register("vUI")
 
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
@@ -716,15 +716,56 @@ local StylePlayer = function(self, unit)
 	--self:UpdateTags()
 end
 
+local Name, Duration, Expiration, Caster, SpellID, _
+local DurationNew, ExpirationNew, Enabled
+local UnitAura = UnitAura
+local GetTime = GetTime
+
+local AuraOnUpdate = function(self, ela)
+	self.ela = self.ela + ela
+	
+	if (self.ela > 0.1) then
+		local Now = (self.Expiration - GetTime())
+		
+		if (Now > 0) then
+			self.Time:SetText(vUI:FormatTime(Now))
+		else
+			self:SetScript("OnUpdate", nil)
+		end
+		
+		if (Now <= 0) then
+			self:SetScript("OnUpdate", nil)
+			self.Time:Hide()
+		end
+		
+		self.ela = 0
+	end
+end
+
+local PostUpdateIcon = function(self, unit, button, index, position, duration, expiration, debuffType, isStealable)
+	local Name, _, _, _, Duration, Expiration, Caster, _, _, SpellID = UnitAura(unit, index, button.filter)
+	local DurationNew, ExpirationNew = LCD:GetAuraDurationByUnit(unit, SpellID, Caster, Name)
+	
+	if (Duration == 0 and DurationNew) then
+		Duration = DurationNew
+		Expiration = ExpirationNew
+	end
+	
+	button.Duration = Duration
+	button.Expiration = Expiration
+	
+	if (Expiration and Expiration ~= 0) then
+		button:SetScript("OnUpdate", AuraOnUpdate)
+		button.Time:Show()
+	else
+		button.Time:Hide()
+	end
+end
+
 local PostCreateIcon = function(unit, button)
 	button:SetBackdrop(vUI.Backdrop)
 	button:SetBackdropColor(0, 0, 0)
 	button:SetFrameLevel(6)
-	
-	button.Time = button:CreateFontString(nil, "OVERLAY")
-	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
-	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
-	button.Time:SetJustifyH("LEFT")
 	
 	button.cd.noOCC = true
 	button.cd.noCooldownCount = true
@@ -746,9 +787,14 @@ local PostCreateIcon = function(unit, button)
 	button.overlayFrame = CreateFrame("Frame", nil, button)
 	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	 
 	
+	button.Time = button:CreateFontString(nil, "OVERLAY")
+	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
+	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
+	button.Time:SetJustifyH("LEFT")
+	
 	button.overlay:SetParent(button.overlayFrame)
 	button.count:SetParent(button.overlayFrame)
-	--button.Time:SetParent(button.overlayFrame)
+	button.Time:SetParent(button.overlayFrame)
 	
 	button.ela = 0
 end
@@ -860,6 +906,7 @@ local StyleTarget = function(self, unit)
 	Buffs["growth-y"] = "UP"
 	Buffs["growth-x"] = "RIGHT"
 	Buffs.PostCreateIcon = PostCreateIcon
+	Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	Debuffs:SetScaledSize(230, 30)
 	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
@@ -870,6 +917,7 @@ local StyleTarget = function(self, unit)
 	Debuffs["growth-y"] = "UP"
 	Debuffs["growth-x"] = "LEFT"
 	Debuffs.PostCreateIcon = PostCreateIcon
+	Debuffs.PostUpdateIcon = PostUpdateIcon
 	Debuffs.onlyShowPlayer = true
 	
     -- Castbar

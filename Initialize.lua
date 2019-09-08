@@ -248,8 +248,8 @@ function vUI:FormatTime(seconds)
 		return format("%dh", ceil(seconds / 3600))
 	elseif (seconds >= 60) then
 		return format("%dm", ceil(seconds / 60))
-	elseif (seconds >= 60 / 12) then
-		return floor(seconds)
+	elseif (seconds >= 5) then
+		return format("%ds", floor(seconds))
 	end
 	
 	return format("%.1fs", seconds)
