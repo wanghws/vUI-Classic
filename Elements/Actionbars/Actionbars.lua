@@ -747,7 +747,8 @@ end
 local StanceBarUpdateState = function()
 	local NumForms = GetNumShapeshiftForms()
 	
-	ActionBars.StanceBar:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * NumForms))
+	ActionBars.StanceBar:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
+	ActionBars.StanceBar:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
 end
 
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
