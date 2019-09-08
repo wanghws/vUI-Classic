@@ -258,23 +258,16 @@ local UpdateBar1 = function()
 end
 
 local CreateBar1 = function()
-	local Druid, Rogue, Warrior, Priest = "", "", "", ""
-	
 	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", UIParent, "SecureHandlerStateTemplate")
 	ActionBar1:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
 	ActionBar1:SetScaledPoint("BOTTOMLEFT", vUIBottomActionBarsPanel, (SPACING + 1), (SPACING + 1))
 	ActionBar1:SetFrameStrata("MEDIUM")
 	
-	Rogue = "[bonusbar:1] 7;"
-	Druid = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;"
-	Warrior = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;"
-	Priest = "[bonusbar:1] 7;"
-	
 	ActionBar1.Page = {
-		["DRUID"] = Druid,
-		["ROGUE"] = Rogue,
-		["WARRIOR"] = Warrior,
-		["PRIEST"] = Priest,
+		["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
+		["ROGUE"] = "[bonusbar:1] 7;",
+		["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
+		["PRIEST"] = "[bonusbar:1] 7;",
 		["DEFAULT"] = "[bar:6] 6;[bar:5] 5;[bar:4] 4;[bar:3] 3;[bar:2] 2;[overridebar] 14;[shapeshift] 13;[vehicleui] 12;[possessbar] 12;",
 	}
 	
@@ -501,6 +494,10 @@ local CreateStanceBar = function()
 		end
 	end
 	
+	if (NumForms == 0) then
+		StancePanel:Hide()
+	end
+	
 	ActionBars.StanceBar = StancePanel
 end
 
@@ -693,6 +690,14 @@ local SetStanceSize = function(value)
 	
 	ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
 	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))
+	
+	if (NumForms > 0) then
+		if (not ActionBars.StanceBar:IsShown()) then
+			ActionBars.StanceBar:Show()
+		end
+	elseif ActionBars.StanceBar:IsShown() then
+		ActionBars.StanceBar:Hide()
+	end
 end
 
 local SetHighlightTexture = function(value)

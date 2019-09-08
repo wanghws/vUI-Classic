@@ -162,8 +162,10 @@ end
 
 local AnchorOnEnter = function(self)
 	if (self.Tooltip ~= "" or self.Tooltip ~= nil) then
+		local R, G, B = vUI:HexToRGB(Settings["ui-widget-font-color"])
+		
 		GameTooltip:SetOwner(self, "ANCHOR_PRESERVE")
-		GameTooltip:AddLine(self.Tooltip, 1, 1, 1)
+		GameTooltip:AddLine(self.Tooltip, R, G, B)
 		GameTooltip:Show()
 	end
 end

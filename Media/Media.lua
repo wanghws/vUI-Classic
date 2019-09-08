@@ -166,6 +166,14 @@ function Media:ApplyStyle(name)
 	end
 end
 
+function Media:HandleStyle(option)
+	if (self.Styles[name] and self.Styles[name][option]) then
+		return self.Styles[name][option]
+	elseif Settings[option] then
+		return Settings[option]
+	end
+end
+
 -- Palettes
 function Media:SetPalette(name, t, silent)
 	if self.Palettes[name] then
@@ -309,7 +317,7 @@ Media:SetPalette("Rapid", Rapid)
 Media:SetPalette("Fluent", Fluent)
 Media:SetPalette("Flat", Flat)
 
--- Templates
+-- Styles
 
 -- None
 Media:SetStyle("None", {})

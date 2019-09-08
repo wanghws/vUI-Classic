@@ -283,19 +283,9 @@ local UpdatePercentVisibility = function(value)
 	end
 end
 
-local UpdateRestingStatus = function(self)
-	if IsResting() then
-		self.Resting:SetText("zZz")
-	else
-		self.Resting:SetText("")
-	end
-	
-	UpdateXP(self)
-end
-
 ExperienceBar["PLAYER_LEVEL_UP"] = UpdateXP
 ExperienceBar["PLAYER_XP_UPDATE"] = UpdateXP
-ExperienceBar["PLAYER_UPDATE_RESTING"] = UpdateRestingStatus
+ExperienceBar["PLAYER_UPDATE_RESTING"] = UpdateXP
 ExperienceBar["UPDATE_EXHAUSTION"] = UpdateXP
 
 ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)

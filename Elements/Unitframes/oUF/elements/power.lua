@@ -222,7 +222,7 @@ local function Update(self, event, unit)
 	local disconnected = not UnitIsConnected(unit)
 	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 	element:SetMinMaxValues(min or 0, max)
-
+	
 	if(disconnected) then
 		element:SetValue(max)
 	else

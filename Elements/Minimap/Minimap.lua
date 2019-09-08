@@ -19,8 +19,6 @@ local ZoneUpdate = function(self)
 	self.Text:SetTextColor(Color[1], Color[2], Color[3])
 end
 
-local Move = vUI:GetModule("Move")
-
 local CreateMinimap = function()
 	Frame:SetScaledSize(Settings["minimap-size"] + 8, (22 + 8 + Settings["minimap-size"]))
 	Frame:SetScaledPoint("TOPRIGHT", UIParent, -12, -12)
@@ -29,7 +27,7 @@ local CreateMinimap = function()
 	Frame:SetBackdropBorderColor(0, 0, 0)
 	Frame.Ela = 0
 	
-	Move:Add(Frame)
+	vUI:GetModule("Move"):Add(Frame)
 	
 	local ZoneFrame = CreateFrame("Frame", "vUIZoneFrame", Frame)
 	ZoneFrame:SetScaledHeight(20)
