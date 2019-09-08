@@ -873,23 +873,23 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module"):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Backdrops"])
-	Left:CreateCheckbox("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "", UpdateShowBottom)
-	Left:CreateCheckbox("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "", UpdateShowSide)
+	Left:CreateCheckbox("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "Display the backdrop of the bottom action bars", UpdateShowBottom)
+	Left:CreateCheckbox("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "Display the backdrop of the side action bars", UpdateShowSide)
 	
 	Right:CreateHeader(Language["Sizing"])
-	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
-	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "", SetStanceSize)
+	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "Set the size of the action buttons", SetButtonSize)
+	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "Set the size of the stance buttons", SetStanceSize)
 	
 	Right:CreateHeader(Language["Styling"])
-	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "", UpdateShowHotKey)
-	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "", UpdateShowMacroName)
-	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "", UpdateShowCount)
+	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "Display hotkey text on action buttons", UpdateShowHotKey)
+	Right:CreateCheckbox("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "Display macro name text on action buttons", UpdateShowMacroName)
+	Right:CreateCheckbox("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "Display count text on action buttons", UpdateShowCount)
 	
 	Left:CreateHeader(Language["Layouts"])
-	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "", SetActionBarLayout)
+	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
 	
 	Left:CreateHeader(Language["Highlights"])
-	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "", SetHighlightTexture, "Texture")
+	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

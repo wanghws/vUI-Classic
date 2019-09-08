@@ -67,19 +67,19 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Chat Tools"], "", UpdateDisplayDevTools)
 	
 	Left:CreateHeader("Discord")
-	Left:CreateButton("Get Link", "Join Discord", "", GetDiscordLink)
+	Left:CreateButton("Get Link", "Join Discord", "Get a link to join the vUI Discord community", GetDiscordLink)
 	
 	--[[Right:CreateHeader(Language["Language"])
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
 	
 	Right:CreateHeader(Language["Scale"])
-	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "", UpdateUIScale).Box:Save()
+	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
 	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
 	
 	Left:CreateHeader(Language["Move UI"])
-	Left:CreateButton(Language["Toggle"], Language["Move UI"], "", ToggleMove)
-	Left:CreateButton(Language["Restore"], Language["Restore To Defaults"], "", ResetMovers)
+	Left:CreateButton(Language["Toggle"], Language["Move UI"], "While toggled, you can drag some|nelements of vUI around the screen", ToggleMove)
+	Left:CreateButton(Language["Restore"], Language["Restore To Defaults"], "Restore all vUI movable frames|nto their default locations", ResetMovers)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

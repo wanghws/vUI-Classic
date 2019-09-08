@@ -370,9 +370,9 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Misc."])
 	
 	Left:CreateHeader(Language["Miscellaneous Modules"])
-	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "", UpdateShowBagsFrame)
-	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "", UpdateShowMicroButtons)
-	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Enable Auto Repair"], "", UpdateAutoRepair)
+	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
+	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
+	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Enable Auto Repair"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
 	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the left most bag", UpdateBagLooting)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])

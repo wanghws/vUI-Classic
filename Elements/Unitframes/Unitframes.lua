@@ -1536,14 +1536,14 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], ""):RequiresReload(true)
+	Left:CreateCheckbox("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module"):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Cast Bars"])
 	Left:CreateSlider("unitframes-player-castbar-y", Settings["unitframes-player-castbar-y"], 40, 400, 1, Language["Player Cast Bar Y-Offset"], "", UpdatePlayerCastBarY)
 	Left:CreateSlider("unitframes-target-castbar-y", Settings["unitframes-target-castbar-y"], 40, 400, 1, Language["Target Cast Bar Y-Offset"], "", UpdateTargetCastBarY)
 	
 	Right:CreateHeader(Language["Colors"])
-	Right:CreateCheckbox("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "", ReloadUI):RequiresReload(true)
+	Right:CreateCheckbox("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
 	
 	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateCheckbox("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
@@ -1561,14 +1561,14 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], ""):RequiresReload(true)
+	Left:CreateCheckbox("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], "Enable the vUI name plates module"):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
-	Right:CreateCheckbox("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "", ReloadUI):RequiresReload(true)
+	Right:CreateCheckbox("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Sizes"])
-	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "")
-	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "")
+	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "Set the width of name plates")
+	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "Set the height of name plates")
 	
 	Right:CreateHeader(Language["Information"])
 	Right:CreateInput("nameplates-topleft-text", Settings["nameplates-topleft-text"], Language["Top Left Text"], "").Box:Save()

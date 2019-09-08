@@ -24,6 +24,9 @@ local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
 local UnitClassification = UnitClassification
 local GetPetHappiness = GetPetHappiness
+local GetMouseFocus = GetMouseFocus
+local GetItemInfo = GetItemInfo
+local GetCoinTextureString = GetCoinTextureString
 
 Tooltips.Handled = {
 	GameTooltip,
@@ -304,7 +307,7 @@ local OnTooltipSetItem = function(self)
 	local CoinString = GetCoinTextureString(CopperValue)
 	
 	if CoinString then
-		GameTooltip:AddLine(format("%s %s", SELL_PRICE, CoinString), 1, 1, 1)
+		GameTooltip:AddLine(CoinString, 1, 1, 1)
 	end
 end
 
