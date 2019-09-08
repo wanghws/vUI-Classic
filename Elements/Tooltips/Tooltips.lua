@@ -23,6 +23,7 @@ local UnitIsDND = UnitIsDND
 local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
 local UnitClassification = UnitClassification
+local GetPetHappiness = GetPetHappiness
 
 Tooltips.Handled = {
 	GameTooltip,
@@ -41,6 +42,12 @@ Tooltips.Classifications = {
 	["elite"] = Language["Elite"],
 	["rareelite"] = Language["Rare Elite"],
 	["worldboss"] = Language["Boss"],
+}
+
+Tooltips.HappinessLevels = {
+	[1] = Language["Unhappy"],
+	[2] = Language["Content"],
+	[3] = Language["Happy"]
 }
 
 local UpdateFonts = function(self)
@@ -121,7 +128,7 @@ local SetStyle = function(self)
 	end
 	
 	self:SetBackdrop(nil) -- To stop blue tooltips
-	self:SetFrameLevel(3)
+	self:SetFrameLevel(5)
 	
 	self.Backdrop = CreateFrame("Frame", nil, self)
 	self.Backdrop:SetAllPoints(self)
@@ -244,6 +251,18 @@ local OnTooltipSetUnit = function(self)
 			self:AddLine(Language["Targeting: |cFF"] .. TargetColor .. UnitName(UnitID .. "target") .. "|r", 1, 1, 1)
 		end
 		
+		if (vUI.UserClass == "HUNTER" and UnitID == "pet") then
+			local Happiness = GetPetHappiness()
+			
+			if Happiness then
+				local Color = vUI.HappinessColors[Happiness]
+				
+				if Color then
+					self:AddDoubleLine(Language["Happiness:"], format("|cFF%s%s|r", Tooltips.HappinessLevels[Happiness], vUI:RGBToHex(Color[1], Color[2], Color[3])))
+				end
+			end
+		end
+		
 		--GameTooltipStatusBar:OldSetStatusBarColor(vUI:HexToRGB(Color))
 		--GameTooltipStatusBar.BG:SetVertexColorHex(Color)
 		
@@ -252,10 +271,6 @@ local OnTooltipSetUnit = function(self)
 		end
 	end
 end
-
-local SELL_PRICE = SELL_PRICE
-local ITEM_UNSELLABLE = ITEM_UNSELLABLE
-local GetMouseFocus = GetMouseFocus
 
 local OnTooltipSetItem = function(self)
 	if (not Settings["tooltips-show-sell-value"]) then

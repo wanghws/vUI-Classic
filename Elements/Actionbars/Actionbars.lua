@@ -6,6 +6,7 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 -- Start on pet bar.
 
 local BUTTON_SIZE = 32
+local STANCE_SIZE = 32
 local SPACING = 2
 
 local BOTTOM_WIDTH = ((BUTTON_SIZE * 12) + (SPACING * 14))
@@ -65,7 +66,11 @@ local SkinButton = function(button)
 		button.HotKey:SetTextColor(1, 1, 1)
 		button.HotKey.SetTextColor = function() end
 		
-		button.HotKey:SetText("|cffFFFFFF" .. button.HotKey:GetText() .. "|r")
+		local HotKeyText = button.HotKey:GetText()
+		
+		if HotKeyText then
+			button.HotKey:SetText("|cffFFFFFF" .. HotKeyText .. "|r")
+		end
 		
 		button.HotKey.OST = button.HotKey.SetText
 		button.HotKey.SetText = function(self, text)
@@ -411,8 +416,6 @@ local SkinPetButton = function(button)
 	Shine:ClearAllPoints()
 	Shine:SetPoint("CENTER", button, 0, 0)
 	
-	--SkinButton(button)
-	
 	Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	Icon:SetDrawLayer("BACKGROUND", 7)
 	
@@ -464,7 +467,41 @@ local CreatePetBar = function()
 end
 
 local CreateStanceBar = function()
+	local NumForms = GetNumShapeshiftForms()
 	
+	local StancePanel = CreateFrame("Frame", "vUI Stance", UIParent)
+	StancePanel:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	StancePanel:SetBackdrop(vUI.BackdropAndBorder)
+	StancePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	StancePanel:SetBackdropBorderColor(0, 0, 0)
+	StancePanel:SetFrameStrata("LOW")
+	
+	StancePanel:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
+	StancePanel:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
+	
+	vUI:GetModule("Move"):Add(StancePanel)
+	
+	local Button
+	
+	if (StanceBarFrame and StanceBarFrame.StanceButtons) then
+		for i = 1, NUM_STANCE_SLOTS do
+			Button = StanceBarFrame.StanceButtons[i]
+			
+			SkinButton(Button)
+			Button:SetScaledSize(STANCE_SIZE)
+			Button:SetParent(StancePanel)
+			Button:SetFrameStrata("MEDIUM")
+			Button:ClearAllPoints()
+			
+			if i == 1 then
+				Button:SetScaledPoint("LEFT", StancePanel, 3, 0)
+			else
+				Button:SetScaledPoint("LEFT", StanceBarFrame.StanceButtons[i-1], "RIGHT", 2, 0)
+			end
+		end
+	end
+	
+	ActionBars.StanceBar = StancePanel
 end
 
 local CreateBarPanels = function()
@@ -647,6 +684,17 @@ local SetButtonSize = function(value)
 	end
 end
 
+local SetStanceSize = function(value)
+	for i = 1, NUM_STANCE_SLOTS do
+		StanceBarFrame.StanceButtons[i]:SetScaledSize(value, value)
+	end
+	
+	local NumForms = GetNumShapeshiftForms()
+	
+	ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
+	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))
+end
+
 local SetHighlightTexture = function(value)
 	local Texture = Media:GetTexture(value)
 	
@@ -696,6 +744,12 @@ local UpdateButtonStatus = function(self)
 	end
 end
 
+local StanceBarUpdateState = function()
+	local NumForms = GetNumShapeshiftForms()
+	
+	ActionBars.StanceBar:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * NumForms))
+end
+
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
 	if (not Settings["action-bars-enable"]) then
@@ -703,6 +757,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	end
 	
 	BUTTON_SIZE = Settings["action-bars-button-size"]
+	STANCE_SIZE = Settings["action-bars-stance-size"]
 	
 	CreateBarPanels()
 	CreateBar1()
@@ -711,6 +766,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreateBar4()
 	CreateBar5()
 	CreatePetBar()
+	CreateStanceBar()
 	
 	SetActionBarToggles(1, 1, 1, 1)
 	
@@ -719,6 +775,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
+	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
 	
 	self:UnregisterEvent(event)
 end)
@@ -811,6 +868,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "", SetButtonSize)
+	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "", SetStanceSize)
 	
 	Right:CreateHeader(Language["Styling"])
 	Right:CreateCheckbox("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "", UpdateShowHotKey)
