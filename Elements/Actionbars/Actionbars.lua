@@ -682,6 +682,10 @@ local SetButtonSize = function(value)
 end
 
 local SetStanceSize = function(value)
+	if InCombatLockdown() then
+		return
+	end
+	
 	for i = 1, NUM_STANCE_SLOTS do
 		StanceBarFrame.StanceButtons[i]:SetScaledSize(value, value)
 	end

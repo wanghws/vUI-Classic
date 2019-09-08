@@ -362,6 +362,10 @@ local UpdateAutoRepair = function(value)
 	end
 end
 
+local UpdateBagLooting = function(value)
+	SetInsertItemsLeftToRight(value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Misc."])
 	
@@ -369,6 +373,9 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "", UpdateShowBagsFrame)
 	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "", UpdateShowMicroButtons)
 	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Enable Auto Repair"], "", UpdateAutoRepair)
+	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the left most bag", UpdateBagLooting)
+	
+	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
 	Left:CreateFooter()
 end)

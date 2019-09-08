@@ -12,6 +12,8 @@ Elements\Libraries\LibSharedMedia-3.0.lua
 Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibClassicMobHealth-1.0.lua
 Elements\Libraries\LibCompress.lua
+Elements\UnitFrames\oUF\oUF.xml
+Elements\Libraries\LibClassicDurations\LibClassicDurations.xml
 Media\Media.lua
 Languages\Languages.lua
 Languages\deDE.lua
@@ -35,7 +37,6 @@ Elements\General\General.lua
 Elements\Chat\Chat.lua
 Elements\Experience\Experience.lua
 Elements\ActionBars\ActionBars.lua
-Elements\UnitFrames\oUF\oUF.xml
 Elements\UnitFrames\UnitFrames.lua
 Elements\Tooltips\Tooltips.lua
 Elements\MetersBG\MetersBG.lua

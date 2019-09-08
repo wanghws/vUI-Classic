@@ -411,7 +411,7 @@ Media:SetStyle("Conjured Muffin", {
 	["ui-widget-bg-color"] = "263238",
 	["ui-widget-font-color"] = "FAFAFA",
 	
-	["ui-button-font-color"] = "3EC5E9",
+	["ui-button-font-color"] = "EFEBE9",
 	["ui-button-texture-color"] = "757575",
 	
 	["chat-font"] = "Roboto",

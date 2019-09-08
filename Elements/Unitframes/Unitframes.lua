@@ -26,6 +26,9 @@ local IsResting = IsResting
 local GetQuestGreenRange = GetQuestGreenRange
 
 local LCMH = LibStub("LibClassicMobHealth-1.0")
+local LCD = LibStub("LibClassicDurations")
+
+--LCD:Register("vUI")
 
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
@@ -718,18 +721,18 @@ local PostCreateIcon = function(unit, button)
 	button:SetBackdropColor(0, 0, 0)
 	button:SetFrameLevel(6)
 	
-	--[[button.remaining = button:CreateFontString(nil, "OVERLAY")
-	button.remaining:SetFont(Font, 12, "OUTLINE")
-	button.remaining:SetScaledPoint("TOPLEFT", 2, -1)
-	button.remaining:SetJustifyH("LEFT")
-	]]
-	--button.cd.noOCC = true
-	--button.cd.noCooldownCount = true
+	button.Time = button:CreateFontString(nil, "OVERLAY")
+	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
+	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
+	button.Time:SetJustifyH("LEFT")
+	
+	button.cd.noOCC = true
+	button.cd.noCooldownCount = true
 	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
 	button.cd:ClearAllPoints()
-	button.cd:SetScaledPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
-	button.cd:SetScaledPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
-	--button.cd:SetHideCountdownNumbers(true)
+	button.cd:SetScaledPoint("TOPLEFT", button, 1, -1)
+	button.cd:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
+	button.cd:SetHideCountdownNumbers(true)
 	
 	button.icon:SetScaledPoint("TOPLEFT", 1, -1)
 	button.icon:SetScaledPoint("BOTTOMRIGHT", -1, 1)
@@ -745,7 +748,9 @@ local PostCreateIcon = function(unit, button)
 	
 	button.overlay:SetParent(button.overlayFrame)
 	button.count:SetParent(button.overlayFrame)
-	--button.remaining:SetParent(button.overlayFrame)
+	--button.Time:SetParent(button.overlayFrame)
+	
+	button.ela = 0
 end
 
 local StyleTarget = function(self, unit)
@@ -855,7 +860,6 @@ local StyleTarget = function(self, unit)
 	Buffs["growth-y"] = "UP"
 	Buffs["growth-x"] = "RIGHT"
 	Buffs.PostCreateIcon = PostCreateIcon
-	--Buffs.PostUpdateIcon = vUI_UF.PostUpdateAura
 	
 	Debuffs:SetScaledSize(230, 30)
 	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
@@ -866,7 +870,6 @@ local StyleTarget = function(self, unit)
 	Debuffs["growth-y"] = "UP"
 	Debuffs["growth-x"] = "LEFT"
 	Debuffs.PostCreateIcon = PostCreateIcon
-	--Debuffs.PostUpdateIcon = vUI_UF.PostUpdateAura
 	Debuffs.onlyShowPlayer = true
 	
     -- Castbar

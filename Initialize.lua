@@ -16,7 +16,7 @@ local vUI = CreateFrame("Frame")
 
 vUI.Modules = {}
 
-function vUI:NewModule(name, version)
+function vUI:NewModule(name)
 	if self.Modules[name] then
 		return self.Modules[name]
 	end
@@ -24,7 +24,6 @@ function vUI:NewModule(name, version)
 	local Module = CreateFrame("Frame", name, UIParent)
 	
 	Module.Name = name
-	Module.Version = version
 	Module.Loaded = false
 	
 	self.Modules[name] = Module
@@ -54,10 +53,8 @@ end
 
 function vUI:LoadModules(version)
 	for i = 1, #self.Modules do
-		if (not self.Modules[i].Version or self.Modules[i].Version == version) then
-			if self.Modules[i].Load then
-				self.Modules[i]:Load()
-			end
+		if self.Modules[i].Load then
+			self.Modules[i]:Load()
 		end
 	end
 end
@@ -67,7 +64,7 @@ function vUI:VARIABLES_LOADED(event) -- Migrate VARIABLES_LOADED from GUI to her
 end
 
 function vUI:PLAYER_ENTERING_WORLD(event)
-	self:LoadModules(self:GetClientVersion())
+	self:LoadModules()
 	self:UnregisterEvent(event)
 end
 
@@ -168,14 +165,8 @@ function vUI:GetSuggestedScale()
 	return (768 / ScreenHeight)
 end
 
--- Temporary so I can code on retail and disable Classic-only things
 function vUI:IsClassic()
 	return self.TOCVersion <= 20000 and true or false
-end
-
--- Two ways to skin a cat, why do I have 2 of these? lol
-function vUI:GetClientVersion()
-	return self.TOCVersion > 19999 and "Live" or "Classic"
 end
 
 function vUI:ShortValue(num)
