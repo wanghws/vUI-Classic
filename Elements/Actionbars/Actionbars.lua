@@ -469,6 +469,10 @@ local CreateStanceBar = function()
 	StancePanel:SetBackdropBorderColor(0, 0, 0)
 	StancePanel:SetFrameStrata("LOW")
 	
+	if (not Settings["action-bars-show-stance-bg"]) then
+		StancePanel:SetAlpha(0)
+	end
+	
 	StancePanel:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
 	StancePanel:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
 	
@@ -482,11 +486,11 @@ local CreateStanceBar = function()
 			
 			SkinButton(Button)
 			Button:SetScaledSize(STANCE_SIZE)
-			Button:SetParent(StancePanel)
+			Button:SetParent(UIParent)
 			Button:SetFrameStrata("MEDIUM")
 			Button:ClearAllPoints()
 			
-			if i == 1 then
+			if (i == 1) then
 				Button:SetScaledPoint("LEFT", StancePanel, 3, 0)
 			else
 				Button:SetScaledPoint("LEFT", StanceBarFrame.StanceButtons[i-1], "RIGHT", 2, 0)
@@ -790,7 +794,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	self:UnregisterEvent(event)
 end)
 
-local UpdateShowBottom = function(value)
+local UpdateShowBottomBG = function(value)
 	if value then
 		vUIBottomActionBarsPanel:SetAlpha(1)
 	else
@@ -798,11 +802,19 @@ local UpdateShowBottom = function(value)
 	end
 end
 
-local UpdateShowSide = function(value)
+local UpdateShowSideBG = function(value)
 	if value then
 		vUISideActionBarsPanel:SetAlpha(1)
 	else
 		vUISideActionBarsPanel:SetAlpha(0)
+	end
+end
+
+local UpdateShowStanceBG = function(value)
+	if value then
+		ActionBars.StanceBar:SetAlpha(1)
+	else
+		ActionBars.StanceBar:SetAlpha(0)
 	end
 end
 
@@ -873,8 +885,9 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module"):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Backdrops"])
-	Left:CreateCheckbox("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "Display the backdrop of the bottom action bars", UpdateShowBottom)
-	Left:CreateCheckbox("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "Display the backdrop of the side action bars", UpdateShowSide)
+	Left:CreateCheckbox("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "Display the backdrop of the bottom action bars", UpdateShowBottomBG)
+	Left:CreateCheckbox("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "Display the backdrop of the side action bars", UpdateShowSideBG)
+	Left:CreateCheckbox("action-bars-show-stance-bg", Settings["action-bars-show-stance-bg"], "Show Stance Backdrop", "Display the backdrop of the stance bars", UpdateShowStanceBG)
 	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "Set the size of the action buttons", SetButtonSize)
