@@ -754,6 +754,15 @@ local PostUpdateIcon = function(self, unit, button, index, position, duration, e
 	button.Duration = Duration
 	button.Expiration = Expiration
 	
+	if button.cd then
+		if (Duration and Duration > 0) then
+			button.cd:SetCooldown(Expiration - Duration, Duration)
+			button.cd:Show()
+		else
+			button.cd:Hide()
+		end
+	end
+	
 	if (Expiration and Expiration ~= 0) then
 		button:SetScript("OnUpdate", AuraOnUpdate)
 		button.Time:Show()
