@@ -432,7 +432,7 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
 	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
 	Left:CreateCheckbox("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
-	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the left most bag", UpdateBagLooting)
+	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
