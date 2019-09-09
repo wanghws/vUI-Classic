@@ -489,6 +489,10 @@ local CreateStanceBar = function()
 			Button:SetFrameStrata("MEDIUM")
 			Button:ClearAllPoints()
 			
+			if (i > NumForms) then
+				Button:Hide()
+			end
+			
 			if (i == 1) then
 				Button:SetScaledPoint("LEFT", StancePanel, 3, 0)
 			else
@@ -695,8 +699,8 @@ local SetStanceSize = function(value)
 	
 	local NumForms = GetNumShapeshiftForms()
 	
-	--[[ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
-	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))]]
+	ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
+	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))
 	
 	if (NumForms > 0) then
 		if (not ActionBars.StanceBar:IsShown()) then
@@ -757,10 +761,13 @@ local UpdateButtonStatus = function(self)
 end
 
 local StanceBarUpdateState = function()
-	local NumForms = GetNumShapeshiftForms()
-	
-	ActionBars.StanceBar:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
-	ActionBars.StanceBar:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
+	if (GetNumShapeshiftForms() > 0) then
+		if (not ActionBars.StanceBar:IsShown()) then
+			ActionBars.StanceBar:Show()
+		end
+	elseif ActionBars.StanceBar:IsShown() then
+		ActionBars.StanceBar:Hide()
+	end
 end
 
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -788,7 +795,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
-	--hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
+	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
 	
 	self:UnregisterEvent(event)
 end)
