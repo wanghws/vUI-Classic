@@ -1,5 +1,9 @@
 local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
+if (1 == 1) then -- Not just yet
+	return
+end
+
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
 local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s."
