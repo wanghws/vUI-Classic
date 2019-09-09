@@ -3,7 +3,7 @@ local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 -- These are just default values. Use the GUI to change settings.
 
 -- UI
-Defaults["ui-scale"] = 0.71111111111111 --vUI:GetSuggestedScale()
+Defaults["ui-scale"] = 0.71111111111111
 Defaults["ui-language"] = GetLocale()
 Defaults["ui-display-welcome"] = true
 Defaults["ui-display-dev-tools"] = false

@@ -418,6 +418,56 @@ function Tooltips:StyleStatusBar()
 	HealthBar.SetStatusBarColor = function() end
 end
 
+local ItemRefCloseOnEnter = function(self)
+	self.Cross:SetVertexColorHex("C0392B")
+end
+
+local ItemRefCloseOnLeave = function(self)
+	self.Cross:SetVertexColorHex("EEEEEE")
+end
+
+local ItemRefCloseOnMouseUp = function(self)
+	self.Texture:SetVertexColorHex(Settings["ui-header-texture-color"])
+	
+	ItemRefTooltip:Hide()
+end
+
+local ItemRefCloseOnMouseDown = function(self)
+	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
+	
+	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
+end
+
+function Tooltips:SkinItemRef()
+	ItemRefCloseButton:Hide()
+	
+	-- Close button
+	CloseButton = CreateFrame("Frame", nil, ItemRefTooltip)
+	CloseButton:SetScaledSize(20, 20)
+	CloseButton:SetScaledPoint("TOPRIGHT", ItemRefTooltip, -3, -3)
+	CloseButton:SetBackdrop(vUI.BackdropAndBorder)
+	CloseButton:SetBackdropColor(0, 0, 0, 0)
+	CloseButton:SetBackdropBorderColor(0, 0, 0)
+	CloseButton:SetScript("OnEnter", ItemRefCloseOnEnter)
+	CloseButton:SetScript("OnLeave", ItemRefCloseOnLeave)
+	CloseButton:SetScript("OnMouseUp", ItemRefCloseOnMouseUp)
+	CloseButton:SetScript("OnMouseDown", ItemRefCloseOnMouseDown)
+	
+	CloseButton.Texture = CloseButton:CreateTexture(nil, "ARTWORK")
+	CloseButton.Texture:SetScaledPoint("TOPLEFT", CloseButton, 1, -1)
+	CloseButton.Texture:SetScaledPoint("BOTTOMRIGHT", CloseButton, -1, 1)
+	CloseButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	CloseButton.Texture:SetVertexColorHex(Settings["ui-header-texture-color"])
+	
+	CloseButton.Cross = CloseButton:CreateTexture(nil, "OVERLAY")
+	CloseButton.Cross:SetPoint("CENTER", CloseButton, 0, 0)
+	CloseButton.Cross:SetScaledSize(16, 16)
+	CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
+	CloseButton.Cross:SetVertexColorHex("EEEEEE")
+	
+	ItemRefTooltip.CloseButton = CloseButton
+end
+
 function Tooltips:Load()
 	if (not Settings["tooltips-enable"]) then
 		return
@@ -425,6 +475,7 @@ function Tooltips:Load()
 	
 	self:AddHooks()
 	self:StyleStatusBar()
+	self:SkinItemRef()
 	
 	if IsInGuild() then
 		MyGuild = GetGuildInfo("player")

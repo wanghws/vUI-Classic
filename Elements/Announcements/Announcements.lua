@@ -28,6 +28,16 @@ Announcements.Spells = {
 	--[49576] = CastMessage, -- Death Grip
 }
 
+function Announcements:GetChannelToSend()
+	if UnitInRaid("player") then
+		return "RAID"
+	elseif UnitInParty("player") then
+		return "PARTY"
+	else
+		return "EMOTE"
+	end
+end
+
 Announcements.Events = {
 	["SPELL_INTERRUPT"] = function(destName, spellID, spellName)
 		SendChatMessage(format(InterruptMessage, destName, spellName), "EMOTE")
@@ -73,7 +83,7 @@ function Announcements:GROUP_ROSTER_UPDATE()
 	end
 end
 
-function Announcements:UNIT_PET(owner) -- Merge pets with owners. I don't know if this has any purpose in Classic, it's a leftover from my retail script for now
+function Announcements:UNIT_PET(owner)
 	if (owner ~= "player") then
 		return
 	end
