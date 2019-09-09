@@ -131,7 +131,7 @@ local SetStyle = function(self)
 	end
 	
 	self:SetBackdrop(nil) -- To stop blue tooltips
-	self:SetFrameLevel(5)
+	self:SetFrameLevel(10)
 	
 	self.Backdrop = CreateFrame("Frame", nil, self)
 	self.Backdrop:SetAllPoints(self)
@@ -139,7 +139,7 @@ local SetStyle = function(self)
 	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
 	self.Backdrop:SetFrameLevel(2)
-	self.Backdrop:SetFrameStrata("TOOLTIP")
+	self.Backdrop:SetFrameStrata("DIALOG")
 	
 	self.OuterBG = CreateFrame("Frame", nil, self)
 	self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 3)
@@ -147,8 +147,18 @@ local SetStyle = function(self)
 	self.OuterBG:SetBackdrop(vUI.BackdropAndBorder)
 	self.OuterBG:SetBackdropBorderColor(0, 0, 0)
 	self.OuterBG:SetFrameLevel(1)
-	self.OuterBG:SetFrameStrata("TOOLTIP")
+	self.OuterBG:SetFrameStrata("DIALOG")
 	self.OuterBG:SetBackdropColorHex(Settings["ui-window-bg-color"])
+	
+	if (self == AutoCompleteBox) then
+		for i = 1, AUTOCOMPLETE_MAX_BUTTONS do
+			local Text = _G["AutoCompleteButton" .. i .. "Text"]
+			
+			Text:SetFontInfo(Settings["ui-widget-font"], 12)
+		end
+		
+		AutoCompleteInstructions:SetFontInfo(Settings["ui-widget-font"], 12)
+	end
 	
 	UpdateFonts(self)
 	
