@@ -12,7 +12,14 @@ local Debug = '"%s" set to %s.'
 local floor = floor
 local format = format
 local tostring = tostring
-
+local select = select
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerItemLink = GetContainerItemLink
+local GetContainerItemID = GetContainerItemID
+local GetContainerItemInfo = GetContainerItemInfo
+local UseContainerItem = UseContainerItem
+local GetItemInfo = GetItemInfo
+local PickupMerchantItem = PickupMerchantItem
 local GetFramerate = GetFramerate
 
 --[[ This is currently just a test page to see how GUI controls work, and debug them.
@@ -299,6 +306,51 @@ function MicroButtons:Load()
 	self.Panel = Panel
 end
 
+local AutoVendor = vUI:NewModule("Auto Vendor") -- Auto sell useless items
+
+AutoVendor.Filter = {
+	[6196] = true,
+}
+
+AutoVendor:SetScript("OnEvent", function(self, event)
+	local Profit = 0
+	local TotalCount = 0
+	
+	for Bag = 0, 4 do
+		for Slot = 1, GetContainerNumSlots(Bag) do
+			local Link, ID = GetContainerItemLink(Bag, Slot), GetContainerItemID(Bag, Slot)
+			
+			if (Link and ID and not self.Filter[ID]) then
+				local TotalPrice = 0
+				local Quality = select(3, GetItemInfo(Link))
+				local SellPrice = select(11, GetItemInfo(Link))
+				local Count = select(2, GetContainerItemInfo(Bag, Slot))
+				
+				if ((SellPrice and (SellPrice > 0)) and Count) then
+					TotalPrice = SellPrice * Count
+				end
+				
+				if ((Quality and Quality <= 0) and TotalPrice > 0) then
+					UseContainerItem(Bag, Slot)
+					PickupMerchantItem()
+					Profit = Profit + TotalPrice
+					TotalCount = TotalCount + Count
+				end
+			end
+		end
+	end
+	
+	if (Profit > 0) then
+		vUI:print(format(Language["You sold %d items for a total of %s"], TotalCount, GetCoinTextureString(Profit)))
+	end
+end)
+
+function AutoVendor:Load()
+	if Settings["auto-vendor-enable"] then
+		self:RegisterEvent("MERCHANT_SHOW")
+	end
+end
+
 local AutoRepair = vUI:NewModule("Auto Repair") -- Check against the rep with the faction of the merchant, add option to repair if honored +
 
 AutoRepair:SetScript("OnEvent", function(self, event)
@@ -333,8 +385,6 @@ end)
 function AutoRepair:Load()
 	if Settings["auto-repair-enable"] then
 		self:RegisterEvent("MERCHANT_SHOW")
-	else
-		self:UnregisterEvent("MERCHANT_SHOW")
 	end
 end
 
@@ -351,6 +401,14 @@ local UpdateShowBagsFrame = function(value)
 		BagsFrame.Panel:Show()
 	else
 		BagsFrame.Panel:Hide()
+	end
+end
+
+local UpdateAutoVendor = function(value)
+	if value then
+		AutoVendor:RegisterEvent("MERCHANT_SHOW")
+	else
+		AutoVendor:UnregisterEvent("MERCHANT_SHOW")
 	end
 end
 
@@ -372,7 +430,8 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Miscellaneous Modules"])
 	Left:CreateCheckbox("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
 	Left:CreateCheckbox("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
-	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Enable Auto Repair"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
+	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
+	Left:CreateCheckbox("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
 	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the left most bag", UpdateBagLooting)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])

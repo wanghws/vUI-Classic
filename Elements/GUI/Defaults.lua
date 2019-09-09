@@ -186,6 +186,9 @@ Defaults["bags-frame-show"] = true
 -- Auto Repair
 Defaults["auto-repair-enable"] = true
 
+-- Auto Vendor
+Defaults["auto-vendor-enable"] = true
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false

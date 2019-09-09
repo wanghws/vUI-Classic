@@ -462,8 +462,10 @@ end
 local CreateStanceBar = function()
 	local NumForms = GetNumShapeshiftForms()
 	
-	local StancePanel = CreateFrame("Frame", "vUI Stance", UIParent)
+	local StancePanel = CreateFrame("Frame", "vUI Stance", UIParent, "SecureHandlerStateTemplate")
 	StancePanel:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	StancePanel:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
+	StancePanel:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
 	StancePanel:SetBackdrop(vUI.BackdropAndBorder)
 	StancePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	StancePanel:SetBackdropBorderColor(0, 0, 0)
@@ -472,9 +474,6 @@ local CreateStanceBar = function()
 	if (not Settings["action-bars-show-stance-bg"]) then
 		StancePanel:SetAlpha(0)
 	end
-	
-	StancePanel:SetScaledWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
-	StancePanel:SetScaledHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
 	
 	vUI:GetModule("Move"):Add(StancePanel)
 	
@@ -696,8 +695,8 @@ local SetStanceSize = function(value)
 	
 	local NumForms = GetNumShapeshiftForms()
 	
-	ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
-	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))
+	--[[ActionBars.StanceBar:SetScaledWidth((value * NumForms) + (SPACING * (NumForms + 2)))
+	ActionBars.StanceBar:SetScaledHeight(((value * 1) + (SPACING * 3)))]]
 	
 	if (NumForms > 0) then
 		if (not ActionBars.StanceBar:IsShown()) then
@@ -782,14 +781,14 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	CreatePetBar()
 	CreateStanceBar()
 	
-	SetActionBarToggles(1, 1, 1, 1)
+	--SetActionBarToggles(1, 1, 1, 1)
 	
 	SetActionBarLayout(Settings["action-bars-layout"])
 	
 	hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
 	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
-	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
+	--hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
 	
 	self:UnregisterEvent(event)
 end)

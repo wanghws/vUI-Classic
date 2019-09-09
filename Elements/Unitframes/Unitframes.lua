@@ -372,7 +372,7 @@ Methods["LevelColor"] = function(unit)
 	return vUI:UnitDifficultyColor(unit)
 end
 
-Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD" -- UNIT_HAPPINESS
+Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD UNIT_PET" -- UNIT_HAPPINESS
 Methods["PetColor"] = function(unit)
 	if (vUI.UserClass == "HUNTER") then
 		return Methods["HappinessColor"](unit)
@@ -381,7 +381,7 @@ Methods["PetColor"] = function(unit)
 	end
 end
 
-Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD UNIT_PET"
 Methods["PetHappiness"] = function(unit)
 	if (unit == "pet") then
 		local Happiness = GetPetHappiness()
