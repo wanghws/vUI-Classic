@@ -46,7 +46,7 @@ end
 
 -- To be implemented. Add something here like a link or whatever to update.
 local UpdateOnMouseUp = function()
-	
+	vUI:print("You can get an updated version of vUI here at https://www.curseforge.com/wow/addons/vui or by using the Twitch desktop app")
 end
 
 Update["PLAYER_ENTERING_WORLD"] = function(self, event)

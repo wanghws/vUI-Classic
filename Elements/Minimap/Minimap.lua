@@ -141,6 +141,7 @@ local OnEvent = function(self, event)
 	
 	if MiniMapTrackingBorder then
 		MiniMapTrackingBorder:Hide()
+		MiniMapTrackingBorder.Show = function() end
 	end
 	
 	if MiniMapTrackingIcon then
@@ -148,7 +149,7 @@ local OnEvent = function(self, event)
 		MiniMapTrackingIcon:ClearAllPoints()
 		MiniMapTrackingIcon:SetScaledPoint("TOPLEFT", MiniMapTrackingFrame, 1, -1)
 		MiniMapTrackingIcon:SetScaledPoint("BOTTOMRIGHT", MiniMapTrackingFrame, -1, 1)
-	--	MiniMapTrackingIcon:SetTexCoords(0.1, 0.9, 0.1, 0.9)
+		MiniMapTrackingIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	end
 	
 	Kill(MinimapCluster)

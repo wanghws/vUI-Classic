@@ -1,9 +1,5 @@
 local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
-if (1 == 1) then -- Not just yet
-	return
-end
-
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
 local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s."
@@ -43,11 +39,11 @@ Announcements.Events = {
 		SendChatMessage(format(InterruptMessage, destName, spellName), "EMOTE")
 	end,
 	
-	["SPELL_DISPEL"] = function(destName, spellID, spellName)
+	--[[["SPELL_DISPEL"] = function(destName, spellID, spellName)
 		if (not UnitIsFriend("player", destName)) then
 			SendChatMessage(format(DispelledMessage, destName, spellName), "EMOTE")
 		end
-	end,
+	end,]]
 	
 	["SPELL_STOLEN"] = function(destName, spellID, spellName)
 		SendChatMessage(format(StolenMessage, destName, spellName), "EMOTE")

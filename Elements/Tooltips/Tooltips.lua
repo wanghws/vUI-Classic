@@ -33,7 +33,7 @@ Tooltips.Handled = {
 	ItemRefTooltip,
 	ItemRefShoppingTooltip1,
 	ItemRefShoppingTooltip2,
-	AutoCompleteBox,
+	--AutoCompleteBox,
 	FriendsTooltip,
 	ShoppingTooltip1,
 	ShoppingTooltip2,
@@ -115,9 +115,7 @@ end
 
 local SetStyle = function(self)
 	if self.Styled then
-		self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
-		self.Backdrop:SetBackdropBorderColor(0, 0, 0)
-		self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
+	--	self.Backdrop:SetVertexColorHex(Settings["ui-window-main-color"])
 		
 		if (self.GetUnit and self:GetUnit()) then
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
@@ -132,22 +130,23 @@ local SetStyle = function(self)
 	
 	self:SetBackdrop(nil) -- To stop blue tooltips
 	self:SetFrameLevel(10)
+	self.SetFrameLevel = function() end
 	
 	self.Backdrop = CreateFrame("Frame", nil, self)
 	self.Backdrop:SetAllPoints(self)
 	self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
-	self.Backdrop:SetFrameLevel(2)
-	self.Backdrop:SetFrameStrata("DIALOG")
+	--self.Backdrop:SetFrameStrata("TOOLTIP")
+	self.Backdrop:SetFrameLevel(1)
 	
 	self.OuterBG = CreateFrame("Frame", nil, self)
 	self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 3)
 	self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
 	self.OuterBG:SetBackdrop(vUI.BackdropAndBorder)
 	self.OuterBG:SetBackdropBorderColor(0, 0, 0)
+	--self.OuterBG:SetFrameStrata("TOOLTIP")
 	self.OuterBG:SetFrameLevel(1)
-	self.OuterBG:SetFrameStrata("DIALOG")
 	self.OuterBG:SetBackdropColorHex(Settings["ui-window-bg-color"])
 	
 	if (self == AutoCompleteBox) then
@@ -158,6 +157,12 @@ local SetStyle = function(self)
 		end
 		
 		AutoCompleteInstructions:SetFontInfo(Settings["ui-widget-font"], 12)
+		
+		AutoCompleteBox.Backdrop:SetFrameStrata("DIALOG")
+		AutoCompleteBox.OuterBG:SetFrameStrata("DIALOG")
+	else
+		self.Backdrop:SetFrameStrata("TOOLTIP")
+		self.OuterBG:SetFrameStrata("TOOLTIP")
 	end
 	
 	UpdateFonts(self)
