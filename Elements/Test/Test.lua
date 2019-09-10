@@ -434,6 +434,9 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
 	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
 	
+	Right:CreateHeader(Language["Announcements"])
+	Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO"}, Language["Set Channel"], "Set the channel to send announcements to")
+	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
 	Left:CreateFooter()

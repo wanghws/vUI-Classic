@@ -137,15 +137,15 @@ local SetStyle = function(self)
 	self.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	self.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	self.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
-	--self.Backdrop:SetFrameStrata("TOOLTIP")
-	self.Backdrop:SetFrameLevel(1)
+	self.Backdrop:SetFrameStrata("TOOLTIP")
+	self.Backdrop:SetFrameLevel(2)
 	
 	self.OuterBG = CreateFrame("Frame", nil, self)
 	self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 3)
 	self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
 	self.OuterBG:SetBackdrop(vUI.BackdropAndBorder)
 	self.OuterBG:SetBackdropBorderColor(0, 0, 0)
-	--self.OuterBG:SetFrameStrata("TOOLTIP")
+	self.OuterBG:SetFrameStrata("TOOLTIP")
 	self.OuterBG:SetFrameLevel(1)
 	self.OuterBG:SetBackdropColorHex(Settings["ui-window-bg-color"])
 	
@@ -160,16 +160,11 @@ local SetStyle = function(self)
 		
 		AutoCompleteBox.Backdrop:SetFrameStrata("DIALOG")
 		AutoCompleteBox.OuterBG:SetFrameStrata("DIALOG")
-	else
-		self.Backdrop:SetFrameStrata("TOOLTIP")
-		self.OuterBG:SetFrameStrata("TOOLTIP")
 	end
 	
 	UpdateFonts(self)
 	
 	self.SetBackdrop = function() end
-	self.SetBackdropColor = function() end
-	self.SetBackdropBorderColor = function() end
 	
 	self.Styled = true
 end

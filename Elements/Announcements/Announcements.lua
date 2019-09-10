@@ -2,9 +2,9 @@ local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
-local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s."
-local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's %s."
-local StolenMessage = ACTION_SPELL_STOLEN .. " %s's %s."
+local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s"
+local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's %s"
+local StolenMessage = ACTION_SPELL_STOLEN .. " %s's %s"
 local CastMessage = "casts %s on %s."
 local UNKNOWN = UNKNOWN
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
@@ -19,6 +19,8 @@ local format = format
 local MyGUID = UnitGUID("player")
 local PetGUID = ""
 local _
+
+local Channel
 
 Announcements.Spells = {
 	--[49576] = CastMessage, -- Death Grip
@@ -36,7 +38,9 @@ end
 
 Announcements.Events = {
 	["SPELL_INTERRUPT"] = function(destName, spellID, spellName)
-		SendChatMessage(format(InterruptMessage, destName, spellName), "EMOTE")
+		Channel = Announcements:GetChannelToSend()
+		
+		SendChatMessage(format(InterruptMessage, destName, spellName), Channel)
 	end,
 	
 	--[[["SPELL_DISPEL"] = function(destName, spellID, spellName)
