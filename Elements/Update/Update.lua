@@ -98,14 +98,16 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 	if (prefix == "vUI-Version") then
 		if (channel == "WHISPER") then
 			--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
-			vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], message))
+				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
+				print("https://www.curseforge.com/wow/addons/vui")
 			
 			self:UnregisterEvent(event)
 		else
 			local SenderVersion = tonumber(message)
 			
 			if (SenderVersion > AddOnVersion) then	-- We're behind!
-				vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], SenderVersion))
+				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], SenderVersion))
+				print("https://www.curseforge.com/wow/addons/vui")
 				
 				self:UnregisterEvent(event)
 			else -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
