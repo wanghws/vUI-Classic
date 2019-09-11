@@ -527,3 +527,9 @@ function BagSearch:Load()
 	Search:SetScript("OnEscapePressed", SearchOnEnterPressed)
 	Search:SetScript("OnEditFocusLost", SearchOnEditFocusLost)
 end
+
+--[[local Icon = UIParent:CreateTexture(nil, "OVERLAY")
+Icon:SetScaledSize(32, 32)
+Icon:SetScaledPoint("CENTER")
+Icon:SetTexture(Media:GetTexture("Warning"))
+Icon:SetVertexColorHex("FFEB3B")]]

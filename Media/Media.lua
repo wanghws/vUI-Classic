@@ -215,7 +215,8 @@ Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", ni
 
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")
-Media:SetTexture("vUI 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI2.tga") -- We don't talk about what happened to vUI 1. And if you tell ANYONE...
+Media:SetTexture("vUI 1", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI1.tga")
+Media:SetTexture("vUI 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI2.tga")
 Media:SetTexture("vUI 3", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI3.tga")
 Media:SetTexture("vUI 4", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI4.tga")
 Media:SetTexture("vUI Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)

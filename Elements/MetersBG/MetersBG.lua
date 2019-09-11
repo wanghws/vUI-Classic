@@ -4,24 +4,12 @@ if (1 == 1) then
 	return
 end
 
-local select = select
-local tostring = tostring
-local format = string.format
-local sub = string.sub
-local gsub = string.gsub
-local match = string.match
-
 local FRAME_WIDTH = 390
 local FRAME_HEIGHT = 104
 local BAR_HEIGHT = 22
 
-local TabButtons = {}
-local TabNames = {"General", "Whispers", "Loot", "Trade"}
-local TabIDs = {1, 3, 4, 5}
-local BUTTON_WIDTH = (FRAME_WIDTH / 4) + 1
-
 local CreateMetersPanels = function()
-	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
+	local R, G, B = vUI:HexToRGB(Settings["ui-window-bg-color"])
 	
 	local MeterBGBottom = CreateFrame("Frame", "vUIMeterFrame", UIParent)
 	MeterBGBottom:SetScaledSize(FRAME_WIDTH, 4)
@@ -55,6 +43,42 @@ local CreateMetersPanels = function()
 	MeterBGTop:SetBackdropBorderColor(0, 0, 0)
 	MeterBGTop:SetFrameStrata("LOW")
 	
+	local MeterBG = CreateFrame("Frame", nil, UIParent)
+	MeterBG:SetScaledPoint("BOTTOMLEFT", MeterBGLeft, 0, 0)
+	MeterBG:SetScaledPoint("TOPRIGHT", MeterBGTop, 0, 0)
+	MeterBG:SetBackdrop(vUI.BackdropAndBorder)
+	MeterBG:SetBackdropColor(R, G, B, (Settings["chat-bg-opacity"] / 100))
+	MeterBG:SetBackdropBorderColor(0, 0, 0)
+	MeterBG:SetFrameStrata("BACKGROUND")
+	
+	local TopLeft = CreateFrame("Frame", nil, UIParent)
+	TopLeft:SetScaledSize((FRAME_WIDTH / 2) - 4, 21)
+	TopLeft:SetScaledPoint("TOPLEFT", MeterBGTop, 3, -2)
+	TopLeft:SetBackdrop(vUI.BackdropAndBorder)
+	TopLeft:SetBackdropColor(R, G, B)
+	TopLeft:SetBackdropBorderColor(0, 0, 0)
+	TopLeft:SetFrameStrata("LOW")
+	
+	TopLeft.Texture = TopLeft:CreateTexture(nil, "OVERLAY")
+	TopLeft.Texture:SetScaledPoint("TOPLEFT", TopLeft, 1, -1)
+	TopLeft.Texture:SetScaledPoint("BOTTOMRIGHT", TopLeft, -1, 1)
+	TopLeft.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	TopLeft.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	
+	local TopRight = CreateFrame("Frame", nil, UIParent)
+	TopRight:SetScaledSize((FRAME_WIDTH / 2) - 4, 21)
+	TopRight:SetScaledPoint("TOPRIGHT", MeterBGTop, -3, -2)
+	TopRight:SetBackdrop(vUI.BackdropAndBorder)
+	TopRight:SetBackdropColor(R, G, B)
+	TopRight:SetBackdropBorderColor(0, 0, 0)
+	TopRight:SetFrameStrata("LOW")
+	
+	TopRight.Texture = TopRight:CreateTexture(nil, "OVERLAY")
+	TopRight.Texture:SetScaledPoint("TOPLEFT", TopRight, 1, -1)
+	TopRight.Texture:SetScaledPoint("BOTTOMRIGHT", TopRight, -1, 1)
+	TopRight.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	TopRight.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))	
+	
 	local MeterBGMiddle = CreateFrame("Frame", nil, UIParent)
 	MeterBGMiddle:SetScaledPoint("TOP", MeterBGTop, "BOTTOM", 0, 0)
 	MeterBGMiddle:SetScaledPoint("BOTTOM", MeterBGBottom, "TOP", 0, 0)
@@ -64,92 +88,23 @@ local CreateMetersPanels = function()
 	MeterBGMiddle:SetBackdropBorderColor(0, 0, 0)
 	MeterBGMiddle:SetFrameStrata("LOW")
 	
-	local OuterOutline = CreateFrame("Frame", nil, ChatFrameBG)
+	local OuterOutline = CreateFrame("Frame", nil, MeterBGBottom)
 	OuterOutline:SetScaledPoint("TOPLEFT", MeterBGTop, 0, 1)
 	OuterOutline:SetScaledPoint("BOTTOMRIGHT", MeterBGBottom, 0, 0)
 	OuterOutline:SetBackdrop(vUI.Outline)
 	OuterOutline:SetBackdropBorderColor(0, 0, 0)
 	
-	local InnerLeftOutline = CreateFrame("Frame", nil, ChatFrameBG)
+	local InnerLeftOutline = CreateFrame("Frame", nil, MeterBGBottom)
 	InnerLeftOutline:SetScaledPoint("TOPLEFT", MeterBGLeft, "TOPRIGHT", -1, 1)
 	InnerLeftOutline:SetScaledPoint("BOTTOMRIGHT", MeterBGMiddle, "BOTTOMLEFT", 1, -1)
 	InnerLeftOutline:SetBackdrop(vUI.Outline)
 	InnerLeftOutline:SetBackdropBorderColor(0, 0, 0)
 	
-	local InnerRightOutline = CreateFrame("Frame", nil, ChatFrameBG)
+	local InnerRightOutline = CreateFrame("Frame", nil, MeterBGBottom)
 	InnerRightOutline:SetScaledPoint("TOPRIGHT", MeterBGRight, "TOPLEFT", 1, 1)
 	InnerRightOutline:SetScaledPoint("BOTTOMLEFT", MeterBGMiddle, "BOTTOMRIGHT", -1, -1)
 	InnerRightOutline:SetBackdrop(vUI.Outline)
 	InnerRightOutline:SetBackdropBorderColor(0, 0, 0)
-	
-	--[[local ChatFrameBG = CreateFrame("Frame", "vUIMeterFrame", UIParent)
-	ChatFrameBG:SetScaledSize(FRAME_WIDTH, FRAME_HEIGHT + BAR_HEIGHT)
-	ChatFrameBG:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 13)
-	ChatFrameBG:SetBackdrop(vUI.BackdropAndBorder)
-	ChatFrameBG:SetBackdropColor(R, G, B, (Settings["chat-bg-opacity"] / 100))
-	ChatFrameBG:SetBackdropBorderColor(0, 0, 0)
-	ChatFrameBG:SetFrameStrata("LOW")
-	
-	local LeftChatFrameTop = CreateFrame("Frame", "vUIMeterFrameTop", UIParent)
-	LeftChatFrameTop:SetScaledSize(FRAME_WIDTH, BAR_HEIGHT)
-	LeftChatFrameTop:SetScaledPoint("TOP", ChatFrameBG, 0, -2)
-	LeftChatFrameTop:SetBackdrop(vUI.BackdropAndBorder)
-	LeftChatFrameTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	LeftChatFrameTop:SetBackdropBorderColor(0, 0, 0)
-	LeftChatFrameTop:SetFrameStrata("LOW")
-	
-	LeftChatFrameTop.Texture = LeftChatFrameTop:CreateTexture(nil, "OVERLAY")
-	LeftChatFrameTop.Texture:SetScaledPoint("TOPLEFT", LeftChatFrameTop, 1, -1)
-	LeftChatFrameTop.Texture:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameTop, -1, 1)
-	LeftChatFrameTop.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	LeftChatFrameTop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
-	
-	-- All this just to achieve an empty center :P
-	local ChatFrameBGTop = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGTop:SetScaledPoint("TOPLEFT", LeftChatFrameTop, -3, 3)
-	ChatFrameBGTop:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameTop, 3, -3)
-	ChatFrameBGTop:SetBackdrop(vUI.BackdropAndBorder)
-	ChatFrameBGTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	ChatFrameBGTop:SetBackdropBorderColor(0, 0, 0, 0)
-	ChatFrameBGTop:SetFrameStrata("LOW")
-	
-	local ChatFrameBGBottom = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGBottom:SetScaledPoint("TOPLEFT", ChatFrameBG, -3, 3)
-	ChatFrameBGBottom:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 3, -3)
-	ChatFrameBGBottom:SetBackdrop(vUI.BackdropAndBorder)
-	ChatFrameBGBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	ChatFrameBGBottom:SetBackdropBorderColor(0, 0, 0, 0)
-	ChatFrameBGBottom:SetFrameStrata("LOW")
-	
-	local ChatFrameBGLeft = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGLeft:SetScaledWidth(4)
-	ChatFrameBGLeft:SetScaledPoint("TOPLEFT", ChatFrameBGTop, 0, 0)
-	ChatFrameBGLeft:SetScaledPoint("BOTTOMLEFT", ChatFrameBGBottom, "TOPLEFT", 0, 0)
-	ChatFrameBGLeft:SetBackdrop(vUI.BackdropAndBorder)
-	ChatFrameBGLeft:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	ChatFrameBGLeft:SetBackdropBorderColor(0, 0, 0, 0)
-	ChatFrameBGLeft:SetFrameStrata("LOW")
-	
-	local ChatFrameBGRight = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGRight:SetScaledWidth(4)
-	ChatFrameBGRight:SetScaledPoint("TOPRIGHT", ChatFrameBGTop, 0, 0)
-	ChatFrameBGRight:SetScaledPoint("BOTTOMRIGHT", ChatFrameBGBottom, 0, 0)
-	ChatFrameBGRight:SetBackdrop(vUI.BackdropAndBorder)
-	ChatFrameBGRight:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	ChatFrameBGRight:SetBackdropBorderColor(0, 0, 0, 0)
-	ChatFrameBGRight:SetFrameStrata("LOW")
-	
-	local OuterOutline = CreateFrame("Frame", nil, ChatFrameBG)
-	OuterOutline:SetScaledPoint("TOPLEFT", ChatFrameBGTop, 0, 0)
-	OuterOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 0, 0)
-	OuterOutline:SetBackdrop(vUI.Outline)
-	OuterOutline:SetBackdropBorderColor(0, 0, 0)
-	
-	local InnerOutline = CreateFrame("Frame", nil, ChatFrameBG)
-	InnerOutline:SetScaledPoint("TOPLEFT", ChatFrameBG, 0, 0)
-	InnerOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 0, 0)
-	InnerOutline:SetBackdrop(vUI.Outline)
-	InnerOutline:SetBackdropBorderColor(0, 0, 0)]]
 end
 
 local Frame = CreateFrame("Frame")

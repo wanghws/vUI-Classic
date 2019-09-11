@@ -452,7 +452,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Experience"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("experience-enable", true, Language["Enable Experience Module"], "Enable the vUI experience module"):RequiresReload(true)
+	Left:CreateSwitch("experience-enable", true, Language["Enable Experience Module"], "Enable the vUI experience module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateSwitch("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "Display your current level in the experience bar", UpdateDisplayLevel)

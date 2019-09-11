@@ -130,8 +130,11 @@ function vUI:UpdateScreenHeight()
 		self.ScreenResolution = select(Resolution, GetScreenResolutions())
 		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
 	else -- Windowed
-		ScreenHeight = UIParent:GetHeight()
-		self.ScreenResolution = UIParent:GetWidth() .. "x" .. ScreenHeight
+		Resolution = GetCVar("gxWindowedResolution")
+		ScreenWidth = tonumber(string.match(Resolution, "(%d+)x%d+"))
+		ScreenHeight = tonumber(string.match(Resolution, "%d+x(%d+)"))
+		
+		self.ScreenResolution = ScreenWidth .. "x" .. ScreenHeight
 	end
 end
 

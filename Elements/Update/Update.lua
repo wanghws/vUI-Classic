@@ -13,7 +13,7 @@ local IsInRaid = IsInRaid
 
 local AddOnVersion = tonumber(vUI.UIVersion)
 
-local Update = CreateFrame("Frame")
+local Update = vUI:NewModule("Update")
 
 --[[local WhatsNew = {
 	[1.01] = {
