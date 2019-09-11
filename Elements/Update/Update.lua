@@ -15,11 +15,6 @@ local AddOnVersion = tonumber(vUI.UIVersion)
 
 local Update = CreateFrame("Frame")
 
--- We'll only store information on the previous 5-10 versions
-local RecentVersions = { -- I guess I only need to put major versions in here, minor versions are ignored anyways
-	--[1.01] = "Minor",
-}
-
 --[[local WhatsNew = {
 	[1.01] = {
 		"Alert frames",
@@ -27,17 +22,6 @@ local RecentVersions = { -- I guess I only need to put major versions in here, m
 	},
 }
 ]]
-local GetRecentMajorVersion = function(compare)
-	local Major = 0
-	
-	for Version, Importance in pairs(RecentVersions) do
-		if ((Version > compare) and (Importance == "Major")) then
-			Major = Major + 1
-		end
-	end
-	
-	return Major
-end
 
 -- Make a frame to display a simple "What's new" list.
 local WhatsNewOnMouseUp = function()
@@ -112,27 +96,20 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 	end
 	
 	if (prefix == "vUI-Version") then
-		local SenderVersion = tonumber(message)
-		
 		if (channel == "WHISPER") then
-			local Version, Major = match(message, "(%S+):(%S+)")
-			Major = tonumber(Major)
-			
-			if (Major > 0) then
-				--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
-				vUI:print(format("Update to version |cFF%s%s|r! (includes ~|cFF%s%s|r major updates) https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], Version, Settings["ui-header-font-color"], Major))
-			else
-				--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
-				vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], Version))
-			end
+			--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
+			vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], message))
 			
 			self:UnregisterEvent(event)
 		else
-			if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
-				local Count = GetRecentMajorVersion(SenderVersion)
-				local Message = format("%s:%d", AddOnVersion, Count)
+			local SenderVersion = tonumber(message)
+			
+			if (SenderVersion > AddOnVersion) then	-- We're behind!
+				vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], SenderVersion))
 				
-				SendAddonMessage("vUI-Version", Message, "WHISPER", GetName(sender))
+				self:UnregisterEvent(event)
+			else -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
+				SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", GetName(sender))
 			end
 		end
 	end
