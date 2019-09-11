@@ -903,12 +903,10 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "Display hotkey text on action buttons", UpdateShowHotKey)
 	Right:CreateSwitch("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "Display macro name text on action buttons", UpdateShowMacroName)
 	Right:CreateSwitch("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "Display count text on action buttons", UpdateShowCount)
+	Right:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
-	
-	Left:CreateHeader(Language["Highlights"])
-	Left:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
