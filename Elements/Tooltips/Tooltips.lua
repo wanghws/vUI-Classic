@@ -271,7 +271,7 @@ local OnTooltipSetUnit = function(self)
 				local Color = vUI.HappinessColors[Happiness]
 				
 				if Color then
-					self:AddDoubleLine(Language["Happiness:"], format("|cFF%s%s|r", Tooltips.HappinessLevels[Happiness], vUI:RGBToHex(Color[1], Color[2], Color[3])))
+					self:AddDoubleLine(Language["Happiness:"], format("|cFF%s%s|r", vUI:RGBToHex(Color[1], Color[2], Color[3]), Tooltips.HappinessLevels[Happiness]))
 				end
 			end
 		end

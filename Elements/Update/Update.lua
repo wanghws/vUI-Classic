@@ -13,6 +13,10 @@ local IsInRaid = IsInRaid
 
 local AddOnVersion = tonumber(vUI.UIVersion)
 
+if (vUI.UserName == "Hydrazine") then
+	AddOnVersion = 9999
+end
+
 local Update = CreateFrame("Frame")
 
 -- We'll only store information on the previous 5-10 versions
@@ -60,12 +64,10 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
 	end
 	
-	if IsInGroup() then
-		if IsInRaid() then
-			SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
-		else
-			SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
-		end
+	if IsInRaid() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
+	elseif IsInGroup() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
 	end
 	
 	if UnitInBattleground("player") then
@@ -102,6 +104,12 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	self:UnregisterEvent(event)
 end
 
+local GetName = function(name)
+	name = strsplit("-", name)
+	
+	return name
+end
+
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
 	if (match(sender, "(%S+)-%S+") == vUI.UserName) then
 		return
@@ -110,29 +118,33 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 	if (prefix == "vUI-Version") then
 		local SenderVersion = tonumber(message)
 		
-		if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
-			local Count = GetRecentMajorVersion(SenderVersion)
+		if (channel == "WHISPER") then
+			local Version, Major = match(message, "(%S+):(%S+)")
+			Major = tonumber(Major)
 			
-			SendAddonMessage("vUI-Version-Detailed", format("%s:%d", AddOnVersion, Count), "WHISPER", sender)
-		end
-	elseif (prefix == "vUI-Version-Detailed") then -- Someone is sending us more detailed information because we were behind.
-		local Version, Major = match(message, "(%S+):(%S+)")
-		
-		Major = tonumber(Major)
-		
-		if (Major > 0) then
-			vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
+			if (Major > 0) then
+				--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), format("Includes ~|cFF%s%s|r major updates.", Settings["ui-header-font-color"], Major), UpdateOnMouseUp, true)
+				vUI:print(format("Update to version |cFF%s%s|r! (includes ~|cFF%s%s|r major updates) https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], Version, Settings["ui-header-font-color"], Major))
+			else
+				--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
+				vUI:print(format("Update to version |cFF%s%s|r! https://www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], Version))
+			end
+			
+			self:UnregisterEvent(event)
 		else
-			vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
+			if (AddOnVersion > SenderVersion) then -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
+				local Count = GetRecentMajorVersion(SenderVersion)
+				local Message = format("%s:%d", AddOnVersion, Count)
+				
+				SendAddonMessage("vUI-Version", Message, "WHISPER", GetName(sender))
+			end
 		end
-		
-		self:UnregisterEvent(event)
 	end
 end
 
---[[Update:RegisterEvent("VARIABLES_LOADED")
+Update:RegisterEvent("VARIABLES_LOADED")
 Update:RegisterEvent("PLAYER_ENTERING_WORLD")
-Update:RegisterEvent("CHAT_MSG_ADDON")]]
+Update:RegisterEvent("CHAT_MSG_ADDON")
 Update:SetScript("OnEvent", function(self, event, ...)
 	if self[event] then
 		self[event](self, event, ...)
@@ -140,4 +152,3 @@ Update:SetScript("OnEvent", function(self, event, ...)
 end)
 
 C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version")
-C_ChatInfo.RegisterAddonMessagePrefix("vUI-Version-Detailed")

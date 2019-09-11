@@ -184,4 +184,5 @@ function oUF:HandleUnit(object, unit)
 		object:HookScript('OnEvent', updateArenaPreparation)
 	elseif(unit:match('%w+target')) then
 		enableTargetUpdate(object)
+	end
 end

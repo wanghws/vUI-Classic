@@ -102,9 +102,9 @@ Defaults["color-poison"] = "009900"
 Defaults["color-none"] = "CC0000"
 
 -- Happiness
-Defaults["color-happiness-1"] = "FF3333"
-Defaults["color-happiness-2"] = "FFFF33"
-Defaults["color-happiness-3"] = "66FF66"
+Defaults["color-happiness-1"] = "FF3333" -- "8BC94D"
+Defaults["color-happiness-2"] = "FFFF33" -- "FFC44D"
+Defaults["color-happiness-3"] = "66FF66" -- "EE4D4D"
 
 -- Difficulty
 Defaults["color-trivial"] = "9A9A9A"
