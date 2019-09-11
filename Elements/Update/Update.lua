@@ -85,13 +85,15 @@ Update["VARIABLES_LOADED"] = function(self, event)
 end
 
 local GetName = function(name)
-	name = strsplit("-", name)
+	name = match(name, "(%S+)-%S+")
 	
 	return name
 end
 
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	if (match(sender, "(%S+)-%S+") == vUI.UserName) then
+	sender = GetName(sender)
+
+	if (sender == vUI.UserName) then
 		return
 	end
 	
@@ -110,8 +112,8 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 				print("https://www.curseforge.com/wow/addons/vui")
 				
 				self:UnregisterEvent(event)
-			else -- They're behind, not us. Let them know what version you have, and if theres been major updates since their version.
-				SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", GetName(sender))
+			else -- They're behind, not us. Let them know what version you have.
+				SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", sender)
 			end
 		end
 	end
