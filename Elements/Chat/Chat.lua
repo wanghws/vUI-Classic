@@ -903,23 +903,21 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "Enable the vUI chat module"):RequiresReload(true)
+	Left:CreateSwitch("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "Enable the vUI chat module"):RequiresReload(true)
 	
-	Left:CreateHeader(Language["Opacity"])
-	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "Set the opacity of the chat background", UpdateOpacity, nil, "%")
-	
-	Left:CreateHeader(Language["Chat Size"])
+	Left:CreateHeader(Language["General"])
 	Left:CreateSlider("chat-frame-width", Settings["chat-frame-width"], 300, 500, 1, "Chat Width", "Set the width of the chat frame", UpdateChatFrameSize)
 	Left:CreateSlider("chat-frame-height", Settings["chat-frame-height"], 40, 200, 1, "Chat Height", "Set the height of the chat frame", UpdateChatFrameSize)
+	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "Set the opacity of the chat background", UpdateOpacity, nil, "%")
 	
 	Right:CreateHeader(Language["Install"])
 	Right:CreateButton(Language["Install"], Language["Install Chat Defaults"], "Set default channels and settings related to chat", RunChatInstall):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Links"])
-	Right:CreateCheckbox("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "Enable URL links in the chat frame")
-	Right:CreateCheckbox("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "Enable Discord links in the chat frame")
-	Right:CreateCheckbox("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "Enable email links in the chat frame")
-	Right:CreateCheckbox("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "Enable friend tag links in the chat frame")
+	Right:CreateSwitch("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "Enable URL links in the chat frame")
+	Right:CreateSwitch("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "Enable Discord links in the chat frame")
+	Right:CreateSwitch("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "Enable email links in the chat frame")
+	Right:CreateSwitch("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "Enable friend tag links in the chat frame")
 	
 	Left:CreateHeader(Language["Chat Frame Font"])
 	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame", UpdateChatFont, "Font")

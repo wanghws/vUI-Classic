@@ -496,10 +496,10 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Tooltips"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateCheckbox("tooltips-enable", Settings["tooltips-enable"], Language["Enable Tooltips Module"], ""):RequiresReload(true)
+	Left:CreateSwitch("tooltips-enable", Settings["tooltips-enable"], Language["Enable Tooltips Module"], ""):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
-	Left:CreateCheckbox("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
+	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
 	
 	Left:CreateFooter()
 end)
