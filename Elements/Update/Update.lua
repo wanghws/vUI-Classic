@@ -13,10 +13,6 @@ local IsInRaid = IsInRaid
 
 local AddOnVersion = tonumber(vUI.UIVersion)
 
-if (vUI.UserName == "Hydrazine") then
-	AddOnVersion = 9999
-end
-
 local Update = CreateFrame("Frame")
 
 -- We'll only store information on the previous 5-10 versions
