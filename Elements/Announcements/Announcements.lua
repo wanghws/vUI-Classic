@@ -1,5 +1,9 @@
 local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
+if (1 == 1) then
+	return
+end
+
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
 local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s"
@@ -27,10 +31,16 @@ Announcements.Spells = {
 }
 
 function Announcements:GetChannelToSend()
-	if UnitInRaid("player") then
-		return "RAID"
-	elseif UnitInParty("player") then
-		return "PARTY"
+	if (Settings["announcements-channel"] == "SELF") then
+		return
+	elseif (Settings["announcements-channel"] == "GROUP") then
+		if UnitInRaid("player") then
+			return "RAID"
+		elseif UnitInParty("player") then
+			return "PARTY"
+		end
+	elseif (Settings["announcements-channel"] == "SAY") then
+		return "SAY"
 	else
 		return "EMOTE"
 	end
@@ -40,7 +50,11 @@ Announcements.Events = {
 	["SPELL_INTERRUPT"] = function(destName, spellID, spellName)
 		Channel = Announcements:GetChannelToSend()
 		
-		SendChatMessage(format(InterruptMessage, destName, spellName), Channel)
+		if Channel then
+			SendChatMessage(format(InterruptMessage, destName, spellName), Channel)
+		else
+			print(format(InterruptMessage, destName, spellName))
+		end
 	end,
 	
 	--[[["SPELL_DISPEL"] = function(destName, spellID, spellName)
@@ -50,7 +64,13 @@ Announcements.Events = {
 	end,]]
 	
 	["SPELL_STOLEN"] = function(destName, spellID, spellName)
-		SendChatMessage(format(StolenMessage, destName, spellName), "EMOTE")
+		Channel = Announcements:GetChannelToSend()
+		
+		if Channel then
+			SendChatMessage(format(StolenMessage, destName, spellName), Channel)
+		else
+			print(format(StolenMessage, destName, spellName))
+		end
 	end,
 	
 	--[[["SPELL_CAST_SUCCESS"] = function(destName, _, _, spellID, spellName)

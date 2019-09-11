@@ -266,7 +266,7 @@ Methods["PowerColor"] = function(unit)
 	
 end
 
-Events["Name4"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name4"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name4"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -275,7 +275,7 @@ Methods["Name4"] = function(unit)
 	end
 end
 
-Events["Name5"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name5"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name5"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -284,7 +284,7 @@ Methods["Name5"] = function(unit)
 	end
 end
 
-Events["Name8"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name8"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name8"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -293,7 +293,7 @@ Methods["Name8"] = function(unit)
 	end
 end
 
-Events["Name10"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name10"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name10"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -302,7 +302,7 @@ Methods["Name10"] = function(unit)
 	end
 end
 
-Events["Name14"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name14"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name14"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -311,7 +311,7 @@ Methods["Name14"] = function(unit)
 	end
 end
 
-Events["Name15"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name15"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name15"] = function(unit)
 	local Name = UnitName(unit)
 	
@@ -320,12 +320,21 @@ Methods["Name15"] = function(unit)
 	end
 end
 
-Events["Name20"] = "UNIT_NAME_UPDATE PLAYER_ENTERING_WORLD"
+Events["Name20"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
 Methods["Name20"] = function(unit)
 	local Name = UnitName(unit)
 	
 	if Name then
 		return sub(Name, 1, 20)
+	end
+end
+
+Events["Name30"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
+Methods["Name30"] = function(unit)
+	local Name = UnitName(unit)
+	
+	if Name then
+		return sub(Name, 1, 30)
 	end
 end
 
@@ -862,11 +871,11 @@ local StyleTarget = function(self, unit)
 		Health.colorReaction = true
 		Health.colorClass = true
 		
-		self:Tag(HealthLeft, "[LevelColor][Level][Plus]|r [Name15]")
+		self:Tag(HealthLeft, "[LevelColor][Level][Plus]|r [Name30]")
 	else
 		Health.colorHealth = true
 		
-		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name15]")
+		self:Tag(HealthLeft, "[LevelColor][Level][Plus] [NameColor][Name30]")
 	end
 	
 	local Power = CreateFrame("StatusBar", nil, self)

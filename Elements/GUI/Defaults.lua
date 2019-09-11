@@ -189,6 +189,10 @@ Defaults["auto-repair-enable"] = true
 -- Auto Vendor
 Defaults["auto-vendor-enable"] = true
 
+-- Announcements
+Defaults["announcements-enable"] = true
+Defaults["announcements-channel"] = "GROUP"
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-player-show-name"] = false

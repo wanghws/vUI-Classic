@@ -2,9 +2,6 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 
 -- The most important file there is.
 
--- Cinematic Mode with black lines on the top and bottom of the screen. Reposition the UI parent
--- Notification system with a bell icon under the minimap or something. This is just a small log where it shows things like version handshakes, update news etc
-
 -- To do: A bag slot visualizer (Yes, like FFXIV)
 -- black square, 2x2 pixels inside, colored by what's in the slot if occupied, 0.3 opacity or something if it's an empty slot.
 
@@ -103,10 +100,6 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
-	
-	-- Testing
-	self:CreateWindow("Misc.")
-	self:CreateWindow("Search")
 end)
 ]]
 GUI:AddOptions(function(self)
@@ -433,9 +426,10 @@ GUI:AddOptions(function(self)
 	Left:CreateCheckbox("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
 	Left:CreateCheckbox("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
 	Left:CreateCheckbox("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
-	
-	Right:CreateHeader(Language["Announcements"])
-	Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO"}, Language["Set Channel"], "Set the channel to send announcements to")
+
+	--Right:CreateHeader(Language["Announcements"])
+	--Right:CreateCheckbox("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
+	--Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO", [Language["Self"]] = "SELF"}, Language["Set Channel"], "Set the channel to send announcements to")
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
