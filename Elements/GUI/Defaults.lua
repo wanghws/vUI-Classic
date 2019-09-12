@@ -185,9 +185,11 @@ Defaults["bags-frame-show"] = true
 
 -- Auto Repair
 Defaults["auto-repair-enable"] = true
+Defaults["auto-repair-report"] = true
 
 -- Auto Vendor
 Defaults["auto-vendor-enable"] = true
+Defaults["auto-vendor-report"] = true
 
 -- Announcements
 Defaults["announcements-enable"] = true

@@ -334,7 +334,7 @@ AutoVendor:SetScript("OnEvent", function(self, event)
 		end
 	end
 	
-	if (Profit > 0) then
+	if (Profit > 0 and Settings["auto-vendor-report"]) then
 		vUI:print(format(Language["You sold %d items for a total of %s"], TotalCount, GetCoinTextureString(Profit)))
 	end
 end)
@@ -360,7 +360,7 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 				
 				local CoinString = GetCoinTextureString(Cost)
 				
-				if CoinString then
+				if (CoinString and Settings["auto-repair-report"]) then
 					vUI:print(format(Language["Your equipment has been repaired for %s"], CoinString))
 				end
 			else
@@ -368,7 +368,7 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 				
 				CoinString = GetCoinTextureString(Required)
 				
-				if CoinString then
+				if (CoinString and Settings["auto-repair-report"]) then
 					vUI:print(format(Language["You require %s to repair"], CoinString))
 				end
 			end
@@ -424,9 +424,13 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Miscellaneous Modules"])
 	Left:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
 	Left:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
-	Left:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
-	Left:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
 	Left:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
+
+	Right:CreateHeader(Language["Merchant"])
+	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
+	Right:CreateSwitch("auto-repair-report", Settings["auto-repair-report"], Language["Auto Repair Report"], "Report the cost of automatic repairs into the chat")
+	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
+	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Vendor Report"], "Report the profit of automatic vendoring into the chat")
 
 	--Right:CreateHeader(Language["Announcements"])
 	--Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
