@@ -60,7 +60,6 @@ end
 
 local SetSuggestedScale = function()
 	vUI:SetSuggestedScale()
-	print(vUI:GetSuggestedScale())
 end
 
 GUI:AddOptions(function(self)
