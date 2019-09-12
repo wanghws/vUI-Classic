@@ -125,28 +125,22 @@ local Scale = 1
 
 function vUI:UpdateScreenHeight()
 	Resolution = GetCurrentResolution()
-
+	
 	if (Resolution > 0) then -- A fullscreen resolution
-		self.ScreenResolution = select(Resolution, GetScreenResolutions())
-		
-		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
+		self.ScreenResolution = GetCVar("gxFullscreenResolution")
+		self.IsFullScreen = true
 	else -- Windowed
-		Resolution = GetCVar("gxWindowedResolution")
-		
-		SreenWidth, ScreenHeight = strsplit("x", Resolution)
-		SreenWidth = tonumber(SreenWidth)
-		ScreenHeight = tonumber(ScreenHeight)
-
-		print(SreenWidth, ScreenHeight)
-		
-		self.ScreenResolution = SreenWidth .. "x" .. ScreenHeight
+		self.ScreenResolution = GetCVar("gxWindowedResolution")
+		self.IsFullScreen = false
 	end
+	
+	ScreenHeight = tonumber(string.match(self.ScreenResolution, "%d+x(%d+)"))
 end
 
 vUI:UpdateScreenHeight()
 
 local GetScale = function(x)
-	return floor(Scale * x + 0.5) 
+	return floor(Scale * x + 0.5)
 end
 
 vUI.GetScale = GetScale

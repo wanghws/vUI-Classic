@@ -58,6 +58,11 @@ local ResetMovers = function()
 	Move:ResetAll()
 end
 
+local SetSuggestedScale = function()
+	vUI:SetSuggestedScale()
+	print(vUI:GetSuggestedScale())
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["General"], true)
 	
@@ -75,7 +80,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Scale"])
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
-	--Right:CreateDoubleLine("Suggested Scale:", vUI:GetSuggestedScale())
+	--Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
 	Left:CreateHeader(Language["Move UI"])
 	Left:CreateButton(Language["Toggle"], Language["Move UI"], "While toggled, you can drag some|nelements of vUI around the screen", ToggleMove)

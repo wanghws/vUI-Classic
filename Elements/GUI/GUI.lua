@@ -187,7 +187,7 @@ GUI.Widgets.CreateLine = function(self, text)
 	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Anchor.Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Text:SetJustifyH("LEFT")
-	Anchor.Text:SetText("|cFF" .. Settings["ui-widget-font-color"] .. text .. "|r")
+	Anchor.Text:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], text))
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -215,19 +215,22 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = CreateID(left)
 	
+	left = tostring(left)
+	right = tostring(right)
+	
 	Anchor.Left = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
 	Anchor.Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Anchor.Left:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Left:SetJustifyH("LEFT")
-	Anchor.Left:SetText("|cFF" .. Settings["ui-widget-font-color"] .. left .. "|r")
+	Anchor.Left:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], left))
 	
 	Anchor.Right = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
 	Anchor.Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
 	Anchor.Right:SetFontInfo(Settings["ui-widget-font"], 12)
 	Anchor.Right:SetJustifyH("RIGHT")
-	Anchor.Right:SetText("|cFF" .. Settings["ui-widget-font-color"] .. right .. "|r")
+	Anchor.Right:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], right))
 	
 	tinsert(self.Widgets, Anchor)
 	
