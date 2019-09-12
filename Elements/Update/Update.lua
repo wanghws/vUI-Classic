@@ -57,6 +57,22 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 	--self:UnregisterEvent(event)
 end
 
+function Update:SendVersion()
+	if IsInGuild() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
+	end
+	
+	if IsInRaid() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
+	elseif IsInGroup() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
+	end
+	
+	if UnitInBattleground("player") then
+		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
+	end
+end
+
 -- /run vUIData.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
 Update["VARIABLES_LOADED"] = function(self, event)
 	if (not vUIData) then

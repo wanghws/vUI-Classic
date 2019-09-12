@@ -98,7 +98,7 @@ local UpdateMinimapSize = function(value)
 	Minimap:SetZoom(Minimap:GetZoom() - 1)
 	Minimap:UpdateBlips()
 end
--- /run Minimap:SetMaskTexture(nil)
+
 local OnEvent = function(self, event)
 	if (not Settings["minimap-enable"]) then
 		self:UnregisterEvent(event)

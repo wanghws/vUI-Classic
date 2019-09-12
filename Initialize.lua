@@ -128,13 +128,18 @@ function vUI:UpdateScreenHeight()
 
 	if (Resolution > 0) then -- A fullscreen resolution
 		self.ScreenResolution = select(Resolution, GetScreenResolutions())
+		
 		ScreenHeight = tonumber(string.match(vUI.ScreenResolution, "%d+x(%d+)"))
 	else -- Windowed
 		Resolution = GetCVar("gxWindowedResolution")
-		ScreenWidth = tonumber(string.match(Resolution, "(%d+)x%d+"))
-		ScreenHeight = tonumber(string.match(Resolution, "%d+x(%d+)"))
 		
-		self.ScreenResolution = ScreenWidth .. "x" .. ScreenHeight
+		SreenWidth, ScreenHeight = strsplit("x", Resolution)
+		SreenWidth = tonumber(SreenWidth)
+		ScreenHeight = tonumber(ScreenHeight)
+
+		print(SreenWidth, ScreenHeight)
+		
+		self.ScreenResolution = SreenWidth .. "x" .. ScreenHeight
 	end
 end
 
