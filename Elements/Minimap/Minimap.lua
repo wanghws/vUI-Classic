@@ -91,13 +91,14 @@ end
 
 local UpdateMinimapSize = function(value)
 	Minimap:SetScaledSize(value, value)
-	vUIMinimap:SetScaledSize((value + 8), (22 + 8 + value))
+	
+	_G["vUI Minimap"]:SetScaledSize((value + 8), (22 + 8 + value))
 	
 	Minimap:SetZoom(Minimap:GetZoom() + 1)
 	Minimap:SetZoom(Minimap:GetZoom() - 1)
 	Minimap:UpdateBlips()
 end
-
+-- /run Minimap:SetMaskTexture(nil)
 local OnEvent = function(self, event)
 	if (not Settings["minimap-enable"]) then
 		self:UnregisterEvent(event)
@@ -106,7 +107,6 @@ local OnEvent = function(self, event)
 	end
 	
 	CreateMinimap()
-	
 	Minimap:SetMaskTexture(Media:GetTexture("Blank"))
 	
 	Minimap:SetParent(self)

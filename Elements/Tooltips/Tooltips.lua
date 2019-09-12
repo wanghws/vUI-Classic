@@ -308,16 +308,18 @@ local OnTooltipSetItem = function(self)
 		Count = MouseFocus.count
 	end
 	
-	local CopperValue = SellValue * Count
-	
-	if (CopperValue == 0) then
-		return
-	end
-	
-	local CoinString = GetCoinTextureString(CopperValue)
-	
-	if CoinString then
-		GameTooltip:AddLine(CoinString, 1, 1, 1)
+	if (Count and type(Count) == "number") then
+		local CopperValue = SellValue * Count
+		
+		if (CopperValue == 0) then
+			return
+		end
+		
+		local CoinString = GetCoinTextureString(CopperValue)
+		
+		if CoinString then
+			GameTooltip:AddLine(CoinString, 1, 1, 1)
+		end
 	end
 end
 
