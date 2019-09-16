@@ -888,7 +888,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module"):RequiresReload(true)
+	Left:CreateSwitch("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module", ReloadUIa):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Backdrops"])
 	Left:CreateSwitch("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "Display the backdrop of the bottom action bars", UpdateShowBottomBG)

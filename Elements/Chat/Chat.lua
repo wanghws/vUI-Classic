@@ -903,7 +903,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "Enable the vUI chat module"):RequiresReload(true)
+	Left:CreateSwitch("chat-enable", Settings["chat-enable"], Language["Enable Chat Module"], "Enable the vUI chat module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["General"])
 	Left:CreateSlider("chat-frame-width", Settings["chat-frame-width"], 300, 500, 1, "Chat Width", "Set the width of the chat frame", UpdateChatFrameSize)

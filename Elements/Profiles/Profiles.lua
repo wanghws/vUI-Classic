@@ -506,11 +506,15 @@ end
 local CreateProfile = function(value)
 	Profiles:CreateProfile(value)
 	Profiles:UpdateProfileInfo()
+	
+	ReloadUI() -- Temp
 end
 
 local DeleteProfile = function(value)
 	Profiles:DeleteProfile(value)
 	Profiles:UpdateProfileInfo()
+	
+	ReloadUI() -- Temp
 end
 
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
@@ -579,11 +583,15 @@ end
 local DeleteEmpty = function()
 	Profiles:DeleteEmptyProfiles()
 	Profiles:UpdateProfileInfo()
+	
+	ReloadUI() -- Temp
 end
 
 local DeleteUnused = function()
 	Profiles:DeleteUnusedProfiles()
 	Profiles:UpdateProfileInfo()
+	
+	ReloadUI() -- Temp
 end
 
 local RenameProfile = function(value)
@@ -601,6 +609,8 @@ end
 
 local RestoreToDefault = function()
 	Profiles:RestoreToDefault(Profiles:GetActiveProfileName())
+	
+	ReloadUI() -- Temp
 end
 
 GUI:AddOptions(function(self)

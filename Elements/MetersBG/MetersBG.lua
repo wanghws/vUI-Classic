@@ -11,7 +11,7 @@ local BAR_HEIGHT = 22
 local CreateMetersPanels = function()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
-	local MeterBGBottom = CreateFrame("Frame", "vUIMeterFrame", UIParent)
+	local MeterBGBottom = CreateFrame("Frame", nil, UIParent)
 	MeterBGBottom:SetScaledSize(FRAME_WIDTH, 4)
 	MeterBGBottom:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 13)
 	MeterBGBottom:SetBackdrop(vUI.Backdrop)
@@ -88,7 +88,7 @@ local CreateMetersPanels = function()
 	MeterBGMiddle:SetBackdropBorderColor(0, 0, 0)
 	MeterBGMiddle:SetFrameStrata("LOW")
 	
-	local OuterOutline = CreateFrame("Frame", nil, MeterBGBottom)
+	local OuterOutline = CreateFrame("Frame", "vUIMetersFrame", MeterBGBottom)
 	OuterOutline:SetScaledPoint("TOPLEFT", MeterBGTop, 0, 1)
 	OuterOutline:SetScaledPoint("BOTTOMRIGHT", MeterBGBottom, 0, 0)
 	OuterOutline:SetBackdrop(vUI.Outline)

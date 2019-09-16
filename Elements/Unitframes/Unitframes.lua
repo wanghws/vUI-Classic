@@ -416,11 +416,103 @@ Methods["HappinessColor"] = function(unit)
 	end
 end
 
+local Name, Duration, Expiration, Caster, SpellID, _
+local DurationNew, ExpirationNew, Enabled
+local UnitAura = UnitAura
+local GetTime = GetTime
+
+local AuraOnUpdate = function(self, ela)
+	self.ela = self.ela + ela
+	
+	if (self.ela > 0.1) then
+		local Now = (self.Expiration - GetTime())
+		
+		if (Now > 0) then
+			self.Time:SetText(vUI:FormatTime(Now))
+		else
+			self:SetScript("OnUpdate", nil)
+		end
+		
+		if (Now <= 0) then
+			self:SetScript("OnUpdate", nil)
+			self.Time:Hide()
+		end
+		
+		self.ela = 0
+	end
+end
+
+local PostUpdateIcon = function(self, unit, button, index, position, duration, expiration, debuffType, isStealable)
+	local Name, _, _, _, Duration, Expiration, Caster, _, _, SpellID = UnitAura(unit, index, button.filter)
+	local DurationNew, ExpirationNew = LCD:GetAuraDurationByUnit(unit, SpellID, Caster, Name)
+	
+	if (Duration == 0 and DurationNew) then
+		Duration = DurationNew
+		Expiration = ExpirationNew
+	end
+	
+	button.Duration = Duration
+	button.Expiration = Expiration
+	
+	if button.cd then
+		if (Duration and Duration > 0) then
+			button.cd:SetCooldown(Expiration - Duration, Duration)
+			button.cd:Show()
+		else
+			button.cd:Hide()
+		end
+	end
+	
+	if (Expiration and Expiration ~= 0) then
+		button:SetScript("OnUpdate", AuraOnUpdate)
+		button.Time:Show()
+	else
+		button.Time:Hide()
+	end
+end
+
+local PostCreateIcon = function(unit, button)
+	button:SetBackdrop(vUI.Backdrop)
+	button:SetBackdropColor(0, 0, 0)
+	button:SetFrameLevel(6)
+	
+	button.cd.noOCC = true
+	button.cd.noCooldownCount = true
+	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
+	button.cd:ClearAllPoints()
+	button.cd:SetScaledPoint("TOPLEFT", button, 1, -1)
+	button.cd:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
+	button.cd:SetHideCountdownNumbers(true)
+	
+	button.icon:SetScaledPoint("TOPLEFT", 1, -1)
+	button.icon:SetScaledPoint("BOTTOMRIGHT", -1, 1)
+	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	button.icon:SetDrawLayer("ARTWORK")
+	
+	button.count:SetScaledPoint("BOTTOMRIGHT", 2, 2)
+	button.count:SetJustifyH("RIGHT")
+	button.count:SetFontInfo(Settings["ui-widget-font"], 12)
+	
+	button.overlayFrame = CreateFrame("Frame", nil, button)
+	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	 
+	
+	button.Time = button:CreateFontString(nil, "OVERLAY")
+	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
+	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
+	button.Time:SetJustifyH("LEFT")
+	
+	button.overlay:SetParent(button.overlayFrame)
+	button.count:SetParent(button.overlayFrame)
+	button.Time:SetParent(button.overlayFrame)
+	
+	button.ela = 0
+end
+
 local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
 	self:SetScale(Settings["ui-scale"])
-	self:EnableMouse(true)
+	self:EnableMouse(false)
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
@@ -431,6 +523,7 @@ local StyleNamePlate = function(self, unit)
 	Health:SetPoint("TOPLEFT", self, 1, -1)
 	Health:SetPoint("BOTTOMRIGHT", self, -1, 1)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Health:EnableMouse(false)
 	
 	local HealthBG = Health:CreateTexture(nil, "BACKGROUND")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -477,6 +570,26 @@ local StyleNamePlate = function(self, unit)
 		Health.colorClass = true
 	else
 		Health.colorHealth = true
+	end
+	
+	-- Debuffs
+	if Settings["nameplates-display-debuffs"] then
+		local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+		Debuffs:SetScaledSize(Settings["nameplates-width"], 26)
+		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 20)
+		Debuffs.size = 26
+		Debuffs.num = 5
+		Debuffs.numRow = 1
+		Debuffs.spacing = -1
+		Debuffs.initialAnchor = "TOPLEFT"
+		Debuffs["growth-y"] = "UP"
+		Debuffs["growth-x"] = "RIGHT"
+		Debuffs.PostCreateIcon = PostCreateIcon
+		Debuffs.PostUpdateIcon = PostUpdateIcon
+		Debuffs.onlyShowPlayer = true
+		Debuffs.disableMouse = true
+		
+		self.Debuffs = Debuffs
 	end
 	
 	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
@@ -726,98 +839,6 @@ local StylePlayer = function(self, unit)
 	--self:UpdateTags()
 end
 
-local Name, Duration, Expiration, Caster, SpellID, _
-local DurationNew, ExpirationNew, Enabled
-local UnitAura = UnitAura
-local GetTime = GetTime
-
-local AuraOnUpdate = function(self, ela)
-	self.ela = self.ela + ela
-	
-	if (self.ela > 0.1) then
-		local Now = (self.Expiration - GetTime())
-		
-		if (Now > 0) then
-			self.Time:SetText(vUI:FormatTime(Now))
-		else
-			self:SetScript("OnUpdate", nil)
-		end
-		
-		if (Now <= 0) then
-			self:SetScript("OnUpdate", nil)
-			self.Time:Hide()
-		end
-		
-		self.ela = 0
-	end
-end
-
-local PostUpdateIcon = function(self, unit, button, index, position, duration, expiration, debuffType, isStealable)
-	local Name, _, _, _, Duration, Expiration, Caster, _, _, SpellID = UnitAura(unit, index, button.filter)
-	local DurationNew, ExpirationNew = LCD:GetAuraDurationByUnit(unit, SpellID, Caster, Name)
-	
-	if (Duration == 0 and DurationNew) then
-		Duration = DurationNew
-		Expiration = ExpirationNew
-	end
-	
-	button.Duration = Duration
-	button.Expiration = Expiration
-	
-	if button.cd then
-		if (Duration and Duration > 0) then
-			button.cd:SetCooldown(Expiration - Duration, Duration)
-			button.cd:Show()
-		else
-			button.cd:Hide()
-		end
-	end
-	
-	if (Expiration and Expiration ~= 0) then
-		button:SetScript("OnUpdate", AuraOnUpdate)
-		button.Time:Show()
-	else
-		button.Time:Hide()
-	end
-end
-
-local PostCreateIcon = function(unit, button)
-	button:SetBackdrop(vUI.Backdrop)
-	button:SetBackdropColor(0, 0, 0)
-	button:SetFrameLevel(6)
-	
-	button.cd.noOCC = true
-	button.cd.noCooldownCount = true
-	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
-	button.cd:ClearAllPoints()
-	button.cd:SetScaledPoint("TOPLEFT", button, 1, -1)
-	button.cd:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
-	button.cd:SetHideCountdownNumbers(true)
-	
-	button.icon:SetScaledPoint("TOPLEFT", 1, -1)
-	button.icon:SetScaledPoint("BOTTOMRIGHT", -1, 1)
-	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	button.icon:SetDrawLayer("ARTWORK")
-	
-	button.count:SetScaledPoint("BOTTOMRIGHT", 2, 2)
-	button.count:SetJustifyH("RIGHT")
-	button.count:SetFontInfo(Settings["ui-widget-font"], 12)
-	
-	button.overlayFrame = CreateFrame("Frame", nil, button)
-	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	 
-	
-	button.Time = button:CreateFontString(nil, "OVERLAY")
-	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
-	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
-	button.Time:SetJustifyH("LEFT")
-	
-	button.overlay:SetParent(button.overlayFrame)
-	button.count:SetParent(button.overlayFrame)
-	button.Time:SetParent(button.overlayFrame)
-	
-	button.ela = 0
-end
-
 local StyleTarget = function(self, unit)
 	-- General
 	self:RegisterForClicks("AnyUp")
@@ -914,8 +935,6 @@ local StyleTarget = function(self, unit)
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	
 	Buffs:SetScaledSize(230, 30)
 	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 	Buffs.size = 30
@@ -927,6 +946,7 @@ local StyleTarget = function(self, unit)
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
 	
+	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
 	Debuffs:SetScaledSize(230, 30)
 	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
 	Debuffs.size = 30
@@ -1629,7 +1649,10 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], "Enable the vUI name plates module"):RequiresReload(true)
+	Left:CreateSwitch("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], "Enable the vUI name plates module", ReloadUI):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Debuffs"])
+	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)

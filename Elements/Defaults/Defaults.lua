@@ -218,6 +218,7 @@ Defaults["nameplates-topleft-text"] = "[NameColor][Name14]"
 Defaults["nameplates-topright-text"] = "[LevelColor][Level][Plus]"
 Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
+Defaults["nameplates-display-debuffs"] = true
 Defaults["nameplates-class-color"] = true -- temporary
 
 -- Tooltips

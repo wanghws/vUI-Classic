@@ -29,7 +29,7 @@ local GetItemInfo = GetItemInfo
 local GetCoinTextureString = GetCoinTextureString
 
 Tooltips.Handled = {
---	GameTooltip,
+	GameTooltip,
 	ItemRefTooltip,
 	ItemRefShoppingTooltip1,
 	ItemRefShoppingTooltip2,
@@ -323,41 +323,33 @@ local OnTooltipSetItem = function(self)
 	end
 end
 
-local GameTooltipOnShow = function(self)
-	SetStyle(self)
-	
-	if (self:GetAnchorType() ~= "ANCHOR_NONE") then
+local SetTooltipDefaultAnchor = function(self, parent)
+	if Settings["tooltips-on-cursor"] then
+		self:SetOwner(parent, "ANCHOR_CURSOR", 0, 8)
+		
 		return
+	end
+	
+	local Unit, UnitID = self:GetUnit()
+	
+	if (not UnitID) then
+		local MouseFocus = GetMouseFocus()
+		
+		if MouseFocus and MouseFocus:GetAttribute("unit") then
+			UnitID = MouseFocus:GetAttribute("unit")
+		end
+	end
+	
+	if (not UnitID and UnitExists("mouseover")) then
+		UnitID = "mouseover"
 	end
 	
 	self:ClearAllPoints()
 	
-	local UnitID = select(2, self:GetUnit())
-	
 	if UnitID then
-		if (vUIMeterFrame and vUIMeterFrame:IsShown()) then
-			self:SetPoint("BOTTOMRIGHT", vUIMeterFrame, "TOPRIGHT", 0, 14)
-		else
-			self:SetPoint("BOTTOMRIGHT", UIParent, -50, 50)
-		end
-		
-		if self.OuterBG then
-			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
-		end
+		self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 24)
 	else
-		self:SetPoint("BOTTOMRIGHT", UIParent, -50, 50)
-		
-		if self.OuterBG then
-			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
-		end
-	end
-end
-
-local SetTooltipDefaultAnchor = function(self, parent)
-	if Settings["tooltips-on-cursor"] then
-		self:SetOwner(parent, "ANCHOR_CURSOR")
-	else
-		self:SetOwner(parent, "ANCHOR_NONE")
+		self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
 	end
 end
 
@@ -368,7 +360,6 @@ function Tooltips:AddHooks()
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 	GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
-	GameTooltip:HookScript("OnShow", GameTooltipOnShow)
 	
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", SetTooltipDefaultAnchor)
 end
@@ -522,6 +513,7 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-enable", Settings["tooltips-enable"], Language["Enable Tooltips Module"], ""):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
+	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
 	
 	Left:CreateFooter()
