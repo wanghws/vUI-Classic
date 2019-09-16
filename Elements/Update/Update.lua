@@ -50,27 +50,11 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
 	end
 	
-	if UnitInBattleground("player") then
+	--[[if UnitInBattleground("player") then -- Battlegrounds are NYI
 		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
-	end
+	end]]
 	
 	--self:UnregisterEvent(event)
-end
-
-function Update:SendVersion()
-	if IsInGuild() then
-		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
-	end
-	
-	if IsInRaid() then
-		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
-	elseif IsInGroup() then
-		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
-	end
-	
-	if UnitInBattleground("player") then
-		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
-	end
 end
 
 -- /run vUIData.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
@@ -100,37 +84,31 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	self:UnregisterEvent(event)
 end
 
-local GetName = function(name)
-	name = match(name, "(%S+)-%S+")
-	
-	return name
-end
-
 Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
-	sender = GetName(sender)
-
-	if (sender == vUI.UserName) then
+	sender = match(sender, "(%S+)-%S+")
+	
+	if (sender == vUI.UserName or prefix ~= "vUI-Version") then
 		return
 	end
 	
-	if (prefix == "vUI-Version") then
-		if (channel == "WHISPER") then
+	message = tonumber(message)
+	
+	if (channel == "WHISPER") then
+		if (message > AddOnVersion) then
 			--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
 				print("https://www.curseforge.com/wow/addons/vui")
+				
+			self:UnregisterEvent(event)
+		end
+	else
+		if (AddOnVersion > message) then -- We have a higher version, share it
+			SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", sender)
+		elseif (message > AddOnVersion) then -- We're behind!
+			vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
+			print("https://www.curseforge.com/wow/addons/vui")
 			
 			self:UnregisterEvent(event)
-		else
-			local SenderVersion = tonumber(message)
-			
-			if (SenderVersion > AddOnVersion) then	-- We're behind!
-				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], SenderVersion))
-				print("https://www.curseforge.com/wow/addons/vui")
-				
-				self:UnregisterEvent(event)
-			else -- They're behind, not us. Let them know what version you have.
-				SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", sender)
-			end
 		end
 	end
 end

@@ -420,6 +420,7 @@ local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
 	self:SetScale(Settings["ui-scale"])
+	self:EnableMouse(true)
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)

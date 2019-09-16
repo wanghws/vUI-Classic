@@ -3492,18 +3492,14 @@ function GUI:RunQueue()
 end
 
 function GUI:VARIABLES_LOADED()
+	if (not GetCVar("useUIScale")) then
+		SetCVar("useUIScale", 1)
+	end
+	
 	Profiles:CreateProfileData()
 	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
 	
-	--[[
-		if Settings["enable-templates"] then
-			Merge templates with Settings, otherwise use default settings?
-		end
-		
-		-- Write the template into the Defaults table?
-	--]]
-	--vUI:SetScale(Settings["ui-scale"])
 	vUI:SetScale(Settings["ui-scale"])
 	vUI:UpdateoUFColors()
 	

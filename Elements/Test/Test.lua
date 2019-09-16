@@ -4,6 +4,7 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 
 -- To do: A bag slot visualizer (Yes, like FFXIV)
 -- black square, 2x2 pixels inside, colored by what's in the slot if occupied, 0.3 opacity or something if it's an empty slot.
+-- Highlight x cheapest items in bags. x should be optional
 
 local Debug = '"%s" set to %s.'
 local floor = floor
@@ -439,6 +440,7 @@ GUI:AddOptions(function(self)
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
 	Left:CreateFooter()
+	Right:CreateFooter()
 end)
 
 local Taxi = vUI:NewModule("Taxi")

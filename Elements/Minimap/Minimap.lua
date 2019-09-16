@@ -19,15 +19,21 @@ local ZoneUpdate = function(self)
 	self.Text:SetTextColor(Color[1], Color[2], Color[3])
 end
 
+local TimeOnUpdate = function(self, elapsed)
+	self.Ela = self.Ela + elapsed
+	
+	if (self.Ela >= 10) then
+		self.Text:SetText(GameTime_GetLocalTime(true))
+		
+		self.Ela = 0
+	end
+end
+
 local CreateMinimap = function()
-	Frame:SetScaledSize(Settings["minimap-size"] + 8, (22 + 8 + Settings["minimap-size"]))
 	Frame:SetScaledPoint("TOPRIGHT", UIParent, -12, -12)
 	Frame:SetBackdrop(vUI.BackdropAndBorder)
 	Frame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Frame:SetBackdropBorderColor(0, 0, 0)
-	Frame.Ela = 0
-	
-	vUI:GetModule("Move"):Add(Frame)
 	
 	local ZoneFrame = CreateFrame("Frame", "vUIZoneFrame", Frame)
 	ZoneFrame:SetScaledHeight(20)
@@ -36,13 +42,10 @@ local CreateMinimap = function()
 	ZoneFrame:SetBackdrop(vUI.BackdropAndBorder)
 	ZoneFrame:SetBackdropColor(0, 0, 0, 0)
 	ZoneFrame:SetBackdropBorderColor(0, 0, 0)
-	ZoneFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	ZoneFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	ZoneFrame:RegisterEvent("ZONE_CHANGED")
 	ZoneFrame:RegisterEvent("ZONE_CHANGED_INDOORS")
 	ZoneFrame:SetScript("OnEvent", ZoneUpdate)
-	ZoneFrame:SetScript("OnEnter", ZoneFrameOnEnter)
-	ZoneFrame:SetScript("OnLeave", ZoneFrameOnLeave)
 	
 	ZoneFrame.Tex = ZoneFrame:CreateTexture(nil, "ARTWORK")
 	ZoneFrame.Tex:SetPoint("TOPLEFT", ZoneFrame, 1, -1)
@@ -51,15 +54,44 @@ local CreateMinimap = function()
 	ZoneFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
 	
 	ZoneFrame.Text = ZoneFrame:CreateFontString(nil, "OVERLAY", 7)
-	ZoneFrame.Text:SetScaledPoint("CENTER", ZoneFrame, 0, -1)
+	ZoneFrame.Text:SetScaledHeight(20)
+	ZoneFrame.Text:SetScaledPoint("LEFT", ZoneFrame, 6, 0)
+	ZoneFrame.Text:SetScaledPoint("RIGHT", ZoneFrame, -6, 0)
 	ZoneFrame.Text:SetFontInfo(Settings["ui-header-font"], 12)
-	ZoneFrame.Text:SetScaledSize(ZoneFrame:GetWidth() - 12, 20)
+	ZoneFrame.Text:SetJustifyH("CENTER")
 	
-	Frame.Stats = CreateFrame("Frame", nil, Minimap)
-	Frame.Stats:SetAllPoints(ZoneFrame)
-	Frame.Stats:SetScript("OnEnter", StatsOnEnter)
-	Frame.Stats:SetScript("OnLeave", StatsOnLeave)
-	Frame.Stats:SetScript("OnMouseUp", StatsOnMouseUp)
+	local TimeFrame = CreateFrame("Frame", "vUITimeFrame", Frame)
+	TimeFrame:SetScaledHeight(20)
+	TimeFrame:SetScaledPoint("BOTTOMLEFT", Frame, 3, 3)
+	TimeFrame:SetScaledPoint("BOTTOMRIGHT", Frame, -3, 3)
+	TimeFrame:SetBackdrop(vUI.BackdropAndBorder)
+	TimeFrame:SetBackdropColor(0, 0, 0, 0)
+	TimeFrame:SetBackdropBorderColor(0, 0, 0)
+	TimeFrame.Ela = 0
+	
+	TimeFrame.Tex = TimeFrame:CreateTexture(nil, "ARTWORK")
+	TimeFrame.Tex:SetPoint("TOPLEFT", TimeFrame, 1, -1)
+	TimeFrame.Tex:SetPoint("BOTTOMRIGHT", TimeFrame, -1, 1)
+	TimeFrame.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	TimeFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
+	
+	TimeFrame.Text = TimeFrame:CreateFontString(nil, "OVERLAY", 7)
+	TimeFrame.Text:SetScaledHeight(20)
+	TimeFrame.Text:SetScaledPoint("LEFT", TimeFrame, 6, 0)
+	TimeFrame.Text:SetScaledPoint("RIGHT", TimeFrame, -6, 0)
+	TimeFrame.Text:SetFontInfo(Settings["ui-header-font"], 12)
+	TimeFrame.Text:SetJustifyH("CENTER")
+	TimeFrame.Text:SetText(GameTime_GetLocalTime(true))
+	
+	if Settings["minimap-show-time"] then
+		Frame:SetScaledSize((Settings["minimap-size"] + 8), (44 + 8 + Settings["minimap-size"]))
+		TimeFrame:SetScript("OnUpdate", TimeOnUpdate)
+	else
+		Frame:SetScaledSize((Settings["minimap-size"] + 8), (22 + 8 + Settings["minimap-size"]))
+		TimeFrame:SetAlpha(0)
+	end
+	
+	vUI:GetModule("Move"):Add(Frame)
 	
 	ZoneUpdate(ZoneFrame)
 end
@@ -92,11 +124,34 @@ end
 local UpdateMinimapSize = function(value)
 	Minimap:SetScaledSize(value, value)
 	
-	_G["vUI Minimap"]:SetScaledSize((value + 8), (22 + 8 + value))
+	if Settings["minimap-show-time"] then
+		_G["vUI Minimap"]:SetScaledSize((value + 8), (44 + 8 + value))
+	else
+		_G["vUI Minimap"]:SetScaledSize((value + 8), (22 + 8 + value))
+	end
 	
 	Minimap:SetZoom(Minimap:GetZoom() + 1)
 	Minimap:SetZoom(Minimap:GetZoom() - 1)
 	Minimap:UpdateBlips()
+end
+
+local UpdateShowMinimapTime = function(value)
+	local Time = vUITimeFrame
+	
+	if value then
+		Frame:SetScaledSize((Settings["minimap-size"] + 8), (44 + 8 + Settings["minimap-size"]))
+		
+		Time.Ela = 12
+		Time:SetScript("OnUpdate", TimeOnUpdate)
+		Time:SetAlpha(1)
+		
+		Time.Text:SetText(GameTime_GetLocalTime(true))
+	else
+		Frame:SetScaledSize((Settings["minimap-size"] + 8), (22 + 8 + Settings["minimap-size"]))
+		
+		Time:SetScript("OnUpdate", nil)
+		Time:SetAlpha(0)
+	end
 end
 
 local OnEvent = function(self, event)
@@ -127,8 +182,8 @@ local OnEvent = function(self, event)
 	
 	MiniMapMailIcon:SetScaledSize(32, 32)
 	MiniMapMailIcon:SetTexture(Media:GetTexture("vUI Mail 2"))
-	MiniMapMailIcon:SetVertexColorHex(Settings["ui-widget-bright-color"])
-	--MiniMapMailIcon:SetVertexColorHex("EEEEEE")
+	--MiniMapMailIcon:SetVertexColorHex(Settings["ui-widget-bright-color"])
+	MiniMapMailIcon:SetVertexColorHex("EEEEEE")
 	
 	MinimapNorthTag:SetTexture(nil)
 	
@@ -158,9 +213,9 @@ local OnEvent = function(self, event)
 	Kill(MinimapZoomIn)
 	Kill(MinimapZoomOut)
 	Kill(MinimapNorthTag)
-	Kill(GameTimeFrame)
 	Kill(MiniMapWorldMapButton)
 	Kill(MiniMapMailBorder)
+	Kill(GameTimeFrame)
 	Kill(TimeManagerClockButton)
 	
 	self:UnregisterEvent(event)
@@ -174,6 +229,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "Enable the vUI Minimap module"):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Styling"])
+	Left:CreateSwitch("minimap-show-time", Settings["minimap-show-time"], Language["Enable Minimap Time"], "Display time on the minimap", UpdateShowMinimapTime)
 	
 	Right:CreateHeader(Language["Size"])
 	Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "Set the size of the Minimap", UpdateMinimapSize)

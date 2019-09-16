@@ -29,7 +29,7 @@ local GetItemInfo = GetItemInfo
 local GetCoinTextureString = GetCoinTextureString
 
 Tooltips.Handled = {
-	GameTooltip,
+--	GameTooltip,
 	ItemRefTooltip,
 	ItemRefShoppingTooltip1,
 	ItemRefShoppingTooltip2,
@@ -323,21 +323,41 @@ local OnTooltipSetItem = function(self)
 	end
 end
 
-local SetTooltipDefaultAnchor = function(self)
-	local Unit, UnitID = self:GetUnit()
+local GameTooltipOnShow = function(self)
+	SetStyle(self)
+	
+	if (self:GetAnchorType() ~= "ANCHOR_NONE") then
+		return
+	end
+	
+	self:ClearAllPoints()
+	
+	local UnitID = select(2, self:GetUnit())
 	
 	if UnitID then
-		--self:SetAnchorType("ANCHOR_BOTTOMRIGHT", -10, 15)
-			
+		if (vUIMeterFrame and vUIMeterFrame:IsShown()) then
+			self:SetPoint("BOTTOMRIGHT", vUIMeterFrame, "TOPRIGHT", 0, 14)
+		else
+			self:SetPoint("BOTTOMRIGHT", UIParent, -50, 50)
+		end
+		
 		if self.OuterBG then
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -22)
 		end
 	else
-		--self:SetAnchorType("ANCHOR_BOTTOMRIGHT", -10, 3)
+		self:SetPoint("BOTTOMRIGHT", UIParent, -50, 50)
 		
 		if self.OuterBG then
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
 		end
+	end
+end
+
+local SetTooltipDefaultAnchor = function(self, parent)
+	if Settings["tooltips-on-cursor"] then
+		self:SetOwner(parent, "ANCHOR_CURSOR")
+	else
+		self:SetOwner(parent, "ANCHOR_NONE")
 	end
 end
 
@@ -348,6 +368,7 @@ function Tooltips:AddHooks()
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 	GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+	GameTooltip:HookScript("OnShow", GameTooltipOnShow)
 	
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", SetTooltipDefaultAnchor)
 end

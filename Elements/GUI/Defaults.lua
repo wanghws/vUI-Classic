@@ -173,6 +173,7 @@ Defaults["experience-rested-color"] = "00B4FF"
 -- Minimap
 Defaults["minimap-enable"] = true
 Defaults["minimap-size"] = 140
+Defaults["minimap-show-time"] = true
 
 -- Cooldowns
 Defaults["cooldowns-enable"] = true
@@ -222,6 +223,7 @@ Defaults["nameplates-class-color"] = true -- temporary
 -- Tooltips
 Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
+Defaults["tooltips-on-cursor"] = false
 
 -- Bags
 Defaults["bags-loot-from-left"] = false
