@@ -596,16 +596,6 @@ local StyleNamePlate = function(self, unit)
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
 	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
 	
-	--[[local Child
-	
-	for i = 1, self:GetNumChildren() do
-		Child = select(i, self:GetChildren())
-		
-		if (Child and Child.EnableMouse) then
-			Child:EnableMouse(false)
-		end
-	end]]
-	
 	self.Health = Health
 	self.TopLeft = TopLeft
 	self.Top = Top
