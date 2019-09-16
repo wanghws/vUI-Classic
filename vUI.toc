@@ -27,7 +27,7 @@ Languages\ruRU.lua
 Languages\zhCN.lua
 Languages\zhTW.lua
 Elements\Animation\Animation.lua
-Elements\GUI\Defaults.lua
+Elements\Defaults\Defaults.lua
 Elements\Profiles\Profiles.lua
 Elements\GUI\GUI.lua
 Elements\Colors\Colors.lua
