@@ -347,9 +347,17 @@ local SetTooltipDefaultAnchor = function(self, parent)
 	self:ClearAllPoints()
 	
 	if UnitID then
-		self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 24)
+		if vUIMetersFrame then
+			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 24)
+		else
+			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 120)
+		end
 	else
-		self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
+		if vUIMetersFrame then
+			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
+		else
+			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 101)
+		end
 	end
 end
 

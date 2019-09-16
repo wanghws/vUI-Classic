@@ -512,7 +512,6 @@ local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
 	self:SetScale(Settings["ui-scale"])
-	self:EnableMouse(false)
 	
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
@@ -596,6 +595,16 @@ local StyleNamePlate = function(self, unit)
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
 	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
+	
+	--[[local Child
+	
+	for i = 1, self:GetNumChildren() do
+		Child = select(i, self:GetChildren())
+		
+		if (Child and Child.EnableMouse) then
+			Child:EnableMouse(false)
+		end
+	end]]
 	
 	self.Health = Health
 	self.TopLeft = TopLeft

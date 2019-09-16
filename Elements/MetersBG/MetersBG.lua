@@ -1,7 +1,7 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 if (1 == 1) then
---	return
+	return
 end
 
 local FRAME_WIDTH = 390

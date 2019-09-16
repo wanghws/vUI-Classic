@@ -112,6 +112,12 @@ function Move:Add(frame)
 		return
 	end
 	
+	local Label = Name
+	
+	if string.find(Label, "vUI") then
+		Label = string.gsub(Label, "vUI ", "")
+	end
+	
 	if (not Parent) then
 		Parent = UIParent
 	end
@@ -146,7 +152,7 @@ function Move:Add(frame)
 	Mover.Label = Mover.BG:CreateFontString(nil, "OVERLAY")
 	Mover.Label:SetFontInfo(Settings["ui-widget-font"], 12)
 	Mover.Label:SetScaledPoint("CENTER", Mover, 0, 0)
-	Mover.Label:SetText(Name)
+	Mover.Label:SetText(Label)
 	
 	frame:ClearAllPoints()
 	frame:SetScaledPoint("CENTER", Mover, 0, 0)
