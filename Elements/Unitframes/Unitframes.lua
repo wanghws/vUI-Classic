@@ -1672,10 +1672,6 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module"):RequiresReload(true)
 	
-	Left:CreateHeader(Language["Cast Bars"])
-	Left:CreateSlider("unitframes-player-castbar-y", Settings["unitframes-player-castbar-y"], 40, 400, 1, Language["Player Cast Bar Y-Offset"], "", UpdatePlayerCastBarY)
-	Left:CreateSlider("unitframes-target-castbar-y", Settings["unitframes-target-castbar-y"], 40, 400, 1, Language["Target Cast Bar Y-Offset"], "", UpdateTargetCastBarY)
-	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
 	
