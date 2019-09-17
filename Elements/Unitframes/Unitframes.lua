@@ -593,8 +593,8 @@ local StyleNamePlate = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
-    Castbar:SetScaledSize(Settings["nameplates-width"] - 2, 14)
-	Castbar:SetScaledPoint("TOP", Health, "BOTTOM", 0, -5)
+    Castbar:SetScaledSize(Settings["nameplates-width"] - 2, 12)
+	Castbar:SetScaledPoint("TOP", Health, "BOTTOM", 0, -4)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
@@ -624,7 +624,7 @@ local StyleNamePlate = function(self, unit)
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    Icon:SetScaledSize(Settings["nameplates-height"] + 14 + 3, Settings["nameplates-height"] + 14 + 3)
+    Icon:SetScaledSize(Settings["nameplates-height"] + 12 + 2, Settings["nameplates-height"] + 12 + 2)
     Icon:SetScaledPoint("BOTTOMRIGHT", Castbar, "BOTTOMLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
@@ -634,16 +634,10 @@ local StyleNamePlate = function(self, unit)
     IconBG:SetTexture(Media:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
-    -- Add Shield
-    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
-    Shield:SetScaledSize(20, 20)
-    Shield:SetScaledPoint("CENTER", Castbar)
-	
     Castbar.bg = CastbarBG
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
-	Castbar.Shield = Shield
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
 	
@@ -800,11 +794,6 @@ local StylePlayer = function(self, unit)
     IconBG:SetTexture(Media:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
-    -- Add Shield
-    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
-    Shield:SetScaledSize(20, 20)
-    Shield:SetScaledPoint("CENTER", Castbar)
-	
     -- Add safezone
     local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
 	SafeZone:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
@@ -815,7 +804,6 @@ local StylePlayer = function(self, unit)
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
-    Castbar.Shield = Shield
     Castbar.SafeZone = SafeZone
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
@@ -1061,16 +1049,10 @@ local StyleTarget = function(self, unit)
     IconBG:SetTexture(Media:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
-    -- Add Shield
-    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
-    Shield:SetScaledSize(20, 20)
-    Shield:SetScaledPoint("CENTER", Castbar)
-	
     Castbar.bg = CastbarBG
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
-	Castbar.Shield = Shield
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
 	
