@@ -759,11 +759,11 @@ local StylePlayer = function(self, unit)
 	end
 	
     -- Castbar
-    local Castbar = CreateFrame("StatusBar", nil, self)
-    Castbar:SetScaledSize(250, 20)
-    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, Settings["unitframes-player-castbar-y"])
+    local Castbar = CreateFrame("StatusBar", "Casting Bar", self)
+    Castbar:SetScaledSize(250, 22)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-    Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	
+	Move:Add(Castbar)
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
 	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
@@ -1022,11 +1022,9 @@ local StyleTarget = function(self, unit)
 	Debuffs.onlyShowPlayer = true
 	
     -- Castbar
-    local Castbar = CreateFrame("StatusBar", nil, self)
-    Castbar:SetScaledSize(250, 20)
-    Castbar:SetScaledPoint("BOTTOM", UIParent, 0, Settings["unitframes-target-castbar-y"])
+    local Castbar = CreateFrame("StatusBar", "Target Casting Bar", self)
+    Castbar:SetScaledSize(250, 22)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-    Castbar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
 	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
@@ -1633,6 +1631,12 @@ UF:SetScript("OnEvent", function(self, event)
 			self:SetHeight(Header:GetAttribute("initial-height"))
 		]]
 	)
+	
+	Player.Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
+	Target.Castbar:SetScaledPoint("BOTTOM", Player.Castbar, "TOP", 0, 4)
+	
+	Move:Add(Player.Castbar)
+	Move:Add(Target.Castbar)
 	
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)

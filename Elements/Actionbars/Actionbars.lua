@@ -770,7 +770,7 @@ local StanceBarUpdateState = function()
 	end
 end
 
-ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
+ActionBars:RegisterEvent("PLAYER_LOGIN")
 ActionBars:SetScript("OnEvent", function(self, event)
 	if (not Settings["action-bars-enable"]) then
 		return
