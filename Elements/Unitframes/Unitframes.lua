@@ -575,11 +575,11 @@ local StyleNamePlate = function(self, unit)
 	if Settings["nameplates-display-debuffs"] then
 		local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
 		Debuffs:SetScaledSize(Settings["nameplates-width"], 26)
-		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 20)
+		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 18)
 		Debuffs.size = 26
 		Debuffs.num = 5
 		Debuffs.numRow = 1
-		Debuffs.spacing = -3
+		Debuffs.spacing = 2
 		Debuffs.initialAnchor = "TOPLEFT"
 		Debuffs["growth-y"] = "UP"
 		Debuffs["growth-x"] = "RIGHT"
@@ -620,6 +620,7 @@ local StyleNamePlate = function(self, unit)
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	Text:SetFontInfo(Settings["ui-widget-font"], 12)
 	Text:SetScaledPoint("LEFT", Castbar, "BOTTOMLEFT", 4, -3)
+	Text:SetScaledWidth(Settings["nameplates-width"] / 2 + 4)
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon

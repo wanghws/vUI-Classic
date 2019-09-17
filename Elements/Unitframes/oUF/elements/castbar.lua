@@ -149,7 +149,7 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 	element:SetMinMaxValues(0, max)
 	element:SetValue(0)
 
-	if(element.Text) then element.Text:SetText(text) end
+	if(element.Text) then element.Text:SetText(name) end
 	if(element.Icon) then element.Icon:SetTexture(texture) end
 	if(element.Time) then element.Time:SetText() end
 

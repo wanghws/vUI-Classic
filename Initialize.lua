@@ -26,7 +26,9 @@ local Hook = function(self, global, hook)
 			Func = self[hook]
 		end
 		
-		hooksecurefunc(global, Func)
+		if Func then
+			hooksecurefunc(global, Func)
+		end
 	end
 end
 

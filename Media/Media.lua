@@ -334,7 +334,7 @@ Media:SetStyle("vUI", {
 	["ui-button-texture"] = "Ferous",
 	
 	["ui-header-font-color"] = "FFE6C0",
-	["ui-header-texture-color"] = "616161",
+	["ui-header-texture-color"] = "424242",
 	
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "2B2B2B",
