@@ -715,27 +715,27 @@ local SetHighlightTexture = function(value)
 	local Texture = Media:GetTexture(value)
 	
 	for i = 1, Num do
-		vUIActionBar1[i].Hover:SetTexture(Texture)
+		vUIActionBar1[i].Highlight:SetTexture(Texture)
 		vUIActionBar1[i].Pushed:SetTexture(Texture)
 		vUIActionBar1[i].Checked:SetTexture(Texture)
 		vUIActionBar1[i].Range:SetTexture(Texture)
 		
-		vUIActionBar2[i].Hover:SetTexture(Texture)
+		vUIActionBar2[i].Highlight:SetTexture(Texture)
 		vUIActionBar2[i].Pushed:SetTexture(Texture)
 		vUIActionBar2[i].Checked:SetTexture(Texture)
 		vUIActionBar2[i].Range:SetTexture(Texture)
 		
-		vUIActionBar3[i].Hover:SetTexture(Texture)
+		vUIActionBar3[i].Highlight:SetTexture(Texture)
 		vUIActionBar3[i].Pushed:SetTexture(Texture)
 		vUIActionBar3[i].Checked:SetTexture(Texture)
 		vUIActionBar3[i].Range:SetTexture(Texture)
 		
-		vUIActionBar4[i].Hover:SetTexture(Texture)
+		vUIActionBar4[i].Highlight:SetTexture(Texture)
 		vUIActionBar4[i].Pushed:SetTexture(Texture)
 		vUIActionBar4[i].Checked:SetTexture(Texture)
 		vUIActionBar4[i].Range:SetTexture(Texture)
 		
-		vUIActionBar5[i].Hover:SetTexture(Texture)
+		vUIActionBar5[i].Highlight:SetTexture(Texture)
 		vUIActionBar5[i].Pushed:SetTexture(Texture)
 		vUIActionBar5[i].Checked:SetTexture(Texture)
 		vUIActionBar5[i].Range:SetTexture(Texture)
