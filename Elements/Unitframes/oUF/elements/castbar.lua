@@ -85,12 +85,31 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 --]]
 local _, ns = ...
 local oUF = ns.oUF
-local vUI = ns:get()
+local vUI, GUI, Language, Media, Settings = ns:get()
+
+local isClassic = select(4,GetBuildInfo()) <= 19999
+local UnitCastingInfo = UnitCastingInfo
+local UnitChannelInfo = UnitChannelInfo
+
+if isClassic then
+    UnitCastingInfo = CastingInfo
+    UnitChannelInfo = ChannelInfo
+end
+
+local LibCC = isClassic and LibStub("LibClassicCasterino", true)
+
+if LibCC then
+    UnitCastingInfo = function(unit)
+        return LibCC:UnitCastingInfo(unit)
+    end
+	
+    UnitChannelInfo = function(unit)
+        return LibCC:UnitChannelInfo(unit)
+    end
+end
 
 local GetNetStats = GetNetStats
 local GetTime = GetTime
-local CastingInfo = CastingInfo
-local ChannelInfo = ChannelInfo
 
 local function updateSafeZone(self)
 	local safeZone = self.SafeZone
@@ -107,13 +126,13 @@ end
 
 local function UNIT_SPELLCAST_START(self, event, unit)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
-
+	
 	local element = self.Castbar
-	local name, text, texture, startTime, endTime, _, castID, notInterruptible, spellID = CastingInfo(unit)
+	local name, text, texture, startTime, endTime, _, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	if(not name) then
 		return element:Hide()
 	end
-
+	
 	endTime = endTime / 1e3
 	startTime = startTime / 1e3
 	local max = endTime - startTime
@@ -140,7 +159,13 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 	elseif(shield) then
 		shield:Hide()
 	end
-
+	
+	element:SetStatusBarColorHex(Settings["color-casting-start"])
+	
+	if element.bg then
+		element.bg:SetVertexColorHex(Settings["color-casting-start"])
+	end
+	
 	local sf = element.SafeZone
 	if(sf) then
 		sf:ClearAllPoints()
@@ -180,6 +205,12 @@ local function UNIT_SPELLCAST_FAILED(self, event, unit, castID)
 	element.notInterruptible = nil
 	element.holdTime = element.timeToHold or 0
 
+	element:SetStatusBarColorHex(Settings["color-casting-stopped"])
+
+	if element.bg then
+		element.bg:SetVertexColorHex(Settings["color-casting-stopped"])
+	end
+
 	--[[ Callback: Castbar:PostCastFailed(unit)
 	Called after the element has been updated upon a failed spell cast.
 
@@ -198,7 +229,7 @@ local function UNIT_SPELLCAST_INTERRUPTED(self, event, unit, castID)
 	if(element.castID ~= castID) then
 		return
 	end
-
+	
 	local text = element.Text
 	if(text) then
 		text:SetText(INTERRUPTED)
@@ -207,6 +238,12 @@ local function UNIT_SPELLCAST_INTERRUPTED(self, event, unit, castID)
 	element.casting = nil
 	element.channeling = nil
 	element.holdTime = element.timeToHold or 0
+
+	element:SetStatusBarColorHex(Settings["color-casting-interrupted"])
+
+	if element.bg then
+		element.bg:SetVertexColorHex(Settings["color-casting-interrupted"])
+	end
 
 	--[[ Callback: Castbar:PostCastInterrupted(unit)
 	Called after the element has been updated upon an interrupted spell cast.
@@ -267,7 +304,7 @@ local function UNIT_SPELLCAST_DELAYED(self, event, unit)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, _, startTime = CastingInfo(unit)
+	local name, _, _, startTime = UnitCastingInfo(unit)
 	if(not startTime or not element:IsShown()) then return end
 
 	local duration = GetTime() - (startTime / 1000)
@@ -301,6 +338,12 @@ local function UNIT_SPELLCAST_STOP(self, event, unit, castID)
 	element.casting = nil
 	element.notInterruptible = nil
 
+	element:SetStatusBarColorHex(Settings["color-casting-stopped"])
+	
+	if element.bg then
+		element.bg:SetVertexColorHex(Settings["color-casting-stopped"])
+	end
+	
 	--[[ Callback: Castbar:PostCastStop(unit)
 	Called after the element has been updated when a spell cast has finished.
 
@@ -316,7 +359,7 @@ local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, texture, startTime, endTime, _, notInterruptible = ChannelInfo(unit)
+	local name, _, texture, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
 	if(not name) then
 		return
 	end
@@ -354,6 +397,12 @@ local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, spellID)
 		shield:Hide()
 	end
 
+	element:SetStatusBarColorHex(Settings["color-casting-start"])
+
+	if element.bg then
+		element.bg:SetVertexColorHex(Settings["color-casting-start"])
+	end
+
 	local sf = element.SafeZone
 	if(sf) then
 		sf:ClearAllPoints()
@@ -380,7 +429,7 @@ local function UNIT_SPELLCAST_CHANNEL_UPDATE(self, event, unit)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, _, startTime, endTime = ChannelInfo(unit)
+	local name, _, _, startTime, endTime = UnitChannelInfo(unit)
 	if(not name or not element:IsShown()) then
 		return
 	end
@@ -414,6 +463,12 @@ local function UNIT_SPELLCAST_CHANNEL_STOP(self, event, unit)
 		element.channeling = nil
 		element.notInterruptible = nil
 
+		element:SetStatusBarColorHex(Settings["color-casting-stopped"])
+
+		if element.bg then
+			element.bg:SetVertexColorHex(Settings["color-casting-stopped"])
+		end
+
 		--[[ Callback: Castbar:PostChannelStop(unit)
 		Called after the element has been updated after a channeled spell has been completed.
 
@@ -442,13 +497,13 @@ local function onUpdate(self, elapsed)
 				if(self.CustomDelayText) then
 					self:CustomDelayText(duration)
 				else
-					self.Time:SetFormattedText('%.1f|cffff0000-%.1f|r', duration, self.delay)
+					self.Time:SetFormattedText('%.1f|cffff0000-%.1f / %.1f|r', duration, self.delay, self.max)
 				end
 			else
 				if(self.CustomTimeText) then
 					self:CustomTimeText(duration)
 				else
-					self.Time:SetFormattedText('%.1f', duration)
+					self.Time:SetFormattedText('%.1f / %.1f', duration, self.max)
 				end
 			end
 		end
@@ -534,16 +589,34 @@ local function Enable(self, unit)
 		element.ForceUpdate = ForceUpdate
 
 		if(not (unit and unit:match'%wtarget$')) then
-			self:RegisterEvent('UNIT_SPELLCAST_START', UNIT_SPELLCAST_START)
-			self:RegisterEvent('UNIT_SPELLCAST_FAILED', UNIT_SPELLCAST_FAILED)
-			self:RegisterEvent('UNIT_SPELLCAST_STOP', UNIT_SPELLCAST_STOP)
-			self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', UNIT_SPELLCAST_INTERRUPTED)
-			--self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', UNIT_SPELLCAST_INTERRUPTIBLE)
-			--self:RegisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', UNIT_SPELLCAST_NOT_INTERRUPTIBLE)
-			self:RegisterEvent('UNIT_SPELLCAST_DELAYED', UNIT_SPELLCAST_DELAYED)
-			self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', UNIT_SPELLCAST_CHANNEL_START)
-			self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', UNIT_SPELLCAST_CHANNEL_UPDATE)
-			self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', UNIT_SPELLCAST_CHANNEL_STOP)
+			if (LibCC and (unit ~= "player")) then
+				self["UNIT_SPELLCAST_START"] = UNIT_SPELLCAST_START
+				self["UNIT_SPELLCAST_DELAYED"] = UNIT_SPELLCAST_DELAYED
+				self["UNIT_SPELLCAST_STOP"] = UNIT_SPELLCAST_STOP
+				self["UNIT_SPELLCAST_FAILED"] = UNIT_SPELLCAST_FAILED
+				self["UNIT_SPELLCAST_INTERRUPTED"] = UNIT_SPELLCAST_INTERRUPTED
+				self["UNIT_SPELLCAST_CHANNEL_START"] = UNIT_SPELLCAST_CHANNEL_START
+				self["UNIT_SPELLCAST_CHANNEL_UPDATE"] = UNIT_SPELLCAST_CHANNEL_UPDATE
+				self["UNIT_SPELLCAST_CHANNEL_STOP"] = UNIT_SPELLCAST_CHANNEL_STOP
+				
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_START")
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_DELAYED") -- only for player
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_STOP")
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_FAILED")
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_INTERRUPTED")
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_CHANNEL_START")
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_CHANNEL_UPDATE") -- only for player
+				LibCC.RegisterCallback(self, "UNIT_SPELLCAST_CHANNEL_STOP")
+			else
+				self:RegisterEvent("UNIT_SPELLCAST_START", UNIT_SPELLCAST_START)
+				self:RegisterEvent("UNIT_SPELLCAST_DELAYED", UNIT_SPELLCAST_DELAYED)
+				self:RegisterEvent("UNIT_SPELLCAST_STOP", UNIT_SPELLCAST_STOP)
+				self:RegisterEvent("UNIT_SPELLCAST_FAILED", UNIT_SPELLCAST_FAILED)
+				self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", UNIT_SPELLCAST_INTERRUPTED)
+				self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START", UNIT_SPELLCAST_CHANNEL_START)
+				self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE", UNIT_SPELLCAST_CHANNEL_UPDATE)
+				self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", UNIT_SPELLCAST_CHANNEL_STOP)
+			end
 		end
 
 		element.horizontal = element:GetOrientation() == 'HORIZONTAL'
@@ -587,8 +660,28 @@ local function Disable(self)
 	local element = self.Castbar
 	if(element) then
 		element:Hide()
-
-		self:UnregisterEvent('UNIT_SPELLCAST_START', UNIT_SPELLCAST_START)
+		
+		if LibCC then
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_START")
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_DELAYED") -- only for player
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_STOP")
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_FAILED")
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_INTERRUPTED")
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_CHANNEL_START")
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_CHANNEL_UPDATE") -- only for player
+			LibCC.UnregisterCallback(self, "UNIT_SPELLCAST_CHANNEL_STOP")
+		else
+			self:UnregisterEvent("UNIT_SPELLCAST_START", UNIT_SPELLCAST_START)
+			self:UnregisterEvent("UNIT_SPELLCAST_DELAYED", UNIT_SPELLCAST_DELAYED)
+			self:UnregisterEvent("UNIT_SPELLCAST_STOP", UNIT_SPELLCAST_STOP)
+			self:UnregisterEvent("UNIT_SPELLCAST_FAILED", UNIT_SPELLCAST_FAILED)
+			self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED", UNIT_SPELLCAST_INTERRUPTED)
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START", UNIT_SPELLCAST_CHANNEL_START)
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE", UNIT_SPELLCAST_CHANNEL_UPDATE)
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", UNIT_SPELLCAST_CHANNEL_STOP)
+		end
+		
+		--[[self:UnregisterEvent('UNIT_SPELLCAST_START', UNIT_SPELLCAST_START)
 		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', UNIT_SPELLCAST_FAILED)
 		self:UnregisterEvent('UNIT_SPELLCAST_STOP', UNIT_SPELLCAST_STOP)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', UNIT_SPELLCAST_INTERRUPTED)
@@ -597,7 +690,7 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', UNIT_SPELLCAST_DELAYED)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', UNIT_SPELLCAST_CHANNEL_START)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', UNIT_SPELLCAST_CHANNEL_UPDATE)
-		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', UNIT_SPELLCAST_CHANNEL_STOP)
+		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', UNIT_SPELLCAST_CHANNEL_STOP)]]
 
 		element:SetScript('OnUpdate', nil)
 	end

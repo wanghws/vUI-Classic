@@ -533,7 +533,7 @@ local StyleNamePlate = function(self, unit)
 	-- Target Icon
 	local RaidTargetIndicator = Health:CreateTexture(nil, 'OVERLAY')
 	RaidTargetIndicator:SetSize(16, 16)
-	RaidTargetIndicator:SetPoint("RIGHT", Health, "LEFT", -5, 0)
+	RaidTargetIndicator:SetPoint("LEFT", Health, "RIGHT", 5, 0)
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
 	TopLeft:SetFontInfo(Settings["ui-widget-font"], 12)
@@ -579,7 +579,7 @@ local StyleNamePlate = function(self, unit)
 		Debuffs.size = 26
 		Debuffs.num = 5
 		Debuffs.numRow = 1
-		Debuffs.spacing = -1
+		Debuffs.spacing = -3
 		Debuffs.initialAnchor = "TOPLEFT"
 		Debuffs["growth-y"] = "UP"
 		Debuffs["growth-x"] = "RIGHT"
@@ -590,6 +590,62 @@ local StyleNamePlate = function(self, unit)
 		
 		self.Debuffs = Debuffs
 	end
+	
+    -- Castbar
+    local Castbar = CreateFrame("StatusBar", nil, self)
+    Castbar:SetScaledSize(Settings["nameplates-width"] - 2, 14)
+	Castbar:SetScaledPoint("TOP", Health, "BOTTOM", 0, -5)
+    Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
+	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetScaledPoint("BOTTOMRIGHT", Castbar, 0, 0)
+    CastbarBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	CastbarBG:SetAlpha(0.2)
+	
+    -- Add a background
+    local Background = Castbar:CreateTexture(nil, "BACKGROUND")
+    Background:SetScaledPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetScaledPoint("BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetTexture(Media:GetTexture("Blank"))
+    Background:SetVertexColor(0, 0, 0)
+	
+    -- Add a timer
+    local Time = Castbar:CreateFontString(nil, "OVERLAY")
+	Time:SetFontInfo(Settings["ui-widget-font"], 12)
+	Time:SetScaledPoint("RIGHT", Castbar, "BOTTOMRIGHT", -4, -3)
+	Time:SetJustifyH("RIGHT")
+	
+    -- Add spell text
+    local Text = Castbar:CreateFontString(nil, "OVERLAY")
+	Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	Text:SetScaledPoint("LEFT", Castbar, "BOTTOMLEFT", 4, -3)
+	Text:SetJustifyH("LEFT")
+	
+    -- Add spell icon
+    local Icon = Castbar:CreateTexture(nil, "OVERLAY")
+    Icon:SetScaledSize(Settings["nameplates-height"] + 14 + 3, Settings["nameplates-height"] + 14 + 3)
+    Icon:SetScaledPoint("BOTTOMRIGHT", Castbar, "BOTTOMLEFT", -4, 0)
+    Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	
+    local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
+    IconBG:SetScaledPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetScaledPoint("BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetTexture(Media:GetTexture("Blank"))
+    IconBG:SetVertexColor(0, 0, 0)
+	
+    -- Add Shield
+    local Shield = Castbar:CreateTexture(nil, "OVERLAY")
+    Shield:SetScaledSize(20, 20)
+    Shield:SetScaledPoint("CENTER", Castbar)
+	
+    Castbar.bg = CastbarBG
+    Castbar.Time = Time
+    Castbar.Text = Text
+    Castbar.Icon = Icon
+	Castbar.Shield = Shield
+    Castbar.showTradeSkills = true
+    Castbar.timeToHold = 0.3
 	
 	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
@@ -602,6 +658,7 @@ local StyleNamePlate = function(self, unit)
 	self.TopRight = TopRight
 	self.BottomRight = BottomRight
 	self.Health.bg = HealthBG
+	self.Castbar = Castbar
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
@@ -712,7 +769,6 @@ local StylePlayer = function(self, unit)
 	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
 	CastbarBG:SetScaledPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-    CastbarBG:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
@@ -737,8 +793,14 @@ local StylePlayer = function(self, unit)
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
     Icon:SetScaledSize(20, 20)
-    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -3, 0)
+    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	
+	local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
+    IconBG:SetScaledPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetScaledPoint("BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetTexture(Media:GetTexture("Blank"))
+    IconBG:SetVertexColor(0, 0, 0)
 	
     -- Add Shield
     local Shield = Castbar:CreateTexture(nil, "OVERLAY")
@@ -751,13 +813,14 @@ local StylePlayer = function(self, unit)
 	SafeZone:SetVertexColor(vUI:HexToRGB("C0392B"))
 	
     -- Register it with oUF
-    --Castbar.bg = Background
+    Castbar.bg = CastbarBG
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
     Castbar.Shield = Shield
     Castbar.SafeZone = SafeZone
     Castbar.showTradeSkills = true
+    Castbar.timeToHold = 0.3
 	
 	if (vUI.UserClass == "SHAMAN") then
 		local Totems = {}
@@ -969,7 +1032,6 @@ local StyleTarget = function(self, unit)
 	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
 	CastbarBG:SetScaledPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-    CastbarBG:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
@@ -994,26 +1056,27 @@ local StyleTarget = function(self, unit)
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
     Icon:SetScaledSize(20, 20)
-    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -3, 0)
+    Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
-    --[[ Add Shield
+    local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
+    IconBG:SetScaledPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetScaledPoint("BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetTexture(Media:GetTexture("Blank"))
+    IconBG:SetVertexColor(0, 0, 0)
+	
+    -- Add Shield
     local Shield = Castbar:CreateTexture(nil, "OVERLAY")
     Shield:SetScaledSize(20, 20)
-    Shield:SetScaledPoint("CENTER", Castbar)]]
+    Shield:SetScaledPoint("CENTER", Castbar)
 	
-    -- Add safezone
-    local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
-	SafeZone:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	SafeZone:SetVertexColor(vUI:HexToRGB("C0392B"))
-	
-    --Castbar.bg = Background
+    Castbar.bg = CastbarBG
     Castbar.Time = Time
     Castbar.Text = Text
     Castbar.Icon = Icon
-	--Castbar.Shield = Shield
-    Castbar.SafeZone = SafeZone
+	Castbar.Shield = Shield
     Castbar.showTradeSkills = true
+    Castbar.timeToHold = 0.3
 	
 	-- Combat
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
@@ -1562,7 +1625,7 @@ UF:SetScript("OnEvent", function(self, event)
 		"maxColumns", 8,
 		"unitsPerColumn", 5,
 		"columnSpacing", 2,
-		"columnAnchorPoint", "TOP",
+		"columnAnchorPoint", "LEFT",
 		"oUF-initialConfigFunction", [[
 			local Header = self:GetParent()
 			

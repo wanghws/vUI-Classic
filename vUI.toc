@@ -11,6 +11,7 @@ Elements\Libraries\CallbackHandler-1.0.lua
 Elements\Libraries\LibSharedMedia-3.0.lua
 Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibClassicMobHealth-1.0.lua
+Elements\Libraries\LibClassicCasterino.lua
 Elements\Libraries\LibCompress.lua
 Elements\UnitFrames\oUF\oUF.xml
 Elements\Libraries\LibClassicDurations\LibClassicDurations.xml

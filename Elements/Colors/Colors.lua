@@ -184,6 +184,11 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-tapped", Settings["color-tapped"], Language["Tagged"], "")
 	Right:CreateColorSelection("color-disconnected", Settings["color-disconnected"], Language["Disconnected"], "")
 	
+	Right:CreateHeader(Language["Casting"])
+	Right:CreateColorSelection("color-casting-start", Settings["color-casting-start"], Language["Casting"], "")
+	Right:CreateColorSelection("color-casting-stopped", Settings["color-casting-stopped"], Language["Stopped"], "")
+	Right:CreateColorSelection("color-casting-interrupted", Settings["color-casting-interrupted"], Language["Interrupted"], "")
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 	

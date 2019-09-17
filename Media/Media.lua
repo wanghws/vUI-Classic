@@ -391,7 +391,7 @@ Media:SetStyle("vUI 2", {
 	["chat-tab-font-color"] = "FFB74D",
 })
 
--- Conjured Muffin
+-- Conjured Muffin -- Casting: 2ECC71 - Interrupted: F39C12 - Failed: D35400
 Media:SetStyle("Conjured Muffin", {
 	["ui-widget-font"] = "Roboto",
 	["ui-header-font"] = "Roboto",

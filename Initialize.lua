@@ -16,6 +16,20 @@ local vUI = CreateFrame("Frame")
 
 vUI.Modules = {}
 
+local Hook = function(self, global, hook)
+	if _G[global] then
+		local Func
+	
+		if self[global] then
+			Func = self[global]
+		elseif (hook and self[hook]) then
+			Func = self[hook]
+		end
+		
+		hooksecurefunc(global, Func)
+	end
+end
+
 function vUI:NewModule(name)
 	if self.Modules[name] then
 		return self.Modules[name]
@@ -25,6 +39,7 @@ function vUI:NewModule(name)
 	
 	Module.Name = name
 	Module.Loaded = false
+	Module.Hook = Hook
 	
 	self.Modules[name] = Module
 	self.Modules[#self.Modules + 1] = Module

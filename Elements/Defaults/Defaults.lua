@@ -120,6 +120,11 @@ Defaults["color-combo-3"] = "FFFF66"
 Defaults["color-combo-4"] = "B2FF66"
 Defaults["color-combo-5"] = "66FF66"
 
+-- Casting
+Defaults["color-casting-start"] = "009900"
+Defaults["color-casting-stopped"] = "F39C12"
+Defaults["color-casting-interrupted"] = "D35400"
+
 -- Other
 Defaults["color-tapped"] = "A6A6A6"
 Defaults["color-disconnected"] = "A6A6A6"
