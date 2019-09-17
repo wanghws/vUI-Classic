@@ -344,6 +344,14 @@ local function UNIT_SPELLCAST_STOP(self, event, unit, castID)
 		element.bg:SetVertexColorHex(Settings["color-casting-stopped"])
 	end
 	
+	if (unit == "player" and UnitIsUnit("player", "target")) then -- Simulate the event for the target cast bar
+		if oUF.objects[2] then
+			local Target = oUF.objects[2]
+			
+			UNIT_SPELLCAST_INTERRUPTED(Target, nil, Target.unit, Target.Castbar.castID)
+		end
+	end
+	
 	--[[ Callback: Castbar:PostCastStop(unit)
 	Called after the element has been updated when a spell cast has finished.
 
