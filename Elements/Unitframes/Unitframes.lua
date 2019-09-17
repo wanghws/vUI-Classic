@@ -759,11 +759,9 @@ local StylePlayer = function(self, unit)
 	end
 	
     -- Castbar
-    local Castbar = CreateFrame("StatusBar", "Casting Bar", self)
+    local Castbar = CreateFrame("StatusBar", "vUI Casting Bar", self)
     Castbar:SetScaledSize(250, 22)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	
-	Move:Add(Castbar)
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
 	CastbarBG:SetScaledPoint("TOPLEFT", Castbar, 0, 0)
@@ -1022,7 +1020,7 @@ local StyleTarget = function(self, unit)
 	Debuffs.onlyShowPlayer = true
 	
     -- Castbar
-    local Castbar = CreateFrame("StatusBar", "Target Casting Bar", self)
+    local Castbar = CreateFrame("StatusBar", "vUI Target Casting Bar", self)
     Castbar:SetScaledSize(250, 22)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
