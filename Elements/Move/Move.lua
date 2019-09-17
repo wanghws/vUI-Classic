@@ -173,4 +173,6 @@ function Move:Add(frame)
 	end
 	
 	table.insert(self.Frames, Mover)
+	
+	return Mover
 end

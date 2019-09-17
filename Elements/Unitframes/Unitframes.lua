@@ -785,7 +785,7 @@ local StylePlayer = function(self, unit)
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    Icon:SetScaledSize(20, 20)
+    Icon:SetScaledSize(22, 22)
     Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
@@ -1040,7 +1040,7 @@ local StyleTarget = function(self, unit)
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    Icon:SetScaledSize(20, 20)
+    Icon:SetScaledSize(22, 22)
     Icon:SetScaledPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
