@@ -1658,14 +1658,6 @@ local TogglePlayerName = function(value)
 	end
 end
 
-local UpdatePlayerCastBarY = function(value)
-	oUF_vUIPlayer.Castbar:SetScaledPoint("BOTTOM", UIParent, 0, value)
-end
-
-local UpdateTargetCastBarY = function(value)
-	oUF_vUITarget.Castbar:SetScaledPoint("BOTTOM", UIParent, 0, value)
-end
-
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
