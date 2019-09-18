@@ -229,3 +229,8 @@ Defaults["tooltips-on-cursor"] = false
 
 -- Bags
 Defaults["bags-loot-from-left"] = false
+
+-- Quests
+Defaults["quest-watch-font"] = "Roboto"
+Defaults["quest-watch-font-size"] = 12
+Defaults["quest-watch-font-flags"] = ""
