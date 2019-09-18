@@ -212,6 +212,7 @@ Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldR
 Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
 Media:SetFont("Noto Sans Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedBold.ttf")
 Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", nil, true)
+Media:SetFont("FiraCode", "Interface\\Addons\\vUI\\Media\\Fonts\\FiraCode.ttf")
 
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")
@@ -525,4 +526,38 @@ Media:SetStyle("Unnamed", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "00CC6A",
+})
+
+-- Smelly
+Media:SetStyle("Smelly", {
+	["ui-widget-font"] = "FiraCode",
+	["ui-header-font"] = "FiraCode",
+	["ui-button-font"] = "FiraCode",
+	
+	["ui-widget-texture"] = "Bettina",
+	["ui-header-texture"] = "Bettina",
+	["ui-button-texture"] = "Bettina",
+	
+	["ui-header-font-color"] = "FFFFFF",
+	["ui-header-texture-color"] = "29272B",
+	
+	["ui-window-bg-color"] = "29272B",
+	["ui-window-main-color"] = "29272B",
+	
+	["ui-widget-color"] = "FC533E",
+	["ui-widget-bright-color"] = "66606B",
+	["ui-widget-bg-color"] = "29272B",
+	["ui-widget-font-color"] = "FFFFFF",
+	
+	["ui-button-font-color"] = "FFFFFF",
+	["ui-button-texture-color"] = "66606B",
+	
+	["chat-font"] = "FiraCode",
+	["chat-font-size"] = 12,
+	["chat-font-flags"] = "",
+	
+	["chat-tab-font"] = "FiraCode",
+	["chat-tab-font-size"] = 12,
+	["chat-tab-font-flags"] = "",
+	["chat-tab-font-color"] = "FC533E",
 })
