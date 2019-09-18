@@ -552,7 +552,7 @@ Media:SetStyle("Smelly", {
 	["ui-button-font-color"] = "FFFFFF",
 	["ui-button-texture-color"] = "66606B",
 	
-	["chat-font"] = "FiraCode",
+	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
 	
