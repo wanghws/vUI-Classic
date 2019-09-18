@@ -435,7 +435,7 @@ local HandledCount = 0
 Object = EnumerateFrames()
 
 while Object do
-	if not Object:IsForbidden() and not Handled[Object:GetObjectType()] then
+	if (not Object:IsForbidden() and not Handled[Object:GetObjectType()]) then
 		AddMethodsToObject(Object)
 		HandledCount = HandledCount + 1
 		

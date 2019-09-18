@@ -318,8 +318,27 @@ local OnTooltipSetItem = function(self)
 		local CoinString = GetCoinTextureString(CopperValue)
 		
 		if CoinString then
-			GameTooltip:AddLine(CoinString, 1, 1, 1)
+			self:AddLine(CoinString, 1, 1, 1)
 		end
+	end
+end
+
+local OnItemRefTooltipSetItem = function(self)
+	if (not Settings["tooltips-show-sell-value"]) then
+		return
+	end
+	
+	local Item, Link = self:GetItem()
+	local SellValue = select(11, GetItemInfo(Link))
+	
+	if (not SellValue) then
+		return
+	end
+	
+	local CoinString = GetCoinTextureString(SellValue)
+	
+	if CoinString then
+		self:AddLine(CoinString, 1, 1, 1)
 	end
 end
 
@@ -406,6 +425,7 @@ function Tooltips:AddHooks()
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 	GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+	ItemRefTooltip:HookScript("OnTooltipSetItem", OnItemRefTooltipSetItem)
 	
 	self:Hook("GameTooltip_SetDefaultAnchor")
 	
