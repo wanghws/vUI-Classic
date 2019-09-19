@@ -8,7 +8,25 @@ local format = format
 local select = select
 local floor = floor
 
+local Slots = {1, 3, 5, 6, 7, 8, 9, 10, 16, 17, 18}
+
 local Frame = CreateFrame("Frame", "vUI Minimap", UIParent)
+
+local GetDurability = function()
+	local Current, Max
+	local Total, Count = 0, 0
+	
+	for i = 1, #Slots do
+		Current, Max = GetInventoryItemDurability(Slots[i])
+		
+		if Current then
+			Total = Total + (Current / Max)
+			Count = Count + 1
+		end
+	end
+	
+	return format("%s%%", floor(Total / Count * 100 + 0.5))
+end
 
 local ZoneUpdate = function(self)
 	local Zone = GetMinimapZoneText()
@@ -27,6 +45,72 @@ local TimeOnUpdate = function(self, elapsed)
 		
 		self.Ela = 0
 	end
+end
+
+local StatsOnUpdate = function(self, ela)
+	self.Ela = self.Ela + ela
+	
+	if (self.Ela >= 1) then
+		self:GetScript("OnEnter")(self)
+		
+		self.Ela = 0
+	end
+end
+
+local StatsOnEnter = function(self)
+	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	GameTooltip:ClearLines()
+	
+	HomeLatency, WorldLatency = select(3, GetNetStats())
+	Framerate = floor(GetFramerate())
+	ServerTime = GameTime_GetGameTime(true)
+	
+	GameTooltip:AddLine("Realm Time:", 1, 0.7, 0)
+	GameTooltip:AddLine(ServerTime, 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine("Latency:", 1, 0.7, 0)
+	GameTooltip:AddLine(HomeLatency .. " ms (home)", 1, 1, 1)
+	GameTooltip:AddLine(WorldLatency .. " ms (world)", 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine("Framerate:", 1, 0.7, 0)
+	GameTooltip:AddLine(Framerate .. " fps", 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine("Durability:", 1, 0.7, 0)
+	GameTooltip:AddLine(GetDurability(), 1, 1, 1)
+	
+	GameTooltip:Show()
+	
+	if (not self:GetScript("OnUpdate")) then
+		self:SetScript("OnUpdate", StatsOnUpdate)
+	end
+end
+
+local TimeOnEnter = function(self)
+	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	GameTooltip:ClearLines()
+	
+	HomeLatency, WorldLatency = select(3, GetNetStats())
+	Framerate = floor(GetFramerate())
+	ServerTime = GameTime_GetGameTime(true)
+	
+	GameTooltip:AddLine(Language["Realm Time:"], 1, 0.7, 0)
+	GameTooltip:AddLine(ServerTime, 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(Language["Latency:"], 1, 0.7, 0)
+	GameTooltip:AddLine(format(Language["%s ms (home)"], HomeLatency), 1, 1, 1)
+	GameTooltip:AddLine(format(Language["%s ms (world)"], WorldLatency), 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(Language["Framerate:"], 1, 0.7, 0)
+	GameTooltip:AddLine(Framerate .. " fps", 1, 1, 1)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(Language["Durability:"], 1, 0.7, 0)
+	GameTooltip:AddLine(GetDurability(), 1, 1, 1)
+	
+	GameTooltip:Show()
+end
+
+local TimeOnLeave = function()
+	GameTooltip:Hide()
 end
 
 local CreateMinimap = function()
@@ -92,6 +176,9 @@ local CreateMinimap = function()
 	end
 	
 	vUI:GetModule("Move"):Add(Frame)
+	
+	TimeFrame:SetScript("OnEnter", TimeOnEnter)
+	TimeFrame:SetScript("Onleave", TimeOnLeave)
 	
 	ZoneUpdate(ZoneFrame)
 end
