@@ -348,6 +348,10 @@ Media:SetStyle("vUI", {
 	["ui-button-font-color"] = "FFC44D",
 	["ui-button-texture-color"] = "616161",
 	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
+	
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
@@ -381,6 +385,10 @@ Media:SetStyle("vUI 2", {
 	
 	["ui-button-font-color"] = "FFB74D",
 	["ui-button-texture-color"] = "666666",
+	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
 	
 	["chat-font"] = "PT Sans",
 	["chat-font-size"] = 12,
@@ -416,6 +424,10 @@ Media:SetStyle("Conjured Muffin", {
 	["ui-button-font-color"] = "EFEBE9",
 	["ui-button-texture-color"] = "757575",
 	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
+	
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
@@ -449,6 +461,10 @@ Media:SetStyle("Zen", {
 	
 	["ui-button-font-color"] = "00FF99", -- 81D4FA
 	["ui-button-texture-color"] = "757575",
+	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
 	
 	["chat-font"] = "Prototype",
 	["chat-font-size"] = 12,
@@ -484,6 +500,10 @@ Media:SetStyle("Slate", {
 	["ui-button-font-color"] = "FAFAFA",
 	["ui-button-texture-color"] = "78909C",
 	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
+	
 	["chat-font"] = "PT Sans",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
@@ -518,6 +538,10 @@ Media:SetStyle("Unnamed", {
 	["ui-button-font-color"] = "00CC6A",
 	["ui-button-texture-color"] = "616161",
 	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
+	
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
@@ -551,6 +575,10 @@ Media:SetStyle("Smelly", {
 	
 	["ui-button-font-color"] = "FFFFFF",
 	["ui-button-texture-color"] = "66606B",
+	
+	["ui-font-size"] = 12,
+	["ui-header-font-size"] = 14,
+	["ui-title-font-size"] = 16,
 	
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,

@@ -38,6 +38,10 @@ Defaults["ui-widget-font-color"] = "FFFFFF"
 Defaults["ui-button-font-color"] = "FFCE54"
 Defaults["ui-button-texture-color"] = "616161"
 
+Defaults["ui-font-size"] = 12
+Defaults["ui-header-font-size"] = 14
+Defaults["ui-title-font-size"] = 16
+
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 

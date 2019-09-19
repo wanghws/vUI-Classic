@@ -44,8 +44,6 @@ GUI.Widgets = {}
 local GUI_WIDTH = 710
 local GUI_HEIGHT = 406
 local SPACING = 3
-local GUI_FONT_SIZE = 12
-local GUI_HEADER_FONT_SIZE = 14
 
 local HEADER_WIDTH = GUI_WIDTH - (SPACING * 2)
 local HEADER_HEIGHT = 20
@@ -188,7 +186,7 @@ GUI.Widgets.CreateLine = function(self, text)
 	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
 	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
-	Anchor.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Anchor.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Anchor.Text:SetJustifyH("LEFT")
 	Anchor.Text:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], text))
 	
@@ -204,7 +202,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	
 	--[[local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
-	Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	Text:SetText("|cFF" .. Settings["ui-widget-font-color"] .. text .. "|r")
 	
@@ -224,14 +222,14 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	Anchor.Left = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Left:SetScaledPoint("LEFT", Anchor, HEADER_SPACING, 0)
 	Anchor.Left:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
-	Anchor.Left:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Anchor.Left:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Anchor.Left:SetJustifyH("LEFT")
 	Anchor.Left:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], left))
 	
 	Anchor.Right = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Right:SetScaledPoint("RIGHT", Anchor, -HEADER_SPACING, 0)
 	Anchor.Right:SetScaledSize((GROUP_WIDTH / 2) - 6, WIDGET_HEIGHT)
-	Anchor.Right:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Anchor.Right:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Anchor.Right:SetJustifyH("RIGHT")
 	Anchor.Right:SetText(format("|cFF%s%s|r", Settings["ui-widget-font-color"], right))
 	
@@ -263,7 +261,7 @@ end
 	Header.Text = Header:CreateFontString(nil, "OVERLAY")
 	Header.Text:SetScaledPoint("LEFT", Header, HEADER_SPACING, 0)
 	Header.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
-	Header.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Header.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Header.Text:SetJustifyH("LEFT")
 	Header.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
@@ -279,7 +277,7 @@ end]]
 	
 	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
-	--Anchor.Text:SetScaledPoint("LEFT", Anchor, GUI_FONT_SIZE, 0)
+	--Anchor.Text:SetScaledPoint("LEFT", Anchor, Settings["ui-font-size"], 0)
 	Anchor.Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
 	Anchor.Text:SetFontInfo(Settings["ui-header-font"], 14)
 	Anchor.Text:SetJustifyH("LEFT")
@@ -332,7 +330,7 @@ GUI.Widgets.CreateHeader = function(self, text)
 	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
 	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
 	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
-	Anchor.Text:SetFontInfo(Settings["ui-header-font"], GUI_FONT_SIZE) -- 14
+	Anchor.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"]) -- 14
 	Anchor.Text:SetJustifyH("CENTER")
 	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
@@ -547,14 +545,14 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
 	Button.MiddleText:SetScaledSize(BUTTON_WIDTH - 6, WIDGET_HEIGHT)
-	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetText(value)
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Button.Text:SetScaledSize(GROUP_WIDTH - BUTTON_WIDTH - 6, WIDGET_HEIGHT)
-	Button.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Button.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -617,14 +615,14 @@ GUI.Widgets.CreateStatusBar = function(self, value, minvalue, maxvalue, label, t
 	Bar.MiddleText = Bar:CreateFontString(nil, "ARTWORK")
 	Bar.MiddleText:SetScaledPoint("CENTER", Bar, "CENTER", 0, 0)
 	Bar.MiddleText:SetScaledSize(STATUSBAR_WIDTH - 6, WIDGET_HEIGHT)
-	Bar.MiddleText:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Bar.MiddleText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Bar.MiddleText:SetJustifyH("CENTER")
 	Bar.MiddleText:SetText(value)
 	
 	Bar.Text = Bar:CreateFontString(nil, "OVERLAY")
 	Bar.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Bar.Text:SetScaledSize(GROUP_WIDTH - STATUSBAR_WIDTH - 6, WIDGET_HEIGHT)
-	Bar.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Bar.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Bar.Text:SetJustifyH("LEFT")
 	Bar.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -719,7 +717,7 @@ GUI.Widgets.CreateCheckbox = function(self, id, value, label, tooltip, hook)
 	Checkbox.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Checkbox.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Checkbox.Text:SetScaledSize(GROUP_WIDTH - CHECKBOX_WIDTH - 6, WIDGET_HEIGHT)
-	Checkbox.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Checkbox.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Checkbox.Text:SetJustifyH("LEFT")
 	Checkbox.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -872,7 +870,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Switch.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Switch.Text:SetScaledSize(GROUP_WIDTH - SWITCH_WIDTH - 6, WIDGET_HEIGHT)
-	Switch.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Switch.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Switch.Text:SetJustifyH("LEFT")
 	Switch.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -1013,7 +1011,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Highlight:SetAlpha(0)
 	
 	Input.Box = CreateFrame("EditBox", nil, Input)
-	Input.Box:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Input.Box:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
 	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
 	Input.Box:SetJustifyH("LEFT")
@@ -1039,7 +1037,7 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Text = Input:CreateFontString(nil, "OVERLAY")
 	Input.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Input.Text:SetScaledSize(GROUP_WIDTH - INPUT_WIDTH - 6, WIDGET_HEIGHT)
-	Input.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Input.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Input.Text:SetJustifyH("LEFT")
 	Input.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -1085,7 +1083,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	local Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Text:SetScaledSize(GROUP_WIDTH - 6, WIDGET_HEIGHT)
-	Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	Text:SetShadowColor(0, 0, 0)
 	Text:SetShadowOffset(1, -1)
@@ -1123,7 +1121,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, "CENTER", 0, 0)
-	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetText(button)
 	
@@ -1155,7 +1153,7 @@ GUI.Widgets.CreateInputWithButton = function(self, id, value, button, label, too
 	Input.Highlight:SetAlpha(0)
 	
 	Input.Box = CreateFrame("EditBox", nil, Input)
-	Input.Box:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Input.Box:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
 	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
 	Input.Box:SetJustifyH("LEFT")
@@ -1275,7 +1273,7 @@ GUI.CreateExportWindow = function(self)
 	
 	Window.Header.Text = Window.Header:CreateFontString(nil, "OVERLAY")
 	Window.Header.Text:SetScaledPoint("LEFT", Window.Header, HEADER_SPACING, -1)
-	Window.Header.Text:SetFontInfo(Settings["ui-header-font"], GUI_HEADER_FONT_SIZE)
+	Window.Header.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-header-font-size"])
 	Window.Header.Text:SetJustifyH("LEFT")
 	Window.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Export string".."|r")
 	
@@ -1301,7 +1299,7 @@ GUI.CreateExportWindow = function(self)
 	Window.Inner:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Input = CreateFrame("EditBox", nil, Window.Inner)
-	Window.Input:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Window.Input:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Window.Input:SetScaledPoint("TOPLEFT", Window.Inner, 3, -3)
 	Window.Input:SetScaledPoint("BOTTOMRIGHT", Window.Inner, -3, 3)
 	Window.Input:SetFrameStrata("DIALOG")
@@ -1399,7 +1397,7 @@ GUI.CreateImportWindow = function(self)
 	
 	Window.Header.Text = Window.Header:CreateFontString(nil, "OVERLAY")
 	Window.Header.Text:SetScaledPoint("LEFT", Window.Header, HEADER_SPACING, -1)
-	Window.Header.Text:SetFontInfo(Settings["ui-header-font"], GUI_HEADER_FONT_SIZE)
+	Window.Header.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-header-font-size"])
 	Window.Header.Text:SetJustifyH("LEFT")
 	Window.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Import string".."|r")
 	
@@ -1425,7 +1423,7 @@ GUI.CreateImportWindow = function(self)
 	Window.Inner:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Input = CreateFrame("EditBox", nil, Window.Inner)
-	Window.Input:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Window.Input:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Window.Input:SetScaledPoint("TOPLEFT", Window.Inner, 3, -3)
 	Window.Input:SetScaledPoint("BOTTOMRIGHT", Window.Inner, -3, 3)
 	Window.Input:SetFrameStrata("DIALOG")
@@ -1551,7 +1549,7 @@ local MenuItemOnMouseUp = function(self)
 	if (self.GrandParent.SpecificType == "Texture") then
 		self.GrandParent.Texture:SetTexture(Media:GetTexture(self.Key))
 	elseif (self.GrandParent.SpecificType == "Font") then
-		self.GrandParent.Current:SetFontInfo(self.Key, GUI_FONT_SIZE)
+		self.GrandParent.Current:SetFontInfo(self.Key, Settings["ui-font-size"])
 	end
 	
 	self.GrandParent.Current:SetText(self.Key)
@@ -1749,7 +1747,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Current = Dropdown:CreateFontString(nil, "ARTWORK")
 	Dropdown.Current:SetScaledPoint("LEFT", Dropdown, HEADER_SPACING, 0)
 	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 20, WIDGET_HEIGHT)
-	Dropdown.Current:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Dropdown.Current:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Dropdown.Current:SetJustifyH("LEFT")
 	
 	Dropdown.Button = CreateFrame("Frame", nil, Dropdown)
@@ -1773,7 +1771,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Text = Dropdown:CreateFontString(nil, "OVERLAY")
 	Dropdown.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Dropdown.Text:SetScaledSize(GROUP_WIDTH - DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
-	Dropdown.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Dropdown.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Dropdown.Text:SetJustifyH("LEFT")
 	Dropdown.Text:SetScaledWidth(DROPDOWN_WIDTH - 4)
 	Dropdown.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
@@ -1954,7 +1952,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		Dropdown.Texture:SetTexture(Media:GetTexture(value))
 	elseif (specific == "Font") then
 		Dropdown.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-		Dropdown.Current:SetFontInfo(Settings[id], GUI_FONT_SIZE)
+		Dropdown.Current:SetFontInfo(Settings[id], Settings["ui-font-size"])
 	else
 		Dropdown.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	end
@@ -2191,7 +2189,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Highlight:SetAlpha(0)
 	
 	EditBox.Box = CreateFrame("EditBox", nil, EditBox)
-	EditBox.Box:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	EditBox.Box:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	EditBox.Box:SetScaledPoint("TOPLEFT", EditBox, SPACING, -2)
 	EditBox.Box:SetScaledPoint("BOTTOMRIGHT", EditBox, -SPACING, 2)
 	EditBox.Box:SetJustifyH("CENTER")
@@ -2246,7 +2244,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.Text = Slider:CreateFontString(nil, "OVERLAY")
 	Slider.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Slider.Text:SetScaledSize(GROUP_WIDTH - SLIDER_WIDTH - EDITBOX_WIDTH - 6, WIDGET_HEIGHT)
-	Slider.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Slider.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Slider.Text:SetJustifyH("LEFT")
 	Slider.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -2469,7 +2467,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.Header.Text = ColorPicker.Header:CreateFontString(nil, "OVERLAY")
 	ColorPicker.Header.Text:SetScaledPoint("LEFT", ColorPicker.Header, HEADER_SPACING, -1)
-	ColorPicker.Header.Text:SetFontInfo(Settings["ui-header-font"], GUI_HEADER_FONT_SIZE)
+	ColorPicker.Header.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-header-font-size"])
 	ColorPicker.Header.Text:SetJustifyH("LEFT")
 	ColorPicker.Header.Text:SetText("|cFF"..Settings["ui-header-font-color"].."Select a color".."|r")
 	
@@ -2512,7 +2510,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.CurrentText = ColorPicker.Current:CreateFontString(nil, "OVERLAY")
 	ColorPicker.CurrentText:SetScaledPoint("CENTER", ColorPicker.Current, HEADER_SPACING, -1)
-	ColorPicker.CurrentText:SetFontInfo(Settings["ui-header-font"], GUI_FONT_SIZE)
+	ColorPicker.CurrentText:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
 	ColorPicker.CurrentText:SetJustifyH("CENTER")
 	ColorPicker.CurrentText:SetText(Language["Current"])
 	ColorPicker.CurrentText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
@@ -2532,7 +2530,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.CurrentHexText = ColorPicker.CurrentHex:CreateFontString(nil, "OVERLAY")
 	ColorPicker.CurrentHexText:SetScaledPoint("CENTER", ColorPicker.CurrentHex, 0, 0)
-	ColorPicker.CurrentHexText:SetFontInfo(Settings["ui-header-font"], GUI_FONT_SIZE)
+	ColorPicker.CurrentHexText:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
 	ColorPicker.CurrentHexText:SetJustifyH("CENTER")
 	
 	ColorPicker.CompareCurrentParent = CreateFrame("Frame", nil, ColorPicker)
@@ -2563,7 +2561,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.NewText = ColorPicker.New:CreateFontString(nil, "OVERLAY")
 	ColorPicker.NewText:SetScaledPoint("CENTER", ColorPicker.New, 0, -1)
-	ColorPicker.NewText:SetFontInfo(Settings["ui-header-font"], GUI_FONT_SIZE)
+	ColorPicker.NewText:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
 	ColorPicker.NewText:SetJustifyH("CENTER")
 	ColorPicker.NewText:SetText(Language["New"])
 	ColorPicker.NewText:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
@@ -2582,7 +2580,7 @@ local CreateColorPicker = function()
 	ColorPicker.NewHexTexture:SetVertexColorHex(Settings["ui-widget-bright-color"])
 	
 	ColorPicker.NewHexText = CreateFrame("EditBox", nil, ColorPicker.NewHex)
-	ColorPicker.NewHexText:SetFontInfo(Settings["ui-wudget-font"], GUI_FONT_SIZE)
+	ColorPicker.NewHexText:SetFontInfo(Settings["ui-wudget-font"], Settings["ui-font-size"])
 	ColorPicker.NewHexText:SetScaledPoint("TOPLEFT", ColorPicker.NewHex, SPACING, -2)
 	ColorPicker.NewHexText:SetScaledPoint("BOTTOMRIGHT", ColorPicker.NewHex, -SPACING, 2)
 	ColorPicker.NewHexText:SetJustifyH("CENTER")
@@ -2644,7 +2642,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.AcceptText = ColorPicker.Accept:CreateFontString(nil, "OVERLAY")
 	ColorPicker.AcceptText:SetScaledPoint("CENTER", ColorPicker.Accept, 0, 0)
-	ColorPicker.AcceptText:SetFontInfo(Settings["ui-button-font"], GUI_FONT_SIZE)
+	ColorPicker.AcceptText:SetFontInfo(Settings["ui-button-font"], Settings["ui-font-size"])
 	ColorPicker.AcceptText:SetJustifyH("CENTER")
 	ColorPicker.AcceptText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Accept"].."|r")
 	
@@ -2675,7 +2673,7 @@ local CreateColorPicker = function()
 	
 	ColorPicker.CancelText = ColorPicker.Cancel:CreateFontString(nil, "OVERLAY")
 	ColorPicker.CancelText:SetScaledPoint("CENTER", ColorPicker.Cancel, 0, 0)
-	ColorPicker.CancelText:SetFontInfo(Settings["ui-button-font"], GUI_FONT_SIZE)
+	ColorPicker.CancelText:SetFontInfo(Settings["ui-button-font"], Settings["ui-font-size"])
 	ColorPicker.CancelText:SetJustifyH("CENTER")
 	ColorPicker.CancelText:SetText("|cFF"..Settings["ui-button-font-color"]..Language["Cancel"].."|r")
 	
@@ -2905,14 +2903,14 @@ GUI.Widgets.CreateColorSelection = function(self, id, value, label, tooltip, hoo
 	Button.MiddleText = Button:CreateFontString(nil, "OVERLAY")
 	Button.MiddleText:SetScaledPoint("CENTER", Button, 0, 0)
 	Button.MiddleText:SetScaledSize(COLOR_WIDTH - 6, WIDGET_HEIGHT)
-	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Button.MiddleText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.MiddleText:SetJustifyH("CENTER")
 	Button.MiddleText:SetText("#"..upper(value))
 	
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
 	Button.Text:SetScaledSize(GROUP_WIDTH - COLOR_WIDTH - SWATCH_SIZE - 6, WIDGET_HEIGHT)
-	Button.Text:SetFontInfo(Settings["ui-widget-font"], GUI_FONT_SIZE)
+	Button.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
 	
@@ -3259,7 +3257,7 @@ GUI.CreateWindow = function(self, name, default)
 	Button.Text = Button:CreateFontString(nil, "OVERLAY")
 	Button.Text:SetScaledPoint("CENTER", Button, 0, -1)
 	Button.Text:SetScaledSize(MENU_BUTTON_WIDTH - 6, MENU_BUTTON_HEIGHT)
-	Button.Text:SetFontInfo(Settings["ui-widget-font"], GUI_HEADER_FONT_SIZE)
+	Button.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-header-font-size"])
 	Button.Text:SetJustifyH("CENTER")
 	Button.Text:SetText("|cFF"..Settings["ui-button-font-color"]..name.."|r")
 	
@@ -3410,7 +3408,7 @@ function GUI:Create()
 	self.Header.Text = self.Header:CreateFontString(nil, "OVERLAY")
 	self.Header.Text:SetScaledPoint("CENTER", self.Header, 0, -1)
 	self.Header.Text:SetScaledSize(HEADER_WIDTH - 6, HEADER_HEIGHT)
-	self.Header.Text:SetFontInfo(Settings["ui-header-font"], 16)
+	self.Header.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-title-font-size"])
 	self.Header.Text:SetJustifyH("CENTER")
 	self.Header.Text:SetTextColor(HexToRGB(Settings["ui-header-font-color"]))
 	self.Header.Text:SetText(format(Language["- vUI version %s -"], vUI.UIVersion))
