@@ -192,37 +192,39 @@ local SkinButton = function(button)
 end
 
 local ShowGridAndSkin = function()
+	local Value = Settings["action-bars-show-grid"] and 1 or 0
+	local ValueBoolean = Value == 0 and true or false
+	local Button
+	
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		local Button
-		
 		Button = _G[format("ActionButton%d", i)]
-		Button:SetAttribute("showgrid", 1)
-		Button:SetAttribute("statehidden", true)
-		Button:Show()
+		Button:SetAttribute("showgrid", Value)
+		Button:SetAttribute("statehidden", ValueBoolean)
+		--Button:Show()
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarRightButton%d", i)]
-		Button:SetAttribute("showgrid", 1)
-		Button:SetAttribute("statehidden", true)
-		Button:Show()
+		Button:SetAttribute("showgrid", Value)
+		Button:SetAttribute("statehidden", ValueBoolean)
+		--Button:Show()
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
-		Button:SetAttribute("showgrid", 1)
-		Button:SetAttribute("statehidden", true)
-		Button:Show()
+		Button:SetAttribute("showgrid", Value)
+		Button:SetAttribute("statehidden", ValueBoolean)
+		--Button:Show()
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarLeftButton%d", i)]
-		Button:SetAttribute("showgrid", 1)
-		Button:SetAttribute("statehidden", true)
-		Button:Show()
+		Button:SetAttribute("showgrid", Value)
+		Button:SetAttribute("statehidden", ValueBoolean)
+		--Button:Show()
 		SkinButton(Button)
 		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
-		Button:SetAttribute("showgrid", 1)
-		Button:SetAttribute("statehidden", true)
-		Button:Show()
+		Button:SetAttribute("showgrid", Value)
+		Button:SetAttribute("statehidden", ValueBoolean)
+		--Button:Show()
 		SkinButton(Button)
 	end
 end
@@ -884,6 +886,59 @@ local UpdateShowCount = function(value)
 	end
 end
 
+local UpdateShowGrid = function(value)
+	if value then
+		for i = 1, Num do
+			vUIActionBar1[i]:SetAttribute("showgrid", 1)
+			vUIActionBar1[i]:Show()
+			
+			vUIActionBar2[i]:SetAttribute("showgrid", 1)
+			vUIActionBar2[i]:Show()
+			
+			vUIActionBar3[i]:SetAttribute("showgrid", 1)
+			vUIActionBar3[i]:Show()
+			
+			vUIActionBar4[i]:SetAttribute("showgrid", 1)
+			vUIActionBar4[i]:Show()
+			
+			vUIActionBar5[i]:SetAttribute("showgrid", 1)
+			vUIActionBar5[i]:Show()
+		end
+	else
+		for i = 1, Num do
+			vUIActionBar1[i]:SetAttribute("showgrid", 0)
+			
+			if (not HasAction(vUIActionBar1[i].action)) then
+				vUIActionBar1[i]:Hide()
+			end
+			
+			vUIActionBar2[i]:SetAttribute("showgrid", 0)
+			
+			if (not HasAction(vUIActionBar2[i].action)) then
+				vUIActionBar2[i]:Hide()
+			end
+			
+			vUIActionBar3[i]:SetAttribute("showgrid", 0)
+
+			if (not HasAction(vUIActionBar3[i].action)) then
+				vUIActionBar3[i]:Hide()
+			end
+
+			vUIActionBar4[i]:SetAttribute("showgrid", 0)
+			
+			if (not HasAction(vUIActionBar4[i].action)) then
+				vUIActionBar4[i]:Hide()
+			end
+			
+			vUIActionBar5[i]:SetAttribute("showgrid", 0)
+			
+			if (not HasAction(vUIActionBar5[i].action)) then
+				vUIActionBar5[i]:Hide()
+			end
+		end
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
@@ -900,6 +955,7 @@ GUI:AddOptions(function(self)
 	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "Set the size of the stance buttons", SetStanceSize)
 	
 	Right:CreateHeader(Language["Styling"])
+	Right:CreateSwitch("action-bars-show-grid", Settings["action-bars-show-grid"], "Show Empty Buttons", "Display unused buttons", UpdateShowGrid)
 	Right:CreateSwitch("action-bars-show-hotkeys", Settings["action-bars-show-hotkeys"], "Show Hotkeys", "Display hotkey text on action buttons", UpdateShowHotKey)
 	Right:CreateSwitch("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "Display macro name text on action buttons", UpdateShowMacroName)
 	Right:CreateSwitch("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "Display count text on action buttons", UpdateShowCount)
