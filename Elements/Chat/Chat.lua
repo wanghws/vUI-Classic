@@ -126,10 +126,6 @@ ChatFrame_DisplayGMOTD = function(frame, message)
 	end
 end
 
-ChatClassColorOverrideShown = function()
-	return nil
-end
-
 local SetEditBoxToLink = function(box, text)
 	box:SetText("")
 	
@@ -787,6 +783,25 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	ChatTypeInfo["DISCORD"] = {sticky = 0, r = 114/255, g = 137/255,  b = 218/255}
 	ChatTypeInfo["FRIEND"] = {sticky = 0, r = 0, g = 170/255,  b = 255/255}
 	ChatTypeInfo["PRINT"] = {sticky = 1, r = 0.364, g = 0.780,  b = 1}
+	
+	ChatTypeInfo["SAY"].colorNameByClass = 1
+	--ChatTypeInfo["EMOTE"].colorNameByClass = 1
+	ChatTypeInfo["YELL"].colorNameByClass = 1
+	ChatTypeInfo["GUILD"].colorNameByClass = 1
+	ChatTypeInfo["OFFICER"].colorNameByClass = 1
+	ChatTypeInfo["WHISPER"].colorNameByClass = 1
+	ChatTypeInfo["PARTY"].colorNameByClass = 1
+	ChatTypeInfo["PARTY_LEADER"].colorNameByClass = 1
+	ChatTypeInfo["RAID"].colorNameByClass = 1
+	ChatTypeInfo["RAID_LEADER"].colorNameByClass = 1
+	ChatTypeInfo["RAID_WARNING"].colorNameByClass = 1
+	--ChatTypeInfo["BATTLEGROUND"].colorNameByClass = 1
+	--ChatTypeInfo["BATTLEGROUND_LEADER"].colorNameByClass = 1
+	ChatTypeInfo["CHANNEL1"].colorNameByClass = 1
+	ChatTypeInfo["CHANNEL2"].colorNameByClass = 1
+	ChatTypeInfo["CHANNEL3"].colorNameByClass = 1
+	ChatTypeInfo["CHANNEL4"].colorNameByClass = 1
+	ChatTypeInfo["CHANNEL5"].colorNameByClass = 1
 	
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)
