@@ -784,24 +784,40 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	ChatTypeInfo["FRIEND"] = {sticky = 0, r = 0, g = 170/255,  b = 255/255}
 	ChatTypeInfo["PRINT"] = {sticky = 1, r = 0.364, g = 0.780,  b = 1}
 	
-	ChatTypeInfo["SAY"].colorNameByClass = 1
-	--ChatTypeInfo["EMOTE"].colorNameByClass = 1
-	ChatTypeInfo["YELL"].colorNameByClass = 1
-	ChatTypeInfo["GUILD"].colorNameByClass = 1
-	ChatTypeInfo["OFFICER"].colorNameByClass = 1
-	ChatTypeInfo["WHISPER"].colorNameByClass = 1
-	ChatTypeInfo["PARTY"].colorNameByClass = 1
-	ChatTypeInfo["PARTY_LEADER"].colorNameByClass = 1
-	ChatTypeInfo["RAID"].colorNameByClass = 1
-	ChatTypeInfo["RAID_LEADER"].colorNameByClass = 1
-	ChatTypeInfo["RAID_WARNING"].colorNameByClass = 1
-	--ChatTypeInfo["BATTLEGROUND"].colorNameByClass = 1
-	--ChatTypeInfo["BATTLEGROUND_LEADER"].colorNameByClass = 1
-	ChatTypeInfo["CHANNEL1"].colorNameByClass = 1
-	ChatTypeInfo["CHANNEL2"].colorNameByClass = 1
-	ChatTypeInfo["CHANNEL3"].colorNameByClass = 1
-	ChatTypeInfo["CHANNEL4"].colorNameByClass = 1
-	ChatTypeInfo["CHANNEL5"].colorNameByClass = 1
+	ChatTypeInfo["SAY"].colorNameByClass = true
+	ChatTypeInfo["YELL"].colorNameByClass = true
+	ChatTypeInfo["GUILD"].colorNameByClass = true
+	ChatTypeInfo["OFFICER"].colorNameByClass = true
+	ChatTypeInfo["WHISPER"].colorNameByClass = true
+	ChatTypeInfo["WHISPER_INFORM"].colorNameByClass = true
+	ChatTypeInfo["PARTY"].colorNameByClass = true
+	ChatTypeInfo["PARTY_LEADER"].colorNameByClass = true
+	ChatTypeInfo["RAID"].colorNameByClass = true
+	ChatTypeInfo["RAID_LEADER"].colorNameByClass = true
+	ChatTypeInfo["RAID_WARNING"].colorNameByClass = true
+	--ChatTypeInfo["BATTLEGROUND"].colorNameByClass = true
+	--ChatTypeInfo["BATTLEGROUND_LEADER"].colorNameByClass = true
+	ChatTypeInfo["EMOTE"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL1"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL2"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL3"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL4"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL5"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL6"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL7"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL8"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL9"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL10"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL11"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL12"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL13"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL14"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL15"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL16"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL17"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL18"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL19"].colorNameByClass = true
+	ChatTypeInfo["CHANNEL20"].colorNameByClass = true
 	
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)
