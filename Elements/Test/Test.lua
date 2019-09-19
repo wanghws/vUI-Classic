@@ -419,33 +419,9 @@ local UpdateBagLooting = function(value)
 	SetInsertItemsLeftToRight(value)
 end
 
-GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Misc."])
-	
-	Left:CreateHeader(Language["Miscellaneous Modules"])
-	Left:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
-	Left:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
-	Left:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
-
-	Right:CreateHeader(Language["Merchant"])
-	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
-	Right:CreateSwitch("auto-repair-report", Settings["auto-repair-report"], Language["Auto Repair Report"], "Report the cost of automatic repairs into the chat")
-	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
-	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Vendor Report"], "Report the profit of automatic vendoring into the chat")
-
-	--Right:CreateHeader(Language["Announcements"])
-	--Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
-	--Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO", [Language["Self"]] = "SELF"}, Language["Set Channel"], "Set the channel to send announcements to")
-	
-	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
-end)
-
 local Taxi = vUI:NewModule("Taxi")
 
-local OnEvent = function(self, event)
+local TaxiOnEvent = function(self, event)
     if UnitOnTaxi("player") then
         self:Show()
     else
@@ -486,7 +462,7 @@ function Taxi:Load()
 	TaxiFrame:SetScript("OnLeave", OnLeave)
 	TaxiFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	TaxiFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
-	TaxiFrame:SetScript("OnEvent", OnEvent)
+	TaxiFrame:SetScript("OnEvent", TaxiOnEvent)
 	TaxiFrame:Hide()
 	
 	TaxiFrame.Tex = TaxiFrame:CreateTexture(nil, "ARTWORK")
@@ -540,3 +516,121 @@ Icon:SetScaledSize(32, 32)
 Icon:SetScaledPoint("CENTER")
 Icon:SetTexture(Media:GetTexture("Warning"))
 Icon:SetVertexColorHex("FFEB3B")]]
+
+--[[ 
+
+Delete cheapest item
+clear item space when you need to
+pop a dialog
+--]]
+
+local Delete = vUI:NewModule("Delete")
+
+local GetCheapestItem = function()
+	local CheapestItem
+	local CheapestValue
+	local CheapestBag
+	local CheapestSlot
+	local CheapestCount
+	
+	for Bag = 0, 4 do
+		for Slot = 1, GetContainerNumSlots(Bag) do
+			local Link, ID = GetContainerItemLink(Bag, Slot), GetContainerItemID(Bag, Slot)
+			
+			if (Link and ID) then
+				local SellPrice = select(11, GetItemInfo(Link))
+				
+				if (SellPrice and (SellPrice > 0)) then
+					local Count = select(2, GetContainerItemInfo(Bag, Slot))
+					
+					if Count then
+						SellPrice = SellPrice * Count
+					end
+					
+					if (not CheapestValue) then
+						CheapestItem = Link
+						CheapestValue = SellPrice
+						CheapestCount = Count
+						CheapestBag = Bag
+						CheapestSlot = Slot
+					elseif (SellPrice < CheapestValue) then
+						CheapestItem = Link
+						CheapestValue = SellPrice
+						CheapestCount = Count
+						CheapestBag = Bag
+						CheapestSlot = Slot
+					end
+				end
+			end
+		end
+	end
+	
+	return CheapestItem, CheapestValue, CheapestCount, CheapestBag, CheapestSlot
+end
+
+function Delete:PrintCheapestItem()
+	local Item, Value, Count = GetCheapestItem()
+	
+	if (Item and Value) then
+		if (Count > 1) then
+			vUI:print(format(Language["The cheapest vendorable item in your inventory is currently %sx%s worth %s"], Item, Count, GetCoinTextureString(Value)))
+		else
+			vUI:print(format(Language["The cheapest vendorable item in your inventory is currently %s worth %s"], Item, GetCoinTextureString(Value)))
+		end
+	else
+		vUI:print(Language["No valid items were found"])
+	end
+end
+
+function Delete:DeleteCheapestItem()
+	local Item, Value, Count, Bag, Slot = GetCheapestItem()
+	
+	if (Bag and Slot) then
+		PickupContainerItem(Bag, Slot)
+		DeleteCursorItem()
+		
+		if (Count > 1) then
+			vUI:print(format(Language["Deleted %sx%s worth %s"], Item, Count, GetCoinTextureString(Value)))
+		else
+			vUI:print(format(Language["Deleted %s worth %s"], Item, GetCoinTextureString(Value)))
+		end
+	else
+		vUI:print(Language["No valid items were found"])
+	end
+end
+
+local PrintCheapest = function()
+	vUI:GetModule("Delete"):PrintCheapestItem()
+end
+
+local DeleteCheapest = function()
+	vUI:GetModule("Delete"):DeleteCheapestItem()
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:CreateWindow(Language["Misc."])
+	
+	Left:CreateHeader(Language["Miscellaneous Modules"])
+	Left:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
+	Left:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
+	Left:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
+	
+	Left:CreateHeader(Language["Inventory"])
+	Left:CreateButton(Language["Search"], Language["Find Cheapest Item"], "Find the cheapest item|ncurrently in your inventory", PrintCheapest)
+	Left:CreateButton(Language["Delete"], Language["Delete Cheapest Item"], "Delete the cheapest item|ncurrently in your inventory", DeleteCheapest)
+	
+	Right:CreateHeader(Language["Merchant"])
+	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
+	Right:CreateSwitch("auto-repair-report", Settings["auto-repair-report"], Language["Auto Repair Report"], "Report the cost of automatic repairs into the chat")
+	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
+	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Vendor Report"], "Report the profit of automatic vendoring into the chat")
+
+	--Right:CreateHeader(Language["Announcements"])
+	--Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
+	--Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO", [Language["Self"]] = "SELF"}, Language["Set Channel"], "Set the channel to send announcements to")
+	
+	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
+end)

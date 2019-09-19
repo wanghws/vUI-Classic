@@ -142,6 +142,12 @@ Defaults["action-bars-show-stance-bg"] = true
 Defaults["action-bars-show-hotkeys"] = true
 Defaults["action-bars-show-macro-names"] = true
 Defaults["action-bars-show-count"] = true
+Defaults["action-bars-show-grid"] = true
+Defaults["action-bars-show-1"] = true
+Defaults["action-bars-show-2"] = true
+Defaults["action-bars-show-3"] = true
+Defaults["action-bars-show-4"] = true
+Defaults["action-bars-show-5"] = true
 
 -- Chat
 Defaults["chat-enable"] = true
