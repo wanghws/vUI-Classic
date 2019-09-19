@@ -314,7 +314,15 @@ local function UNIT_SPELLCAST_DELAYED(self, event, unit)
 	element.duration = duration
 
 	element:SetValue(duration)
-
+	
+	if (unit == "player" and UnitIsUnit("player", "target")) then -- Simulate the event for the target cast bar
+		if oUF.objects[2] then
+			local Target = oUF.objects[2]
+			
+			UNIT_SPELLCAST_DELAYED(Target, nil, Target.unit, Target.Castbar.castID)
+		end
+	end
+	
 	--[[ Callback: Castbar:PostCastDelayed(unit, name)
 	Called after the element has been updated when a spell cast has been delayed.
 
