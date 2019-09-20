@@ -100,7 +100,7 @@ local MoverOnLeave = function(self)
 	self:SetBackdropColorHex(Settings["ui-window-bg-color"])
 end
 
-function Move:Add(frame)
+function Move:Add(frame, padding)
 	if (not vUIMove) then
 		vUIMove = {}
 	end
@@ -125,8 +125,11 @@ function Move:Add(frame)
 	ParentName = Parent:GetName()
 	ParentObject = _G[ParentName]
 	
+	padding = padding or 0
+	local Width, Height = frame:GetSize()
+	
 	local Mover = CreateFrame("Frame", nil, UIParent)
-	Mover:SetScaledSize(frame:GetSize())
+	Mover:SetScaledSize(Width + padding, Height + padding)
 	Mover:SetBackdrop(vUI.BackdropAndBorder)
 	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Mover:SetBackdropBorderColor(0, 0, 0)

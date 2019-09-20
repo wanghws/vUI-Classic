@@ -526,30 +526,16 @@ Icon:SetTexture(Media:GetTexture("Warning"))
 Icon:SetVertexColorHex("FFEB3B")]]
 
 --[[ 
+	Delete cheapest item
+	clear item space when you need to make room for more important items
+	To be fully implemented when I write my own bags module
 
-Delete cheapest item
-clear item space when you need to
-pop a dialog
 --]]
 
 local Delete = vUI:NewModule("Delete")
 
 Delete.FilterIDs = {}
 Delete.FilterClassIDs = {}
-
-function Delete:UpdateFilterTradeskills(value)
-	self.Filter[2901] = value -- Mining Pick
-	self.Filter[5956] = value -- Blacksmith Hammer
-	self.Filter[6219] = value -- Arclight Spanner
-	self.Filter[6256] = value -- Fishing Pole
-	self.Filter[7005] = value -- Skinning Knife
-	
-	self.Filter[6218] = value -- Runed Copper Rod
-	self.Filter[7795] = value -- Runed Silver Rod
-	self.Filter[13628] = value -- Runed Golden Rod
-	self.Filter[13702] = value -- Runed Truesilver Rod
-	self.Filter[20051] = value -- Runed Arcanite Rod
-end
 
 function Delete:UpdateFilterConsumable(value)
 	self.FilterClassIDs[0] = value
@@ -793,7 +779,7 @@ function MirrorTimers:Load()
 	self.Hider = CreateFrame("Frame", nil, UIParent)
 	self.Hider:Hide()
 	
-	vUI:GetModule("Move"):Add(self.Bar)
+	vUI:GetModule("Move"):Add(self.Bar, 6)
 	
 	for i = 1, MIRRORTIMER_NUMTIMERS do
 		_G["MirrorTimer" .. i]:SetParent(self.Hider)

@@ -50,3 +50,4 @@ Elements\Cooldowns\Cooldowns.lua
 Elements\QuestWatch\QuestWatch.lua
 Elements\Announcements\Announcements.lua
 Elements\Test\Test.lua
+Elements\Commands\Commands.lua

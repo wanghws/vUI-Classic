@@ -129,6 +129,12 @@ Defaults["color-casting-start"] = "009900"
 Defaults["color-casting-stopped"] = "F39C12"
 Defaults["color-casting-interrupted"] = "D35400"
 
+-- Mirror Timers
+Defaults["color-mirror-exhaustion"] = "FFE500"
+Defaults["color-mirror-breath"] = "007FFF"
+Defaults["color-mirror-death"] = "FFB200"
+Defaults["color-mirror-feign-death"] = "FFB200"
+
 -- Other
 Defaults["color-tapped"] = "A6A6A6"
 Defaults["color-disconnected"] = "A6A6A6"
@@ -219,7 +225,7 @@ Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-player-castbar-y"] = 130
 Defaults["unitframes-target-castbar-y"] = 156
 Defaults["unitframes-class-color"] = true -- temporary
-Defaults["unitframes-only-player-debuffs"] = false
+Defaults["unitframes-only-player-debuffs"] = true
 
 -- Name Plates
 Defaults["nameplates-enable"] = true

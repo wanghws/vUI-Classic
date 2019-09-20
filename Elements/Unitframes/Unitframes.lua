@@ -1617,8 +1617,8 @@ UF:SetScript("OnEvent", function(self, event)
 	Player.Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
 	Target.Castbar:SetScaledPoint("BOTTOM", Player.Castbar, "TOP", 0, 4)
 	
-	Move:Add(Player.Castbar)
-	Move:Add(Target.Castbar)
+	Move:Add(Player.Castbar, 2)
+	Move:Add(Target.Castbar, 2)
 	
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
