@@ -436,6 +436,10 @@ Media:SetStyle("Conjured Muffin", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "ECEFF1",
+	
+	["color-casting-start"] = "27AE60",
+	["color-casting-stopped"] = "FF8C00",
+	["color-casting-interrupted"] = "DA3B01",
 })
 
 -- Zen
@@ -474,6 +478,10 @@ Media:SetStyle("Zen", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "00FF99",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
 })
 
 -- Slate
@@ -512,6 +520,10 @@ Media:SetStyle("Slate", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "BBDEFB",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
 })
 
 -- Unnamed
@@ -550,6 +562,10 @@ Media:SetStyle("Unnamed", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "00CC6A",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
 })
 
 -- Smelly
@@ -588,4 +604,8 @@ Media:SetStyle("Smelly", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FC533E",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
 })
