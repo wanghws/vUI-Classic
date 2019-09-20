@@ -421,7 +421,7 @@ end
 
 local Taxi = vUI:NewModule("Taxi")
 
-local TaxiOnEvent = function(self, event)
+local TaxiOnEvent = function(self)
     if UnitOnTaxi("player") then
         self:Show()
     else
@@ -448,7 +448,8 @@ local OnLeave = function()
 	GameTooltip:Hide()
 end
 
-function Taxi:Load()
+Taxi:RegisterEvent("PLAYER_ENTERING_WORLD")
+Taxi:SetScript("OnEvent", function(self, event)
 	local TaxiFrame = CreateFrame("Frame", "vUI Taxi", UIParent)
 	TaxiFrame:SetScaledSize(Settings["minimap-size"] + 8, 22)
 	TaxiFrame:SetScaledPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
@@ -460,10 +461,14 @@ function Taxi:Load()
 	TaxiFrame:SetScript("OnMouseUp", RequestLanding)
 	TaxiFrame:SetScript("OnEnter", OnEnter)
 	TaxiFrame:SetScript("OnLeave", OnLeave)
-	TaxiFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	TaxiFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	TaxiFrame:SetScript("OnEvent", TaxiOnEvent)
-	TaxiFrame:Hide()
+	
+    if UnitOnTaxi("player") then
+        TaxiFrame:Show()
+    else
+		TaxiFrame:Hide()
+    end
 	
 	TaxiFrame.Tex = TaxiFrame:CreateTexture(nil, "ARTWORK")
 	TaxiFrame.Tex:SetPoint("TOPLEFT", TaxiFrame, 1, -1)
@@ -478,7 +483,9 @@ function Taxi:Load()
 	TaxiFrame.Text:SetText(Language["Land Early"])
 	
 	self.Frame = TaxiFrame
-end
+	
+	
+end)
 
 local BagSearch = vUI:NewModule("Bag Search")
 
