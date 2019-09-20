@@ -3378,6 +3378,7 @@ function GUI:Create()
 	self.BlackTexture:SetTexture(Media:GetTexture("Blank"))
 	self.BlackTexture:SetVertexColor(0, 0, 0)
 	
+	self:SetFrameStrata("HIGH")
 	self:SetScaledSize(GUI_WIDTH, GUI_HEIGHT)
 	self:SetScaledPoint("CENTER", UIParent, 0, 0)
 	self:SetBackdrop(vUI.BackdropAndBorder)
