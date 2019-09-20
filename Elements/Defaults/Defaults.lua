@@ -236,6 +236,7 @@ Defaults["nameplates-class-color"] = true -- temporary
 Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
 Defaults["tooltips-on-cursor"] = false
+Defaults["tooltips-show-id"] = true
 
 -- Bags
 Defaults["bags-loot-from-left"] = false

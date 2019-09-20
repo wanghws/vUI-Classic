@@ -305,7 +305,10 @@ local function Enable(self)
 		else
 			self:RegisterEvent('UNIT_POWER_UPDATE', Path)
 		end
-
+		
+		element:SetMinMaxValues(0, 1)
+		element:SetValue(1)
+		
 		self:RegisterEvent('UNIT_POWER_BAR_SHOW', Path)
 		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Path)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)

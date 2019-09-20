@@ -6,6 +6,7 @@ local MyGuild
 
 local select = select
 local find = string.find
+local match = string.match
 local floor = floor
 local format = format
 local UnitPlayerControlled = UnitPlayerControlled
@@ -321,25 +322,49 @@ local OnTooltipSetItem = function(self)
 			self:AddLine(CoinString, 1, 1, 1)
 		end
 	end
+	
+	if Settings["tooltips-show-id"] then
+		local ID = match(Link, ":(%w+)")
+		
+		self:AddLine(" ")
+		self:AddDoubleLine(Language["Item ID:"], ID, 1, 1, 1, 1, 1, 1)
+	end
 end
 
 local OnItemRefTooltipSetItem = function(self)
-	if (not Settings["tooltips-show-sell-value"]) then
+	local Item, Link = select(2, self:GetItem())
+	
+	if Settings["tooltips-show-sell-value"] then
+		local SellValue = select(11, GetItemInfo(select(2, self:GetItem())))
+		
+		if (not SellValue) then
+			return
+		end
+		
+		local CoinString = GetCoinTextureString(SellValue)
+		
+		if CoinString then
+			self:AddLine(CoinString, 1, 1, 1)
+		end
+	end
+	
+	if Settings["tooltips-show-id"] then
+		local ID = match(select(2, self:GetItem()), ":(%w+)")
+		
+		self:AddLine(" ")
+		self:AddDoubleLine(Language["Item ID:"], ID, 1, 1, 1, 1, 1, 1)
+	end
+end
+
+local OnTooltipSetSpell = function(self)
+	if (not Settings["tooltips-show-id"]) then
 		return
 	end
 	
-	local Item, Link = self:GetItem()
-	local SellValue = select(11, GetItemInfo(Link))
+	local ID = select(2, self:GetSpell())
 	
-	if (not SellValue) then
-		return
-	end
-	
-	local CoinString = GetCoinTextureString(SellValue)
-	
-	if CoinString then
-		self:AddLine(CoinString, 1, 1, 1)
-	end
+	self:AddLine(" ")
+	self:AddDoubleLine(Language["Spell ID:"], ID, 1, 1, 1, 1, 1, 1)
 end
 
 local SetTooltipDefaultAnchor = function(self, parent)
@@ -425,6 +450,7 @@ function Tooltips:AddHooks()
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 	GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+	GameTooltip:HookScript("OnTooltipSetSpell", OnTooltipSetSpell)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", OnItemRefTooltipSetItem)
 	
 	self:Hook("GameTooltip_SetDefaultAnchor")
@@ -583,6 +609,7 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
+	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")
 	
 	Left:CreateFooter()
 end)

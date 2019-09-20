@@ -231,7 +231,10 @@ local function Enable(self, unit)
 		else
 			self:RegisterEvent('UNIT_HEALTH', Path)
 		end
-
+		
+		element:SetMinMaxValues(0, 1)
+		element:SetValue(1)
+		
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_CONNECTION', Path)
 		self:RegisterEvent('UNIT_FACTION', Path) -- For tapping

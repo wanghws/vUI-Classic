@@ -2,9 +2,6 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 -- Some of the settings callbacks still need checks for if Experience or Action Bars are enabled
 
--- 3 bottom bars, 2 right bars layout
--- Start on pet bar.
-
 local BUTTON_SIZE = 32
 local STANCE_SIZE = 32
 local SPACING = 2
