@@ -1664,10 +1664,10 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module"):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
-	Left:CreateSwitch("unitframes-show-all-debuffs", Settings["unitframes-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed"):RequiresReload(true)
+	Left:CreateSwitch("unitframes-show-all-debuffs", Settings["unitframes-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
@@ -1692,7 +1692,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Debuffs"])
 	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("nameplates-show-all-debuffs", Settings["nameplates-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed"):RequiresReload(true)
+	Left:CreateSwitch("nameplates-show-all-debuffs", Settings["nameplates-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)

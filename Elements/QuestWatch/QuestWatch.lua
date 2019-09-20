@@ -17,29 +17,61 @@ function Quest:StyleFrame()
 	Mover:SetScaledSize(156, 40)
 	Mover:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -300, -400)
 	
-	--[[local Header = QuestWatchFrame:CreateFontString(nil, "OVERLAY")
-	Header:SetScaledPoint("BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, 0)
-	Header:SetFontInfo(Settings["ui-header-font"], 12)
-	Header:SetJustifyH("LEFT")
-	Header:SetTextColorHex(Settings["ui-header-font-color"])
-	Header:SetText(QUESTS_LABEL)
+	--[[local Title = QuestWatchFrame:CreateFontString(nil, "OVERLAY")
+	Title:SetScaledPoint("BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, 0)
+	Title:SetFontInfo(Settings["ui-header-font"], 12)
+	Title:SetJustifyH("LEFT")
+	Title:SetTextColorHex(Settings["ui-header-font-color"])
+	Title:SetText(Language["Quests"])
 	
-	local HeaderDiv = CreateFrame("Frame", nil, Anchor)
-	HeaderDiv:SetScaledSize(156, 4)
-	HeaderDiv:SetScaledPoint("BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, -6)
-	HeaderDiv:SetBackdrop(vUI.BackdropAndBorder)
-	HeaderDiv:SetBackdropColorHex(Settings["ui-button-texture-color"])
-	HeaderDiv:SetBackdropBorderColor(0, 0, 0)
+	local TitleDiv = CreateFrame("Frame", nil, QuestWatchFrame)
+	TitleDiv:SetScaledSize(156, 4)
+	TitleDiv:SetScaledPoint("BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, -6)
+	TitleDiv:SetBackdrop(vUI.BackdropAndBorder)
+	TitleDiv:SetBackdropColorHex(Settings["ui-button-texture-color"])
+	TitleDiv:SetBackdropBorderColor(0, 0, 0)
 	
-	HeaderDiv.Texture = HeaderDiv:CreateTexture(nil, "OVERLAY")
-	HeaderDiv.Texture:SetScaledPoint("TOPLEFT", HeaderDiv, 1, -1)
-	HeaderDiv.Texture:SetScaledPoint("BOTTOMRIGHT", HeaderDiv, -1, 1)
-	HeaderDiv.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	HeaderDiv.Texture:SetVertexColorHex(Settings["ui-button-texture-color"])
-	]]
-	QuestWatchFrame:SetParent(Mover)
+	TitleDiv.Texture = TitleDiv:CreateTexture(nil, "OVERLAY")
+	TitleDiv.Texture:SetScaledPoint("TOPLEFT", TitleDiv, 1, -1)
+	TitleDiv.Texture:SetScaledPoint("BOTTOMRIGHT", TitleDiv, -1, 1)
+	TitleDiv.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	TitleDiv.Texture:SetVertexColorHex(Settings["ui-button-texture-color"])]]
+	
 	QuestWatchFrame:ClearAllPoints()
 	QuestWatchFrame:SetScaledPoint("TOPLEFT", Mover, "TOPLEFT", 0, 0)
+	
+	local Region
+	local Child
+	
+	for i = 1, QuestTimerFrame:GetNumRegions() do
+		Region = select(i, QuestTimerFrame:GetRegions())
+		
+		if (Region:GetObjectType() == "Texture") then
+			Region:SetTexture(nil)
+		elseif (Region:GetObjectType() == "FontString") then
+			Region:SetFontInfo(Settings["ui-header-font"], 12)
+		end
+	end
+	
+	for i = 1, QuestTimerFrame:GetNumChildren() do -- QuestTimer1-20
+		Child = select(i, QuestTimerFrame:GetChildren())
+		
+		for i = 1, Child:GetNumRegions() do
+			Region = select(i, Child:GetRegions())
+			
+			if (Region:GetObjectType() == "FontString") then
+				Region:SetFontInfo(Settings["ui-header-font"], 12)
+			end
+		end
+	end
+	
+	QuestTimerFrame:ClearAllPoints()
+	QuestTimerFrame:SetScaledPoint("TOPLEFT", Mover, "TOPLEFT", 0, 60)
+	QuestTimerFrame:SetScaledPoint("TOPRIGHT", Mover, "TOPRIGHT", 0, 60)
+	QuestTimerFrame:SetScaledHeight(30)
+	
+	QuestTimerFrame.ClearAllPoints = function() end
+	QuestTimerFrame.SetPoint = function() end
 	
 	Move:Add(Mover)
 end

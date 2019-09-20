@@ -66,7 +66,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["General"], true)
 	
 	Left:CreateHeader(Language["Welcome"])
-	Left:CreateSwitch("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "Display a welcome message on login with UI information")
+	Left:CreateSwitch("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "Display a welcome message on|n login with UI information")
 	Left:CreateSwitch("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
 	Left:CreateSwitch("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Chat Tools"], "", UpdateDisplayDevTools)
 	
