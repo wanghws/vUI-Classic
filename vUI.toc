@@ -49,5 +49,6 @@ Elements\Update\Update.lua
 Elements\Cooldowns\Cooldowns.lua
 Elements\QuestWatch\QuestWatch.lua
 Elements\Announcements\Announcements.lua
+Elements\Bags\Bags.lua
 Elements\Test\Test.lua
 Elements\Commands\Commands.lua
