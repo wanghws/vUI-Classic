@@ -578,14 +578,15 @@ local StyleNamePlate = function(self, unit)
 		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 18)
 		Debuffs.size = 26
 		Debuffs.num = 5
-		Debuffs.numRow = 1
+		Debuffs.numRow = 4
+		Debuffs.numDebuffs = 16
 		Debuffs.spacing = 2
 		Debuffs.initialAnchor = "TOPLEFT"
 		Debuffs["growth-y"] = "UP"
 		Debuffs["growth-x"] = "RIGHT"
 		Debuffs.PostCreateIcon = PostCreateIcon
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.onlyShowPlayer = true
+		Debuffs.onlyShowPlayer = Settings["nameplates-show-all-debuffs"]
 		Debuffs.disableMouse = true
 		
 		self.Debuffs = Debuffs
@@ -1006,7 +1007,7 @@ local StyleTarget = function(self, unit)
 	Debuffs["growth-x"] = "LEFT"
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
-	Debuffs.onlyShowPlayer = true
+	Debuffs.onlyShowPlayer = Settings["unitframes-show-all-debuffs"]
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Target Casting Bar", self)
@@ -1665,6 +1666,9 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module"):RequiresReload(true)
 	
+	Left:CreateHeader(Language["Settings"])
+	Left:CreateSwitch("unitframes-show-all-debuffs", Settings["unitframes-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed"):RequiresReload(true)
+	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
 	
@@ -1688,6 +1692,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Debuffs"])
 	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("nameplates-show-all-debuffs", Settings["nameplates-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed"):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)
