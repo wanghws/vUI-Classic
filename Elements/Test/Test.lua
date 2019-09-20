@@ -664,10 +664,12 @@ end
 local DeleteCheapest = function()
 	local Item, Value, Count = Delete:GetCheapestItem()
 	
-	if (Count > 1) then
-		vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure that you want to delete %sx%s?"], Item, Count), "Accept", OnAccept, "Cancel", nil)
-	else
-		vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure that you want to delete %s?"], Item), "Accept", OnAccept, "Cancel", nil)
+	if (Item and Count) then
+		if (Count > 1) then
+			vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure that you want to delete %sx%s?"], Item, Count), "Accept", OnAccept, "Cancel", nil)
+		else
+			vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure that you want to delete %s?"], Item), "Accept", OnAccept, "Cancel", nil)
+		end
 	end
 end
 
