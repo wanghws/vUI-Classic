@@ -190,39 +190,48 @@ end
 
 local ShowGridAndSkin = function()
 	local Value = Settings["action-bars-show-grid"] and 1 or 0
-	local ValueBoolean = Value == 0 and true or false
 	local Button
 	
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		Button = _G[format("ActionButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
-		Button:SetAttribute("statehidden", ValueBoolean)
-		--Button:Show()
 		SkinButton(Button)
+		
+		if Value then
+			Button:Show()
+		end
 		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
-		Button:SetAttribute("statehidden", ValueBoolean)
-		--Button:Show()
 		SkinButton(Button)
+		
+		if Value then
+			Button:Show()
+		end
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
-		Button:SetAttribute("statehidden", ValueBoolean)
-		--Button:Show()
 		SkinButton(Button)
+		
+		if Value then
+			Button:Show()
+		end
 		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
-		Button:SetAttribute("statehidden", ValueBoolean)
-		--Button:Show()
 		SkinButton(Button)
+		
+		if Value then
+			Button:Show()
+		end
 		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
-		Button:SetAttribute("statehidden", ValueBoolean)
-		--Button:Show()
 		SkinButton(Button)
+		
+		if Value then
+			Button:Show()
+		end
 	end
 	
 	SetCVar("alwaysShowActionBars", Value)
