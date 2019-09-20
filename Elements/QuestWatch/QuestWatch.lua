@@ -9,10 +9,6 @@ local Quest = vUI:NewModule("Quest")
 
 
 function Quest:StyleFrame()
-	for i = 1, 30 do
-		_G["QuestWatchLine" .. i]:SetFontInfo(Settings["ui-header-font"], 12)
-	end
-	
 	local Mover = CreateFrame("Frame", "vUI Quest Watch", UIParent)
 	Mover:SetScaledSize(156, 40)
 	Mover:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -300, -400)
@@ -53,16 +49,12 @@ function Quest:StyleFrame()
 		end
 	end
 	
-	for i = 1, QuestTimerFrame:GetNumChildren() do -- QuestTimer1-20
-		Child = select(i, QuestTimerFrame:GetChildren())
-		
-		for i = 1, Child:GetNumRegions() do
-			Region = select(i, Child:GetRegions())
-			
-			if (Region:GetObjectType() == "FontString") then
-				Region:SetFontInfo(Settings["ui-header-font"], 12)
-			end
-		end
+	for i = 1, 30 do
+		_G["QuestWatchLine" .. i]:SetFontInfo(Settings["ui-header-font"], 12)
+	end
+	
+	for i = 1, 20 do
+		_G["QuestTimer" .. i .. "Text"]:SetFontInfo(Settings["ui-header-font"], 12)
 	end
 	
 	QuestTimerFrame:ClearAllPoints()

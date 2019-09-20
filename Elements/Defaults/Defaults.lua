@@ -219,7 +219,7 @@ Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-player-castbar-y"] = 130
 Defaults["unitframes-target-castbar-y"] = 156
 Defaults["unitframes-class-color"] = true -- temporary
-Defaults["unitframes-show-all-debuffs"] = false
+Defaults["unitframes-only-player-debuffs"] = false
 
 -- Name Plates
 Defaults["nameplates-enable"] = true
@@ -232,7 +232,7 @@ Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
 Defaults["nameplates-display-debuffs"] = true
 Defaults["nameplates-class-color"] = true -- temporary
-Defaults["nameplates-show-all-debuffs"] = false
+Defaults["nameplates-only-player-debuffs"] = true
 
 -- Tooltips
 Defaults["tooltips-enable"] = true

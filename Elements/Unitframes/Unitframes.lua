@@ -586,7 +586,7 @@ local StyleNamePlate = function(self, unit)
 		Debuffs["growth-x"] = "RIGHT"
 		Debuffs.PostCreateIcon = PostCreateIcon
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.onlyShowPlayer = Settings["nameplates-show-all-debuffs"]
+		Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
 		Debuffs.disableMouse = true
 		
 		self.Debuffs = Debuffs
@@ -988,7 +988,7 @@ local StyleTarget = function(self, unit)
 	Buffs:SetScaledSize(230, 30)
 	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 	Buffs.size = 30
-	Buffs.num = 8
+	Buffs.num = 16
 	Buffs.spacing = -1
 	Buffs.initialAnchor = "TOPLEFT"
 	Buffs["growth-y"] = "UP"
@@ -1000,14 +1000,14 @@ local StyleTarget = function(self, unit)
 	Debuffs:SetScaledSize(230, 30)
 	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
 	Debuffs.size = 30
-	Debuffs.num = 8
+	Debuffs.num = 16
 	Debuffs.spacing = -1
 	Debuffs.initialAnchor = "TOPRIGHT"
 	Debuffs["growth-y"] = "UP"
 	Debuffs["growth-x"] = "LEFT"
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
-	Debuffs.onlyShowPlayer = Settings["unitframes-show-all-debuffs"]
+	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Target Casting Bar", self)
@@ -1667,7 +1667,7 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
-	Left:CreateSwitch("unitframes-show-all-debuffs", Settings["unitframes-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Player Debuffs"], "If enabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
@@ -1692,7 +1692,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Debuffs"])
 	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("nameplates-show-all-debuffs", Settings["nameplates-show-all-debuffs"], Language["Show All Debuffs"], "If disabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("nameplates-only-player-debuffs", Settings["nameplates-only-player-debuffs"], Language["Only Player Debuffs"], "If enabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)

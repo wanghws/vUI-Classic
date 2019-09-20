@@ -5,7 +5,6 @@ local select = select
 local sub = string.sub
 local format = string.format
 local floor = math.floor
-local ceil = math.ceil
 local min = math.min
 local max = math.max
 local type = type
@@ -262,11 +261,11 @@ end
 
 function vUI:FormatTime(seconds)
 	if (seconds >= 86400) then
-		return format("%dd", ceil(seconds / 86400))
+		return format("%dd", floor(seconds / 86400 + 0.5))
 	elseif (seconds >= 3600) then
-		return format("%dh", ceil(seconds / 3600))
+		return format("%dh", floor(seconds / 3600 + 0.5))
 	elseif (seconds >= 60) then
-		return format("%dm", ceil(seconds / 60))
+		return format("%dm", floor(seconds / 60 + 0.5))
 	elseif (seconds >= 6) then
 		return format("%ds", floor(seconds))
 	end
