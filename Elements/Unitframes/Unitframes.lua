@@ -1676,9 +1676,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-party", Settings["unitframes-enable-party"], Language["Enable Party Frames Module"], "Enable the vUI party frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-party-pets", Settings["unitframes-enable-party-pets"], Language["Enable Party Pet Frames Module"], "Enable the vUI party pet frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames Module"], "Enable the vUI raid frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party", Settings["unitframes-enable-party"], Language["Enable Party Frames"], "Enable the vUI party frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party-pets", Settings["unitframes-enable-party-pets"], Language["Enable Party Pet Frames"], "Enable the vUI party pet frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames"], "Enable the vUI raid frames module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
 	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", UpdateOnlyPlayerDebuffs)

@@ -315,7 +315,7 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Minimap"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "Enable the vUI Minimap module"):RequiresReload(true)
+	Left:CreateSwitch("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "Enable the vUI Minimap module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateSwitch("minimap-show-time", Settings["minimap-show-time"], Language["Enable Minimap Time"], "Display time on the minimap", UpdateShowMinimapTime)

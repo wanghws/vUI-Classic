@@ -3511,9 +3511,9 @@ function GUI:VARIABLES_LOADED()
 	self:RunQueue()
 	
 	-- Set the frame height
-	local Height = HEADER_HEIGHT + (self.WindowCount * WIDGET_HEIGHT) + ((self.WindowCount - 1) * SPACING)
+	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 2
 	
-	self:SetScaledHeight(Height + 2)
+	self:SetScaledHeight(Height)
 	
 	-- Show the default window, if one was found
 	if self.DefaultWindow then
