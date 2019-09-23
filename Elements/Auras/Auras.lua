@@ -96,7 +96,7 @@ Auras.DebuffButton_UpdateAnchors = function(name, index)
 			Aura.offsetY = Rows * (Settings["auras-spacing"] + Settings["auras-size"])
 		end
 		
-		Aura:SetPoint("TOPRIGHT", Auras.Debuffs, "TOPRIGHT", 0, 0)
+		Aura:SetScaledPoint("TOPRIGHT", Auras.Debuffs, "TOPRIGHT", 0, 0)
 	else
 		Aura:SetScaledPoint("RIGHT", _G[name..(index - 1)], "LEFT", -5, 0)
 	end
