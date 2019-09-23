@@ -197,7 +197,7 @@ Defaults["auras-enable"] = true
 Defaults["auras-size"] = 30
 Defaults["auras-spacing"] = 2
 Defaults["auras-row-spacing"] = 16
-Defaults["auras-per-row"] = 8
+Defaults["auras-per-row"] = 12
 
 -- Minimap
 Defaults["minimap-enable"] = true
