@@ -219,6 +219,9 @@ Defaults["announcements-channel"] = "GROUP"
 
 -- Unitframes
 Defaults["unitframes-enable"] = true
+Defaults["unitframes-enable-raid"] = true
+Defaults["unitframes-enable-party"] = true
+Defaults["unitframes-enable-party-pets"] = true
 Defaults["unitframes-player-show-name"] = false
 Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false

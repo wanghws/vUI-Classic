@@ -1507,11 +1507,11 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
-	elseif find(unit, "raid") then
+	elseif (find(unit, "raid") and Settings["unitframes-enable-raid"]) then
 		StyleRaid(self, unit)
-	elseif find(unit, "partypet") then
+	elseif (find(unit, "partypet") and Settings["unitframes-enable-party"] and Settings["unitframes-enable-party-pets"]) then
 		StylePartyPet(self, unit)
-	elseif find(unit, "party") then
+	elseif (find(unit, "party") and Settings["unitframes-enable-party"]) then
 		StyleParty(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
@@ -1671,6 +1671,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party", Settings["unitframes-enable-party"], Language["Enable Party Frames Module"], "Enable the vUI party frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party-pets", Settings["unitframes-enable-party-pets"], Language["Enable Party Pet Frames Module"], "Enable the vUI party pet frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames Module"], "Enable the vUI raid frames module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
 	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", UpdateOnlyPlayerDebuffs)
