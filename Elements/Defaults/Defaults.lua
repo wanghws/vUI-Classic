@@ -103,7 +103,7 @@ Defaults["color-curse"] = "9900FF"
 Defaults["color-disease"] = "996600"
 Defaults["color-magic"] = "3399FF"
 Defaults["color-poison"] = "009900"
-Defaults["color-none"] = "CC0000"
+Defaults["color-none"] = "000000"
 
 -- Happiness
 Defaults["color-happiness-1"] = "FF3333" -- "8BC94D"

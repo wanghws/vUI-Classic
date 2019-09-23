@@ -3533,8 +3533,9 @@ function GUI:PLAYER_REGEN_DISABLED()
 end
 
 local ReOpenWindow = function(self)
+	GUI:SetAlpha(0)
 	GUI:Show()
-	GUI:SetAlpha(1)
+	GUI.FadeIn:Play()
 end
 
 function GUI:PLAYER_REGEN_ENABLED()

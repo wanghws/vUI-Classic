@@ -11,7 +11,6 @@ local UnitName = UnitName
 local UnitPower = UnitPower
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
-local DebuffTypeColor = DebuffTypeColor
 local UnitCanAttack = UnitCanAttack
 local UnitIsFriend = UnitIsFriend
 local UnitIsConnected = UnitIsConnected
@@ -463,6 +462,12 @@ local PostUpdateIcon = function(self, unit, button, index, position, duration, e
 		end
 	end
 	
+	if vUI.DebuffColors[debuffType] then
+		button:SetBackdropColor(unpack(vUI.DebuffColors[debuffType]))
+	else
+		button:SetBackdropColor(unpack(vUI.DebuffColors["none"]))
+	end
+	
 	if (Expiration and Expiration ~= 0) then
 		button:SetScript("OnUpdate", AuraOnUpdate)
 		button.Time:Show()
@@ -489,7 +494,7 @@ local PostCreateIcon = function(unit, button)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon:SetDrawLayer("ARTWORK")
 	
-	button.count:SetScaledPoint("BOTTOMRIGHT", 2, 2)
+	button.count:SetScaledPoint("BOTTOMRIGHT", -2, 2)
 	button.count:SetJustifyH("RIGHT")
 	button.count:SetFontInfo(Settings["ui-widget-font"], 12)
 	
@@ -577,13 +582,13 @@ local StyleNamePlate = function(self, unit)
 		Debuffs:SetScaledSize(Settings["nameplates-width"], 26)
 		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 18)
 		Debuffs.size = 26
+		Debuffs.spacing = 2
 		Debuffs.num = 5
 		Debuffs.numRow = 4
 		Debuffs.numDebuffs = 16
-		Debuffs.spacing = 2
 		Debuffs.initialAnchor = "TOPLEFT"
-		Debuffs["growth-y"] = "UP"
 		Debuffs["growth-x"] = "RIGHT"
+		Debuffs["growth-y"] = "UP"
 		Debuffs.PostCreateIcon = PostCreateIcon
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 		Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
@@ -988,11 +993,11 @@ local StyleTarget = function(self, unit)
 	Buffs:SetScaledSize(230, 30)
 	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 	Buffs.size = 30
-	Buffs.num = 16
 	Buffs.spacing = -1
+	Buffs.num = 16
 	Buffs.initialAnchor = "TOPLEFT"
-	Buffs["growth-y"] = "UP"
 	Buffs["growth-x"] = "RIGHT"
+	Buffs["growth-y"] = "UP"
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
 	
@@ -1000,11 +1005,11 @@ local StyleTarget = function(self, unit)
 	Debuffs:SetScaledSize(230, 30)
 	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
 	Debuffs.size = 30
-	Debuffs.num = 16
 	Debuffs.spacing = -1
+	Debuffs.num = 16
 	Debuffs.initialAnchor = "TOPRIGHT"
-	Debuffs["growth-y"] = "UP"
 	Debuffs["growth-x"] = "LEFT"
+	Debuffs["growth-y"] = "UP"
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
 	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
