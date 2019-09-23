@@ -286,11 +286,7 @@ local OnTooltipSetUnit = function(self)
 	end
 end
 
-local OnTooltipSetItem = function(self)
-	if (not Settings["tooltips-show-sell-value"]) then
-		return
-	end
-	
+local OnTooltipSetItem = function(self)	
 	if (MerchantFrame and MerchantFrame:IsShown()) then
 		return
 	end
@@ -300,39 +296,42 @@ local OnTooltipSetItem = function(self)
 	if (not Link) then
 		return
 	end
-	
-	local SellValue = select(11, GetItemInfo(Link))
-	
-	if (not SellValue) then
-		return
-	end
-	
-	local Count = 1
-	local MouseFocus = GetMouseFocus()
-	
-	if (MouseFocus and MouseFocus.count) then
-		Count = MouseFocus.count
-	end
-	
-	if (Count and type(Count) == "number") then
-		local CopperValue = SellValue * Count
-		
-		if (CopperValue == 0) then
-			return
-		end
-		
-		local CoinString = GetCoinTextureString(CopperValue)
-		
-		if CoinString then
-			self:AddLine(CoinString, 1, 1, 1)
-		end
-	end
-	
-	if Settings["tooltips-show-id"] then
+
+	if (Settings["tooltips-show-id"]) then
 		local ID = match(Link, ":(%w+)")
 		
 		self:AddLine(" ")
 		self:AddDoubleLine(Language["Item ID:"], ID, 1, 1, 1, 1, 1, 1)
+	end
+
+	if (Settings["tooltips-show-sell-value"]) then
+	
+		local SellValue = select(11, GetItemInfo(Link))
+		
+		if (not SellValue) then
+			return
+		end
+		
+		local Count = 1
+		local MouseFocus = GetMouseFocus()
+		
+		if (MouseFocus and MouseFocus.count) then
+			Count = MouseFocus.count
+		end
+	
+		if (Count and type(Count) == "number") then
+			local CopperValue = SellValue * Count
+			
+			if (CopperValue == 0) then
+				return
+			end
+			
+			local CoinString = GetCoinTextureString(CopperValue)
+			
+			if CoinString then
+				self:AddLine(CoinString, 1, 1, 1)
+			end
+		end
 	end
 end
 
