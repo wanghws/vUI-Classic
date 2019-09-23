@@ -3,6 +3,7 @@ local tonumber = tonumber
 local tostring = tostring
 local select = select
 local sub = string.sub
+local len = string.len
 local format = string.format
 local floor = math.floor
 local min = math.min
@@ -252,7 +253,11 @@ function vUI:HexToRGB(hex)
 		return
 	end
 	
-    return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
+	if (len(hex) == 8) then
+		return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255, tonumber("0x"..sub(hex, 7, 8)) / 255
+	else
+		return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
+	end
 end
 
 function vUI:RGBToHex(r, g, b)

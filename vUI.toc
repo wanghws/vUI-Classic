@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Author: Hydra
-## Version: 1.0034
+## Version: 1.00332
 ## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIMove
@@ -47,6 +47,7 @@ Elements\Alerts\Alerts.lua
 Elements\Popup\Popup.lua
 Elements\Update\Update.lua
 Elements\Cooldowns\Cooldowns.lua
+Elements\Auras\Auras.lua
 Elements\QuestWatch\QuestWatch.lua
 Elements\Announcements\Announcements.lua
 Elements\Bags\Bags.lua

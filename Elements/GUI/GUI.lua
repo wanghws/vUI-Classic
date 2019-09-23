@@ -3532,12 +3532,17 @@ function GUI:PLAYER_REGEN_DISABLED()
 	end
 end
 
+local ReOpenWindow = function(self)
+	GUI:Show()
+	GUI:SetAlpha(1)
+end
+
 function GUI:PLAYER_REGEN_ENABLED()
 	if self.WasCombatClosed then
-		self:Show()
-		self:SetAlpha(1)
-		self.WasCombatClosed = false
+		vUI:DisplayPopup(Language["Attention"], Language["The settings window was automatically closed due to combat. Would you like to open it again?"], "Yes", ReOpenWindow, "No", nil)
 	end
+	
+	self.WasCombatClosed = false
 end
 
 GUI:RegisterEvent("PLAYER_REGEN_DISABLED")
