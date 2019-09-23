@@ -5,6 +5,14 @@ local Auras = vUI:NewModule("Auras")
 local Name, Texture, Count, DebuffType
 local UnitAura = UnitAura
 local unpack = unpack
+local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
+local GetInventoryItemQuality = GetInventoryItemQuality
+
+local ItemMap = {
+	[1] = 16, -- Main hand
+	[2] = 17, -- Off-hand
+	[3] = 18, -- Ranged
+}
 
 BUFF_MIN_ALPHA = 0.4
 
@@ -35,48 +43,157 @@ local SkinAura = function(button, name, index)
 	button.Handled = true
 end
 
-Auras.BuffFrame_UpdateAllBuffAnchors = function()
-	if BuffFrame then
-		local Aura
-		local PreviousAura
-		local NumEnchants = BuffFrame.numEnchants
-		local NumAuras = 0
-		local NumRows = 0
-		local RowAnchor
-		local Index
+Auras.TemporaryEnchantFrame_Update = function()
+	local Enchant
+	local Index
+	
+	for i = 1, 3 do
+		Index = i - 1
+		Enchant = _G["TempEnchant" .. Index]
 		
-		for i = 1, BUFF_ACTUAL_DISPLAY do
-			Aura = _G["BuffButton" .. i]
+		if Enchant then
+			local Quality = GetInventoryItemQuality("player", ItemMap[Index])
 			
-			NumAuras = NumAuras + 1
-			Index = NumAuras + NumEnchants
+			if Quality then
+				local Color = ITEM_QUALITY_COLORS[Quality]
+				
+				Enchant:SetBackdropBorderColor(Color.r, Color.g, Color.b)
+			else
+				Enchant:SetBackdropBorderColorHex("000000")
+			end
+		end
+	end
+end
+
+local SkinTempEnchants = function()
+	local Enchant
+	local Index
+	
+	for i = 1, 3 do
+		Index = i - 1
+		Enchant = _G["TempEnchant" .. Index]
+		
+		if Enchant then
+			Enchant:SetParent(Auras.Buffs)
+			Enchant:SetBackdrop(vUI.BackdropAndBorder)
+			Enchant:SetBackdropColorHex("00000000")
 			
+			local Quality = GetInventoryItemQuality("player", ItemMap[i])
+			
+			if Quality then
+				local Color = ITEM_QUALITY_COLORS[Quality]
+				
+				Enchant:SetBackdropBorderColor(unpack(Color))
+			else
+				Enchant:SetBackdropBorderColorHex("000000")
+			end
+			
+			Enchant.duration:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+			Enchant.duration:ClearAllPoints()
+			Enchant.duration:SetScaledPoint("TOP", Enchant, "BOTTOM", 0, -4)
+			Enchant.duration.SetFontObject = function() end
+			
+			Enchant.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+			Enchant.count.SetFontObject = function() end
+			
+			local Icon = _G["TempEnchant" .. Index .. "Icon"]
+			local Border = _G["TempEnchant" .. Index .. "Border"]
+			
+			if Icon then
+				Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			end
+			
+			if Border then
+				Border:SetTexture(nil)
+			end
+		end
+	end
+end
+
+local GetPreviousAura = function()
+	
+end
+
+Auras.BuffFrame_UpdateAllBuffAnchors = function()
+	local Aura
+	local PreviousAura
+	local NumEnchants = BuffFrame.numEnchants
+	local NumAuras = 0
+	local NumRows = 0
+	local RowAnchor
+	local Index
+	local EnchantIndex
+	
+	for i = 1, 3 do
+		EnchantIndex = i - 1
+		
+		Aura = _G["TempEnchant" .. EnchantIndex]
+		
+		--[[if (Aura and Aura:IsShown()) then
+			
+			PreviousAura = Aura
+		end]]
+		
+		if Aura then
 			Aura:ClearAllPoints()
 			
-			if (Index > 1 and (Index % Settings["auras-per-row"] == 1)) then
-				Aura:SetScaledPoint("TOP", RowAnchor, "BOTTOM", 0, -Settings["auras-row-spacing"])
-				
-				RowAnchor = Aura
-				NumRows = NumRows + 1
-			elseif (Index == 1) then
-				Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
-				
-				RowAnchor = Aura
-				NumRows = 1
-			else
-				if (NumAuras == 1) then
-					if (NumEnchants > 0) then
-						Aura:SetScaledPoint("TOPRIGHT", TemporaryEnchantFrame, "TOPLEFT", -2, 0)
-					else
-						Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
-					end
+			if PreviousAura then
+				Aura:SetScaledPoint("TOPRIGHT", PreviousAura, "TOPLEFT", -2, 0)
 				else
-					Aura:SetScaledPoint("RIGHT", PreviousAura, "LEFT", -2, 0)
-				end
+				Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
 			end
+			
+			Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
 			
 			PreviousAura = Aura
 		end
+	end
+	
+	--[[ Position Temp Enchants first
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+		
+	end]]
+	
+	-- Position Buffs
+	for i = 1, BUFF_ACTUAL_DISPLAY do
+		Aura = _G["BuffButton" .. i]
+		
+		NumAuras = NumAuras + 1
+		Index = NumAuras + NumEnchants
+		
+		Aura:ClearAllPoints()
+		
+		if (Index > 1 and (Index % Settings["auras-per-row"] == 1)) then
+			Aura:SetScaledPoint("TOP", RowAnchor, "BOTTOM", 0, -Settings["auras-row-spacing"])
+			
+			RowAnchor = Aura
+			NumRows = NumRows + 1
+		elseif (Index == 1) then
+			Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
+			
+			RowAnchor = Aura
+			NumRows = 1
+		else
+			if (NumAuras == 1) then
+				--[[if (NumEnchants > 0) then
+					Aura:SetScaledPoint("TOPRIGHT", TemporaryEnchantFrame, "TOPLEFT", -2, 0)
+				else
+					Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
+				end]]
+				
+				if PreviousAura then
+					Aura:SetScaledPoint("TOPRIGHT", PreviousAura, "TOPLEFT", -2, 0)
+				else
+					Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
+				end
+				
+				--Aura:SetScaledPoint("TOPRIGHT", TemporaryEnchantFrame, "TOPLEFT", -2, 0)
+			else
+				Aura:SetScaledPoint("RIGHT", PreviousAura, "LEFT", -2, 0)
+			end
+		end
+		
+		PreviousAura = Aura
 	end
 end
 
@@ -133,6 +250,7 @@ function Auras:Load()
 	self:Hook("AuraButton_Update")
 	self:Hook("BuffFrame_UpdateAllBuffAnchors")
 	self:Hook("DebuffButton_UpdateAnchors")
+	self:Hook("TemporaryEnchantFrame_Update")
 	
 	local BuffRows = ceil(BUFF_MAX_DISPLAY / Settings["auras-per-row"])
 	local DebuffRows = ceil(DEBUFF_MAX_DISPLAY / Settings["auras-per-row"])
@@ -147,6 +265,8 @@ function Auras:Load()
 	
 	vUI:GetModule("Move"):Add(self.Buffs)
 	vUI:GetModule("Move"):Add(self.Debuffs)
+	
+	SkinTempEnchants()
 	
 	BuffFrame_Update()
 end
