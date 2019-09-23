@@ -1511,7 +1511,7 @@ local Style = function(self, unit)
 		StyleRaid(self, unit)
 	elseif (find(unit, "partypet") and Settings["unitframes-enable-party"] and Settings["unitframes-enable-party-pets"]) then
 		StylePartyPet(self, unit)
-	elseif (find(unit, "party") and Settings["unitframes-enable-party"]) then
+	elseif (find(unit, "party") and not find(unit, "pet") and Settings["unitframes-enable-party"]) then
 		StyleParty(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
