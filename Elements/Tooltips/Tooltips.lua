@@ -295,7 +295,12 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
-	local Item, Link = self:GetItem()
+	local Link = select(2, self:GetItem())
+	
+	if (not Link) then
+		return
+	end
+	
 	local SellValue = select(11, GetItemInfo(Link))
 	
 	if (not SellValue) then
@@ -334,8 +339,12 @@ end
 local OnItemRefTooltipSetItem = function(self)
 	local Item, Link = select(2, self:GetItem())
 	
+	if (not Link) then
+		return
+	end
+	
 	if Settings["tooltips-show-sell-value"] then
-		local SellValue = select(11, GetItemInfo(select(2, self:GetItem())))
+		local SellValue = select(11, GetItemInfo(Link))
 		
 		if (not SellValue) then
 			return
@@ -349,7 +358,7 @@ local OnItemRefTooltipSetItem = function(self)
 	end
 	
 	if Settings["tooltips-show-id"] then
-		local ID = match(select(2, self:GetItem()), ":(%w+)")
+		local ID = match(Link, ":(%w+)")
 		
 		self:AddLine(" ")
 		self:AddDoubleLine(Language["Item ID:"], ID, 1, 1, 1, 1, 1, 1)
