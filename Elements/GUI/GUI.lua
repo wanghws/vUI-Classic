@@ -3576,12 +3576,6 @@ GUI.Toggle = function(self)
 	end
 end
 
--- Move this to a commands file later
-SLASH_VUI1 = "/vui"
-SlashCmdList["VUI"] = function()
-	GUI:Toggle()
-end
-
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Styles"])
 	
