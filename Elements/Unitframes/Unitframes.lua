@@ -462,7 +462,7 @@ local PostUpdateIcon = function(self, unit, button, index, position, duration, e
 		end
 	end
 	
-	if vUI.DebuffColors[debuffType] then
+	if (vUI.DebuffColors[debuffType] and button.filter == "HARMFUL") then
 		button:SetBackdropColor(unpack(vUI.DebuffColors[debuffType]))
 	else
 		button:SetBackdropColor(unpack(vUI.DebuffColors["none"]))

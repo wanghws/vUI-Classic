@@ -194,6 +194,10 @@ Defaults["experience-rested-color"] = "00B4FF"
 
 -- Auras
 Defaults["auras-enable"] = true
+Defaults["auras-size"] = 30
+Defaults["auras-spacing"] = 2
+Defaults["auras-row-spacing"] = 16
+Defaults["auras-per-row"] = 8
 
 -- Minimap
 Defaults["minimap-enable"] = true
