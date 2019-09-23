@@ -301,30 +301,26 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
-	local SellValue = select(11, GetItemInfo(Link))
+	local VendorPrice = select(11, GetItemInfo(Link))
 	
-	if (not SellValue) then
-		return
-	end
-	
-	local Count = 1
-	local MouseFocus = GetMouseFocus()
-	
-	if (MouseFocus and MouseFocus.count) then
-		Count = MouseFocus.count
-	end
-	
-	if (Count and type(Count) == "number") then
-		local CopperValue = SellValue * Count
+	if VendorPrice then
+		local Count = 1
+		local MouseFocus = GetMouseFocus()
 		
-		if (CopperValue == 0) then
-			return
+		if (MouseFocus and MouseFocus.count) then
+			Count = MouseFocus.count
 		end
 		
-		local CoinString = GetCoinTextureString(CopperValue)
-		
-		if CoinString then
-			self:AddLine(CoinString, 1, 1, 1)
+		if (Count and type(Count) == "number") then
+			local CopperValue = VendorPrice * Count
+			
+			if (CopperValue > 0) then
+				local CoinString = GetCoinTextureString(CopperValue)
+				
+				if CoinString then
+					self:AddLine(CoinString, 1, 1, 1)
+				end
+			end
 		end
 	end
 	
