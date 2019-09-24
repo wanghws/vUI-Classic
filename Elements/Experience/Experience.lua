@@ -318,7 +318,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.HeaderBG.Text = self.HeaderBG:CreateFontString(nil, "OVERLAY")
 	self.HeaderBG.Text:SetScaledPoint("CENTER", self.HeaderBG, 0, 0)
-	self.HeaderBG.Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	self.HeaderBG.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.HeaderBG.Text:SetJustifyH("CENTER")
 	self.HeaderBG.Text:SetText(format("|cFF%s%s:|r", Settings["ui-widget-color"], Language["Level"]))
 	
@@ -405,14 +405,14 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	
 	self.Progress = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Progress:SetScaledPoint("LEFT", self.Bar, 5, 0)
-	self.Progress:SetFontInfo(Settings["ui-widget-font"], 12)
+	self.Progress:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.Progress:SetJustifyH("LEFT")
 	
 	-- Add fade to self.Progress
 	
 	self.Percentage = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Percentage:SetScaledPoint("RIGHT", self.Bar, -5, 0)
-	self.Percentage:SetFontInfo(Settings["ui-widget-font"], 12)
+	self.Percentage:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.Percentage:SetJustifyH("RIGHT")
 	
 	-- Add fade to self.Percentage

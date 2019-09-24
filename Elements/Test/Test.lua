@@ -200,14 +200,14 @@ function BagsFrame:Load()
 			Count:ClearAllPoints()
 			Count:SetScaledPoint("BOTTOMRIGHT", 0, 2)
 			Count:SetJustifyH("RIGHT")
-			Count:SetFontInfo(Settings["ui-widget-font"], 12)
+			Count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 		end
 		
 		if Stock then
 			Stock:ClearAllPoints()
 			Stock:SetScaledPoint("TOPLEFT", 0, -2)
 			Stock:SetJustifyH("LEFT")
-			Stock:SetFontInfo(Settings["ui-widget-font"], 12)
+			Stock:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 		end
 		
 		if Object.icon then
@@ -479,7 +479,7 @@ Taxi:SetScript("OnEvent", function(self, event)
 	
 	TaxiFrame.Text = TaxiFrame:CreateFontString(nil, "OVERLAY", 7)
 	TaxiFrame.Text:SetScaledPoint("CENTER", TaxiFrame, 0, -1)
-	TaxiFrame.Text:SetFontInfo(Settings["ui-header-font"], 12)
+	TaxiFrame.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
 	TaxiFrame.Text:SetScaledSize(TaxiFrame:GetWidth() - 12, 20)
 	TaxiFrame.Text:SetText(Language["Land Early"])
 	
@@ -753,7 +753,7 @@ function MirrorTimers:Load()
 	
 	self.Bar.Text = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Bar.Text:SetScaledPoint("CENTER", self.Bar, 0, 0)
-	self.Bar.Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	self.Bar.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.Bar.Text:SetJustifyH("CENTER")
 	
 	self.BarOutline = self.Bar:CreateTexture(nil, "BORDER")

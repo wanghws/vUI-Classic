@@ -23,7 +23,7 @@ local SkinAura = function(button, name, index)
 	
 	button.duration:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	button.duration:ClearAllPoints()
-	button.duration:SetScaledPoint("TOP", button, "BOTTOM", 0, -4)
+	button.duration:SetScaledPoint("TOP", button, "BOTTOM", 0, -3)
 	button.duration.SetFontObject = function() end
 	
 	button.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])

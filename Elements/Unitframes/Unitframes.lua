@@ -496,13 +496,13 @@ local PostCreateIcon = function(unit, button)
 	
 	button.count:SetScaledPoint("BOTTOMRIGHT", -2, 2)
 	button.count:SetJustifyH("RIGHT")
-	button.count:SetFontInfo(Settings["ui-widget-font"], 12)
+	button.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
 	
 	button.overlayFrame = CreateFrame("Frame", nil, button)
 	button.overlayFrame:SetFrameLevel(button.cd:GetFrameLevel() + 1)	 
 	
 	button.Time = button:CreateFontString(nil, "OVERLAY")
-	button.Time:SetFontInfo(Settings["ui-widget-font"], 12, "OUTLINE")
+	button.Time:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
 	button.Time:SetScaledPoint("TOPLEFT", 2, -2)
 	button.Time:SetJustifyH("LEFT")
 	
@@ -541,27 +541,27 @@ local StyleNamePlate = function(self, unit)
 	RaidTargetIndicator:SetPoint("LEFT", Health, "RIGHT", 5, 0)
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
-	TopLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	TopLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 3)
 	TopLeft:SetJustifyH("LEFT")
 	
 	local Top = Health:CreateFontString(nil, "OVERLAY")
-	Top:SetFontInfo(Settings["ui-widget-font"], 12)
+	Top:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 3)
 	Top:SetJustifyH("CENTER")
 	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
-	TopRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	TopRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
 	TopRight:SetJustifyH("RIGHT")
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
-	BottomRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	BottomRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
 	BottomRight:SetJustifyH("RIGHT")
 	
 	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
-	BottomLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	BottomLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	BottomLeft:SetScaledPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
 	BottomLeft:SetJustifyH("LEFT")
 	
@@ -618,13 +618,13 @@ local StyleNamePlate = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFontInfo(Settings["ui-widget-font"], 12)
+	Time:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Time:SetScaledPoint("RIGHT", Castbar, "BOTTOMRIGHT", -4, -3)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetScaledPoint("LEFT", Castbar, "BOTTOMLEFT", 4, -3)
 	Text:SetScaledWidth(Settings["nameplates-width"] / 2 + 4)
 	Text:SetJustifyH("LEFT")
@@ -688,12 +688,12 @@ local StylePlayer = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -739,12 +739,12 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	PowerRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	PowerLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	
@@ -779,13 +779,13 @@ local StylePlayer = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFontInfo(Settings["ui-widget-font"], 12)
+	Time:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
 	Text:SetJustifyH("LEFT")
 	
@@ -921,12 +921,12 @@ local StyleTarget = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -968,12 +968,12 @@ local StyleTarget = function(self, unit)
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
-	PowerLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	PowerLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	PowerLeft:SetScaledPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
-	PowerRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	PowerRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	
@@ -1034,13 +1034,13 @@ local StyleTarget = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFontInfo(Settings["ui-widget-font"], 12)
+	Time:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Time:SetScaledPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFontInfo(Settings["ui-widget-font"], 12)
+	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
 	Text:SetJustifyH("LEFT")
 	
@@ -1117,12 +1117,12 @@ local StyleTargetTarget = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -1190,12 +1190,12 @@ local StylePet = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -1252,12 +1252,12 @@ local StyleParty = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -1364,12 +1364,12 @@ local StylePartyPet = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
@@ -1436,12 +1436,12 @@ local StyleRaid = function(self, unit)
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
-	HealthLeft:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthLeft:SetScaledPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
-	HealthRight:SetFontInfo(Settings["ui-widget-font"], 12)
+	HealthRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	HealthRight:SetScaledPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
