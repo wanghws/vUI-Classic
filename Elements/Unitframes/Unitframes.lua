@@ -1427,7 +1427,7 @@ local StyleRaid = function(self, unit)
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
-	Health:SetScaledHeight(21)
+	Health:SetScaledHeight(23)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1628,9 +1628,13 @@ UF:SetScript("OnEvent", function(self, event)
 	Move:Add(Player.Castbar, 2)
 	Move:Add(Target.Castbar, 2)
 	
+	self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
+	self.RaidAnchor:SetScaledSize((4 * 90 + 4 * 2), (28 * 10) + (2 * (10 - 1)))
+	self.RaidAnchor:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	
 	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
 	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
-	Raid:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+	Raid:SetScaledPoint("TOPLEFT", self.RaidAnchor, 0, 0)
 	
 	vUI.UnitFrames["player"] = Player
 	vUI.UnitFrames["target"] = Target
@@ -1656,6 +1660,7 @@ UF:SetScript("OnEvent", function(self, event)
 	--Move:Add(Party)
 	--Move:Add(PartyPet)
 	--Move:Add(Raid)
+	Move:Add(self.RaidAnchor)
 end)
 
 local TogglePlayerName = function(value)
@@ -1750,7 +1755,7 @@ FakeGroup = function()
 			RegisterUnitWatch(Frame, true)
 			Frame:Show()
 			
-			local IsMissingHealth = random(0, 1) == 0
+			--[[local IsMissingHealth = random(0, 1) == 0
 			
 			if IsMissingHealth then
 				local min, max = Frame.Health:GetMinMaxValues()
@@ -1764,7 +1769,7 @@ FakeGroup = function()
 					--Frame.Health.HealthLeft:SetText(format("|cffD7BEA5-|r%s%s", Color, Value))
 					
 				end
-			end
+			end]]
 		end
 	end
 end

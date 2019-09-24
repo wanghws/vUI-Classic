@@ -9,7 +9,7 @@ local unpack = unpack
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
 local GetInventoryItemQuality = GetInventoryItemQuality
 
-BUFF_MIN_ALPHA = 0.4
+BUFF_MIN_ALPHA = 0.5
 
 local ItemMap = {
 	[1] = 16, -- Main hand
@@ -110,10 +110,6 @@ local SkinTempEnchants = function()
 			end
 		end
 	end
-end
-
-local GetPreviousAura = function()
-	
 end
 
 Auras.BuffFrame_UpdateAllBuffAnchors = function()
