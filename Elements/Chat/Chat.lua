@@ -396,11 +396,24 @@ local OnEditFocusGained = function(self)
 end
 
 local CheckForBottom = function(self)
-	if (not self:AtBottom()) then
-		self.JumpToBottom:Show()
-	elseif (self:AtBottom() and self.JumpToBottom:IsShown()) then
-		self.JumpToBottom:Hide()
+	if (not self:AtBottom() and not self.JumpButton.FadeIn:IsPlaying()) then
+		if (self.JumpButton:GetAlpha() == 0) then
+			self.JumpButton:Show()
+			self.JumpButton.FadeIn:Play()
+		end
+	elseif (self:AtBottom() and self.JumpButton:IsShown() and not self.JumpButton.FadeOut:IsPlaying()) then
+		if (self.JumpButton:GetAlpha() > 0) then
+			self.JumpButton.FadeOut:Play()
+		end
 	end
+end
+
+local JumpToBottom = function(self)
+	self:GetParent():ScrollToBottom()
+end
+
+local JumpButtonOnFinished = function(self)
+	self.Parent:Hide()
 end
 
 local StyleChatFrame = function(frame)
@@ -519,32 +532,43 @@ local StyleChatFrame = function(frame)
 	EditBox.header:SetJustifyH("CENTER")
 	
 	-- Scroll to bottom
-	local JumpToBottom = CreateFrame("Frame", nil, frame)
-	JumpToBottom:SetScaledSize(20, 20)
-	JumpToBottom:SetScaledPoint("BOTTOMRIGHT", frame, 0, 0)
-	JumpToBottom:SetBackdrop(vUI.BackdropAndBorder)
-	JumpToBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
-	JumpToBottom:SetBackdropBorderColor(0, 0, 0)
-	JumpToBottom:SetFrameStrata("HIGH")
-	JumpToBottom:SetScript("OnMouseUp", function(self)
-		self:Hide()
-		self:GetParent():ScrollToBottom()
-	end)
-	JumpToBottom:Hide()
+	local JumpButton = CreateFrame("Frame", nil, frame)
+	JumpButton:SetScaledSize(20, 20)
+	JumpButton:SetScaledPoint("BOTTOMRIGHT", frame, 0, 0)
+	JumpButton:SetBackdrop(vUI.BackdropAndBorder)
+	JumpButton:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	JumpButton:SetBackdropBorderColor(0, 0, 0)
+	JumpButton:SetFrameStrata("HIGH")
+	JumpButton:SetScript("OnMouseUp", JumpToBottom)
+	JumpButton:SetAlpha(0)
+	JumpButton:Hide()
 	
-	JumpToBottom.Texture = JumpToBottom:CreateTexture(nil, "ARTWORK")
-	JumpToBottom.Texture:SetScaledPoint("TOPLEFT", JumpToBottom, 1, -1)
-	JumpToBottom.Texture:SetScaledPoint("BOTTOMRIGHT", JumpToBottom, -1, 1)
-	JumpToBottom.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	JumpToBottom.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	JumpButton.Texture = JumpButton:CreateTexture(nil, "ARTWORK")
+	JumpButton.Texture:SetScaledPoint("TOPLEFT", JumpButton, 1, -1)
+	JumpButton.Texture:SetScaledPoint("BOTTOMRIGHT", JumpButton, -1, 1)
+	JumpButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	JumpButton.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
-	JumpToBottom.Arrow = JumpToBottom:CreateTexture(nil, "OVERLAY")
-	JumpToBottom.Arrow:SetScaledPoint("CENTER", JumpToBottom, 0, 0)
-	JumpToBottom.Arrow:SetScaledSize(16, 16)
-	JumpToBottom.Arrow:SetTexture(Media:GetTexture("Arrow Down"))
-	JumpToBottom.Arrow:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	JumpButton.Arrow = JumpButton:CreateTexture(nil, "OVERLAY")
+	JumpButton.Arrow:SetScaledPoint("CENTER", JumpButton, 0, 0)
+	JumpButton.Arrow:SetScaledSize(16, 16)
+	JumpButton.Arrow:SetTexture(Media:GetTexture("Arrow Down"))
+	JumpButton.Arrow:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
-	frame.JumpToBottom = JumpToBottom
+	JumpButton.Fade = CreateAnimationGroup(JumpButton)
+	
+	JumpButton.FadeIn = JumpButton.Fade:CreateAnimation("Fade")
+	JumpButton.FadeIn:SetEasing("in")
+	JumpButton.FadeIn:SetDuration(0.15)
+	JumpButton.FadeIn:SetChange(1)
+	
+	JumpButton.FadeOut = JumpButton.Fade:CreateAnimation("Fade")
+	JumpButton.FadeOut:SetEasing("out")
+	JumpButton.FadeOut:SetDuration(0.15)
+	JumpButton.FadeOut:SetChange(0)
+	JumpButton.FadeOut:SetScript("OnFinished", JumpButtonOnFinished)
+	
+	frame.JumpButton = JumpButton
 	
 	for i = 1, #CHAT_FRAME_TEXTURES do
 		_G[FrameName..CHAT_FRAME_TEXTURES[i]]:SetTexture(nil)
