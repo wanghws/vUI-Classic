@@ -408,8 +408,16 @@ local CheckForBottom = function(self)
 	end
 end
 
-local JumpToBottom = function(self)
+local JumpButtonOnMouseUp = function(self)
 	self:GetParent():ScrollToBottom()
+end
+
+local JumpButtonOnEnter = function(self)
+	self.Highlight:SetAlpha(0.1)
+end
+
+local JumpButtonOnLeave = function(self)
+	self.Highlight:SetAlpha(0)
 end
 
 local JumpButtonOnFinished = function(self)
@@ -470,11 +478,11 @@ local StyleChatFrame = function(frame)
 	frame:SetJustifyH("LEFT")
 	frame:Hide()
 	
+	FCF_SetChatWindowFontSize(nil, frame, 12)
+	
 	if (not frame.isLocked) then
 		FCF_SetLocked(frame, 1)
 	end
-	
-	FCF_SetChatWindowFontSize(nil, frame, 12)
 	
 	EditBox:ClearAllPoints()
 	EditBox:SetScaledPoint("TOPLEFT", vUIChatFrameBottom, 5, -2)
@@ -539,7 +547,9 @@ local StyleChatFrame = function(frame)
 	JumpButton:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	JumpButton:SetBackdropBorderColor(0, 0, 0)
 	JumpButton:SetFrameStrata("HIGH")
-	JumpButton:SetScript("OnMouseUp", JumpToBottom)
+	JumpButton:SetScript("OnMouseUp", JumpButtonOnMouseUp)
+	JumpButton:SetScript("OnEnter", JumpButtonOnEnter)
+	JumpButton:SetScript("OnLeave", JumpButtonOnLeave)
 	JumpButton:SetAlpha(0)
 	JumpButton:Hide()
 	
@@ -548,6 +558,13 @@ local StyleChatFrame = function(frame)
 	JumpButton.Texture:SetScaledPoint("BOTTOMRIGHT", JumpButton, -1, 1)
 	JumpButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	JumpButton.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	
+	JumpButton.Highlight = JumpButton:CreateTexture(nil, "ARTWORK", 7)
+	JumpButton.Highlight:SetScaledPoint("TOPLEFT", JumpButton, 1, -1)
+	JumpButton.Highlight:SetScaledPoint("BOTTOMRIGHT", JumpButton, -1, 1)
+	JumpButton.Highlight:SetTexture(Media:GetTexture("Blank"))
+	JumpButton.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	JumpButton.Highlight:SetAlpha(0)
 	
 	JumpButton.Arrow = JumpButton:CreateTexture(nil, "OVERLAY")
 	JumpButton.Arrow:SetScaledPoint("CENTER", JumpButton, 0, 0)
@@ -570,6 +587,7 @@ local StyleChatFrame = function(frame)
 	
 	frame.JumpButton = JumpButton
 	
+	-- Remove textures
 	for i = 1, #CHAT_FRAME_TEXTURES do
 		_G[FrameName..CHAT_FRAME_TEXTURES[i]]:SetTexture(nil)
 	end
