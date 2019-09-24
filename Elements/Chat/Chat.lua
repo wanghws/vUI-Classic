@@ -532,7 +532,7 @@ local StyleChatFrame = function(frame)
 	end)
 	JumpToBottom:Hide()
 	
-	JumpToBottom.Texture = JumpToBottom:CreateTexture(nil, "OVERLAY")
+	JumpToBottom.Texture = JumpToBottom:CreateTexture(nil, "ARTWORK")
 	JumpToBottom.Texture:SetScaledPoint("TOPLEFT", JumpToBottom, 1, -1)
 	JumpToBottom.Texture:SetScaledPoint("BOTTOMRIGHT", JumpToBottom, -1, 1)
 	JumpToBottom.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
