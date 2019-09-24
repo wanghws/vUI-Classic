@@ -481,9 +481,19 @@ local OnValueChanged = function(self)
 		Max = select(2, self:GetMinMaxValues())
 	end
 	
-	local Color = vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
-	
-	if Unit then
+	if (Max == 0) then
+		if UnitIsDead(Unit) then
+			self.HealthValue:SetText("|cFFD64545" .. Language["Dead"] .. "|r")
+		elseif UnitIsGhost(Unit) then
+			self.HealthValue:SetText("|cFFEEEEEE" .. Language["Ghost"] .. "|r")
+		else
+			self.HealthValue:SetText(" ")
+			self.HealthPercent:SetText(" ")
+		end
+	else
+		local R, G, B = GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)
+		local Color = vUI:RGBToHex(R, G, B)
+		
 		if UnitIsDead(Unit) then
 			self.HealthValue:SetText("|cFFD64545" .. Language["Dead"] .. "|r")
 		elseif UnitIsGhost(Unit) then
@@ -492,9 +502,6 @@ local OnValueChanged = function(self)
 			self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Current), vUI:ShortValue(Max)))
 		end
 		
-		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Current / Max * 100 + 0.5)))
-	else
-		self.HealthValue:SetText(format("|cFF%s%s|r / |cFF2DCC70%s|r", Color, vUI:ShortValue(Current), vUI:ShortValue(Max)))
 		self.HealthPercent:SetText(format("|cFF%s%s|r", Color, floor(Current / Max * 100 + 0.5)))
 	end
 end

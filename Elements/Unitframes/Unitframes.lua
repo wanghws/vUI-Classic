@@ -241,8 +241,10 @@ Methods["HealthColor"] = function(unit)
 		Max = UnitHealthMax(unit)
 	end
 	
-	if (Current and Max) then
+	if (Current and Max > 0) then
 		return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443))
+	else
+		return "|cFF" .. vUI:RGBToHex(0.18, 0.8, 0.443)
 	end
 end
 
@@ -1644,15 +1646,16 @@ UF:SetScript("OnEvent", function(self, event)
 	if Settings["nameplates-enable"] then
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)
 	end
-	--[[
-	CompactRaidFrameManager:UnregisterAllEvents()
-	CompactRaidFrameManager.Show = function() end
-	CompactRaidFrameManager:Hide()]]
 	
 	if Settings["unitframes-enable-raid"] then
+		local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+		Hider:Hide()
+		
 		CompactRaidFrameContainer:UnregisterAllEvents()
-		CompactRaidFrameContainer.Show = function() end
-		CompactRaidFrameContainer:Hide()
+		CompactRaidFrameContainer:SetParent(Hider)
+		
+		--CompactRaidFrameManager:UnregisterAllEvents()
+		--CompactRaidFrameManager:SetParent(Hider)
 	end
 	
 	Move:Add(Player)
