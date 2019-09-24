@@ -4,6 +4,7 @@ local Auras = vUI:NewModule("Auras")
 
 local Name, Texture, Count, DebuffType
 local UnitAura = UnitAura
+local ceil = math.ceil
 local unpack = unpack
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
 local GetInventoryItemQuality = GetInventoryItemQuality
@@ -25,6 +26,7 @@ local SkinAura = function(button, name, index)
 	button.duration:ClearAllPoints()
 	button.duration:SetScaledPoint("TOP", button, "BOTTOM", 0, -3)
 	button.duration.SetFontObject = function() end
+	button.duration.ClearAllPoints = function() end
 	
 	button.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	button.count.SetFontObject = function() end
@@ -122,17 +124,10 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 	local NumRows = 0
 	local RowAnchor
 	local Index
-	local EnchantIndex
 	
-	for i = 1, 3 do
-		EnchantIndex = i - 1
-		
-		Aura = _G["TempEnchant" .. EnchantIndex]
-		
-		--[[if (Aura and Aura:IsShown()) then
-			
-			PreviousAura = Aura
-		end]]
+	-- Position Temp Enchants
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+		Aura = _G["TempEnchant" .. (i - i)]
 		
 		if Aura then
 			Aura:ClearAllPoints()
@@ -148,11 +143,6 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 			PreviousAura = Aura
 		end
 	end
-	
-	--[[ Position Temp Enchants first
-	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
-		
-	end]]
 	
 	-- Position Buffs
 	for i = 1, BUFF_ACTUAL_DISPLAY do
@@ -175,19 +165,11 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 			NumRows = 1
 		else
 			if (NumAuras == 1) then
-				--[[if (NumEnchants > 0) then
-					Aura:SetScaledPoint("TOPRIGHT", TemporaryEnchantFrame, "TOPLEFT", -2, 0)
-				else
-					Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
-				end]]
-				
 				if PreviousAura then
 					Aura:SetScaledPoint("TOPRIGHT", PreviousAura, "TOPLEFT", -2, 0)
 				else
 					Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
 				end
-				
-				--Aura:SetScaledPoint("TOPRIGHT", TemporaryEnchantFrame, "TOPLEFT", -2, 0)
 			else
 				Aura:SetScaledPoint("RIGHT", PreviousAura, "LEFT", -2, 0)
 			end
@@ -273,6 +255,11 @@ end
 
 local UpdateSizes = function()
 	-- Resize movers
+	local BuffRows = ceil(BUFF_MAX_DISPLAY / Settings["auras-per-row"])
+	local DebuffRows = ceil(DEBUFF_MAX_DISPLAY / Settings["auras-per-row"])
+	
+	Auras.Buffs:SetScaledSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * BuffRows) + (Settings["auras-row-spacing"] * (BuffRows - 1))))
+	Auras.Debuffs:SetScaledSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * DebuffRows) + Settings["auras-row-spacing"]))
 	
 	BuffFrame_Update()
 end
