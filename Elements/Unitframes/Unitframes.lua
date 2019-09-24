@@ -494,7 +494,7 @@ local PostCreateIcon = function(unit, button)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon:SetDrawLayer("ARTWORK")
 	
-	button.count:SetScaledPoint("BOTTOMRIGHT", 0, 2)
+	button.count:SetScaledPoint("BOTTOMRIGHT", 1, 2)
 	button.count:SetJustifyH("RIGHT")
 	button.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
 	

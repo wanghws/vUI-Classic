@@ -742,7 +742,12 @@ local MirrorTimersOnUpdate = function(self)
 	
 	self.Value = GetMirrorTimerProgress(self.Timer) / 1000
 	
-	self.Text:SetText(format("%s (%s)", self.Label, vUI:FormatTime(self.Value)))
+	if (self.Value > 0) then
+		self.Text:SetText(format("%s (%s)", self.Label, vUI:FormatTime(self.Value)))
+	else
+		self.Text:SetText(format("%s", self.Label))
+	end
+	
 	self:SetValue(self.Value)
 end
 
