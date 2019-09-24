@@ -494,7 +494,7 @@ local PostCreateIcon = function(unit, button)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon:SetDrawLayer("ARTWORK")
 	
-	button.count:SetScaledPoint("BOTTOMRIGHT", -2, 2)
+	button.count:SetScaledPoint("BOTTOMRIGHT", 0, 2)
 	button.count:SetJustifyH("RIGHT")
 	button.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
 	
@@ -1425,7 +1425,7 @@ local StyleRaid = function(self, unit)
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
-	Health:SetScaledHeight(17)
+	Health:SetScaledHeight(21)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1499,6 +1499,7 @@ local StyleRaid = function(self, unit)
 	self.Health = Health
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
 	self.Power = Power
 	self.Power.bg = PowerBG
 end
@@ -1596,8 +1597,8 @@ UF:SetScript("OnEvent", function(self, event)
 	)
 	
 	local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
-		"initial-width", 76,
-		"initial-height", 22,
+		"initial-width", 90,
+		"initial-height", 28,
 		"showSolo", false,
 		"showPlayer", true,
 		"showParty", false,
@@ -1607,8 +1608,8 @@ UF:SetScript("OnEvent", function(self, event)
 		"groupFilter", "1,2,3,4,5,6,7,8",
 		"groupingOrder", "1,2,3,4,5,6,7,8",
 		"groupBy", "GROUP",
-		"maxColumns", 8,
-		"unitsPerColumn", 5,
+		"maxColumns", ceil(40 / 10),
+		"unitsPerColumn", 10,
 		"columnSpacing", 2,
 		"columnAnchorPoint", "LEFT",
 		"oUF-initialConfigFunction", [[
@@ -1724,3 +1725,44 @@ GUI:AddOptions(function(self)
 	Left:CreateFooter()
 	Right:CreateFooter()
 end)
+
+--[[
+	self.HealthLeft = HealthLeft
+	self.HealthRight = HealthRight
+--]]
+
+-- /run FakeGroup()
+FakeGroup = function()
+	local Header = _G["vUI Raid"]
+	
+	if Header then
+		if (Header:GetAttribute("startingIndex") ~= -39) then
+			Header:SetAttribute("startingIndex", -39)
+		end
+		
+		for i = 1, select("#", Header:GetChildren()) do
+			local Frame = select(i, Header:GetChildren())
+			
+			Frame.unit = "player"
+			UnregisterUnitWatch(Frame)
+			RegisterUnitWatch(Frame, true)
+			Frame:Show()
+			
+			local IsMissingHealth = random(0, 1) == 0
+			
+			if IsMissingHealth then
+				local min, max = Frame.Health:GetMinMaxValues()
+				local Health = random(min, max)
+				
+				Frame.Health:SetValue(Health)
+				Frame.Power:SetValue(random(min, max))
+				
+				if (Frame.Health:GetValue() ~= max) then
+					--Frame.Health.Value:SetText(format("|cffD7BEA5-|r%s%s", Color, Value))
+					--Frame.Health.HealthLeft:SetText(format("|cffD7BEA5-|r%s%s", Color, Value))
+					
+				end
+			end
+		end
+	end
+end
