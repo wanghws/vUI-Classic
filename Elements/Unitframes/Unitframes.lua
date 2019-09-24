@@ -787,6 +787,7 @@ local StylePlayer = function(self, unit)
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
+	Text:SetScaledSize(250 * 0.7, Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
@@ -1042,6 +1043,7 @@ local StyleTarget = function(self, unit)
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Text:SetScaledPoint("LEFT", Castbar, 3, 0)
+	Text:SetScaledSize(250 * 0.7, Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
