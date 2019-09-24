@@ -8,13 +8,13 @@ local unpack = unpack
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
 local GetInventoryItemQuality = GetInventoryItemQuality
 
+BUFF_MIN_ALPHA = 0.4
+
 local ItemMap = {
 	[1] = 16, -- Main hand
 	[2] = 17, -- Off-hand
 	[3] = 18, -- Ranged
 }
-
-BUFF_MIN_ALPHA = 0.4
 
 local SkinAura = function(button, name, index)
 	button:SetBackdrop(vUI.BackdropAndBorder)
