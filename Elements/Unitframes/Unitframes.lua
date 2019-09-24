@@ -1645,13 +1645,15 @@ UF:SetScript("OnEvent", function(self, event)
 		oUF:SpawnNamePlates(nil, nil, PlateCVars)
 	end
 	--[[
-	CompactRaidFrameContainer:UnregisterAllEvents()
-	CompactRaidFrameContainer.Show = function() end
-	CompactRaidFrameContainer:Hide()
-	
 	CompactRaidFrameManager:UnregisterAllEvents()
 	CompactRaidFrameManager.Show = function() end
 	CompactRaidFrameManager:Hide()]]
+	
+	if Settings["unitframes-enable-raid"] then
+		CompactRaidFrameContainer:UnregisterAllEvents()
+		CompactRaidFrameContainer.Show = function() end
+		CompactRaidFrameContainer:Hide()
+	end
 	
 	Move:Add(Player)
 	Move:Add(Target)

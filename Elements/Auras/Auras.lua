@@ -65,6 +65,8 @@ Auras.TemporaryEnchantFrame_Update = function()
 			end
 		end
 	end
+	
+	Auras.BuffFrame_UpdateAllBuffAnchors()
 end
 
 local SkinTempEnchants = function()
@@ -120,10 +122,12 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 	local NumRows = 0
 	local RowAnchor
 	local Index
+	--local EnchantIndex
 	
 	-- Position Temp Enchants
 	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
-		Aura = _G["TempEnchant" .. (i - i)]
+		--EnchantIndex = i - 1
+		Aura = _G["TempEnchant" .. i - 1]
 		
 		if Aura then
 			Aura:ClearAllPoints()
