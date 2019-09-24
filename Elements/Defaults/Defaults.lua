@@ -221,6 +221,14 @@ Defaults["auto-repair-report"] = true
 Defaults["auto-vendor-enable"] = true
 Defaults["auto-vendor-report"] = true
 
+-- Delete cheapest
+Defaults["delete-filter-consumable"] = false
+Defaults["delete-filter-container"] = false
+Defaults["delete-filter-weapon"] = false
+Defaults["delete-filter-armor"] = false
+Defaults["delete-filter-reagent"] = false
+Defaults["delete-filter-tradeskill"] = false
+
 -- Announcements
 Defaults["announcements-enable"] = true
 Defaults["announcements-channel"] = "GROUP"

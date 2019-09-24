@@ -639,12 +639,45 @@ function Delete:DeleteCheapestItem()
 	end
 end
 
+local UpdateDeleteFilterConsumable = function(value)
+	Delete:UpdateFilterConsumable(value)
+end
+
+local UpdateUpdateFilterContainer = function(value)
+	Delete:UpdateFilterContainer(value)
+end
+
+local UpdateUpdateFilterWeapon = function(value)
+	Delete:UpdateFilterWeapon(value)
+end
+
+local UpdateUpdateFilterArmor = function(value)
+	Delete:UpdateFilterArmor(value)
+end
+
+local UpdateUpdateFilterReagent = function(value)
+	Delete:UpdateFilterReagent(value)
+end
+
+local UpdateUpdateFilterTradeskill = function(value)
+	Delete:UpdateFilterTradeskill(value)
+end
+
+function Delete:Load()
+	self:UpdateFilterConsumable(Settings["delete-filter-consumable"])
+	self:UpdateFilterContainer(Settings["delete-filter-container"])
+	self:UpdateFilterWeapon(Settings["delete-filter-weapon"])
+	self:UpdateFilterArmor(Settings["delete-filter-armor"])
+	self:UpdateFilterReagent(Settings["delete-filter-reagent"])
+	self:UpdateFilterTradeskill(Settings["delete-filter-tradeskill"])
+end
+
 local PrintCheapest = function()
-	vUI:GetModule("Delete"):PrintCheapestItem()
+	Delete:PrintCheapestItem()
 end
 
 local OnAccept = function(self)
-	vUI:GetModule("Delete"):DeleteCheapestItem()
+	Delete:DeleteCheapestItem()
 end
 
 local DeleteCheapest = function()
@@ -670,6 +703,12 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Inventory"])
 	Left:CreateButton(Language["Search"], Language["Find Cheapest Item"], "Find the cheapest item|ncurrently in your inventory", PrintCheapest)
 	Left:CreateButton(Language["Delete"], Language["Delete Cheapest Item"], "Delete the cheapest item|ncurrently in your inventory", DeleteCheapest)
+	Left:CreateSwitch("delete-filter-consumable", Settings["delete-filter-consumable"], Language["Filter Consumables"], "Exclude consumables", UpdateDeleteFilterConsumable)
+	Left:CreateSwitch("delete-filter-container", Settings["delete-filter-container"], Language["Filter Containers"], "Exclude container items", UpdateUpdateFilterContainer)
+	Left:CreateSwitch("delete-filter-weapon", Settings["delete-filter-weapon"], Language["Filter Weapons"], "Exclude weapons items", UpdateUpdateFilterWeapon)
+	Left:CreateSwitch("delete-filter-armor", Settings["delete-filter-armor"], Language["Filter Armor"], "Exclude armor items", UpdateUpdateFilterArmor)
+	Left:CreateSwitch("delete-filter-reagent", Settings["delete-filter-reagent"], Language["Filter Reagents"], "Exclude reagent related items", UpdateUpdateFilterReagent)
+	Left:CreateSwitch("delete-filter-tradeskill", Settings["delete-filter-tradeskill"], Language["Filter Tradeskills"], "Exclude tradeskill related items", UpdateUpdateFilterTradeskill)
 	
 	Right:CreateHeader(Language["Merchant"])
 	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)
