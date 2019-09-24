@@ -17,6 +17,8 @@ local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 local ChatEdit_ParseText = ChatEdit_ParseText
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
+-- When hovering over a chat frame, fade in the scroll controls
+
 local FormatDiscordHyperlink = function(id)
 	return format("|cFF7289DA|Hdiscord:%s|h[%s: %s]|h|r", format("https://discord.gg/%s", id), Language["Discord"], id)
 end
@@ -393,6 +395,14 @@ local OnEditFocusGained = function(self)
 	vUIChatFrameBottom:Hide()
 end
 
+local CheckForBottom = function(self)
+	if (not self:AtBottom()) then
+		self.JumpToBottom:Show()
+	elseif (self:AtBottom() and self.JumpToBottom:IsShown()) then
+		self.JumpToBottom:Hide()
+	end
+end
+
 local StyleChatFrame = function(frame)
 	if frame.Styled then
 		return
@@ -508,6 +518,34 @@ local StyleChatFrame = function(frame)
 	EditBox.header:SetFontInfo(Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
 	EditBox.header:SetJustifyH("CENTER")
 	
+	-- Scroll to bottom
+	local JumpToBottom = CreateFrame("Frame", nil, frame)
+	JumpToBottom:SetScaledSize(20, 20)
+	JumpToBottom:SetScaledPoint("BOTTOMRIGHT", frame, 0, 0)
+	JumpToBottom:SetBackdrop(vUI.BackdropAndBorder)
+	JumpToBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	JumpToBottom:SetBackdropBorderColor(0, 0, 0)
+	JumpToBottom:SetFrameStrata("HIGH")
+	JumpToBottom:SetScript("OnMouseUp", function(self)
+		self:Hide()
+		self:GetParent():ScrollToBottom()
+	end)
+	JumpToBottom:Hide()
+	
+	JumpToBottom.Texture = JumpToBottom:CreateTexture(nil, "OVERLAY")
+	JumpToBottom.Texture:SetScaledPoint("TOPLEFT", JumpToBottom, 1, -1)
+	JumpToBottom.Texture:SetScaledPoint("BOTTOMRIGHT", JumpToBottom, -1, 1)
+	JumpToBottom.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	JumpToBottom.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	
+	JumpToBottom.Arrow = JumpToBottom:CreateTexture(nil, "OVERLAY")
+	JumpToBottom.Arrow:SetScaledPoint("CENTER", JumpToBottom, 0, 0)
+	JumpToBottom.Arrow:SetScaledSize(16, 16)
+	JumpToBottom.Arrow:SetTexture(Media:GetTexture("Arrow Down"))
+	JumpToBottom.Arrow:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	
+	frame.JumpToBottom = JumpToBottom
+	
 	for i = 1, #CHAT_FRAME_TEXTURES do
 		_G[FrameName..CHAT_FRAME_TEXTURES[i]]:SetTexture(nil)
 	end
@@ -515,6 +553,8 @@ local StyleChatFrame = function(frame)
 	for i = 1, #KillTextures do
 		Kill(_G[FrameName..KillTextures[i]])
 	end
+	
+	hooksecurefunc(frame, "SetScrollOffset", CheckForBottom)
 	
 	frame.Styled = true
 end
