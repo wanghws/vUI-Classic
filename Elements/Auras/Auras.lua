@@ -49,7 +49,7 @@ Auras.TemporaryEnchantFrame_Update = function()
 	local Enchant
 	local Index
 	
-	for i = 1, 3 do
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
@@ -73,7 +73,7 @@ local SkinTempEnchants = function()
 	local Enchant
 	local Index
 	
-	for i = 1, 3 do
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
@@ -122,23 +122,19 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 	local NumRows = 0
 	local RowAnchor
 	local Index
-	--local EnchantIndex
 	
 	-- Position Temp Enchants
 	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
-		--EnchantIndex = i - 1
-		Aura = _G["TempEnchant" .. i - 1]
+		Aura = _G["TempEnchant" .. (i - 1)]
 		
 		if Aura then
 			Aura:ClearAllPoints()
 			
 			if PreviousAura then
 				Aura:SetScaledPoint("TOPRIGHT", PreviousAura, "TOPLEFT", -2, 0)
-				else
+			else
 				Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
 			end
-			
-			Aura:SetScaledPoint("TOPRIGHT", Auras.Buffs, "TOPRIGHT", 0, 0)
 			
 			PreviousAura = Aura
 		end
