@@ -49,7 +49,7 @@ Auras.TemporaryEnchantFrame_Update = function()
 	local Enchant
 	local Index
 	
-	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
@@ -73,7 +73,7 @@ local SkinTempEnchants = function()
 	local Enchant
 	local Index
 	
-	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
@@ -124,7 +124,7 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 	local Index
 	
 	-- Position Temp Enchants
-	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
 		Aura = _G["TempEnchant" .. (i - 1)]
 		
 		if Aura then
