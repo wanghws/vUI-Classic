@@ -12,9 +12,9 @@ local GetInventoryItemQuality = GetInventoryItemQuality
 BUFF_MIN_ALPHA = 0.5
 
 local ItemMap = {
-	[1] = 16, -- Main hand
-	[2] = 17, -- Off-hand
-	[3] = 18, -- Ranged
+	[0] = 16, -- Main hand
+	[1] = 17, -- Off-hand
+	[2] = 18, -- Ranged
 }
 
 local SkinAura = function(button, name, index)
@@ -49,12 +49,12 @@ Auras.TemporaryEnchantFrame_Update = function()
 	local Enchant
 	local Index
 	
-	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
 		if Enchant then
-			local Quality = GetInventoryItemQuality("player", ItemMap[Index])
+			local Quality = GetInventoryItemQuality("player", ItemMap[i])
 			
 			if Quality then
 				local Color = ITEM_QUALITY_COLORS[Quality]
@@ -73,7 +73,7 @@ local SkinTempEnchants = function()
 	local Enchant
 	local Index
 	
-	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		Index = i - 1
 		Enchant = _G["TempEnchant" .. Index]
 		
@@ -124,7 +124,7 @@ Auras.BuffFrame_UpdateAllBuffAnchors = function()
 	local Index
 	
 	-- Position Temp Enchants
-	for i = NUM_TEMP_ENCHANT_FRAMES, 1, -1 do
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		Aura = _G["TempEnchant" .. (i - 1)]
 		
 		if Aura then

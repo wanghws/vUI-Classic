@@ -287,10 +287,6 @@ local OnTooltipSetUnit = function(self)
 end
 
 local OnTooltipSetItem = function(self)
-	if (not Settings["tooltips-show-sell-value"]) then
-		return
-	end
-	
 	if (MerchantFrame and MerchantFrame:IsShown()) then
 		return
 	end
@@ -301,24 +297,26 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
-	local VendorPrice = select(11, GetItemInfo(Link))
-	
-	if VendorPrice then
-		local Count = 1
-		local MouseFocus = GetMouseFocus()
+	if Settings["tooltips-show-sell-value"] then
+		local VendorPrice = select(11, GetItemInfo(Link))
 		
-		if (MouseFocus and MouseFocus.count) then
-			Count = MouseFocus.count
-		end
-		
-		if (Count and type(Count) == "number") then
-			local CopperValue = VendorPrice * Count
+		if VendorPrice then
+			local Count = 1
+			local MouseFocus = GetMouseFocus()
 			
-			if (CopperValue > 0) then
-				local CoinString = GetCoinTextureString(CopperValue)
+			if (MouseFocus and MouseFocus.count) then
+				Count = MouseFocus.count
+			end
+			
+			if (Count and type(Count) == "number") then
+				local CopperValue = VendorPrice * Count
 				
-				if CoinString then
-					self:AddLine(CoinString, 1, 1, 1)
+				if (CopperValue > 0) then
+					local CoinString = GetCoinTextureString(CopperValue)
+					
+					if CoinString then
+						self:AddLine(CoinString, 1, 1, 1)
+					end
 				end
 			end
 		end
@@ -620,7 +618,7 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
-	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Sell Value"], "")
+	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Vendor Price"], "Display the items value if sold to a vendor")
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")
 	
 	Left:CreateFooter()

@@ -1,5 +1,9 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
+if (1 == 1) then
+	return
+end
+
 local temp = {
 	["Hydrazine:Whitemane"] = 1,
 }
