@@ -1,15 +1,12 @@
 local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
-if (1 == 1) then
-	return
-end
-
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
 local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s"
 local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's %s"
 local StolenMessage = ACTION_SPELL_STOLEN .. " %s's %s"
-local CastMessage = "casts %s on %s."
+local CastMessage = Language["casts %s on %s."]
+local CastingMessage = Language["casting %s on %s."]
 local UNKNOWN = UNKNOWN
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local SendChatMessage = SendChatMessage
@@ -27,7 +24,10 @@ local _
 local Channel
 
 Announcements.Spells = {
-	--[49576] = CastMessage, -- Death Grip
+	[20777] = CastingMessage, -- Ancestral Spirit
+	[20773] = CastingMessage, -- Redemption
+	[20770] = CastingMessage, -- Resurrection
+	[20748] = CastMessage, -- Rebirth
 }
 
 function Announcements:GetChannelToSend()
@@ -73,11 +73,29 @@ Announcements.Events = {
 		end
 	end,
 	
-	--[[["SPELL_CAST_SUCCESS"] = function(destName, _, _, spellID, spellName)
+	["SPELL_CAST_SUCCESS"] = function(destName, _, _, spellID, spellName)
 		if Spells[spellID] then
-			SendChatMessage(format(Spells[spellID], spellID, spellName, destName), "EMOTE")
+			Channel = Announcements:GetChannelToSend()
+			
+			if Channel then
+				SendChatMessage(format(Spells[spellID], destName, spellName), Channel)
+			else
+				print(format(Spells[spellID], destName, spellName))
+			end
 		end
-	end,]]
+	end,
+	
+	["SPELL_CAST_START"] = function(destName, _, _, spellID, spellName)
+		if Spells[spellID] then
+			Channel = Announcements:GetChannelToSend()
+			
+			if Channel then
+				SendChatMessage(format(Spells[spellID], destName, spellName), Channel)
+			else
+				print(format(Spells[spellID], destName, spellName))
+			end
+		end
+	end,
 }
 
 function Announcements:COMBAT_LOG_EVENT_UNFILTERED()
@@ -118,6 +136,10 @@ local OnEvent = function(self, event, arg)
 end
 
 function Announcements:Load()
+	if (not Settings["announcements-enable"]) then
+		return
+	end
+	
 	self:GROUP_ROSTER_UPDATE()
 	self:UNIT_PET("player")
 	

@@ -331,20 +331,20 @@ local OnTooltipSetItem = function(self)
 end
 
 local OnItemRefTooltipSetItem = function(self)
-	local Item, Link = select(2, self:GetItem())
+	local Link = select(2, self:GetItem())
 	
 	if (not Link) then
 		return
 	end
 	
 	if Settings["tooltips-show-sell-value"] then
-		local SellValue = select(11, GetItemInfo(Link))
+		local VendorPrice = select(11, GetItemInfo(Link))
 		
-		if (not SellValue) then
+		if (not VendorPrice or VendorPrice == 0) then
 			return
 		end
 		
-		local CoinString = GetCoinTextureString(SellValue)
+		local CoinString = GetCoinTextureString(VendorPrice)
 		
 		if CoinString then
 			self:AddLine(CoinString, 1, 1, 1)

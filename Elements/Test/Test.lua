@@ -720,6 +720,10 @@ GUI:AddOptions(function(self)
 	--Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
 	--Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO", [Language["Self"]] = "SELF"}, Language["Set Channel"], "Set the channel to send announcements to")
 	
+	Right:CreateHeader(Language["Interrupt Announcements"])
+	Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce to the selected channel when you successfully perform an interrupt spell", ReloadUI):RequiresReload(true)
+	Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Self"]] = "SELF", [Language["Say"]] = "SAY", [Language["Group"]] = "GROUP", [Language["Emote"]] = "EMOTE"}, Language["Set Channel"], "Set the channel to announce to")
+	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
 	Left:CreateFooter()
