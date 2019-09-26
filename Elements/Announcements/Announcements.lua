@@ -24,10 +24,10 @@ local _
 local Channel
 
 Announcements.Spells = {
-	[20777] = CastingMessage, -- Ancestral Spirit
-	[20773] = CastingMessage, -- Redemption
-	[20770] = CastingMessage, -- Resurrection
-	[20748] = CastMessage, -- Rebirth
+	[GetSpellInfo(20777)] = CastingMessage, -- Ancestral Spirit
+	[GetSpellInfo(20773)] = CastingMessage, -- Redemption
+	[GetSpellInfo(20770)] = CastingMessage, -- Resurrection
+	[GetSpellInfo(20748)] = CastMessage, -- Rebirth
 }
 
 function Announcements:GetChannelToSend()
@@ -70,30 +70,6 @@ Announcements.Events = {
 			SendChatMessage(format(StolenMessage, destName, spellName), Channel)
 		else
 			print(format(StolenMessage, destName, spellName))
-		end
-	end,
-	
-	["SPELL_CAST_SUCCESS"] = function(destName, _, _, spellID, spellName)
-		if Spells[spellID] then
-			Channel = Announcements:GetChannelToSend()
-			
-			if Channel then
-				SendChatMessage(format(Spells[spellID], destName, spellName), Channel)
-			else
-				print(format(Spells[spellID], destName, spellName))
-			end
-		end
-	end,
-	
-	["SPELL_CAST_START"] = function(destName, _, _, spellID, spellName)
-		if Spells[spellID] then
-			Channel = Announcements:GetChannelToSend()
-			
-			if Channel then
-				SendChatMessage(format(Spells[spellID], destName, spellName), Channel)
-			else
-				print(format(Spells[spellID], destName, spellName))
-			end
 		end
 	end,
 }

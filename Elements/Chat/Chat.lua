@@ -413,11 +413,11 @@ local JumpButtonOnMouseUp = function(self)
 end
 
 local JumpButtonOnEnter = function(self)
-	self.Highlight:SetAlpha(0.1)
+	self.Arrow:SetVertexColorHex("FFFFFF")
 end
 
 local JumpButtonOnLeave = function(self)
-	self.Highlight:SetAlpha(0)
+	self.Arrow:SetVertexColorHex("00CC66")
 end
 
 local JumpButtonOnFinished = function(self)
@@ -559,18 +559,11 @@ local StyleChatFrame = function(frame)
 	JumpButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	JumpButton.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
-	JumpButton.Highlight = JumpButton:CreateTexture(nil, "ARTWORK", 7)
-	JumpButton.Highlight:SetScaledPoint("TOPLEFT", JumpButton, 1, -1)
-	JumpButton.Highlight:SetScaledPoint("BOTTOMRIGHT", JumpButton, -1, 1)
-	JumpButton.Highlight:SetTexture(Media:GetTexture("Blank"))
-	JumpButton.Highlight:SetVertexColor(1, 1, 1, 0.4)
-	JumpButton.Highlight:SetAlpha(0)
-	
 	JumpButton.Arrow = JumpButton:CreateTexture(nil, "OVERLAY")
 	JumpButton.Arrow:SetScaledPoint("CENTER", JumpButton, 0, 0)
 	JumpButton.Arrow:SetScaledSize(16, 16)
 	JumpButton.Arrow:SetTexture(Media:GetTexture("Arrow Down"))
-	JumpButton.Arrow:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
+	JumpButton.Arrow:SetVertexColorHex("00CC66")
 	
 	JumpButton.Fade = CreateAnimationGroup(JumpButton)
 	

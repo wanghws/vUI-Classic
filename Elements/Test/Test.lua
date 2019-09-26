@@ -839,3 +839,42 @@ MirrorTimers:SetScript("OnEvent", function(self, event, ...)
 		self[event](self, ...)
 	end
 end)
+
+--[[
+local AutoDismount = vUI:NewModule("Dismount")
+
+local DismountErrors = {
+	[50] = SPELL_FAILED_NOT_MOUNTED,
+	[198] = ERR_ATTACK_MOUNTED,
+	[213] = ERR_TAXIPLAYERALREADYMOUNTED,
+}
+
+function AutoDismount:UI_ERROR_MESSAGE(id)
+	if DismountErrors[id] then
+		Dismount()
+	end
+end
+
+function AutoDismount:TAXIMAP_OPENED()
+	Dismount()
+end
+
+local AutoDismountOnEvent = function(self, event, ...)
+	if self[event] then
+		self[event](self, ...)
+	end
+end
+
+function AutoDismount:Load()
+	self:RegisterEvent("UI_ERROR_MESSAGE")
+	self:RegisterEvent("TAXIMAP_OPENED")
+	self:SetScript("OnEvent", AutoDismountOnEvent)
+end]]
+
+--[[for k, v in pairs(_G) do
+	if (v and type(v) == "string") then
+		if v:find("Can't attack while mounted") then
+			print(k, v)
+		end
+	end
+end]]

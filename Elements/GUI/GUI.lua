@@ -495,12 +495,10 @@ end
 
 local ButtonWidgetOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
-	self.MiddleText:SetTextColor(HexToRGB(Settings["ui-widget-color"]))
 end
 
 local ButtonWidgetOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
-	self.MiddleText:SetTextColor(1, 1, 1)
 end
 
 local ButtonRequiresReload = function(self, flag)
