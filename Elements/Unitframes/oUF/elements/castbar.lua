@@ -111,6 +111,11 @@ end
 local GetNetStats = GetNetStats
 local GetTime = GetTime
 
+local Replace = {
+	--[136235] = "Interface\\Icons\\ability_seal", -- Turn samwise into a seal instead
+	[136235] = 136243, -- Turn samwise into a gear
+}
+
 local function updateSafeZone(self)
 	local safeZone = self.SafeZone
 	local width = self:GetWidth()
@@ -148,7 +153,11 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 
 	element:SetMinMaxValues(0, max)
 	element:SetValue(0)
-
+	
+	if Replace[texture] then
+		texture = Replace[texture]
+	end
+	
 	if(element.Text) then element.Text:SetText(name) end
 	if(element.Icon) then element.Icon:SetTexture(texture) end
 	if(element.Time) then element.Time:SetText() end
@@ -401,6 +410,10 @@ local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, spellID)
 
 	element:SetMinMaxValues(0, max)
 	element:SetValue(duration)
+
+	if Replace[texture] then
+		texture = Replace[texture]
+	end
 
 	if(element.Text) then element.Text:SetText(name) end
 	if(element.Icon) then element.Icon:SetTexture(texture) end

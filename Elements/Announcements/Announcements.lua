@@ -47,42 +47,42 @@ function Announcements:GetChannelToSend()
 end
 
 Announcements.Events = {
-	["SPELL_INTERRUPT"] = function(destName, spellID, spellName)
+	["SPELL_INTERRUPT"] = function(target, id, spell)
 		Channel = Announcements:GetChannelToSend()
 		
 		if Channel then
-			SendChatMessage(format(InterruptMessage, destName, spellName), Channel)
+			SendChatMessage(format(InterruptMessage, target, spell), Channel)
 		else
-			print(format(InterruptMessage, destName, spellName))
+			print(format(InterruptMessage, target, spell))
 		end
 	end,
 	
-	--[[["SPELL_DISPEL"] = function(destName, spellID, spellName)
-		if (not UnitIsFriend("player", destName)) then
-			SendChatMessage(format(DispelledMessage, destName, spellName), "EMOTE")
+	--[[["SPELL_DISPEL"] = function(target, id, spell)
+		if (not UnitIsFriend("player", target)) then
+			SendChatMessage(format(DispelledMessage, target, spell), "EMOTE")
 		end
 	end,]]
 	
-	["SPELL_STOLEN"] = function(destName, spellID, spellName)
+	["SPELL_STOLEN"] = function(target, id, spell)
 		Channel = Announcements:GetChannelToSend()
 		
 		if Channel then
-			SendChatMessage(format(StolenMessage, destName, spellName), Channel)
+			SendChatMessage(format(StolenMessage, target, spell), Channel)
 		else
-			print(format(StolenMessage, destName, spellName))
+			print(format(StolenMessage, target, spell))
 		end
 	end,
 }
 
 function Announcements:COMBAT_LOG_EVENT_UNFILTERED()
-	_, EventType, _, SourceGUID, _, _, _, _, DestName, _, _, CastID, CastName, _, SpellID, SpellName = CombatLogGetCurrentEventInfo()
+	_, EventType, _, SourceGUID, _, _, _, _, DestName, _, _, _, _, _, SpellID, SpellName = CombatLogGetCurrentEventInfo()
 	
 	if (not self.Events[EventType]) then
 		return
 	end
 	
 	if (SourceGUID == MyGUID or SourceGUID == PetGUID) then
-		self.Events[EventType](DestName, SpellID, SpellName, CastID, CastName)
+		self.Events[EventType](DestName, SpellID, SpellName)
 	end
 end
 
