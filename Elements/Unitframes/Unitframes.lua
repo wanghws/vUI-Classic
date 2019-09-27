@@ -1738,11 +1738,6 @@ GUI:AddOptions(function(self)
 	Right:CreateFooter()
 end)
 
---[[
-	self.HealthLeft = HealthLeft
-	self.HealthRight = HealthRight
---]]
-
 --[[ /run FakeGroup()
 FakeGroup = function()
 	local Header = _G["vUI Raid"]
@@ -1759,22 +1754,6 @@ FakeGroup = function()
 			UnregisterUnitWatch(Frame)
 			RegisterUnitWatch(Frame, true)
 			Frame:Show()
-			
-			--[[local IsMissingHealth = random(0, 1) == 0
-			
-			if IsMissingHealth then
-				local min, max = Frame.Health:GetMinMaxValues()
-				local Health = random(min, max)
-				
-				Frame.Health:SetValue(Health)
-				Frame.Power:SetValue(random(min, max))
-				
-				if (Frame.Health:GetValue() ~= max) then
-					--Frame.Health.Value:SetText(format("|cffD7BEA5-|r%s%s", Color, Value))
-					--Frame.Health.HealthLeft:SetText(format("|cffD7BEA5-|r%s%s", Color, Value))
-					
-				end
-			end]]
 		end
 	end
 end]]
