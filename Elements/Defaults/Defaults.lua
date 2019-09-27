@@ -224,8 +224,8 @@ Defaults["auto-vendor-report"] = true
 -- Delete cheapest
 Defaults["delete-filter-consumable"] = false
 Defaults["delete-filter-container"] = false
-Defaults["delete-filter-weapon"] = false
-Defaults["delete-filter-armor"] = false
+Defaults["delete-filter-weapon"] = true
+Defaults["delete-filter-armor"] = true
 Defaults["delete-filter-reagent"] = false
 Defaults["delete-filter-tradeskill"] = false
 
@@ -241,8 +241,6 @@ Defaults["unitframes-enable-party-pets"] = true
 Defaults["unitframes-player-show-name"] = false
 Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false
-Defaults["unitframes-player-castbar-y"] = 130
-Defaults["unitframes-target-castbar-y"] = 156
 Defaults["unitframes-class-color"] = true -- temporary
 Defaults["unitframes-only-player-debuffs"] = true
 

@@ -147,14 +147,19 @@ end)
 local Fonts = vUI:NewModule("Fonts")
 
 function Fonts:Load()
-	local WidgetFont = Media:GetFont(Settings["ui-widget-font"])
+	local Font = Media:GetFont(Settings["ui-widget-font"])
 
-	UNIT_NAME_FONT = WidgetFont
-	--NAMEPLATE_FONT = WidgetFont
-	DAMAGE_TEXT_FONT = WidgetFont
-	STANDARD_TEXT_FONT = WidgetFont
+	UNIT_NAME_FONT = Font
+	--NAMEPLATE_FONT = Font
+	DAMAGE_TEXT_FONT = Font
+	STANDARD_TEXT_FONT = Font
 	
-	AutoFollowStatusText:SetFontInfo(WidgetFont, 18)
+	UIErrorsFrame:SetFont(Font, 16)
+	
+	RaidWarningFrameSlot1:SetFont(Font, 16)
+	RaidWarningFrameSlot2:SetFont(Font, 16)
+	
+	AutoFollowStatusText:SetFontInfo(Font, 18)
 end
 
 local BagsFrame = vUI:NewModule("Bags Frame")
