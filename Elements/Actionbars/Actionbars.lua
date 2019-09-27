@@ -1,7 +1,5 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
--- Some of the settings callbacks still need checks for if Experience or Action Bars are enabled
-
 local BUTTON_SIZE = 32
 local STANCE_SIZE = 32
 local SPACING = 2
@@ -550,7 +548,7 @@ local CreateBarPanels = function()
 		SidePanel:SetAlpha(0)
 	end
 	
-	if (Settings["experience-position"] == "CLASSIC") then
+	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
 		BottomPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
 	else
 		BottomPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
