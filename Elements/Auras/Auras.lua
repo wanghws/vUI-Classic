@@ -9,7 +9,7 @@ local unpack = unpack
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
 local GetInventoryItemQuality = GetInventoryItemQuality
 
-BUFF_MIN_ALPHA = 0.5
+--BUFF_MIN_ALPHA = 0.5
 
 local ItemMap = {
 	[0] = 16, -- Main hand

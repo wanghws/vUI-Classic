@@ -1743,7 +1743,7 @@ end)
 	self.HealthRight = HealthRight
 --]]
 
--- /run FakeGroup()
+--[[ /run FakeGroup()
 FakeGroup = function()
 	local Header = _G["vUI Raid"]
 	
@@ -1777,4 +1777,4 @@ FakeGroup = function()
 			end]]
 		end
 	end
-end
+end]]

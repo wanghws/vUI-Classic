@@ -287,7 +287,7 @@ function vUI:Reset()
 	ReloadUI()
 end
 
-print = function(...)
+--[[print = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
 	
@@ -316,7 +316,7 @@ print = function(...)
 			DEFAULT_CHAT_FRAME:AddMessage(...)
 		end
 	end
-end
+end]]
 
 function vUI:print(...)
 	if Core[5]["ui-widget-color"] then
