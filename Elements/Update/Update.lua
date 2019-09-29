@@ -97,7 +97,7 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 		if (message > AddOnVersion) then
 			--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
 				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
-				print("https://www.curseforge.com/wow/addons/vui")
+				print("	https://www.curseforge.com/wow/addons/vui")
 				
 			self:UnregisterEvent(event)
 		end
@@ -106,7 +106,7 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 			SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", sender)
 		elseif (message > AddOnVersion) then -- We're behind!
 			vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
-			print("https://www.curseforge.com/wow/addons/vui")
+			print("	https://www.curseforge.com/wow/addons/vui")
 			
 			self:UnregisterEvent(event)
 		end

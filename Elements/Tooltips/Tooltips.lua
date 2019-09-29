@@ -568,7 +568,7 @@ local ItemRefCloseOnMouseDown = function(self)
 end
 
 function Tooltips:SkinItemRef()
-	ItemRefCloseButton:SetAlpha(0)
+	ItemRefCloseButton:Hide()
 	
 	-- Close button
 	local CloseButton = CreateFrame("Frame", nil, ItemRefTooltip)
