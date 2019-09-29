@@ -26,6 +26,12 @@ local OnDragStop = function(self)
 end
 
 function Move:Toggle()
+	if InCombatLockdown() then
+		vUI:print(ERR_NOT_IN_COMBAT)
+		
+		return
+	end
+	
 	local Frame
 	
 	if self.Active then
