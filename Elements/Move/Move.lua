@@ -2,6 +2,8 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 
 local Move = vUI:NewModule("Move")
 
+local unpack = unpack
+
 Move.Frames = {}
 Move.Defaults = {}
 Move.Active = false
@@ -122,14 +124,13 @@ function Move:Add(frame, padding)
 		Parent = UIParent
 	end
 	
-	ParentName = Parent:GetName()
-	ParentObject = _G[ParentName]
-	
-	padding = padding or 0
+	local ParentName = Parent:GetName()
+	local ParentObject = _G[ParentName]
+	local Padding = padding or 0
 	local Width, Height = frame:GetSize()
 	
 	local Mover = CreateFrame("Frame", nil, UIParent)
-	Mover:SetScaledSize(Width + padding, Height + padding)
+	Mover:SetScaledSize(Width + Padding, Height + Padding)
 	Mover:SetBackdrop(vUI.BackdropAndBorder)
 	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Mover:SetBackdropBorderColor(0, 0, 0)

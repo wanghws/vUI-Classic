@@ -12,7 +12,7 @@ local type = type
 local UnitLevel = UnitLevel
 local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local vUI = CreateFrame("Frame")
+local vUI = CreateFrame("Frame", nil, UIParent)
 
 vUI.Modules = {}
 

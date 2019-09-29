@@ -74,7 +74,7 @@ local FormatLinks = function(message)
 	end
 	
 	if Settings["chat-enable-email-links"] then
-		NewMessage, Subs = gsub(message, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)", FormatEmailHyperlink("%1@%2%3%4"))
+		local NewMessage, Subs = gsub(message, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)", FormatEmailHyperlink("%1@%2%3%4"))
 		
 		if (Subs > 0) then
 			return NewMessage
@@ -773,47 +773,6 @@ RAID_CLASS_COLORS["SHAMAN"].g = 0.44
 RAID_CLASS_COLORS["SHAMAN"].b = 0.87
 RAID_CLASS_COLORS["SHAMAN"].colorStr = "ff0070DE"
 
-local ChatFrameOnEvent
-local CHAT_PRINT_GET
-
-local NewChatFrameOnEvent = function(self, event, msg, ...)
-	if (event == "CHAT_MSG_PRINT") then
-		-- Check if the msg was meant to be interpretted as script
-		local Result
-		
-		-- Check if it needs a return or not
-		if (not strfind(msg, "return")) then
-			Result = loadstring("return "..msg)
-		else
-			Result = loadstring(msg)
-		end
-		
-		if Result then
-			local NumArgs = select("#", Result())
-			
-			if (NumArgs > 1) then
-				local String = ""
-				
-				for i = 1, NumArgs do
-					if (i == 1) then
-						String = tostring(select(i, Result()))
-					else
-						String = String..", "..tostring(select(i, Result()))
-					end
-				end
-				
-				self:AddMessage(CHAT_PRINT_GET..String)
-			else
-				self:AddMessage(CHAT_PRINT_GET..tostring(Result()))
-			end
-		else
-			self:AddMessage(CHAT_PRINT_GET..msg)
-		end
-	else
-		ChatFrameOnEvent(self, event, msg, ...)
-	end
-end
-
 local EventFrame = CreateFrame("Frame")
 EventFrame:RegisterEvent("PLAYER_LOGIN")
 EventFrame:SetScript("OnEvent", function(self, event)
@@ -846,18 +805,15 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	
 	MoveChatFrames()
 	
-	CHAT_DISCORD_SEND = Language["Discord: "]
-	CHAT_URL_SEND = Language["URL: "]
-	CHAT_EMAIL_SEND = Language["Email: "]
-	CHAT_FRIEND_SEND = Language["Friend Tag:"]
-	CHAT_PRINT_SEND = "Print: "
-	CHAT_PRINT_GET = "|Hchannel:PRINT|h|cFF66d6ff[Print]|h|r: "
+	_G["CHAT_DISCORD_SEND"] = Language["Discord: "]
+	_G["CHAT_URL_SEND"] = Language["URL: "]
+	_G["CHAT_EMAIL_SEND"] = Language["Email: "]
+	_G["CHAT_FRIEND_SEND"] = Language["Friend Tag:"]
 	
 	ChatTypeInfo["URL"] = {sticky = 0, r = 255/255, g = 206/255,  b = 84/255}
 	ChatTypeInfo["EMAIL"] = {sticky = 0, r = 102/255, g = 187/255,  b = 106/255}
 	ChatTypeInfo["DISCORD"] = {sticky = 0, r = 114/255, g = 137/255,  b = 218/255}
 	ChatTypeInfo["FRIEND"] = {sticky = 0, r = 0, g = 170/255,  b = 255/255}
-	ChatTypeInfo["PRINT"] = {sticky = 1, r = 0.364, g = 0.780,  b = 1}
 	
 	ChatTypeInfo["SAY"].colorNameByClass = true
 	ChatTypeInfo["YELL"].colorNameByClass = true
@@ -897,43 +853,11 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)
 	
-	if (not ChatFrameOnEvent) then
-		ChatFrameOnEvent = DEFAULT_CHAT_FRAME:GetScript("OnEvent")
-	end
-	
 	self:RegisterEvent("UI_SCALE_CHANGED")
 	self:UnregisterEvent(event)
 end
 
 vUI.FormatLinks = FormatLinks
-
-local OldSendChatMessage = SendChatMessage
-
-SendChatMessage = function(msg, chatType, language, channel)
-	if (chatType == "PRINT") then
-		NewChatFrameOnEvent(ChatFrame1, "CHAT_MSG_PRINT", msg)
-		
-		return
-	elseif (chatType == "URL" or chatType == "EMAIL" or chatType == "DISCORD" or chatType == "FRIEND") then -- So you can hit enter instead of escape.
-		local EditBox = ChatEdit_ChooseBoxForSend()
-		
-		if EditBox then
-			EditBox:ClearFocus()
-			ChatEdit_ResetChatTypeToSticky(EditBox)
-			--ChatEdit_ResetChatType(EditBox)
-		end
-	else
-		OldSendChatMessage(msg, chatType, language, channel)
-	end
-end
-
-hooksecurefunc("ChatEdit_HandleChatType", function(eb, msg, cmd, send)
-	if (cmd == "/PRINT") then
-		eb:SetAttribute("chatType", "PRINT")
-		eb:SetText(msg)
-		ChatEdit_UpdateHeader(eb)
-	end
-end)
 
 local UpdateOpacity = function(value)
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])

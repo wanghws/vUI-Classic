@@ -843,6 +843,14 @@ MirrorTimers:SetScript("OnEvent", function(self, event, ...)
 	end
 end)
 
+--[[local WorldMap = vUI:NewModule("World Map")
+
+function WorldMap:Load()
+	WorldMapMagnifyingGlassButton:Hide()
+	WorldMapFrame.BlackoutFrame:Hide()
+	WorldMapFrame.BorderFrame:Hide()
+	WorldMapFrame:SetScaledSize(800, 600)
+end]]
 --[[
 local AutoDismount = vUI:NewModule("Dismount")
 

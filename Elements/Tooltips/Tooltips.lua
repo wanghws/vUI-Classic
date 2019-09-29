@@ -9,14 +9,12 @@ local find = string.find
 local match = string.match
 local floor = floor
 local format = format
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitCanAttack = UnitCanAttack
-local UnitIsPVP = UnitIsPVP
 local UnitPVPName = UnitPVPName
 local UnitReaction = UnitReaction
 local UnitExists = UnitExists
 local UnitClass = UnitClass
 local GetGuildInfo = GetGuildInfo
+local UnitCreatureType = UnitCreatureType
 local UnitRace = UnitRace
 local UnitName = UnitName
 local UnitIsAFK = UnitIsAFK
@@ -210,6 +208,7 @@ local OnTooltipSetUnit = function(self)
 		local Title = UnitPVPName(UnitID)
 		local Guild, Rank = GetGuildInfo(UnitID)
 		local Color = GetUnitColor(UnitID)
+		local CreatureType = UnitCreatureType(UnitID)
 		local Flag = ""
 		local Line
 		
@@ -251,6 +250,8 @@ local OnTooltipSetUnit = function(self)
 				
 				if Race then
 					Line:SetText(format("%s %s%s|r %s %s", LEVEL, LevelColor, Level, Race, Class))
+				elseif CreatureType then
+					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, CreatureType))
 				else
 					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, Class))
 				end
@@ -567,10 +568,10 @@ local ItemRefCloseOnMouseDown = function(self)
 end
 
 function Tooltips:SkinItemRef()
-	ItemRefCloseButton:Hide()
+	ItemRefCloseButton:SetAlpha(0)
 	
 	-- Close button
-	CloseButton = CreateFrame("Frame", nil, ItemRefTooltip)
+	local CloseButton = CreateFrame("Frame", nil, ItemRefTooltip)
 	CloseButton:SetScaledSize(20, 20)
 	CloseButton:SetScaledPoint("TOPRIGHT", ItemRefTooltip, -3, -3)
 	CloseButton:SetBackdrop(vUI.BackdropAndBorder)
@@ -593,7 +594,7 @@ function Tooltips:SkinItemRef()
 	CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
 	CloseButton.Cross:SetVertexColorHex("EEEEEE")
 	
-	ItemRefTooltip.CloseButton = CloseButton
+	ItemRefTooltip.NewCloseButton = CloseButton
 end
 
 function Tooltips:Load()
