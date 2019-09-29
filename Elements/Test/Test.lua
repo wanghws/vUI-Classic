@@ -149,10 +149,10 @@ local Fonts = vUI:NewModule("Fonts")
 function Fonts:Load()
 	local Font = Media:GetFont(Settings["ui-widget-font"])
 
-	UNIT_NAME_FONT = Font
+	--UNIT_NAME_FONT = Font
 	--NAMEPLATE_FONT = Font
-	DAMAGE_TEXT_FONT = Font
-	STANDARD_TEXT_FONT = Font
+	--DAMAGE_TEXT_FONT = Font
+	--STANDARD_TEXT_FONT = Font
 	
 	UIErrorsFrame:SetFont(Font, 16)
 	
@@ -489,8 +489,6 @@ Taxi:SetScript("OnEvent", function(self, event)
 	TaxiFrame.Text:SetText(Language["Land Early"])
 	
 	self.Frame = TaxiFrame
-	
-	
 end)
 
 local BagSearch = vUI:NewModule("Bag Search")

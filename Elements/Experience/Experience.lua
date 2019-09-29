@@ -11,6 +11,7 @@ local gsub = gsub
 local floor = floor
 local XP, MaxXP, Rested
 local IsResting = IsResting
+local RestingText
 local UnitXP = UnitXP
 local UnitXPMax = UnitXPMax
 local UnitLevel = UnitLevel
@@ -46,21 +47,21 @@ local UpdateXP = function(self, first)
 	
 	Rested = GetXPExhaustion()
     XP = UnitXP("player")
-    Max = UnitXPMax("player")
-    Resting = IsResting() and ("|cFF" .. Settings["experience-rested-color"] .. "zZz|r") or ""
+    MaxXP = UnitXPMax("player")
+    RestingText = IsResting() and ("|cFF" .. Settings["experience-rested-color"] .. "zZz|r") or ""
 	
-	self.Bar:SetMinMaxValues(0, Max)
-	self.Bar.Rested:SetMinMaxValues(0, Max)
+	self.Bar:SetMinMaxValues(0, MaxXP)
+	self.Bar.Rested:SetMinMaxValues(0, MaxXP)
 	
 	if Rested then
 		self.Bar.Rested:SetValue(XP + Rested)
-		self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(Max), Comma(Rested), Resting))
+		self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(MaxXP), Comma(Rested), RestingText))
 	else
 		self.Bar.Rested:SetValue(0)
-		self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(Max), Resting))
+		self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(MaxXP), RestingText))
 	end
 	
-	self.Percentage:SetText(floor((XP / Max * 100 + 0.05) * 10) / 10 .. "%")
+	self.Percentage:SetText(floor((XP / MaxXP * 100 + 0.05) * 10) / 10 .. "%")
 	
 	self.HeaderBG.Text:SetText(format("|cFF%s%s:|r %s", Settings["ui-header-font-color"], Language["Level"], UnitLevel("player")))
 	self.HeaderBG:SetScaledWidth(self.HeaderBG.Text:GetWidth() + 14)
