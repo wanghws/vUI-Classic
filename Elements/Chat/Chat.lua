@@ -341,6 +341,10 @@ local UpdateEditBoxColor = function(editbox)
 		Backdrop.Change:Play()
 	end
 	
+	if (not editbox.header) then
+		return
+	end
+	
 	local HeaderText = editbox.header:GetText()
 	local Subs = 0
 	

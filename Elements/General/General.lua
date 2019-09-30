@@ -48,14 +48,12 @@ local GetDiscordLink = function()
 	end
 end
 
-local Move = vUI:GetModule("Move")
-
 local ToggleMove = function()
-	Move:Toggle()
+	vUI:GetModule("Move"):Toggle()
 end
 
 local ResetMovers = function()
-	Move:ResetAll()
+	vUI:GetModule("Move"):ResetAll()
 end
 
 local SetSuggestedScale = function()
@@ -78,6 +76,7 @@ GUI:AddOptions(function(self)
 	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
 	
 	Right:CreateHeader(Language["Scale"])
+	--Right:CreateLine("|cFFE81123Do not use this to resize UI elements|r")
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
 	--Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
