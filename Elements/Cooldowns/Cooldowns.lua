@@ -212,6 +212,15 @@ function Cooldowns:Load()
 		return
 	end
 	
+	local Anchor = CreateFrame("Frame", "vUI Cooldown Flash", UIParent)
+	Anchor:SetScaledSize(60, 60)
+	Anchor:SetScaledPoint("CENTER", UIParent, "CENTER", 0, 100)
+	
+	Frame:SetScaledSize(60, 60)
+	Frame:SetScaledPoint("CENTER", Anchor, "CENTER", 0, 0)
+	
+	vUI:GetModule("Move"):Add(Anchor)
+	
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 	self:SetScript("OnEvent", function(self, event, ...)

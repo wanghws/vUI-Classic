@@ -695,6 +695,18 @@ local DeleteCheapest = function()
 	end
 end
 
+local UpdateEnableCooldownFlash = function(value)
+	local CD = vUI:GetModule("Cooldowns")
+	
+	if value then
+		CD:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+		CD:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+	else
+		CD:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
+		CD:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Misc."])
 	
@@ -718,14 +730,13 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("auto-repair-report", Settings["auto-repair-report"], Language["Auto Repair Report"], "Report the cost of automatic repairs into the chat")
 	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
 	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Vendor Report"], "Report the profit of automatic vendoring into the chat")
-
-	--Right:CreateHeader(Language["Announcements"])
-	--Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce actions to a specified channel")
-	--Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Group"]] = "GROUP", [Language["Say"]] = "SAY", [Language["Macro"]] = "MACRO", [Language["Self"]] = "SELF"}, Language["Set Channel"], "Set the channel to send announcements to")
 	
 	Right:CreateHeader(Language["Interrupt Announcements"])
 	Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce to the selected channel when you|n successfully perform an interrupt spell", ReloadUI):RequiresReload(true)
 	Right:CreateDropdown("announcements-channel", Settings["announcements-channel"], {[Language["Self"]] = "SELF", [Language["Say"]] = "SAY", [Language["Group"]] = "GROUP", [Language["Emote"]] = "EMOTE"}, Language["Set Channel"], "Set the channel to announce to")
+	
+	Right:CreateHeader(Language["Cooldown Flash"])
+	Right:CreateSwitch("cooldowns-enable", Settings["cooldowns-enable"], Language["Enable Cooldown Flash"], "When an ability comes off cooldown|n the icon will flash as an alert", UpdateEnableCooldownFlash)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 	
