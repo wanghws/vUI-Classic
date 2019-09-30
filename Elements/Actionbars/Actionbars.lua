@@ -556,11 +556,13 @@ local CreateBarPanels = function()
 end
 
 local SetClassicStyle = function()
-	local Bar = vUIActionBar5
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	vUIActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
 	
-	Bar:ClearAllPoints()
-	Bar:SetScaledPoint("TOPRIGHT", vUIBottomActionBarsPanel, -(SPACING + 1), -(SPACING + 1))
-	Bar:SetScaledSize((BUTTON_SIZE * 6) + (SPACING * 5), (BUTTON_SIZE * 2) + SPACING)
+	vUIActionBar5:ClearAllPoints()
+	vUIActionBar5:SetScaledPoint("TOPRIGHT", vUIBottomActionBarsPanel, -(SPACING + 1), -(SPACING + 1))
+	vUIActionBar5:SetScaledSize((BUTTON_SIZE * 6) + (SPACING * 5), (BUTTON_SIZE * 2) + SPACING)
 	
 	vUIActionBar2:ClearAllPoints()
 	vUIActionBar2:SetScaledPoint("TOPLEFT", vUIBottomActionBarsPanel, (SPACING + 1), -(SPACING + 1))
@@ -572,14 +574,24 @@ local SetClassicStyle = function()
 	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), SIDE_HEIGHT)
 	
 	for i = 1, Num do
-		Bar[i]:ClearAllPoints()
+		vUIActionBar4[i]:ClearAllPoints()
 		
 		if (i == 1) then
-			Bar[i]:SetScaledPoint("BOTTOMLEFT", Bar, 0, 0)
-		elseif (i == 7) then
-			Bar[i]:SetScaledPoint("TOPLEFT", Bar, 0, 0)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4, 0, 0)
 		else
-			Bar[i]:SetScaledPoint("LEFT", Bar[i-1], "RIGHT", SPACING, 0)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4[i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+	
+	for i = 1, Num do
+		vUIActionBar5[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			vUIActionBar5[i]:SetScaledPoint("BOTTOMLEFT", vUIActionBar5, 0, 0)
+		elseif (i == 7) then
+			vUIActionBar5[i]:SetScaledPoint("TOPLEFT", vUIActionBar5, 0, 0)
+		else
+			vUIActionBar5[i]:SetScaledPoint("LEFT", vUIActionBar5[i-1], "RIGHT", SPACING, 0)
 		end
 	end
 	
@@ -589,11 +601,13 @@ local SetClassicStyle = function()
 end
 
 local Set2x3Style = function()
-	local Bar = vUIActionBar5
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	vUIActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
 	
-	Bar:ClearAllPoints()
-	Bar:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
-	Bar:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	vUIActionBar5:ClearAllPoints()
+	vUIActionBar5:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
+	vUIActionBar5:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	
 	vUIActionBar2:ClearAllPoints()
 	vUIActionBar2:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
@@ -605,12 +619,22 @@ local Set2x3Style = function()
 	vUISideActionBarsPanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
 	
 	for i = 1, Num do
-		Bar[i]:ClearAllPoints()
+		vUIActionBar4[i]:ClearAllPoints()
 		
 		if (i == 1) then
-			Bar[i]:SetScaledPoint("TOP", Bar, 0, 0)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4, 0, 0)
 		else
-			Bar[i]:SetScaledPoint("TOP", Bar[i-1], "BOTTOM", 0, -SPACING)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4[i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+	
+	for i = 1, Num do
+		vUIActionBar5[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			vUIActionBar5[i]:SetScaledPoint("TOP", vUIActionBar5, 0, 0)
+		else
+			vUIActionBar5[i]:SetScaledPoint("TOP", vUIActionBar5[i-1], "BOTTOM", 0, -SPACING)
 		end
 	end
 	
@@ -620,28 +644,37 @@ local Set2x3Style = function()
 end
 
 local Set3x2Style = function()
-	local Bar = vUIActionBar5
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
+	vUIActionBar4:SetScaledPoint("TOPLEFT", vUISideActionBarsPanel, (SPACING + 1), -(SPACING + 1))
 	
-	Bar:ClearAllPoints()
-	Bar:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
-	Bar:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	vUIActionBar5:ClearAllPoints()
+	vUIActionBar5:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
+	vUIActionBar5:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
 	
 	vUIActionBar2:ClearAllPoints()
 	vUIActionBar2:SetScaledPoint("LEFT", vUIBottomActionBarsPanel, (SPACING + 1), 0)
-	
-	vUIActionBar4:ClearAllPoints()
-	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	
 	vUIBottomActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 3) + (SPACING * 5)))
 	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
 	
 	for i = 1, Num do
-		Bar[i]:ClearAllPoints()
+		vUIActionBar4[i]:ClearAllPoints()
 		
 		if (i == 1) then
-			Bar[i]:SetScaledPoint("LEFT", Bar, 0, 0)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4, 0, 0)
 		else
-			Bar[i]:SetScaledPoint("LEFT", Bar[i-1], "RIGHT", SPACING, 0)
+			vUIActionBar4[i]:SetScaledPoint("TOP", vUIActionBar4[i-1], "BOTTOM", 0, -SPACING)
+		end
+	end
+	
+	for i = 1, Num do
+		vUIActionBar5[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			vUIActionBar5[i]:SetScaledPoint("LEFT", vUIActionBar5, 0, 0)
+		else
+			vUIActionBar5[i]:SetScaledPoint("LEFT", vUIActionBar5[i-1], "RIGHT", SPACING, 0)
 		end
 	end
 	
@@ -651,7 +684,43 @@ local Set3x2Style = function()
 end
 
 local Set4x1Style = function()
+	vUIActionBar2:ClearAllPoints()
+	vUIActionBar2:SetScaledPoint("BOTTOM", vUIActionBar1, "TOP", 0, SPACING)
 	
+	vUIActionBar4:ClearAllPoints()
+	vUIActionBar4:SetScaledPoint("TOP", vUIBottomActionBarsPanel, 0, -(SPACING + 1))
+	vUIActionBar4:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	
+	vUIActionBar5:ClearAllPoints()
+	vUIActionBar5:SetScaledPoint("BOTTOM", vUIActionBar2, "TOP", 0, SPACING)
+	vUIActionBar5:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
+	
+	vUIBottomActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 4) + (SPACING * 6)))
+	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 1) + (SPACING * 3)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
+	
+	for i = 1, Num do
+		vUIActionBar4[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			vUIActionBar4[i]:SetScaledPoint("LEFT", vUIActionBar4, 0, 0)
+		else
+			vUIActionBar4[i]:SetScaledPoint("LEFT", vUIActionBar4[i-1], "RIGHT", SPACING, 0)
+		end
+	end
+	
+	for i = 1, Num do
+		vUIActionBar5[i]:ClearAllPoints()
+		
+		if (i == 1) then
+			vUIActionBar5[i]:SetScaledPoint("LEFT", vUIActionBar5, 0, 0)
+		else
+			vUIActionBar5[i]:SetScaledPoint("LEFT", vUIActionBar5[i-1], "RIGHT", SPACING, 0)
+		end
+	end
+	
+	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
+		vUIExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - (SPACING * 3))
+	end
 end
 
 local SetActionBarLayout = function(value)
@@ -659,6 +728,8 @@ local SetActionBarLayout = function(value)
 		Set2x3Style()
 	elseif (value == "3x2") then
 		Set3x2Style()
+	elseif (value == "4x1") then
+		Set4x1Style()
 	elseif (value == "DEFAULT") then
 		SetClassicStyle()
 	end
@@ -970,7 +1041,7 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
 	
 	Left:CreateHeader(Language["Layouts"])
-	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
+	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", ["4 x 1"] = "4x1", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()
