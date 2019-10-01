@@ -187,26 +187,6 @@ Methods["HealthValues"] = function(unit)
 	return vUI:ShortValue(Current) .. " / " .. vUI:ShortValue(Max)
 end
 
-Events["ColoredHealthValues"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION PLAYER_ENTERING_WORLD"
-Methods["ColoredHealthValues"] = function(unit)
-	if UnitIsDead(unit) then
-		return "|cFFEE4D4D" .. Language["Dead"]
-	elseif UnitIsGhost(unit) then
-		return "|cFFEEEEEE" .. Language["Ghost"]
-	elseif (not UnitIsConnected(unit)) then
-		return "|cFFEEEEEE" .. Language["Offline"]
-	end
-	
-	local Current, Max, Found = LCMH:GetUnitHealth(unit)
-	
-	if (not Found) then
-		Current = UnitHealth(unit)
-		Max = UnitHealthMax(unit)
-	end
-	
-	return "|cFF" .. vUI:RGBToHex(GetColor(Current / Max, 0.905, 0.298, 0.235, 0.18, 0.8, 0.443)) .. vUI:ShortValue(Current) .. " |cFFFEFEFE/|cFF2DCC70 " .. vUI:ShortValue(Max)
-end
-
 Events["PartyInfo"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS PLAYER_ENTERING_WORLD"
 Methods["PartyInfo"] = function(unit)
 	if UnitIsDead(unit) then
@@ -252,6 +232,16 @@ Events["Power"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["Power"] = function(unit)
 	if (UnitPower(unit) ~= 0) then
 		return vUI:ShortValue(UnitPower(unit))
+	end
+end
+
+Events["PowerValues"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
+Methods["PowerValues"] = function(unit)
+	local Current = UnitPower(unit)
+	local Max = UnitPowerMax(unit)
+	
+	if (Max ~= 0) then
+		return Current .. " / " .. Max
 	end
 end
 
@@ -761,6 +751,34 @@ local StylePlayer = function(self, unit)
 		Power.colorClass = true
 	end
 	
+	-- Auras
+	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
+	Buffs:SetScaledSize(238, 28)
+	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
+	Buffs.size = 28
+	Buffs.spacing = 2
+	Buffs.num = 16
+	Buffs.initialAnchor = "TOPLEFT"
+	Buffs["growth-x"] = "RIGHT"
+	Buffs["growth-y"] = "UP"
+	Buffs.PostCreateIcon = PostCreateIcon
+	Buffs.PostUpdateIcon = PostUpdateIcon
+	
+	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+	Debuffs:SetScaledSize(238, 28)
+	Debuffs:SetScaledWidth(238)
+	--Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
+	Debuffs:SetScaledPoint("BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs.size = 28
+	Debuffs.spacing = 2
+	Debuffs.num = 16
+	Debuffs.initialAnchor = "TOPRIGHT"
+	Debuffs["growth-x"] = "LEFT"
+	Debuffs["growth-y"] = "UP"
+	Debuffs.PostCreateIcon = PostCreateIcon
+	Debuffs.PostUpdateIcon = PostUpdateIcon
+	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
+	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Casting Bar", self)
     Castbar:SetScaledSize(250, 22)
@@ -878,7 +896,7 @@ local StylePlayer = function(self, unit)
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	self:Tag(PowerLeft, "[HealthValues]")
-	self:Tag(PowerRight, "[Power]")
+	self:Tag(PowerRight, "[PowerValues]")
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
@@ -890,6 +908,8 @@ local StylePlayer = function(self, unit)
 	self.PowerLeft = PowerLeft
 	self.PowerRight = PowerRight
 	self.CombatIndicator = Combat
+	self.Buffs = Buffs
+	self.Debuffs = Debuffs
 	self.Castbar = Castbar
 	--self.RaidTargetIndicator = RaidTarget
 	self.LeaderIndicator = Leader
@@ -993,10 +1013,10 @@ local StyleTarget = function(self, unit)
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	Buffs:SetScaledSize(230, 30)
-	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
-	Buffs.size = 30
-	Buffs.spacing = -1
+	Buffs:SetScaledSize(238, 28)
+	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
+	Buffs.size = 28
+	Buffs.spacing = 2
 	Buffs.num = 16
 	Buffs.initialAnchor = "TOPLEFT"
 	Buffs["growth-x"] = "RIGHT"
@@ -1005,10 +1025,12 @@ local StyleTarget = function(self, unit)
 	Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	Debuffs:SetScaledSize(230, 30)
-	Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 29)
-	Debuffs.size = 30
-	Debuffs.spacing = -1
+	Debuffs:SetScaledSize(238, 28)
+	Debuffs:SetScaledWidth(238)
+	--Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
+	Debuffs:SetScaledPoint("BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs.size = 28
+	Debuffs.spacing = 2
 	Debuffs.num = 16
 	Debuffs.initialAnchor = "TOPRIGHT"
 	Debuffs["growth-x"] = "LEFT"
@@ -1067,15 +1089,10 @@ local StyleTarget = function(self, unit)
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
 	
-	-- Combat
-	local Combat = Health:CreateTexture(nil, "OVERLAY")
-	Combat:SetScaledSize(20, 20)
-	Combat:SetScaledPoint("CENTER", Health)
-	
 	-- Tags
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	self:Tag(PowerLeft, "[HealthValues]")
-	self:Tag(PowerRight, "[Power]")
+	self:Tag(PowerRight, "[PowerValues]")
 	
 	self.Range = {
 		insideAlpha = 1,
@@ -1090,7 +1107,6 @@ local StyleTarget = function(self, unit)
 	self.Power.bg = PowerBG
 	self.PowerLeft = PowerLeft
 	self.PowerRight = PowerRight
-	self.Combat = Combat
 	self.Buffs = Buffs
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
@@ -1551,11 +1567,11 @@ UF:SetScript("OnEvent", function(self, event)
 	end
 	
 	local Player = oUF:Spawn("player", "vUI Player")
-	Player:SetScaledSize(230, 46)
+	Player:SetScaledSize(238, 46)
 	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 	
 	local Target = oUF:Spawn("target", "vUI Target")
-	Target:SetScaledSize(230, 46)
+	Target:SetScaledSize(238, 46)
 	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 	
 	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")

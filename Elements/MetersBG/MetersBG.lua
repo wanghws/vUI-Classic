@@ -1,14 +1,10 @@
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
-if (1 == 1) then
-	return
-end
-
-local temp = {
+local Testing = {
 	["Hydrazine:Whitemane"] = 1,
 }
 
-if (not temp[vUI.UserProfileKey]) then
+if (not Testing[vUI.UserProfileKey]) then
 	return
 end
 
