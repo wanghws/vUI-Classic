@@ -4,15 +4,6 @@ local BUTTON_SIZE = 32
 local STANCE_SIZE = 32
 local SPACING = 2
 
-local BOTTOM_WIDTH = ((BUTTON_SIZE * 12) + (SPACING * 14))
-local BOTTOM_HEIGHT = ((BUTTON_SIZE * 2) + (SPACING * 4))
-
-local SIDE_WIDTH = ((BUTTON_SIZE * 3) + (SPACING * 5))
-local SIDE_HEIGHT = ((BUTTON_SIZE * 12) + (SPACING * 14))
-
-local PET_WIDTH = ((BUTTON_SIZE * 1) + (SPACING * 3))
-local PET_HEIGHT = ((BUTTON_SIZE * 10) + (SPACING * 12))
-
 local Num = NUM_ACTIONBAR_BUTTONS
 local IsUsableAction = IsUsableAction
 local IsActionInRange = IsActionInRange
@@ -55,7 +46,7 @@ local SkinButton = function(button)
 	if button.HotKey then
 		button.HotKey:ClearAllPoints()
 		button.HotKey:SetScaledPoint("TOPLEFT", button, 2, -2)
-		button.HotKey:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		button.HotKey:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
 		button.HotKey:SetJustifyH("LEFT")
 		button.HotKey:SetDrawLayer("OVERLAY")
 		button.HotKey:SetTextColor(1, 1, 1)
@@ -81,7 +72,7 @@ local SkinButton = function(button)
 		button.Name:ClearAllPoints()
 		button.Name:SetScaledPoint("BOTTOMLEFT", button, 2, 2)
 		button.Name:SetScaledWidth(button:GetWidth() - 4)
-		button.Name:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		button.Name:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
 		button.Name:SetJustifyH("LEFT")
 		button.Name:SetDrawLayer("OVERLAY")
 		button.Name:SetTextColor(1, 1, 1)
@@ -104,7 +95,7 @@ local SkinButton = function(button)
 	if button.Count then
 		button.Count:ClearAllPoints()
 		button.Count:SetScaledPoint("TOPRIGHT", button, -2, -2)
-		button.Count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		button.Count:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
 		button.Count:SetJustifyH("RIGHT")
 		button.Count:SetDrawLayer("OVERLAY")
 		button.Count:SetTextColor(1, 1, 1)
@@ -518,7 +509,7 @@ end
 
 local CreateBarPanels = function()
 	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
-	BottomPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
+	BottomPanel:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 2) + (SPACING * 4)))
 	BottomPanel:SetBackdrop(vUI.BackdropAndBorder)
 	BottomPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
@@ -529,7 +520,7 @@ local CreateBarPanels = function()
 	end
 	
 	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent)
-	SidePanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
+	SidePanel:SetScaledSize(((BUTTON_SIZE * 3) + (SPACING * 5)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
 	SidePanel:SetScaledPoint("RIGHT", UIParent, -10, 0)
 	SidePanel:SetBackdrop(vUI.BackdropAndBorder)
 	SidePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -537,7 +528,7 @@ local CreateBarPanels = function()
 	SidePanel:SetFrameStrata("LOW")
 	
 	local PetPanel = CreateFrame("Frame", "vUIPetActionBarsPanel", UIParent)
-	PetPanel:SetScaledSize(PET_WIDTH, PET_HEIGHT)
+	PetPanel:SetScaledSize(((BUTTON_SIZE * 1) + (SPACING * 3)), ((BUTTON_SIZE * 10) + (SPACING * 12)))
 	PetPanel:SetScaledPoint("RIGHT", SidePanel, "LEFT", -SPACING, 0)
 	PetPanel:SetBackdrop(vUI.BackdropAndBorder)
 	PetPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -570,8 +561,8 @@ local SetClassicStyle = function()
 	vUIActionBar4:ClearAllPoints()
 	vUIActionBar4:SetScaledPoint("LEFT", vUISideActionBarsPanel, (SPACING + 1), 0)
 	
-	vUIBottomActionBarsPanel:SetScaledSize((BOTTOM_WIDTH + (BOTTOM_WIDTH / 2)) - SPACING, BOTTOM_HEIGHT)
-	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), SIDE_HEIGHT)
+	vUIBottomActionBarsPanel:SetScaledSize((((BUTTON_SIZE * 12) + (SPACING * 14)) + (((BUTTON_SIZE * 12) + (SPACING * 14)) / 2)) - SPACING, ((BUTTON_SIZE * 2) + (SPACING * 4)))
+	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 2) + (SPACING * 4)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
 	
 	for i = 1, Num do
 		vUIActionBar4[i]:ClearAllPoints()
@@ -615,8 +606,8 @@ local Set2x3Style = function()
 	vUIActionBar4:ClearAllPoints()
 	vUIActionBar4:SetScaledPoint("TOP", vUISideActionBarsPanel, 0, -(SPACING + 1))
 	
-	vUIBottomActionBarsPanel:SetScaledSize(BOTTOM_WIDTH, BOTTOM_HEIGHT)
-	vUISideActionBarsPanel:SetScaledSize(SIDE_WIDTH, SIDE_HEIGHT)
+	vUIBottomActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 2) + (SPACING * 4)))
+	vUISideActionBarsPanel:SetScaledSize(((BUTTON_SIZE * 3) + (SPACING * 5)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
 	
 	for i = 1, Num do
 		vUIActionBar4[i]:ClearAllPoints()
@@ -747,24 +738,34 @@ local SetButtonSize = function(value)
 	vUIActionBar1:SetScaledSize(((value * 12) + (SPACING * 11)), value)
 	vUIActionBar2:SetScaledSize(((value * 12) + (SPACING * 11)), value)
 	vUIActionBar3:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
-	vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 	
 	if (Settings["action-bars-layout"] == "2x3") then
+		vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 		vUIActionBar5:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 		
 		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 2) + (SPACING * 4)))
 		vUISideActionBarsPanel:SetScaledSize(((value * 3) + (SPACING * 5)), ((value * 12) + (SPACING * 14)))
 	elseif (Settings["action-bars-layout"] == "3x2") then
+		vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 		vUIActionBar5:SetScaledSize(((value * 12) + (SPACING * 11)), value)
 		
 		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 3) + (SPACING * 5)))
 		vUISideActionBarsPanel:SetScaledSize(((value * 2) + (SPACING * 4)), ((value * 12) + (SPACING * 14)))
+	elseif (Settings["action-bars-layout"] == "4x1") then
+		vUIActionBar4:SetScaledSize(((value * 12) + (SPACING * 11)), value)
+		vUIActionBar5:SetScaledSize(((value * 12) + (SPACING * 11)), value)
+		
+		vUIBottomActionBarsPanel:SetScaledSize(((value * 12) + (SPACING * 14)), ((value * 4) + (SPACING * 6)))
+		vUISideActionBarsPanel:SetScaledSize(((value * 1) + (SPACING * 3)), ((value * 12) + (SPACING * 14)))
 	elseif (Settings["action-bars-layout"] == "DEFAULT") then
+		vUIActionBar4:SetScaledSize(value, ((value * 12) + (SPACING * 11)))
 		vUIActionBar5:SetScaledSize((value * 6) + (SPACING * 5), (value * 2) + SPACING)
 		
 		vUISideActionBarsPanel:SetScaledSize(((value * 2) + (SPACING * 4)), ((value * 12) + (SPACING * 14)))
 		vUIBottomActionBarsPanel:SetScaledSize((((value * 12) + (SPACING * 14))) * 1.5 - SPACING, ((value * 2) + (SPACING * 4)))
 	end
+	
+	BUTTON_SIZE = value
 end
 
 local SetStanceSize = function(value)
@@ -856,6 +857,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	end
 	
 	BUTTON_SIZE = Settings["action-bars-button-size"]
+	BUTTON_SPACING = Settings["action-bars-button-spacing"]
 	STANCE_SIZE = Settings["action-bars-stance-size"]
 	
 	CreateBarPanels()
@@ -1018,11 +1020,45 @@ local UpdateShowGrid = function(value)
 	SetCVar("alwaysShowActionBars", value and 1 or 0)
 end
 
+local UpdateButtonFont = function(button)
+	if button.HotKey then
+		button.HotKey:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
+	end
+	
+	if button.Name then
+		button.Name:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
+	end
+	
+	if button.Count then
+		button.Count:SetFontInfo(Settings["action-bars-font"], Settings["action-bars-font-size"], Settings["action-bars-font-flags"])
+	end
+end
+
+local UpdateActionBarFont = function()
+	for i = 1, Num do
+		UpdateButtonFont(vUIActionBar1[i])
+		UpdateButtonFont(vUIActionBar2[i])
+		UpdateButtonFont(vUIActionBar3[i])
+		UpdateButtonFont(vUIActionBar4[i])
+		UpdateButtonFont(vUIActionBar5[i])
+	end
+	
+	-- Pet Bar + Stance Bar too
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("action-bars-enable", Settings["action-bars-enable"], "Enable Action Bars Module", ReloadUI):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Layouts"])
+	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", ["4 x 1"] = "4x1", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
+	
+	Left:CreateHeader(Language["Font"])
+	Left:CreateDropdown("action-bars-font", Settings["action-bars-font"], Media:GetFontList(), Language["Font"], "Set the font of the action bar buttons", UpdateActionBarFont, "Font")
+	Left:CreateSlider("action-bars-font-size", Settings["action-bars-font-size"], 8, 18, 1, "Font Size", "Set the font size of the action bar buttons", UpdateActionBarFont)
+	Left:CreateDropdown("action-bars-font-flags", Settings["action-bars-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the action bar buttons", UpdateActionBarFont)
 	
 	Left:CreateHeader(Language["Backdrops"])
 	Left:CreateSwitch("action-bars-show-bottom-bg", Settings["action-bars-show-bottom-bg"], "Show Bottom Backdrop", "Display the backdrop of the bottom action bars", UpdateShowBottomBG)
@@ -1039,9 +1075,6 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "Display macro name text on action buttons", UpdateShowMacroName)
 	Right:CreateSwitch("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "Display count text on action buttons", UpdateShowCount)
 	Right:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
-	
-	Left:CreateHeader(Language["Layouts"])
-	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", ["4 x 1"] = "4x1", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
 	
 	Left:CreateFooter()
 	Right:CreateFooter()

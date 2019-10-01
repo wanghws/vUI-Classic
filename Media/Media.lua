@@ -331,9 +331,9 @@ Media:SetStyle("vUI", {
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
 	
-	["ui-widget-texture"] = "Ferous",
-	["ui-header-texture"] = "Ferous",
-	["ui-button-texture"] = "Ferous",
+	["ui-widget-texture"] = "vUI 4",
+	["ui-header-texture"] = "vUI 4",
+	["ui-button-texture"] = "vUI 4",
 	
 	["ui-header-font-color"] = "FFE6C0",
 	["ui-header-texture-color"] = "424242",
@@ -361,6 +361,14 @@ Media:SetStyle("vUI", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFC44D",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "Roboto",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- vUI 2
@@ -399,6 +407,14 @@ Media:SetStyle("vUI 2", {
 	["chat-tab-font-size"] = 12,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFB74D",
+	
+	["color-casting-start"] = "009900",
+	["color-casting-stopped"] = "F39C12",
+	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "PT Sans",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- Conjured Muffin -- Casting: 2ECC71 - Interrupted: F39C12 - Failed: D35400
@@ -441,6 +457,10 @@ Media:SetStyle("Conjured Muffin", {
 	["color-casting-start"] = "27AE60",
 	["color-casting-stopped"] = "FF8C00",
 	["color-casting-interrupted"] = "DA3B01",
+	
+	["action-bars-font"] = "Roboto",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- Zen
@@ -483,6 +503,10 @@ Media:SetStyle("Zen", {
 	["color-casting-start"] = "009900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "Prototype",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- Slate
@@ -525,6 +549,10 @@ Media:SetStyle("Slate", {
 	["color-casting-start"] = "009900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "Prototype",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- Unnamed
@@ -567,6 +595,10 @@ Media:SetStyle("Unnamed", {
 	["color-casting-start"] = "009900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "Roboto",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
 
 -- Smelly
@@ -609,4 +641,8 @@ Media:SetStyle("Smelly", {
 	["color-casting-start"] = "009900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
+	
+	["action-bars-font"] = "FiraCode",
+	["action-bars-font-size"] = 12,
+	["action-bars-font-flags"] = "",
 })
