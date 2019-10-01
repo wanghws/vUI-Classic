@@ -857,7 +857,7 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	end
 	
 	BUTTON_SIZE = Settings["action-bars-button-size"]
-	BUTTON_SPACING = Settings["action-bars-button-spacing"]
+	SPACING = Settings["action-bars-button-spacing"]
 	STANCE_SIZE = Settings["action-bars-stance-size"]
 	
 	CreateBarPanels()
@@ -1067,6 +1067,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Sizing"])
 	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "Set the size of the action buttons", SetButtonSize)
+	--Right:CreateSlider("action-bars-button-spacing", Settings["action-bars-button-spacing"], -1, 8, 1, "Button Spacing", "Set the spacing of the action buttons", ReloadUI):RequiresReload(true)
 	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "Set the size of the stance buttons", SetStanceSize)
 	
 	Right:CreateHeader(Language["Styling"])

@@ -861,28 +861,28 @@ local StylePlayer = function(self, unit)
 	elseif (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", nil, self)
 		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
-		ComboPoints:SetScaledSize(230, 10)
+		ComboPoints:SetScaledSize(238, 10)
 		ComboPoints:SetBackdrop(vUI.Backdrop)
 		ComboPoints:SetBackdropColor(0, 0, 0)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
 		
-		local Width = (230 / 5) - 2
+		local Width = (238 / 5)
 		local Color
 		
 		for i = 1, 5 do
 			Color = vUI.ComboPoints[i]
 			
 			ComboPoints[i] = CreateFrame("StatusBar", nil, ComboPoints)
-			ComboPoints[i]:SetScaledSize(Width + 1, 8)
+			ComboPoints[i]:SetScaledSize(Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
 			ComboPoints[i]:SetAlpha(0.2)
 			
 			if (i == 1) then
 				ComboPoints[i]:SetScaledPoint("LEFT", ComboPoints, 1, 0)
-				ComboPoints[i]:SetScaledWidth(Width)
 			else
 				ComboPoints[i]:SetScaledPoint("TOPLEFT", ComboPoints[i-1], "TOPRIGHT", 1, 0)
+				ComboPoints[i]:SetScaledWidth(Width - 2)
 			end
 		end
 		
