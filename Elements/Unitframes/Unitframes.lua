@@ -665,6 +665,8 @@ local StylePlayer = function(self, unit)
 	self:SetBackdropColor(0, 0, 0)
 	self:SetBackdropBorderColor(0, 0, 0)
 	
+	local AuraParent = self
+	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
@@ -750,34 +752,6 @@ local StylePlayer = function(self, unit)
 	else
 		Power.colorClass = true
 	end
-	
-	-- Auras
-	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	Buffs:SetScaledSize(238, 28)
-	Buffs:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
-	Buffs.size = 28
-	Buffs.spacing = 2
-	Buffs.num = 16
-	Buffs.initialAnchor = "TOPLEFT"
-	Buffs["growth-x"] = "RIGHT"
-	Buffs["growth-y"] = "UP"
-	Buffs.PostCreateIcon = PostCreateIcon
-	Buffs.PostUpdateIcon = PostUpdateIcon
-	
-	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	Debuffs:SetScaledSize(238, 28)
-	Debuffs:SetScaledWidth(238)
-	--Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
-	Debuffs:SetScaledPoint("BOTTOM", Buffs, "TOP", 0, 2)
-	Debuffs.size = 28
-	Debuffs.spacing = 2
-	Debuffs.num = 16
-	Debuffs.initialAnchor = "TOPRIGHT"
-	Debuffs["growth-x"] = "LEFT"
-	Debuffs["growth-y"] = "UP"
-	Debuffs.PostCreateIcon = PostCreateIcon
-	Debuffs.PostUpdateIcon = PostUpdateIcon
-	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Casting Bar", self)
@@ -887,7 +861,36 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.ComboPoints = ComboPoints
+		AuraParent = ComboPoints
 	end
+	
+	-- Auras
+	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
+	Buffs:SetScaledSize(238, 28)
+	Buffs:SetScaledPoint("BOTTOMLEFT", AuraParent, "TOPLEFT", 0, 2)
+	Buffs.size = 28
+	Buffs.spacing = 2
+	Buffs.num = 16
+	Buffs.initialAnchor = "TOPLEFT"
+	Buffs["growth-x"] = "RIGHT"
+	Buffs["growth-y"] = "UP"
+	Buffs.PostCreateIcon = PostCreateIcon
+	Buffs.PostUpdateIcon = PostUpdateIcon
+	
+	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+	Debuffs:SetScaledSize(238, 28)
+	Debuffs:SetScaledWidth(238)
+	--Debuffs:SetScaledPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
+	Debuffs:SetScaledPoint("BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs.size = 28
+	Debuffs.spacing = 2
+	Debuffs.num = 16
+	Debuffs.initialAnchor = "TOPRIGHT"
+	Debuffs["growth-x"] = "LEFT"
+	Debuffs["growth-y"] = "UP"
+	Debuffs.PostCreateIcon = PostCreateIcon
+	Debuffs.PostUpdateIcon = PostUpdateIcon
+	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
 	
 	-- Tags
 	if Settings["unitframes-player-show-name"] then
