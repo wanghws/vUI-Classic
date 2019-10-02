@@ -10,14 +10,7 @@ vUI.DebuffColors = {}
 vUI.HappinessColors = {}
 vUI.ClassificationColors = {}
 vUI.ComboPoints = {}
-
-function vUI:UpdateComboColors()
-	self.ComboPoints[1] = {self:HexToRGB(Settings["color-combo-1"])}
-	self.ComboPoints[2] = {self:HexToRGB(Settings["color-combo-2"])}
-	self.ComboPoints[3] = {self:HexToRGB(Settings["color-combo-3"])}
-	self.ComboPoints[4] = {self:HexToRGB(Settings["color-combo-4"])}
-	self.ComboPoints[5] = {self:HexToRGB(Settings["color-combo-5"])}
-end
+vUI.Totems = {}
 
 function vUI:UpdateClassColors()
 	self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
@@ -96,6 +89,21 @@ function vUI:UpdateClassificationColors()
 	self.ClassificationColors["difficult"] = {self:HexToRGB(Settings["color-difficult"])}
 	self.ClassificationColors["verydifficult"] = {self:HexToRGB(Settings["color-verydifficult"])}
 	self.ClassificationColors["impossible"] = {self:HexToRGB(Settings["color-impossible"])}
+end
+
+function vUI:UpdateComboColors()
+	self.ComboPoints[1] = {self:HexToRGB(Settings["color-combo-1"])}
+	self.ComboPoints[2] = {self:HexToRGB(Settings["color-combo-2"])}
+	self.ComboPoints[3] = {self:HexToRGB(Settings["color-combo-3"])}
+	self.ComboPoints[4] = {self:HexToRGB(Settings["color-combo-4"])}
+	self.ComboPoints[5] = {self:HexToRGB(Settings["color-combo-5"])}
+end
+
+function vUI:UpdateTotemColors()
+	self.Totems[1] = {self:HexToRGB(Settings["color-totem-fire"])}
+	self.Totems[2] = {self:HexToRGB(Settings["color-totem-earth"])}
+	self.Totems[3] = {self:HexToRGB(Settings["color-totem-water"])}
+	self.Totems[4] = {self:HexToRGB(Settings["color-totem-air"])}
 end
 
 GUI:AddOptions(function(self)
@@ -196,8 +204,9 @@ GUI:AddOptions(function(self)
 	vUI:UpdateReactionColors()
 	vUI:UpdateZoneColors()
 	vUI:UpdatePowerColors()
-	vUI:UpdateComboColors()
 	vUI:UpdateDebuffColors()
 	vUI:UpdateHappinessColors()
 	vUI:UpdateClassificationColors()
+	vUI:UpdateComboColors()
+	vUI:UpdateTotemColors()
 end)

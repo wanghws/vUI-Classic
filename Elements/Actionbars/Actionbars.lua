@@ -144,7 +144,8 @@ local SkinButton = function(button)
 	if (button.SetCheckedTexture and not button.Checked) then
 		local Checked = button:CreateTexture(nil, "ARTWORK", button)
 		Checked:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
-		Checked:SetVertexColor(0.1, 1, 0.1, 0.2)
+		Checked:SetVertexColor(0.1, 0.9, 0.1, 0.2)
+		Checked.SetAlpha = function() end
 		Checked:SetScaledPoint("TOPLEFT", button, 1, -1)
 		Checked:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
 		
@@ -806,26 +807,31 @@ local SetHighlightTexture = function(value)
 		vUIActionBar1[i].Pushed:SetTexture(Texture)
 		vUIActionBar1[i].Checked:SetTexture(Texture)
 		vUIActionBar1[i].Range:SetTexture(Texture)
+		vUIActionBar1[i].Flash:SetTexture(Texture)
 		
 		vUIActionBar2[i].Highlight:SetTexture(Texture)
 		vUIActionBar2[i].Pushed:SetTexture(Texture)
 		vUIActionBar2[i].Checked:SetTexture(Texture)
 		vUIActionBar2[i].Range:SetTexture(Texture)
+		vUIActionBar2[i].Flash:SetTexture(Texture)
 		
 		vUIActionBar3[i].Highlight:SetTexture(Texture)
 		vUIActionBar3[i].Pushed:SetTexture(Texture)
 		vUIActionBar3[i].Checked:SetTexture(Texture)
 		vUIActionBar3[i].Range:SetTexture(Texture)
+		vUIActionBar3[i].Flash:SetTexture(Texture)
 		
 		vUIActionBar4[i].Highlight:SetTexture(Texture)
 		vUIActionBar4[i].Pushed:SetTexture(Texture)
 		vUIActionBar4[i].Checked:SetTexture(Texture)
 		vUIActionBar4[i].Range:SetTexture(Texture)
+		vUIActionBar4[i].Flash:SetTexture(Texture)
 		
 		vUIActionBar5[i].Highlight:SetTexture(Texture)
 		vUIActionBar5[i].Pushed:SetTexture(Texture)
 		vUIActionBar5[i].Checked:SetTexture(Texture)
 		vUIActionBar5[i].Range:SetTexture(Texture)
+		vUIActionBar5[i].Flash:SetTexture(Texture)
 	end
 end
 

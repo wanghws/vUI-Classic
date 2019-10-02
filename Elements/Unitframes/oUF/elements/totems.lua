@@ -49,9 +49,10 @@ local _, ns = ...
 local oUF = ns.oUF
 
 local GetTotemInfo = GetTotemInfo
+local GetTime = GetTime
 
 local function UpdateTooltip(self)
-	--GameTooltip:SetTotem(self:GetID())
+	GameTooltip:SetTotem(self:GetID())
 end
 
 local function OnEnter(self)
@@ -65,6 +66,16 @@ local function OnLeave()
 	GameTooltip:Hide()
 end
 
+local TotemOnUpdate = function(self, elapsed)
+	self.ela = self.ela - elapsed
+	
+	self:SetValue(self.ela)
+	
+	if (self.ela <= 0) then
+		self:SetScript("OnUpdate", nil)
+	end
+end
+
 local function UpdateTotem(self, event, slot)
 	local element = self.Totems
 	if(slot > #element) then return end
@@ -75,22 +86,20 @@ local function UpdateTotem(self, event, slot)
 	* self - the Totems element
 	* slot - the slot of the totem to be updated (number)
 	--]]
-	if(element.PreUpdate) then element:PreUpdate(slot) end
-
-	local totem = element[slot]
+	if element.PreUpdate then
+		element:PreUpdate(slot)
+	end
+	
 	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
-	if(haveTotem and duration > 0) then
-		if(totem.Icon) then
-			totem.Icon:SetTexture(icon)
-		end
-
-		if(totem.Cooldown) then
-			totem.Cooldown:SetCooldown(start, duration)
-		end
-
-		totem:Show()
-	else
-		totem:Hide()
+	
+	if (haveTotem and duration > 0) then
+		local totem = element[slot]
+		
+		totem.duration = start + duration - GetTime()
+		totem.ela = totem.duration
+		totem:SetScript("OnUpdate", TotemOnUpdate)
+		totem:SetMinMaxValues(0, totem.ela)
+		totem:SetValue(totem.ela)
 	end
 
 	--[[ Callback: Totems:PostUpdate(slot, haveTotem, name, start, duration, icon)
@@ -104,7 +113,7 @@ local function UpdateTotem(self, event, slot)
 	* duration  - the total duration for which the totem should last (number)
 	* icon      - the totem's icon (Texture)
 	--]]
-	if(element.PostUpdate) then
+	if element.PostUpdate then
 		return element:PostUpdate(slot, haveTotem, name, start, duration, icon)
 	end
 end
@@ -135,21 +144,24 @@ local function Enable(self)
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
-
+		
 		for i = 1, #element do
 			local totem = element[i]
-
+			
 			totem:SetID(i)
-
+			totem:SetMinMaxValues(0, 1)
+			totem:SetValue(0)
+			
 			if(totem:IsMouseEnabled()) then
 				totem:SetScript('OnEnter', OnEnter)
 				totem:SetScript('OnLeave', OnLeave)
-
+				
 				--[[ Override: Totems[slot]:UpdateTooltip()
 				Used to populate the tooltip when the totem is hovered.
 
 				* self - the widget at the given slot index
-				--]]
+				]]
+				
 				--[[if(not totem.UpdateTooltip) then
 					totem.UpdateTooltip = UpdateTooltip
 				end]]

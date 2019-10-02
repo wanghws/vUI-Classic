@@ -331,9 +331,9 @@ Media:SetStyle("vUI", {
 	["ui-header-font"] = "Roboto",
 	["ui-button-font"] = "Roboto",
 	
-	["ui-widget-texture"] = "vUI 3",
-	["ui-header-texture"] = "vUI 3",
-	["ui-button-texture"] = "vUI 3",
+	["ui-widget-texture"] = "vUI 4",
+	["ui-header-texture"] = "vUI 4",
+	["ui-button-texture"] = "vUI 4",
 	
 	["ui-header-font-color"] = "FFE6C0",
 	["ui-header-texture-color"] = "424242",

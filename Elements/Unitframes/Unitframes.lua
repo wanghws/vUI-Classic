@@ -811,7 +811,45 @@ local StylePlayer = function(self, unit)
     Castbar.timeToHold = 0.3
 	
 	if (vUI.UserClass == "SHAMAN") then
-		local Totems = {}
+		local Totems = CreateFrame("Frame", self:GetName() .. "Totems", self)
+		Totems:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
+		Totems:SetScaledSize(238, 10)
+		Totems:SetBackdrop(vUI.Backdrop)
+		Totems:SetBackdropColor(0, 0, 0)
+		Totems:SetBackdropBorderColor(0, 0, 0)
+		
+		local Width = (238 / 4) - 1
+		local Color
+		
+		for i = 1, 4 do
+			Color = vUI.Totems[i]
+			
+			Totems[i] = CreateFrame("StatusBar", self:GetName() .. "Totems".. i, Totems)
+			Totems[i]:SetScaledSize(Width, 8)
+			Totems[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+			Totems[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
+			Totems[i]:SetMinMaxValues(0, 1)
+			Totems[i]:SetValue(0)
+			
+			Totems[i].BG = Totems[i]:CreateTexture(nil, "BORDER")
+			Totems[i].BG:SetScaledPoint("TOPLEFT", Totems[i], 0, 0)
+			Totems[i].BG:SetScaledPoint("BOTTOMRIGHT", Totems[i], 0, 0)
+			Totems[i].BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+			Totems[i].BG:SetVertexColor(Color[1], Color[2], Color[3])
+			Totems[i].BG:SetAlpha(0.2)
+			
+			if (i == 1) then
+				Totems[i]:SetScaledPoint("LEFT", Totems, 1, 0)
+			else
+				Totems[i]:SetScaledPoint("TOPLEFT", Totems[i-1], "TOPRIGHT", 1, 0)
+				Totems[i]:SetScaledWidth(Width - 1)
+			end
+		end
+		
+		self.Totems = Totems
+		AuraParent = Totems
+	
+		--[[local Totems = {}
 		
 		for i = 1, 4 do
 			local Totem = CreateFrame("Button", nil, self)
@@ -831,9 +869,9 @@ local StylePlayer = function(self, unit)
 			Totems[i] = Totem
 		end
 		
-		self.Totems = Totems
+		self.Totems = Totems]]
 	elseif (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
-		local ComboPoints = CreateFrame("Frame", nil, self)
+		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
 		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 		ComboPoints:SetScaledSize(238, 10)
 		ComboPoints:SetBackdrop(vUI.Backdrop)
@@ -846,7 +884,7 @@ local StylePlayer = function(self, unit)
 		for i = 1, 5 do
 			Color = vUI.ComboPoints[i]
 			
-			ComboPoints[i] = CreateFrame("StatusBar", nil, ComboPoints)
+			ComboPoints[i] = CreateFrame("StatusBar", self:GetName() .. "ComboPoint" .. i, ComboPoints)
 			ComboPoints[i]:SetScaledSize(Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])

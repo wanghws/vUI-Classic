@@ -20,9 +20,9 @@ Defaults["ui-header-font"] = "Roboto"
 Defaults["ui-widget-font"] = "Roboto"
 Defaults["ui-button-font"] = "Roboto"
 
-Defaults["ui-header-texture"] = "vUI 3"
-Defaults["ui-widget-texture"] = "vUI 3"
-Defaults["ui-button-texture"] = "vUI 3"
+Defaults["ui-header-texture"] = "vUI 4"
+Defaults["ui-widget-texture"] = "vUI 4"
+Defaults["ui-button-texture"] = "vUI 4"
 
 Defaults["ui-header-font-color"] = "FFE6C0"
 Defaults["ui-header-texture-color"] = "616161"
