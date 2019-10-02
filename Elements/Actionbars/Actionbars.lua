@@ -152,6 +152,13 @@ local SkinButton = function(button)
 		button:SetCheckedTexture(Checked)
 	end
 	
+	if button.Flash then
+		button.Flash:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
+		button.Flash:SetVertexColor(0.7, 0.7, 0.1, 0.3)
+		button.Flash:SetScaledPoint("TOPLEFT", button, 1, -1)
+		button.Flash:SetScaledPoint("BOTTOMRIGHT", button, -1, 1)
+	end
+	
 	local Range = button:CreateTexture(nil, "ARTWORK", button)
 	Range:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
 	Range:SetVertexColor(0.7, 0, 0)

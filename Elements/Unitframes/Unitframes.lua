@@ -813,7 +813,7 @@ local StylePlayer = function(self, unit)
 	if (vUI.UserClass == "SHAMAN") then
 		local Totems = {}
 		
-		for i = 1, 5 do
+		for i = 1, 4 do
 			local Totem = CreateFrame("Button", nil, self)
 			Totem:SetSize(32, 32)
 			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * Totem:GetWidth(), 0)
