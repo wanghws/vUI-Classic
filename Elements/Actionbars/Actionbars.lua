@@ -270,6 +270,10 @@ local CreateBar1 = function()
 	ActionBar1:SetScaledPoint("BOTTOMLEFT", vUIBottomActionBarsPanel, (SPACING + 1), (SPACING + 1))
 	ActionBar1:SetFrameStrata("MEDIUM")
 	
+	if (not Settings["action-bars-show-1"]) then
+		ActionBar1:Hide()
+	end
+	
 	ActionBar1.Page = {
 		["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
 		["ROGUE"] = "[bonusbar:1] 7;",
@@ -317,6 +321,10 @@ local CreateBar2 = function()
 	ActionBar2:SetScaledSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
 	ActionBar2:SetFrameStrata("MEDIUM")
 	
+	if (not Settings["action-bars-show-2"]) then
+		ActionBar2:Hide()
+	end
+	
 	MultiBarBottomLeft:SetParent(ActionBar2)
 	
 	for i = 1, Num do
@@ -340,6 +348,10 @@ local CreateBar3 = function()
 	ActionBar3:SetScaledPoint("RIGHT", vUISideActionBarsPanel, -(SPACING + 1), 0)
 	ActionBar3:SetFrameStrata("MEDIUM")
 	
+	if (not Settings["action-bars-show-3"]) then
+		ActionBar3:Hide()
+	end
+	
 	MultiBarRight:SetParent(ActionBar3)
 	
 	for i = 1, Num do
@@ -362,6 +374,10 @@ local CreateBar4 = function()
 	ActionBar4:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	ActionBar4:SetFrameStrata("MEDIUM")
 	
+	if (not Settings["action-bars-show-4"]) then
+		ActionBar4:Hide()
+	end
+	
 	MultiBarLeft:SetParent(ActionBar4)
 	
 	for i = 1, Num do
@@ -383,6 +399,10 @@ local CreateBar5 = function()
 	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", UIParent, "SecureHandlerStateTemplate")
 	ActionBar5:SetScaledSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	ActionBar5:SetFrameStrata("MEDIUM")
+	
+	if (not Settings["action-bars-show-5"]) then
+		ActionBar5:Hide()
+	end
 	
 	MultiBarBottomRight:SetParent(ActionBar5)
 	
@@ -891,6 +911,14 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
 	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
 	
+	-- Remove blizzard options so people don't change them instead of our own
+	InterfaceOptionsActionBarsPanelBottomLeft:Hide()
+	InterfaceOptionsActionBarsPanelBottomRight:Hide()
+	InterfaceOptionsActionBarsPanelRight:Hide()
+	InterfaceOptionsActionBarsPanelRightTwo:Hide()
+	InterfaceOptionsActionBarsPanelStackRightBars:Hide()
+	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Hide()
+	
 	self:UnregisterEvent(event)
 end)
 
@@ -1059,6 +1087,46 @@ local UpdateActionBarFont = function()
 	-- Pet Bar + Stance Bar too
 end
 
+local UpdateShowBar1 = function(value)
+	if value then
+		vUIActionBar1:Show()
+	else
+		vUIActionBar1:Hide()
+	end	
+end
+
+local UpdateShowBar2 = function(value)
+	if value then
+		vUIActionBar2:Show()
+	else
+		vUIActionBar2:Hide()
+	end	
+end
+
+local UpdateShowBar3 = function(value)
+	if value then
+		vUIActionBar3:Show()
+	else
+		vUIActionBar3:Hide()
+	end	
+end
+
+local UpdateShowBar4 = function(value)
+	if value then
+		vUIActionBar4:Show()
+	else
+		vUIActionBar4:Hide()
+	end	
+end
+
+local UpdateShowBar5 = function(value)
+	if value then
+		vUIActionBar5:Show()
+	else
+		vUIActionBar5:Hide()
+	end	
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Action Bars"])
 	
@@ -1067,6 +1135,11 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Layouts"])
 	Left:CreateDropdown("action-bars-layout", Settings["action-bars-layout"], {["2 x 3"] = "2x3", ["3 x 2"] = "3x2", ["4 x 1"] = "4x1", [Language["Default"]] = "DEFAULT"}, "Bar Layout", "Select a bar layout", SetActionBarLayout)
+	
+	Left:CreateHeader(Language["Sizing"])
+	Left:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "Set the size of the action buttons", SetButtonSize)
+	--Left:CreateSlider("action-bars-button-spacing", Settings["action-bars-button-spacing"], -1, 8, 1, "Button Spacing", "Set the spacing of the action buttons", ReloadUI):RequiresReload(true)
+	Left:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "Set the size of the stance buttons", SetStanceSize)
 	
 	Left:CreateHeader(Language["Font"])
 	Left:CreateDropdown("action-bars-font", Settings["action-bars-font"], Media:GetFontList(), Language["Font"], "Set the font of the action bar buttons", UpdateActionBarFont, "Font")
@@ -1078,10 +1151,12 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("action-bars-show-side-bg", Settings["action-bars-show-side-bg"], "Show Side Backdrop", "Display the backdrop of the side action bars", UpdateShowSideBG)
 	Left:CreateSwitch("action-bars-show-stance-bg", Settings["action-bars-show-stance-bg"], "Show Stance Backdrop", "Display the backdrop of the stance bars", UpdateShowStanceBG)
 	
-	Right:CreateHeader(Language["Sizing"])
-	Right:CreateSlider("action-bars-button-size", Settings["action-bars-button-size"], 24, 40, 1, "Button Size", "Set the size of the action buttons", SetButtonSize)
-	--Right:CreateSlider("action-bars-button-spacing", Settings["action-bars-button-spacing"], -1, 8, 1, "Button Spacing", "Set the spacing of the action buttons", ReloadUI):RequiresReload(true)
-	Right:CreateSlider("action-bars-stance-size", Settings["action-bars-stance-size"], 24, 40, 1, "Stance Button Size", "Set the size of the stance buttons", SetStanceSize)
+	Right:CreateHeader(Language["Toggles"])
+	Right:CreateSwitch("action-bars-show-1", Settings["action-bars-show-1"], "Enable Action Bar 1", "Enable Action Bar 1", UpdateShowBar1)
+	Right:CreateSwitch("action-bars-show-2", Settings["action-bars-show-2"], "Enable Action Bar 2", "Enable Action Bar 2", UpdateShowBar2)
+	Right:CreateSwitch("action-bars-show-3", Settings["action-bars-show-3"], "Enable Action Bar 3", "Enable Action Bar 3", UpdateShowBar3)
+	Right:CreateSwitch("action-bars-show-4", Settings["action-bars-show-4"], "Enable Action Bar 4", "Enable Action Bar 4", UpdateShowBar4)
+	Right:CreateSwitch("action-bars-show-5", Settings["action-bars-show-5"], "Enable Action Bar 5", "Enable Action Bar 5", UpdateShowBar5)
 	
 	Right:CreateHeader(Language["Styling"])
 	Right:CreateSwitch("action-bars-show-grid", Settings["action-bars-show-grid"], "Show Empty Buttons", "Display unused buttons", UpdateShowGrid)
