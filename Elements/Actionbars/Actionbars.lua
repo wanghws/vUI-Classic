@@ -886,6 +886,12 @@ end
 ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
 	if (not Settings["action-bars-enable"]) then
+		vUI.UnitFrames["player"].Castbar:SetScaledPoint("BOTTOM", UIParent, 0, 110)
+		vUI.UnitFrames["target"].Castbar:SetScaledPoint("BOTTOM", vUI.UnitFrames["player"].Castbar, "TOP", 0, 4)
+		
+		vUI:GetModule("Move"):Add(vUI.UnitFrames["player"].Castbar, 2)
+		vUI:GetModule("Move"):Add(vUI.UnitFrames["target"].Castbar, 2)
+	
 		return
 	end
 	

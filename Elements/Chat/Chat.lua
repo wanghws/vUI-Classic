@@ -48,7 +48,7 @@ local FormatLinks = function(message)
 			return NewMessage
 		end
 		
-		local NewMessage, Subs = gsub(message, "discord.gg/(%S+)", FormatDiscordHyperlink("%1"))
+		NewMessage, Subs = gsub(message, "discord.gg/(%S+)", FormatDiscordHyperlink("%1"))
 		
 		if (Subs > 0) then
 			return NewMessage
@@ -641,8 +641,9 @@ local MoveChatFrames = function()
 	end
 	
 	GeneralDockManager:ClearAllPoints()
-	GeneralDockManager:SetScaledWidth(FRAME_WIDTH)
-	GeneralDockManager:SetScaledPoint("CENTER", vUIChatFrameTop, 0, 6)
+	GeneralDockManager:SetScaledWidth(FRAME_WIDTH + 16)
+	--GeneralDockManager:SetScaledPoint("CENTER", vUIChatFrameTop, 0, 6)
+	GeneralDockManager:SetScaledPoint("LEFT", vUIChatFrameTop, 0, 6)
 	GeneralDockManager:SetFrameStrata("MEDIUM")
 	
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
