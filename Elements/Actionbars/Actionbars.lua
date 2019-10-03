@@ -884,40 +884,50 @@ local StanceBarUpdateState = function()
 end
 
 ActionBars:RegisterEvent("PLAYER_LOGIN")
+ActionBars:RegisterEvent("PLAYER_ENTERING_WORLD")
 ActionBars:SetScript("OnEvent", function(self, event)
-	if (not Settings["action-bars-enable"]) then
-		return
+	if event == "PLAYER_LOGIN" then
+		if (not Settings["action-bars-enable"]) then
+			return
+		end
+		
+		BUTTON_SIZE = Settings["action-bars-button-size"]
+		SPACING = Settings["action-bars-button-spacing"]
+		STANCE_SIZE = Settings["action-bars-stance-size"]
+		
+		CreateBarPanels()
+		CreateBar1()
+		CreateBar2()
+		CreateBar3()
+		CreateBar4()
+		CreateBar5()
+		CreatePetBar()
+		CreateStanceBar()
+		
+		SetActionBarLayout(Settings["action-bars-layout"])
+		
+		hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
+		hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
+		hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
+		hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
+	else
+		if (not Settings["action-bars-enable"]) then
+			return
+		end
+		
+		MultiBarBottomLeft:SetShown(true)
+		MultiBarRight:SetShown(true)
+		MultiBarLeft:SetShown(true)
+		MultiBarBottomRight:SetShown(true)
+		
+		-- Remove blizzard options so people don't change them instead of our own
+		InterfaceOptionsActionBarsPanelBottomLeft:Hide()
+		InterfaceOptionsActionBarsPanelBottomRight:Hide()
+		InterfaceOptionsActionBarsPanelRight:Hide()
+		InterfaceOptionsActionBarsPanelRightTwo:Hide()
+		InterfaceOptionsActionBarsPanelStackRightBars:Hide()
+		InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Hide()
 	end
-	
-	BUTTON_SIZE = Settings["action-bars-button-size"]
-	SPACING = Settings["action-bars-button-spacing"]
-	STANCE_SIZE = Settings["action-bars-stance-size"]
-	
-	CreateBarPanels()
-	CreateBar1()
-	CreateBar2()
-	CreateBar3()
-	CreateBar4()
-	CreateBar5()
-	CreatePetBar()
-	CreateStanceBar()
-	
-	--SetActionBarToggles(1, 1, 1, 1)
-	
-	SetActionBarLayout(Settings["action-bars-layout"])
-	
-	hooksecurefunc("ActionButton_OnUpdate", UpdateButtonStatus)
-	hooksecurefunc("ActionButton_Update", UpdateButtonStatus)
-	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
-	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
-	
-	-- Remove blizzard options so people don't change them instead of our own
-	InterfaceOptionsActionBarsPanelBottomLeft:Hide()
-	InterfaceOptionsActionBarsPanelBottomRight:Hide()
-	InterfaceOptionsActionBarsPanelRight:Hide()
-	InterfaceOptionsActionBarsPanelRightTwo:Hide()
-	InterfaceOptionsActionBarsPanelStackRightBars:Hide()
-	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:Hide()
 	
 	self:UnregisterEvent(event)
 end)
