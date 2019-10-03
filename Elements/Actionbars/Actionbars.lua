@@ -931,6 +931,14 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	hooksecurefunc("ActionButton_UpdateUsable", UpdateButtonStatus)
 	hooksecurefunc("StanceBar_UpdateState", StanceBarUpdateState)
 	
+	if Settings["unitframes-enable"] then
+		vUI.UnitFrames["player"].Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
+		vUI.UnitFrames["target"].Castbar:SetScaledPoint("BOTTOM", vUI.UnitFrames["player"].Castbar, "TOP", 0, 4)
+		
+		vUI:GetModule("Move"):Add(vUI.UnitFrames["player"].Castbar, 2)
+		vUI:GetModule("Move"):Add(vUI.UnitFrames["target"].Castbar, 2)
+	end
+	
 	self:UnregisterEvent(event)
 end)
 

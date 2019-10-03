@@ -1671,12 +1671,6 @@ UF:SetScript("OnEvent", function(self, event)
 			]]
 		)
 		
-		Player.Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
-		Target.Castbar:SetScaledPoint("BOTTOM", Player.Castbar, "TOP", 0, 4)
-		
-		Move:Add(Player.Castbar, 2)
-		Move:Add(Target.Castbar, 2)
-		
 		self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
 		self.RaidAnchor:SetScaledSize((4 * 90 + 4 * 2), (28 * 10) + (2 * (10 - 1)))
 		self.RaidAnchor:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
