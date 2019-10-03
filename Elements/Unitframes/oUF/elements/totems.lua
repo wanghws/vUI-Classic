@@ -94,7 +94,6 @@ local function UpdateTotem(self, event, slot)
 	
 	if (haveTotem and duration > 0) then
 		local totem = element[slot]
-		
 		totem.duration = start + duration - GetTime()
 		totem.ela = totem.duration
 		totem:SetScript("OnUpdate", TotemOnUpdate)

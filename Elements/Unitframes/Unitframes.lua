@@ -665,7 +665,7 @@ local StylePlayer = function(self, unit)
 	self:SetBackdropColor(0, 0, 0)
 	self:SetBackdropBorderColor(0, 0, 0)
 	
-	local AuraParent = self
+	self.AuraParent = self
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
@@ -847,29 +847,7 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.Totems = Totems
-		AuraParent = Totems
-	
-		--[[local Totems = {}
-		
-		for i = 1, 4 do
-			local Totem = CreateFrame("Button", nil, self)
-			Totem:SetSize(32, 32)
-			Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * Totem:GetWidth(), 0)
-			
-			local Icon = Totem:CreateTexture(nil, "OVERLAY")
-			Icon:SetAllPoints()
-			Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			
-			local Cooldown = CreateFrame("Cooldown", nil, Totem, "CooldownFrameTemplate")
-			Cooldown:SetAllPoints()
-			
-			Totem.Icon = Icon
-			Totem.Cooldown = Cooldown
-			
-			Totems[i] = Totem
-		end
-		
-		self.Totems = Totems]]
+		self.AuraParent = Totems
 	elseif (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
 		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
@@ -899,13 +877,13 @@ local StylePlayer = function(self, unit)
 		end
 		
 		self.ComboPoints = ComboPoints
-		AuraParent = ComboPoints
+		self.AuraParent = ComboPoints
 	end
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
 	Buffs:SetScaledSize(238, 28)
-	Buffs:SetScaledPoint("BOTTOMLEFT", AuraParent, "TOPLEFT", 0, 2)
+	Buffs:SetScaledPoint("BOTTOMLEFT", self.AuraParent, "TOPLEFT", 0, 2)
 	Buffs.size = 28
 	Buffs.spacing = 2
 	Buffs.num = 16
@@ -1585,6 +1563,16 @@ local Style = function(self, unit)
 	end
 end
 
+local UpdateShowPlayerBuffs = function(value)
+	if vUI.UnitFrames["player"] then
+		if value then
+			vUI.UnitFrames["player"]:EnableElement("Auras")
+		else
+			vUI.UnitFrames["player"]:DisableElement("Auras")
+		end
+	end
+end
+
 local PlateCVars = {
     nameplateGlobalScale = 1,
     NamePlateHorizontalScale = 1,
@@ -1602,127 +1590,134 @@ local UF = vUI:NewModule("Unit Frames")
 oUF:RegisterStyle("vUI", Style)
 
 UF:RegisterEvent("PLAYER_LOGIN")
+UF:RegisterEvent("PLAYER_ENTERING_WORLD")
 UF:SetScript("OnEvent", function(self, event)
-	if (not Settings["unitframes-enable"]) then
-		return
-	end
-	
-	local Player = oUF:Spawn("player", "vUI Player")
-	Player:SetScaledSize(238, 46)
-	Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
-	
-	local Target = oUF:Spawn("target", "vUI Target")
-	Target:SetScaledSize(238, 46)
-	Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
-	
-	local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
-	TargetTarget:SetScaledSize(110, 26)
-	TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
-	
-	local Pet = oUF:Spawn("pet", "vUI Pet")
-	Pet:SetScaledSize(110, 26)
-	Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
-	
-	local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
-		"initial-width", 160,
-		"initial-height", 38,
-		"showSolo", false,
-		"showPlayer", true,
-		"showParty", true,
-		"showRaid", false,
-		"xoffset", 2,
-		"yOffset", -2,
-		"oUF-initialConfigFunction", [[
-			local Header = self:GetParent()
-			
-			self:SetWidth(Header:GetAttribute("initial-width"))
-			self:SetHeight(Header:GetAttribute("initial-height"))
-		]]
-	)
-	
-	local PartyPet = oUF:SpawnHeader("vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
-		"initial-width", 160,
-		"initial-height", 22,
-		"showSolo", false,
-		"showPlayer", true,
-		"showParty", true,
-		"showRaid", false,
-		"xoffset", 2,
-		"yOffset", -2,
-		"oUF-initialConfigFunction", [[
-			local Header = self:GetParent()
-			
-			self:SetWidth(Header:GetAttribute("initial-width"))
-			self:SetHeight(Header:GetAttribute("initial-height"))
-		]]
-	)
-	
-	local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
-		"initial-width", 90,
-		"initial-height", 28,
-		"showSolo", false,
-		"showPlayer", true,
-		"showParty", false,
-		"showRaid", true,
-		"xoffset", 2,
-		"yOffset", -2,
-		"groupFilter", "1,2,3,4,5,6,7,8",
-		"groupingOrder", "1,2,3,4,5,6,7,8",
-		"groupBy", "GROUP",
-		"maxColumns", ceil(40 / 10),
-		"unitsPerColumn", 10,
-		"columnSpacing", 2,
-		"columnAnchorPoint", "LEFT",
-		"oUF-initialConfigFunction", [[
-			local Header = self:GetParent()
-			
-			self:SetWidth(Header:GetAttribute("initial-width"))
-			self:SetHeight(Header:GetAttribute("initial-height"))
-		]]
-	)
-	
-	Player.Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
-	Target.Castbar:SetScaledPoint("BOTTOM", Player.Castbar, "TOP", 0, 4)
-	
-	Move:Add(Player.Castbar, 2)
-	Move:Add(Target.Castbar, 2)
-	
-	self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
-	self.RaidAnchor:SetScaledSize((4 * 90 + 4 * 2), (28 * 10) + (2 * (10 - 1)))
-	self.RaidAnchor:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
-	
-	Party:SetScaledPoint("LEFT", UIParent, 10, 0)
-	PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
-	Raid:SetScaledPoint("TOPLEFT", self.RaidAnchor, 0, 0)
-	
-	vUI.UnitFrames["player"] = Player
-	vUI.UnitFrames["target"] = Target
-	vUI.UnitFrames["targettarget"] = TargetTarget
-	vUI.UnitFrames["pet"] = Pet
-	
-	if Settings["nameplates-enable"] then
-		oUF:SpawnNamePlates(nil, nil, PlateCVars)
-	end
-	
-	if Settings["unitframes-enable-raid"] then
-		local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
-		Hider:Hide()
+	if (event == "PLAYER_LOGIN") then
+		if (not Settings["unitframes-enable"]) then
+			return
+		end
 		
-		CompactRaidFrameContainer:UnregisterAllEvents()
-		CompactRaidFrameContainer:SetParent(Hider)
+		local Player = oUF:Spawn("player", "vUI Player")
+		Player:SetScaledSize(238, 46)
+		Player:SetScaledPoint("RIGHT", UIParent, "CENTER", -68, -304)
 		
-		--CompactRaidFrameManager:UnregisterAllEvents()
-		--CompactRaidFrameManager:SetParent(Hider)
+		local Target = oUF:Spawn("target", "vUI Target")
+		Target:SetScaledSize(238, 46)
+		Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
+		
+		local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
+		TargetTarget:SetScaledSize(110, 26)
+		TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
+		
+		local Pet = oUF:Spawn("pet", "vUI Pet")
+		Pet:SetScaledSize(110, 26)
+		Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
+		
+		local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
+			"initial-width", 160,
+			"initial-height", 38,
+			"showSolo", false,
+			"showPlayer", true,
+			"showParty", true,
+			"showRaid", false,
+			"xoffset", 2,
+			"yOffset", -2,
+			"oUF-initialConfigFunction", [[
+				local Header = self:GetParent()
+				
+				self:SetWidth(Header:GetAttribute("initial-width"))
+				self:SetHeight(Header:GetAttribute("initial-height"))
+			]]
+		)
+		
+		local PartyPet = oUF:SpawnHeader("vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
+			"initial-width", 160,
+			"initial-height", 22,
+			"showSolo", false,
+			"showPlayer", true,
+			"showParty", true,
+			"showRaid", false,
+			"xoffset", 2,
+			"yOffset", -2,
+			"oUF-initialConfigFunction", [[
+				local Header = self:GetParent()
+				
+				self:SetWidth(Header:GetAttribute("initial-width"))
+				self:SetHeight(Header:GetAttribute("initial-height"))
+			]]
+		)
+		
+		local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
+			"initial-width", 90,
+			"initial-height", 28,
+			"showSolo", false,
+			"showPlayer", true,
+			"showParty", false,
+			"showRaid", true,
+			"xoffset", 2,
+			"yOffset", -2,
+			"groupFilter", "1,2,3,4,5,6,7,8",
+			"groupingOrder", "1,2,3,4,5,6,7,8",
+			"groupBy", "GROUP",
+			"maxColumns", ceil(40 / 10),
+			"unitsPerColumn", 10,
+			"columnSpacing", 2,
+			"columnAnchorPoint", "LEFT",
+			"oUF-initialConfigFunction", [[
+				local Header = self:GetParent()
+				
+				self:SetWidth(Header:GetAttribute("initial-width"))
+				self:SetHeight(Header:GetAttribute("initial-height"))
+			]]
+		)
+		
+		Player.Castbar:SetScaledPoint("BOTTOM", vUIBottomActionBarsPanel, "TOP", 0, 5)
+		Target.Castbar:SetScaledPoint("BOTTOM", Player.Castbar, "TOP", 0, 4)
+		
+		Move:Add(Player.Castbar, 2)
+		Move:Add(Target.Castbar, 2)
+		
+		self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
+		self.RaidAnchor:SetScaledSize((4 * 90 + 4 * 2), (28 * 10) + (2 * (10 - 1)))
+		self.RaidAnchor:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
+		
+		Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+		PartyPet:SetScaledPoint("TOPLEFT", Party, "BOTTOMLEFT", 0, -2)
+		Raid:SetScaledPoint("TOPLEFT", self.RaidAnchor, 0, 0)
+		
+		vUI.UnitFrames["player"] = Player
+		vUI.UnitFrames["target"] = Target
+		vUI.UnitFrames["targettarget"] = TargetTarget
+		vUI.UnitFrames["pet"] = Pet
+		
+		if Settings["nameplates-enable"] then
+			oUF:SpawnNamePlates(nil, nil, PlateCVars)
+		end
+		
+		if Settings["unitframes-enable-raid"] then
+			local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+			Hider:Hide()
+			
+			if CompactRaidFrameContainer then
+				CompactRaidFrameContainer:UnregisterAllEvents()
+				CompactRaidFrameContainer:SetParent(Hider)
+				
+				--CompactRaidFrameManager:UnregisterAllEvents()
+				--CompactRaidFrameManager:SetParent(Hider)
+			end
+		end
+		
+		Move:Add(Player)
+		Move:Add(Target)
+		Move:Add(TargetTarget)
+		Move:Add(Pet)
+		--Move:Add(Party)
+		--Move:Add(PartyPet)
+		--Move:Add(Raid)
+		Move:Add(self.RaidAnchor)
+	else
+		UpdateShowPlayerBuffs(Settings["unitframes-show-player-buffs"])
 	end
-	
-	Move:Add(Player)
-	Move:Add(Target)
-	Move:Add(TargetTarget)
-	Move:Add(Pet)
-	--Move:Add(Party)
-	--Move:Add(PartyPet)
-	--Move:Add(Raid)
-	Move:Add(self.RaidAnchor)
 end)
 
 local TogglePlayerName = function(value)
@@ -1751,7 +1746,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames"], "Enable the vUI raid frames module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
-	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", UpdateOnlyPlayerDebuffs)
+	Left:CreateSwitch("unitframes-show-player-buffs", Settings["unitframes-show-player-buffs"], Language["Show Player Buffs"], "Show your auras above the player unit frame", UpdateShowPlayerBuffs)
+	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will|n be displayed on the target", UpdateOnlyPlayerDebuffs)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
@@ -1764,6 +1760,7 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("unitframes-target-show-name", Settings["unitframes-target-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	Right:CreateSwitch("unitframes-target-cc-health", Settings["unitframes-target-cc-health"], Language["Dark Scheme"], "")
 	]]
+	
 	Left:CreateFooter()
 	Right:CreateFooter()
 end)
