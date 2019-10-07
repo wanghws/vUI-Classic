@@ -99,9 +99,6 @@ GUI:AddOptions(function(self)
 	Left:CreateInput("test-input-1", vUI.UserName, "Test Input 1", nil, function(v) print(v) end)
 	Left:CreateInput("test-input-2", vUI.UserName, "Test Input 2", nil, function(v) print(v) end)
 	Left:CreateInput("test-input-3", vUI.UserName, "Test Input 3", nil, function(v) print(v) end)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 ]]
 GUI:AddOptions(function(self)
@@ -127,9 +124,6 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine(Language["Realm"], vUI.UserRealm)
 	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
 	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 local UpdateZone = CreateFrame("Frame")
@@ -739,9 +733,6 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("cooldowns-enable", Settings["cooldowns-enable"], Language["Enable Cooldown Flash"], "When an ability comes off cooldown|n the icon will flash as an alert", UpdateEnableCooldownFlash)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 local MirrorTimerColors = {

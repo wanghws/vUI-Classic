@@ -476,7 +476,4 @@ GUI:AddOptions(function(self)
 	Left:CreateHeader(Language["Colors"])
 	Left:CreateColorSelection("experience-bar-color", Settings["experience-bar-color"], "Experience Color", "Set the color of the experience bar", UpdateBarColor)
 	Left:CreateColorSelection("experience-rested-color", Settings["experience-rested-color"], "Rested Color", "Set the color of the rested bar", UpdateRestedColor)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

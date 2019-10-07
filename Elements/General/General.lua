@@ -84,9 +84,6 @@ GUI:AddOptions(function(self)
 	Left:CreateButton(Language["Toggle"], Language["Move UI"], "While toggled, you can drag some|nelements of vUI around the screen", ToggleMove)
 	Left:CreateButton(Language["Restore"], Language["Restore To Defaults"], "Restore all vUI movable frames|nto their default locations", ResetMovers)
 	
-	Left:CreateFooter()
-	Right:CreateFooter()
-	
 	if Settings["ui-display-welcome"] then
 		local Color1 = Settings["ui-widget-color"]
 		local Color2 = Settings["ui-header-font-color"]

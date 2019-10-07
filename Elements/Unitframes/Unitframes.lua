@@ -1754,9 +1754,6 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("unitframes-target-show-name", Settings["unitframes-target-show-name"], Language["Enable Name"], "", TogglePlayerName)
 	Right:CreateSwitch("unitframes-target-cc-health", Settings["unitframes-target-cc-health"], Language["Dark Scheme"], "")
 	]]
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 GUI:AddOptions(function(self)
@@ -1781,9 +1778,6 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "").Box:Save()
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "").Box:Save()
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "").Box:Save()
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 --[[ /run FakeGroup()

@@ -3201,9 +3201,9 @@ end
 
 GUI.GetWindow = function(self, name)
 	if self.Windows[name] then
-		return self.Windows[name]
+		return self.Windows[name].LeftWidgetsBG, self.Windows[name].RightWidgetsBG
 	else
-		return self.Windows[self.DefaultWindow]
+		return self.Windows[self.DefaultWindow].LeftWidgetsBG, self.Windows[self.DefaultWindow].RightWidgetsBG
 	end
 end
 
@@ -3353,6 +3353,22 @@ GUI.FadeOut:SetScript("OnFinished", function(self)
 	self.Parent:Hide()
 end)
 
+function GUI:AddFooters()
+	local Window
+	
+	for Name in pairs(self.Windows) do
+		Window = self.Windows[Name]
+		
+		if (#Window.LeftWidgets > 0) then
+			Window.LeftWidgetsBG:CreateFooter()
+		end
+		
+		if (#Window.RightWidgets > 0) then
+			Window.RightWidgetsBG:CreateFooter()
+		end
+	end
+end
+
 function GUI:RunQueue()
 	if (#self.Queue > 0) then
 		local Func
@@ -3363,6 +3379,8 @@ function GUI:RunQueue()
 			Func(self)
 		end
 	end
+	
+	self:AddFooters()
 end
 
 function GUI:VARIABLES_LOADED()
@@ -3485,7 +3503,4 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
 	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

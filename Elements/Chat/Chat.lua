@@ -944,7 +944,4 @@ GUI:AddOptions(function(self)
 	Left:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame tabs", UpdateChatTabFont)
 	Left:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
 	Left:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "Set the color of the chat frame tabs", UpdateChatTabFont)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
