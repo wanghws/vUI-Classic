@@ -10,7 +10,6 @@ local min = math.min
 local max = math.max
 local type = type
 local UnitLevel = UnitLevel
-local oldprint = print
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local vUI = CreateFrame("Frame", nil, UIParent)
 
@@ -287,7 +286,7 @@ function vUI:Reset()
 	ReloadUI()
 end
 
---[[print = function(...)
+local NewPrint = function(...)
 	local NumArgs = select("#", ...)
 	local String = ""
 	
@@ -316,7 +315,9 @@ end
 			DEFAULT_CHAT_FRAME:AddMessage(...)
 		end
 	end
-end]]
+end
+
+setprinthandler(NewPrint)
 
 function vUI:print(...)
 	if Core[5]["ui-widget-color"] then
