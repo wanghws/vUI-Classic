@@ -323,10 +323,3 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Size"])
 	Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "Set the size of the Minimap", UpdateMinimapSize)
 end)
-
-GUI:AddOptions(function(self)
-	local Left, Right = self:GetWindow(Language["Minimap"])
-	
-	Left:CreateHeader(Language["Test Addition"])
-	Left:CreateSwitch("minimap-enable2", true, Language["Enable Test Module"], "Enable the test module")
-end)
