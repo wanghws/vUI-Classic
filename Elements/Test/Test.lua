@@ -99,8 +99,10 @@ GUI:AddOptions(function(self)
 	Left:CreateInput("test-input-1", vUI.UserName, "Test Input 1", nil, function(v) print(v) end)
 	Left:CreateInput("test-input-2", vUI.UserName, "Test Input 2", nil, function(v) print(v) end)
 	Left:CreateInput("test-input-3", vUI.UserName, "Test Input 3", nil, function(v) print(v) end)
-end)
-]]
+	
+	Left:CreateMessage("Hello world. This is a variable length message for the GUI to process.")
+end)]]
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Debug"])
 	
@@ -142,11 +144,6 @@ local Fonts = vUI:NewModule("Fonts")
 
 function Fonts:Load()
 	local Font = Media:GetFont(Settings["ui-widget-font"])
-
-	--UNIT_NAME_FONT = Font
-	--NAMEPLATE_FONT = Font
-	--DAMAGE_TEXT_FONT = Font
-	--STANDARD_TEXT_FONT = Font
 	
 	UIErrorsFrame:SetFont(Font, 16)
 	

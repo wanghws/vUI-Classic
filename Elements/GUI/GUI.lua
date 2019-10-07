@@ -26,9 +26,9 @@ GUI.Widgets = {}
 	To do:
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
-	Input.Imprint = a string that shows when the editbox is empty, a suggestion, or default value.
+	Input.Imprint = a string that shows when the editbox is empty; a suggestion, or default value.
 	
-	- If template == "None" then disable the page
+	- If template == "None" then disable the styles page
 	
 	- Set the scrollbars to have arrow button
 	- Dropdown breaks, when clicked won't respond. something like "---------------"
@@ -195,7 +195,26 @@ GUI.Widgets.CreateLine = function(self, text)
 	return Anchor.Text
 end
 
+local GET_LENGTH = UIParent:CreateFontString(nil, "OVERLAY")
+GET_LENGTH:SetScaledPoint("CENTER", UIParent, 0, 100)
+GET_LENGTH:SetJustifyH("LEFT")
+GET_LENGTH:SetScaledWidth(GROUP_WIDTH - 6)
+
 GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
+	if (not GET_LENGTH.FontSet) then
+		GET_LENGTH:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		GET_LENGTH.FontSet = true
+	end
+	
+	GET_LENGTH:SetText(text)
+	
+	local NumLines = ceil(GET_LENGTH:GetStringHeight() / Settings["ui-font-size"])
+	local Message = text
+	
+	--[[for i = 1, NumLines do
+		print()
+	end]]
+	
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = CreateID(text)
@@ -208,7 +227,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	
 	tinsert(self.Widgets, Anchor)]]
 	
-	--return
+	return Text
 end
 
 GUI.Widgets.CreateDoubleLine = function(self, left, right)

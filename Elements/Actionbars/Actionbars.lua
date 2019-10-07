@@ -43,6 +43,14 @@ local SkinButton = function(button)
 		Kill(_G[button:GetName() .. "FloatingBG"])
 	end
 	
+	if _G[button:GetName() .. "Cooldown"] then
+		local Cooldown = _G[button:GetName() .. "Cooldown"]:GetRegions()
+		
+		if Cooldown then
+			Cooldown:SetFontInfo(Settings["action-bars-font"], 18, Settings["action-bars-font-flags"])
+		end
+	end
+	
 	if button.HotKey then
 		button.HotKey:ClearAllPoints()
 		button.HotKey:SetScaledPoint("TOPLEFT", button, 2, -2)
