@@ -125,10 +125,10 @@ Defaults["color-combo-4"] = "B2FF66"
 Defaults["color-combo-5"] = "66FF66"
 
 -- Casting
-Defaults["color-casting-start"] = "009900"
+Defaults["color-casting-start"] = "7DB545"
 Defaults["color-casting-stopped"] = "F39C12"
 Defaults["color-casting-interrupted"] = "D35400"
-Defaults["color-casting-success"] = "009900" -- TBI
+Defaults["color-casting-success"] = "7DB545" -- TBI
 
 -- Mirror Timers
 Defaults["color-mirror-exhaustion"] = "FFE500"
@@ -272,7 +272,7 @@ Defaults["nameplates-only-player-debuffs"] = true
 Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
 Defaults["tooltips-on-cursor"] = false
-Defaults["tooltips-show-id"] = true
+Defaults["tooltips-show-id"] = false
 
 -- Bags
 Defaults["bags-loot-from-left"] = false
