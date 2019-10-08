@@ -855,6 +855,10 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	ChatTypeInfo["CHANNEL19"].colorNameByClass = true
 	ChatTypeInfo["CHANNEL20"].colorNameByClass = true
 	
+	if (GetCVar("colorChatNamesByClass") == 0) then
+		SetCVar("colorChatNamesByClass", 1)
+	end
+	
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)
 	
@@ -944,7 +948,4 @@ GUI:AddOptions(function(self)
 	Left:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame tabs", UpdateChatTabFont)
 	Left:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
 	Left:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "Set the color of the chat frame tabs", UpdateChatTabFont)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

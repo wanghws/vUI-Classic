@@ -621,6 +621,4 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Vendor Price"], "Display the items value if sold to a vendor")
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")
-	
-	Left:CreateFooter()
 end)

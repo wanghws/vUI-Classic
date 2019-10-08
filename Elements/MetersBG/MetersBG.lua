@@ -9,22 +9,36 @@ if (not Testing[vUI.UserProfileKey]) then
 end
 
 local FRAME_WIDTH = 390
-local FRAME_HEIGHT = 104
+local FRAME_HEIGHT = 128
 local BAR_HEIGHT = 22
 
 local CreateMetersPanels = function()
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	
 	local MeterBGBottom = CreateFrame("Frame", nil, UIParent)
-	MeterBGBottom:SetScaledSize(FRAME_WIDTH, 4)
+	MeterBGBottom:SetScaledSize(FRAME_WIDTH, BAR_HEIGHT + 6)
 	MeterBGBottom:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 13)
 	MeterBGBottom:SetBackdrop(vUI.Backdrop)
 	MeterBGBottom:SetBackdropColorHex(Settings["ui-window-bg-color"])
 	MeterBGBottom:SetBackdropBorderColor(0, 0, 0)
 	MeterBGBottom:SetFrameStrata("LOW")
 	
+	local MeterBGBottomFrame = CreateFrame("Frame", nil, UIParent)
+	MeterBGBottomFrame:SetScaledSize(FRAME_WIDTH - 6, BAR_HEIGHT)
+	MeterBGBottomFrame:SetScaledPoint("BOTTOM", MeterBGBottom, "BOTTOM", 0, 3)
+	MeterBGBottomFrame:SetBackdrop(vUI.BackdropAndBorder)
+	MeterBGBottomFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	MeterBGBottomFrame:SetBackdropBorderColor(0, 0, 0)
+	MeterBGBottomFrame:SetFrameStrata("MEDIUM")
+	
+	MeterBGBottomFrame.Texture = MeterBGBottomFrame:CreateTexture(nil, "OVERLAY")
+	MeterBGBottomFrame.Texture:SetScaledPoint("TOPLEFT", MeterBGBottomFrame, 1, -1)
+	MeterBGBottomFrame.Texture:SetScaledPoint("BOTTOMRIGHT", MeterBGBottomFrame, -1, 1)
+	MeterBGBottomFrame.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	MeterBGBottomFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
+	
 	local MeterBGLeft = CreateFrame("Frame", nil, UIParent)
-	MeterBGLeft:SetScaledSize(4, 126)
+	MeterBGLeft:SetScaledSize(4, FRAME_HEIGHT)
 	MeterBGLeft:SetScaledPoint("BOTTOMLEFT", MeterBGBottom, 0, 0)
 	MeterBGLeft:SetBackdrop(vUI.Backdrop)
 	MeterBGLeft:SetBackdropColorHex(Settings["ui-window-bg-color"])
@@ -32,7 +46,7 @@ local CreateMetersPanels = function()
 	MeterBGLeft:SetFrameStrata("LOW")
 	
 	local MeterBGRight = CreateFrame("Frame", nil, UIParent)
-	MeterBGRight:SetScaledSize(4, 126)
+	MeterBGRight:SetScaledSize(4, FRAME_HEIGHT)
 	MeterBGRight:SetScaledPoint("BOTTOMRIGHT", MeterBGBottom, 0, 0)
 	MeterBGRight:SetBackdrop(vUI.Backdrop)
 	MeterBGRight:SetBackdropColorHex(Settings["ui-window-bg-color"])
@@ -40,7 +54,7 @@ local CreateMetersPanels = function()
 	MeterBGRight:SetFrameStrata("LOW")
 	
 	local MeterBGTop = CreateFrame("Frame", nil, UIParent)
-	MeterBGTop:SetScaledSize(FRAME_WIDTH, 22 + 4)
+	MeterBGTop:SetScaledSize(FRAME_WIDTH, BAR_HEIGHT + 4)
 	MeterBGTop:SetScaledPoint("BOTTOMLEFT", MeterBGLeft, "TOPLEFT", 0, 0)
 	MeterBGTop:SetBackdrop(vUI.Backdrop)
 	MeterBGTop:SetBackdropColorHex(Settings["ui-window-bg-color"])
@@ -56,7 +70,7 @@ local CreateMetersPanels = function()
 	MeterBG:SetFrameStrata("BACKGROUND")
 	
 	local TopLeft = CreateFrame("Frame", nil, UIParent)
-	TopLeft:SetScaledSize((FRAME_WIDTH / 2) - 4, 21)
+	TopLeft:SetScaledSize((FRAME_WIDTH / 2) - 4, BAR_HEIGHT)
 	TopLeft:SetScaledPoint("TOPLEFT", MeterBGTop, 3, -2)
 	TopLeft:SetBackdrop(vUI.BackdropAndBorder)
 	TopLeft:SetBackdropColorHex(Settings["ui-window-bg-color"])
@@ -70,7 +84,7 @@ local CreateMetersPanels = function()
 	TopLeft.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	local TopRight = CreateFrame("Frame", nil, UIParent)
-	TopRight:SetScaledSize((FRAME_WIDTH / 2) - 4, 21)
+	TopRight:SetScaledSize((FRAME_WIDTH / 2) - 4, BAR_HEIGHT)
 	TopRight:SetScaledPoint("TOPRIGHT", MeterBGTop, -3, -2)
 	TopRight:SetBackdrop(vUI.BackdropAndBorder)
 	TopRight:SetBackdropColorHex(Settings["ui-window-bg-color"])
@@ -99,13 +113,13 @@ local CreateMetersPanels = function()
 	OuterOutline:SetBackdropBorderColor(0, 0, 0)
 	
 	local InnerLeftOutline = CreateFrame("Frame", nil, MeterBGBottom)
-	InnerLeftOutline:SetScaledPoint("TOPLEFT", MeterBGLeft, "TOPRIGHT", -1, 1)
+	InnerLeftOutline:SetScaledPoint("TOPLEFT", MeterBGLeft, "TOPRIGHT", -1, 0)
 	InnerLeftOutline:SetScaledPoint("BOTTOMRIGHT", MeterBGMiddle, "BOTTOMLEFT", 1, -1)
 	InnerLeftOutline:SetBackdrop(vUI.Outline)
 	InnerLeftOutline:SetBackdropBorderColor(0, 0, 0)
 	
 	local InnerRightOutline = CreateFrame("Frame", nil, MeterBGBottom)
-	InnerRightOutline:SetScaledPoint("TOPRIGHT", MeterBGRight, "TOPLEFT", 1, 1)
+	InnerRightOutline:SetScaledPoint("TOPRIGHT", MeterBGRight, "TOPLEFT", 1, 0)
 	InnerRightOutline:SetScaledPoint("BOTTOMLEFT", MeterBGMiddle, "BOTTOMRIGHT", -1, -1)
 	InnerRightOutline:SetBackdrop(vUI.Outline)
 	InnerRightOutline:SetBackdropBorderColor(0, 0, 0)

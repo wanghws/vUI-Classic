@@ -322,6 +322,7 @@ GUI:AddOptions(function(self)
 
 	Left:CreateHeader(Language["Misc"])
 	Left:CreateSwitch("minimap-show-time", Settings["minimap-show-time"], Language["Enable Minimap Time"], "Display time on the minimap", UpdateShowMinimapTime)
-
-	Left:CreateFooter()
+	
+	-- Right:CreateHeader(Language["Size"])
+	-- Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "Set the size of the Minimap", UpdateMinimapSize)
 end)

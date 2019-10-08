@@ -197,9 +197,6 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-casting-stopped", Settings["color-casting-stopped"], Language["Stopped"], "")
 	Right:CreateColorSelection("color-casting-interrupted", Settings["color-casting-interrupted"], Language["Interrupted"], "")
 	
-	Left:CreateFooter()
-	Right:CreateFooter()
-	
 	vUI:UpdateClassColors()
 	vUI:UpdateReactionColors()
 	vUI:UpdateZoneColors()

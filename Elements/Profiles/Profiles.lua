@@ -647,7 +647,4 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
 	Right:CreateDoubleLine("Empty Profiles:", NumEmpty)
 	Right:CreateDoubleLine("Unused Profiles:", NumUnused)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

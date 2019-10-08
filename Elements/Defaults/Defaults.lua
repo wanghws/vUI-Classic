@@ -125,10 +125,10 @@ Defaults["color-combo-4"] = "B2FF66"
 Defaults["color-combo-5"] = "66FF66"
 
 -- Casting
-Defaults["color-casting-start"] = "009900"
+Defaults["color-casting-start"] = "4C9900"
 Defaults["color-casting-stopped"] = "F39C12"
 Defaults["color-casting-interrupted"] = "D35400"
-Defaults["color-casting-success"] = "009900" -- TBI
+Defaults["color-casting-success"] = "4C9900" -- TBI
 
 -- Mirror Timers
 Defaults["color-mirror-exhaustion"] = "FFE500"
@@ -199,7 +199,7 @@ Defaults["experience-height"] = 16
 Defaults["experience-position"] = "TOP"
 Defaults["experience-progress-visibility"] = "ALWAYS"
 Defaults["experience-percent-visibility"] = "ALWAYS"
-Defaults["experience-bar-color"] = "7DB545" -- 1AE045
+Defaults["experience-bar-color"] = "4C9900" -- 1AE045
 Defaults["experience-rested-color"] = "00B4FF"
 
 -- Auras
@@ -256,7 +256,7 @@ Defaults["unitframes-player-show-name"] = false
 Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-class-color"] = true -- temporary
-Defaults["unitframes-only-player-debuffs"] = true
+Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
 
 -- Name Plates
@@ -276,7 +276,7 @@ Defaults["nameplates-only-player-debuffs"] = true
 Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
 Defaults["tooltips-on-cursor"] = false
-Defaults["tooltips-show-id"] = true
+Defaults["tooltips-show-id"] = false
 
 -- Bags
 Defaults["bags-loot-from-left"] = false

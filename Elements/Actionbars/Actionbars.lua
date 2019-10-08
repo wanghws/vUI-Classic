@@ -43,6 +43,14 @@ local SkinButton = function(button)
 		Kill(_G[button:GetName() .. "FloatingBG"])
 	end
 	
+	if _G[button:GetName() .. "Cooldown"] then
+		local Cooldown = _G[button:GetName() .. "Cooldown"]:GetRegions()
+		
+		if Cooldown then
+			Cooldown:SetFontInfo(Settings["action-bars-font"], 18, Settings["action-bars-font-flags"])
+		end
+	end
+	
 	if button.HotKey then
 		button.HotKey:ClearAllPoints()
 		button.HotKey:SetScaledPoint("TOPLEFT", button, 2, -2)
@@ -64,7 +72,7 @@ local SkinButton = function(button)
 		end
 		
 		if (not Settings["action-bars-show-hotkeys"]) then
-			button.HotKey:Hide()
+			button.HotKey:SetAlpha(0)
 		end
 	end
 	
@@ -79,18 +87,18 @@ local SkinButton = function(button)
 		button.Name.SetTextColor = function() end
 		
 		if (not Settings["action-bars-show-macro-names"]) then
-			button.Name:Hide()
+			button.Name:SetAlpha(0)
 		end
 	end
 	
-	if (not button.CountBG) then
+	--[[if (not button.CountBG) then
 		button.CountBG = button:CreateTexture(nil, "BORDER")
 		button.CountBG:SetScaledPoint("BOTTOMRIGHT", button, 0, 0)
 		button.CountBG:SetScaledSize(24, 16)
 		button.CountBG:SetTexture(Media:GetTexture("Blank"))
 		button.CountBG:SetVertexColor(0, 0, 0, 0.9)
 		button.CountBG:Hide()
-	end
+	end]]
 	
 	if button.Count then
 		button.Count:ClearAllPoints()
@@ -102,7 +110,7 @@ local SkinButton = function(button)
 		button.Count.SetTextColor = function() end
 		
 		if (not Settings["action-bars-show-count"]) then
-			button.Count:Hide()
+			button.Count:SetAlpha(0)
 		end
 	end
 	
@@ -975,19 +983,19 @@ end
 local UpdateShowHotKey = function(value)
 	if value then
 		for i = 1, Num do
-			vUIActionBar1[i].HotKey:Show()
-			vUIActionBar2[i].HotKey:Show()
-			vUIActionBar3[i].HotKey:Show()
-			vUIActionBar4[i].HotKey:Show()
-			vUIActionBar5[i].HotKey:Show()
+			vUIActionBar1[i].HotKey:SetAlpha(1)
+			vUIActionBar2[i].HotKey:SetAlpha(1)
+			vUIActionBar3[i].HotKey:SetAlpha(1)
+			vUIActionBar4[i].HotKey:SetAlpha(1)
+			vUIActionBar5[i].HotKey:SetAlpha(1)
 		end
 	else
 		for i = 1, Num do
-			vUIActionBar1[i].HotKey:Hide()
-			vUIActionBar2[i].HotKey:Hide()
-			vUIActionBar3[i].HotKey:Hide()
-			vUIActionBar4[i].HotKey:Hide()
-			vUIActionBar5[i].HotKey:Hide()
+			vUIActionBar1[i].HotKey:SetAlpha(0)
+			vUIActionBar2[i].HotKey:SetAlpha(0)
+			vUIActionBar3[i].HotKey:SetAlpha(0)
+			vUIActionBar4[i].HotKey:SetAlpha(0)
+			vUIActionBar5[i].HotKey:SetAlpha(0)
 		end
 	end
 end
@@ -995,19 +1003,19 @@ end
 local UpdateShowMacroName = function(value)
 	if value then
 		for i = 1, Num do
-			vUIActionBar1[i].Name:Show()
-			vUIActionBar2[i].Name:Show()
-			vUIActionBar3[i].Name:Show()
-			vUIActionBar4[i].Name:Show()
-			vUIActionBar5[i].Name:Show()
+			vUIActionBar1[i].Name:SetAlpha(1)
+			vUIActionBar2[i].Name:SetAlpha(1)
+			vUIActionBar3[i].Name:SetAlpha(1)
+			vUIActionBar4[i].Name:SetAlpha(1)
+			vUIActionBar5[i].Name:SetAlpha(1)
 		end
 	else
 		for i = 1, Num do
-			vUIActionBar1[i].Name:Hide()
-			vUIActionBar2[i].Name:Hide()
-			vUIActionBar3[i].Name:Hide()
-			vUIActionBar4[i].Name:Hide()
-			vUIActionBar5[i].Name:Hide()
+			vUIActionBar1[i].Name:SetAlpha(0)
+			vUIActionBar2[i].Name:SetAlpha(0)
+			vUIActionBar3[i].Name:SetAlpha(0)
+			vUIActionBar4[i].Name:SetAlpha(0)
+			vUIActionBar5[i].Name:SetAlpha(0)
 		end
 	end
 end
@@ -1015,19 +1023,19 @@ end
 local UpdateShowCount = function(value)
 	if value then
 		for i = 1, Num do
-			vUIActionBar1[i].Count:Show()
-			vUIActionBar2[i].Count:Show()
-			vUIActionBar3[i].Count:Show()
-			vUIActionBar4[i].Count:Show()
-			vUIActionBar5[i].Count:Show()
+			vUIActionBar1[i].Count:SetAlpha(1)
+			vUIActionBar2[i].Count:SetAlpha(1)
+			vUIActionBar3[i].Count:SetAlpha(1)
+			vUIActionBar4[i].Count:SetAlpha(1)
+			vUIActionBar5[i].Count:SetAlpha(1)
 		end
 	else
 		for i = 1, Num do
-			vUIActionBar1[i].Count:Hide()
-			vUIActionBar2[i].Count:Hide()
-			vUIActionBar3[i].Count:Hide()
-			vUIActionBar4[i].Count:Hide()
-			vUIActionBar5[i].Count:Hide()
+			vUIActionBar1[i].Count:SetAlpha(0)
+			vUIActionBar2[i].Count:SetAlpha(0)
+			vUIActionBar3[i].Count:SetAlpha(0)
+			vUIActionBar4[i].Count:SetAlpha(0)
+			vUIActionBar5[i].Count:SetAlpha(0)
 		end
 	end
 end
@@ -1190,7 +1198,4 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("action-bars-show-macro-names", Settings["action-bars-show-macro-names"], "Show Macro Names", "Display macro name text on action buttons", UpdateShowMacroName)
 	Right:CreateSwitch("action-bars-show-count", Settings["action-bars-show-count"], "Show Count Text", "Display count text on action buttons", UpdateShowCount)
 	Right:CreateDropdown("action-bars-button-highlight", Settings["action-bars-button-highlight"], Media:GetTextureList(), Language["Highlight Texture"], "Set the highlight texture used on action buttons", SetHighlightTexture, "Texture")
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

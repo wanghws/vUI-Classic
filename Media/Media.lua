@@ -362,7 +362,7 @@ Media:SetStyle("vUI", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFC44D",
 	
-	["color-casting-start"] = "009900",
+	["color-casting-start"] = "7DB545",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -408,7 +408,7 @@ Media:SetStyle("vUI 2", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFB74D",
 	
-	["color-casting-start"] = "009900",
+	["color-casting-start"] = "7DB545",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -500,7 +500,7 @@ Media:SetStyle("Zen", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "00FF99",
 	
-	["color-casting-start"] = "009900",
+	["color-casting-start"] = "7DB545",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -546,57 +546,11 @@ Media:SetStyle("Slate", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "BBDEFB",
 	
-	["color-casting-start"] = "009900",
+	["color-casting-start"] = "7DB545",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
 	["action-bars-font"] = "Prototype",
-	["action-bars-font-size"] = 12,
-	["action-bars-font-flags"] = "",
-})
-
--- Unnamed
-Media:SetStyle("Unnamed", {
-	["ui-widget-font"] = "Roboto",
-	["ui-header-font"] = "Roboto",
-	["ui-button-font"] = "Roboto",
-	
-	["ui-widget-texture"] = "pHishTex12",
-	["ui-header-texture"] = "pHishTex12",
-	["ui-button-texture"] = "pHishTex12",
-	
-	["ui-header-font-color"] = "E8EAF6",
-	["ui-header-texture-color"] = "3C3C3C",
-	
-	["ui-window-bg-color"] = "3C3C3C",
-	["ui-window-main-color"] = "2C2C2C",
-	
-	["ui-widget-color"] = "00CC6A",
-	["ui-widget-bright-color"] = "797D7F",
-	["ui-widget-bg-color"] = "424242",
-	["ui-widget-font-color"] = "FAFAFA",
-	
-	["ui-button-font-color"] = "00CC6A",
-	["ui-button-texture-color"] = "616161",
-	
-	["ui-font-size"] = 12,
-	["ui-header-font-size"] = 14,
-	["ui-title-font-size"] = 16,
-	
-	["chat-font"] = "Roboto",
-	["chat-font-size"] = 12,
-	["chat-font-flags"] = "",
-	
-	["chat-tab-font"] = "Roboto",
-	["chat-tab-font-size"] = 12,
-	["chat-tab-font-flags"] = "",
-	["chat-tab-font-color"] = "00CC6A",
-	
-	["color-casting-start"] = "009900",
-	["color-casting-stopped"] = "F39C12",
-	["color-casting-interrupted"] = "D35400",
-	
-	["action-bars-font"] = "Roboto",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
 })
@@ -638,7 +592,7 @@ Media:SetStyle("Smelly", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FC533E",
 	
-	["color-casting-start"] = "009900",
+	["color-casting-start"] = "7DB545",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	

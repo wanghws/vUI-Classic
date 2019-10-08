@@ -26,9 +26,11 @@ GUI.Widgets = {}
 	To do:
 	- widgets:
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
-	Input.Imprint = a string that shows when the editbox is empty, a suggestion, or default value.
+	Input.Imprint = a string that shows when the editbox is empty; a suggestion, or default value.
 	
-	- If template == "None" then disable the page
+	DoubleButton
+	
+	- If template == "None" then disable the styles page
 	
 	- Set the scrollbars to have arrow button
 	- Dropdown breaks, when clicked won't respond. something like "---------------"
@@ -195,7 +197,26 @@ GUI.Widgets.CreateLine = function(self, text)
 	return Anchor.Text
 end
 
+local GET_LENGTH = UIParent:CreateFontString(nil, "OVERLAY")
+GET_LENGTH:SetScaledPoint("CENTER", UIParent, 0, 100)
+GET_LENGTH:SetJustifyH("LEFT")
+GET_LENGTH:SetScaledWidth(GROUP_WIDTH - 6)
+
 GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
+	if (not GET_LENGTH.FontSet) then
+		GET_LENGTH:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		GET_LENGTH.FontSet = true
+	end
+	
+	GET_LENGTH:SetText(text)
+	
+	local NumLines = ceil(GET_LENGTH:GetStringHeight() / Settings["ui-font-size"])
+	local Message = text
+	
+	--[[for i = 1, NumLines do
+		print()
+	end]]
+	
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
 	Anchor.ID = CreateID(text)
@@ -208,7 +229,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	
 	tinsert(self.Widgets, Anchor)]]
 	
-	--return
+	return Text
 end
 
 GUI.Widgets.CreateDoubleLine = function(self, left, right)
@@ -3201,9 +3222,9 @@ end
 
 GUI.GetWindow = function(self, name)
 	if self.Windows[name] then
-		return self.Windows[name]
+		return self.Windows[name].LeftWidgetsBG, self.Windows[name].RightWidgetsBG
 	else
-		return self.Windows[self.DefaultWindow]
+		return self.Windows[self.DefaultWindow].LeftWidgetsBG, self.Windows[self.DefaultWindow].RightWidgetsBG
 	end
 end
 
@@ -3353,6 +3374,22 @@ GUI.FadeOut:SetScript("OnFinished", function(self)
 	self.Parent:Hide()
 end)
 
+function GUI:AddFooters()
+	local Window
+	
+	for Name in pairs(self.Windows) do
+		Window = self.Windows[Name]
+		
+		if (#Window.LeftWidgets > 0) then
+			Window.LeftWidgetsBG:CreateFooter()
+		end
+		
+		if (#Window.RightWidgets > 0) then
+			Window.RightWidgetsBG:CreateFooter()
+		end
+	end
+end
+
 function GUI:RunQueue()
 	if (#self.Queue > 0) then
 		local Func
@@ -3363,6 +3400,8 @@ function GUI:RunQueue()
 			Func(self)
 		end
 	end
+	
+	self:AddFooters()
 end
 
 function GUI:VARIABLES_LOADED()
@@ -3485,7 +3524,4 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
 	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)

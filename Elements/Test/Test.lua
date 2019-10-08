@@ -100,10 +100,9 @@ GUI:AddOptions(function(self)
 	Left:CreateInput("test-input-2", vUI.UserName, "Test Input 2", nil, function(v) print(v) end)
 	Left:CreateInput("test-input-3", vUI.UserName, "Test Input 3", nil, function(v) print(v) end)
 	
-	Left:CreateFooter()
-	Right:CreateFooter()
-end)
-]]
+	Left:CreateMessage("Hello world. This is a variable length message for the GUI to process.")
+end)]]
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Debug"])
 	
@@ -127,9 +126,6 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine(Language["Realm"], vUI.UserRealm)
 	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
 	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 local UpdateZone = CreateFrame("Frame")
@@ -148,11 +144,6 @@ local Fonts = vUI:NewModule("Fonts")
 
 function Fonts:Load()
 	local Font = Media:GetFont(Settings["ui-widget-font"])
-
-	--UNIT_NAME_FONT = Font
-	--NAMEPLATE_FONT = Font
-	--DAMAGE_TEXT_FONT = Font
-	--STANDARD_TEXT_FONT = Font
 	
 	UIErrorsFrame:SetFont(Font, 16)
 	
@@ -359,24 +350,22 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 	
 	if CanMerchantRepair() then
 		local Cost = GetRepairAllCost()
-		local CoinString
+		local CostString = GetCoinTextureString(Cost)
 		
 		if (Cost > 0) then
 			if (Money > Cost) then
 				RepairAllItems()
 				
-				local CoinString = GetCoinTextureString(Cost)
-				
-				if (CoinString and Settings["auto-repair-report"]) then
-					vUI:print(format(Language["Your equipped items have been repaired for %s"], CoinString))
+				if Settings["auto-repair-report"] then
+					vUI:print(format(Language["Your equipped items have been repaired for %s"], CostString))
 				end
 			else
 				local Required = Cost - Money
 				
-				CoinString = GetCoinTextureString(Required)
+				local RequiredString = GetCoinTextureString(Required)
 				
-				if (CoinString and Settings["auto-repair-report"]) then
-					vUI:print(format(Language["You require %s to repair"], CoinString))
+				if Settings["auto-repair-report"] then
+					vUI:print(format(Language["You require %s to repair all equipped items (costs %s total)"], RequiredString, CostString))
 				end
 			end
 		end
@@ -739,9 +728,6 @@ GUI:AddOptions(function(self)
 	Right:CreateSwitch("cooldowns-enable", Settings["cooldowns-enable"], Language["Enable Cooldown Flash"], "When an ability comes off cooldown|n the icon will flash as an alert", UpdateEnableCooldownFlash)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
 
 local MirrorTimerColors = {

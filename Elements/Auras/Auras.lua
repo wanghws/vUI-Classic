@@ -270,7 +270,4 @@ GUI:AddOptions(function(self)
 	Right:CreateSlider("auras-spacing", Settings["auras-spacing"], 0, 10, 1, "Spacing", "Set the spacing between auras", UpdateSizes)
 	Right:CreateSlider("auras-row-spacing", Settings["auras-row-spacing"], 0, 30, 1, "Row Spacing", "Set the vertical spacing between aura rows", UpdateSizes)
 	Right:CreateSlider("auras-per-row", Settings["auras-per-row"], 8, 16, 1, "Display Per Row", "Set the number of auras per row", UpdateSizes)
-	
-	Left:CreateFooter()
-	Right:CreateFooter()
 end)
