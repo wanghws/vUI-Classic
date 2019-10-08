@@ -855,6 +855,10 @@ EventFrame["PLAYER_LOGIN"] = function(self, event)
 	ChatTypeInfo["CHANNEL19"].colorNameByClass = true
 	ChatTypeInfo["CHANNEL20"].colorNameByClass = true
 	
+	if (GetCVar("colorChatNamesByClass") == 0) then
+		SetCVar("colorChatNamesByClass", 1)
+	end
+	
 	hooksecurefunc("ChatEdit_UpdateHeader", UpdateEditBoxColor)
 	hooksecurefunc("FCF_OpenTemporaryWindow", StyleTemporaryWindow)
 	

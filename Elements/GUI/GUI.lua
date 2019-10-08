@@ -28,6 +28,8 @@ GUI.Widgets = {}
 	Input (longer editbox that accepts text input, as well as dropping spells/actions/items into it)
 	Input.Imprint = a string that shows when the editbox is empty; a suggestion, or default value.
 	
+	DoubleButton
+	
 	- If template == "None" then disable the styles page
 	
 	- Set the scrollbars to have arrow button
