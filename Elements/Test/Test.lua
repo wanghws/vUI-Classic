@@ -350,24 +350,22 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 	
 	if CanMerchantRepair() then
 		local Cost = GetRepairAllCost()
-		local CoinString
+		local CostString = GetCoinTextureString(Cost)
 		
 		if (Cost > 0) then
 			if (Money > Cost) then
 				RepairAllItems()
 				
-				local CoinString = GetCoinTextureString(Cost)
-				
-				if (CoinString and Settings["auto-repair-report"]) then
-					vUI:print(format(Language["Your equipped items have been repaired for %s"], CoinString))
+				if Settings["auto-repair-report"] then
+					vUI:print(format(Language["Your equipped items have been repaired for %s"], CostString))
 				end
 			else
 				local Required = Cost - Money
 				
-				CoinString = GetCoinTextureString(Required)
+				local RequiredString = GetCoinTextureString(Required)
 				
-				if (CoinString and Settings["auto-repair-report"]) then
-					vUI:print(format(Language["You require %s to repair"], CoinString))
+				if Settings["auto-repair-report"] then
+					vUI:print(format(Language["You require %s to repair all equipped items (costs %s total)"], RequiredString, CostString))
 				end
 			end
 		end
