@@ -252,7 +252,7 @@ Defaults["unitframes-player-show-name"] = false
 Defaults["unitframes-player-cc-health"] = false
 Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-class-color"] = true -- temporary
-Defaults["unitframes-only-player-debuffs"] = true
+Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
 
 -- Name Plates
