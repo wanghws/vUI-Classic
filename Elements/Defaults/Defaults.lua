@@ -125,10 +125,10 @@ Defaults["color-combo-4"] = "B2FF66"
 Defaults["color-combo-5"] = "66FF66"
 
 -- Casting
-Defaults["color-casting-start"] = "7DB545"
+Defaults["color-casting-start"] = "4C9900"
 Defaults["color-casting-stopped"] = "F39C12"
 Defaults["color-casting-interrupted"] = "D35400"
-Defaults["color-casting-success"] = "7DB545" -- TBI
+Defaults["color-casting-success"] = "4C9900" -- TBI
 
 -- Mirror Timers
 Defaults["color-mirror-exhaustion"] = "FFE500"
@@ -199,7 +199,7 @@ Defaults["experience-height"] = 16
 Defaults["experience-position"] = "TOP"
 Defaults["experience-progress-visibility"] = "ALWAYS"
 Defaults["experience-percent-visibility"] = "ALWAYS"
-Defaults["experience-bar-color"] = "7DB545" -- 1AE045
+Defaults["experience-bar-color"] = "4C9900" -- 1AE045
 Defaults["experience-rested-color"] = "00B4FF"
 
 -- Auras
