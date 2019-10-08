@@ -42,6 +42,7 @@ Elements\UnitFrames\UnitFrames.lua
 Elements\Tooltips\Tooltips.lua
 Elements\MetersBG\MetersBG.lua
 Elements\Minimap\Minimap.lua
+Elements\Minimap\MinimapButtons.lua
 Elements\ZoneText\ZoneText.lua
 Elements\Alerts\Alerts.lua
 Elements\Popup\Popup.lua

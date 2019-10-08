@@ -312,17 +312,16 @@ Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Frame:SetScript("OnEvent", OnEvent)
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Minimap"])
+	local Left = self:CreateWindow(Language["Minimap"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("minimap-enable", Settings["minimap-enable"], Language["Enable Minimap Module"], "Enable the vUI Minimap module", ReloadUI):RequiresReload(true)
 	
-	Left:CreateHeader(Language["Styling"])
+	Left:CreateHeader(Language["Size"])
+	Left:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "Set the size of the Minimap", UpdateMinimapSize)
+
+	Left:CreateHeader(Language["Misc"])
 	Left:CreateSwitch("minimap-show-time", Settings["minimap-show-time"], Language["Enable Minimap Time"], "Display time on the minimap", UpdateShowMinimapTime)
-	
-	Right:CreateHeader(Language["Size"])
-	Right:CreateSlider("minimap-size", Settings["minimap-size"], 100, 250, 10, "Minimap Size", "Set the size of the Minimap", UpdateMinimapSize)
-	
+
 	Left:CreateFooter()
-	Right:CreateFooter()
 end)
