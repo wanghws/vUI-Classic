@@ -2,11 +2,15 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local MinimapButtons = vUI:NewModule("Minimap Buttons")
 
+local strlower = string.lower
+local strfind = string.find
+local tinsert = table.insert
+
 MinimapButtons.items = {}
 
--- TODO: clean this list up
 local MinimapButtonsBlacklist = {
 	-- Blizzard
+	-- TODO: clean this list up
 	["BattlefieldMinimap"] = true,
 	["ButtonCollectFrame"] = true,
 	["FeedbackUIButton"] = true,
@@ -36,13 +40,13 @@ local MinimapButtonTextureIdsToRemove = {
 	[130924] = true,
 }
 
-local ResizeAndPosition = function(direction)
-  local lastButton, width, height
+local OnChange = function(direction, buttonSize, spacing)
+	local lastButton, width, height
   local panelTotalPadding = 6
   local numButtons = #MinimapButtons.items
-  local spacing = Settings["minimap-buttonbar-buttonspacing"] or 1
-  local buttonSize = Settings["minimap-buttonbar-buttonsize"] or 24
-  local direction = direction or Settings["minimap-buttonbar-direction"] or "LEFT"
+  local spacing = spacing or Settings["minimap-buttonbar-buttonspacing"]
+  local buttonSize = buttonSize or Settings["minimap-buttonbar-buttonsize"]
+  local direction = direction or Settings["minimap-buttonbar-direction"]
 
   if (direction == "UP" or direction == "DOWN") then
     width = buttonSize + panelTotalPadding
@@ -54,9 +58,9 @@ local ResizeAndPosition = function(direction)
 
   MinimapButtons.Panel:SetScaledSize(width, height)
 
-	for i, Button in pairs(MinimapButtons.items) do
-    if (Button:IsShown()) then
-      Button:SetScaledSize(buttonSize)
+	for _, Button in pairs(MinimapButtons.items) do
+		if (Button:IsShown()) then
+			Button:SetScaledSize(buttonSize)
 			Button:ClearAllPoints()
 
       if not lastButton then
@@ -102,13 +106,23 @@ function MinimapButtons:SkinButtons()
   for _, Child in ipairs({Minimap:GetChildren()}) do
 		local name = Child:GetName()
 
-		if name and not MinimapButtonsBlacklist[name] and Child:IsShown() then	
+		if (name and not MinimapButtonsBlacklist[name] and Child:IsShown()) then
+			Child:SetParent(self.Panel)
+
+			if (Child:HasScript("OnDragStart")) then
+				Child:SetScript("OnDragStart", nil)
+			end
+
+			if (Child:HasScript("OnDragStop")) then
+				Child:SetScript("OnDragStop", nil)
+			end
+
 			for i = 1, Child:GetNumRegions() do
 				local region = select(i, Child:GetRegions())
 				
 				if region:GetObjectType() == "Texture" then
 					local t = region:GetTexture() or ""
-					local texture = string.lower(t)
+					local texture = strlower(t)
 					local textureId = region:GetTextureFileID()
 
 					if (textureId and MinimapButtonTextureIdsToRemove[textureId]) then
@@ -116,12 +130,12 @@ function MinimapButtons:SkinButtons()
 					end
 
 					if (
-						string.find(texture, [[interface\characterframe]]) or
-						string.find(texture, [[interface\minimap]]) or
-						string.find(texture, 'border') or 
-						string.find(texture, 'background') or 
-						string.find(texture, 'alphamask') or
-						string.find(texture, 'highlight')
+						strfind(texture, [[interface\characterframe]]) or
+						strfind(texture, [[interface\minimap]]) or
+						strfind(texture, 'border') or 
+						strfind(texture, 'background') or 
+						strfind(texture, 'alphamask') or
+						strfind(texture, 'highlight')
 					) then
 						region:SetTexture(nil)
 						region:SetAlpha(0)
@@ -132,7 +146,7 @@ function MinimapButtons:SkinButtons()
 					region:SetScaledPoint("BOTTOMRIGHT", Child, -1, 1)
 					region:SetDrawLayer('ARTWORK')
 					region:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-				end	
+				end
 			end
 
 			Child.Backdrop = CreateFrame("Frame", nil, Child)
@@ -151,24 +165,55 @@ function MinimapButtons:SkinButtons()
 			Child:SetFrameLevel(Minimap:GetFrameLevel() + 10)
 			Child:SetFrameStrata(Minimap:GetFrameStrata())
 
-			-- TODO: highlight state
-      -- TODO: pushed state
+			if (Child:GetObjectType() == "Button") then
+				if (Child.SetHighlightTexture) then
+					local Highlight = Child:CreateTexture(nil, "ARTWORK", button)
+					Highlight:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
+					Highlight:SetVertexColor(1, 1, 1, 0.2)
+					Highlight:SetScaledPoint("TOPLEFT", Child, 1, -1)
+					Highlight:SetScaledPoint("BOTTOMRIGHT", Child, -1, 1)
+					
+					Child.Highlight = Highlight
+					Child:SetHighlightTexture(Highlight)
+				end
+
+				if (Child.SetPushedTexture) then
+					local Pushed = Child:CreateTexture(nil, "ARTWORK", button)
+					Pushed:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
+					Pushed:SetVertexColor(0.9, 0.8, 0.1, 0.3)
+					Pushed:SetScaledPoint("TOPLEFT", Child, 1, -1)
+					Pushed:SetScaledPoint("BOTTOMRIGHT", Child, -1, 1)
+					
+					Child.Pushed = Pushed
+					Child:SetPushedTexture(Pushed)
+				end
+			end
+
       -- TODO: tooltip styling
 
-			table.insert(self.items, Child)
+			tinsert(self.items, Child)
 		end
 	end
 end
 
 function MinimapButtons:CreatePanel()
-  local Panel = CreateFrame("Frame", "vUI Minimap Buttons", UIParent)
-	Panel:SetBackdrop(vUI.BackdropAndBorder)
-	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	Panel:SetBackdropBorderColor(0, 0, 0)
-  Panel:SetFrameStrata("LOW")
-  Panel:SetScaledPoint("TOPRIGHT", _G["vUI Minimap"], "TOPLEFT", -6, 0)
+  local Frame = CreateFrame("Frame", "vUI Minimap Buttons", UIParent)
+	Frame:SetBackdrop(vUI.BackdropAndBorder)
+	Frame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	Frame:SetBackdropBorderColor(0, 0, 0)
+	Frame:SetFrameStrata("LOW")
 
-  self.Panel = Panel
+	-- NOTE: we are taking into account zone text panel
+	local minimapHeight = Settings["minimap-size"] + 26
+	
+	if (Settings["minimap-show-time"]) then
+		-- NOTE: here be unicorn numbers
+		Frame:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -12, -(minimapHeight + 26 + 13))
+	else
+		Frame:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -12, -(minimapHeight + 6))
+	end
+
+  self.Panel = Frame
 end
 
 function MinimapButtons:Load()
@@ -176,31 +221,38 @@ function MinimapButtons:Load()
     return
   end
 
+	self:CreatePanel()
   self:SkinButtons()	
-  self:CreatePanel()
   
-  ResizeAndPosition()
+  OnChange()
 
   Move:Add(self.Panel)
 end
 
--- TODO: see if we want to tie into PLAYER_ENTERING_WORLD or anything
-MinimapButtons:SetScript("OnEvent", function(self, event, ...)
-	if self[event] then
-		self[event](self, ...)
-	end
-end)
-
+local DirectionOptions = { 
+	["Up"] = "UP", 
+	["Down"] = "DOWN", 
+	["Left"] = "LEFT", 
+	["Right"] = "RIGHT"
+}
 
 GUI:AddOptions(function(self)
-  -- TODO: how can I reference an existing window?
-	local Left, Right = self:CreateWindow(Language["Minimap Buttons"])
+	local _, Right = self:GetWindow(Language["Minimap"])
 
-	Left:CreateHeader(Language["Minimap Buttons"])
-	Left:CreateSwitch("minimap-buttonbar-enable", Settings["minimap-buttonbar-enable"], "Enable Minimap Button Bar", "Skin and move Minimap Buttons into a bar", ReloadUI):RequiresReload(true)
-  Left:CreateDropdown("minimap-buttonbar-direction", Settings["minimap-buttonbar-direction"], { ["Up"] = "UP", ["Down"] = "DOWN", ["Left"] = "LEFT", ["Right"] = "RIGHT"}, "Button bar direction", "", ResizeAndPosition)
-  Left:CreateSlider("minimap-buttonbar-buttonsize", Settings["minimap-buttonbar-buttonsize"], 16, 44, 1, "Button Size", "", ResizeAndPosition)
-  Left:CreateSlider("minimap-buttonbar-buttonspacing", Settings["minimap-buttonbar-buttonspacing"], 1, 3, 1, "Button Spacing", "", ResizeAndPosition)
+	Right:CreateHeader(Language["Minimap Buttons"])
 
-	Left:CreateFooter()
+	Right:CreateSwitch("minimap-buttonbar-enable", Settings["minimap-buttonbar-enable"], "Enable Minimap Button Bar", "", ReloadUI):RequiresReload(true)
+
+	Right:CreateDropdown("minimap-buttonbar-direction", Settings["minimap-buttonbar-direction"], DirectionOptions, "Direction", "", function(value)
+		OnChange(value, nil, nil)
+	end)
+	
+	Right:CreateSlider("minimap-buttonbar-buttonsize", Settings["minimap-buttonbar-buttonsize"], 16, 44, 1, "Button Size", "", function(value)
+		OnChange(nil, value, nil)
+	end)
+	
+	Right:CreateSlider("minimap-buttonbar-buttonspacing", Settings["minimap-buttonbar-buttonspacing"], 1, 3, 1, "Button Spacing", "", function()
+		OnChange(nil, nil, value)
+	end)
+	
 end)

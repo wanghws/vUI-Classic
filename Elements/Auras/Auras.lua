@@ -235,7 +235,7 @@ function Auras:Load()
 	
 	self.Buffs = CreateFrame("Frame", "vUI Buffs", UIParent)
 	self.Buffs:SetScaledSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * BuffRows) + (Settings["auras-row-spacing"] * (BuffRows - 1))))
-	self.Buffs:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -(Settings["minimap-size"] + 26), -(Settings["minimap-buttonbar-buttonsize"] + 24))
+	self.Buffs:SetScaledPoint("TOPRIGHT", UIParent, "TOPRIGHT", -(Settings["minimap-size"] + 22), -12)
 	
 	self.Debuffs = CreateFrame("Frame", "vUI Debuffs", UIParent)
 	self.Debuffs:SetScaledSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * DebuffRows) + Settings["auras-row-spacing"]))
