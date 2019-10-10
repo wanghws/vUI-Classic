@@ -23,7 +23,7 @@ local CreateMetersPanels = function()
 	MeterBGBottom:SetBackdropBorderColor(0, 0, 0)
 	MeterBGBottom:SetFrameStrata("LOW")
 	
-	local MeterBGBottomFrame = CreateFrame("Frame", nil, UIParent)
+	local MeterBGBottomFrame = CreateFrame("Frame", "vUIMeterBGBottom", UIParent)
 	MeterBGBottomFrame:SetScaledSize(FRAME_WIDTH - 6, BAR_HEIGHT)
 	MeterBGBottomFrame:SetScaledPoint("BOTTOM", MeterBGBottom, "BOTTOM", 0, 3)
 	MeterBGBottomFrame:SetBackdrop(vUI.BackdropAndBorder)
@@ -123,6 +123,27 @@ local CreateMetersPanels = function()
 	InnerRightOutline:SetScaledPoint("BOTTOMLEFT", MeterBGMiddle, "BOTTOMRIGHT", -1, -1)
 	InnerRightOutline:SetBackdrop(vUI.Outline)
 	InnerRightOutline:SetBackdropBorderColor(0, 0, 0)
+	
+	local DT = vUI:GetModule("DataText")
+	
+	local Width = MeterBGBottomFrame:GetWidth() / 3
+	local Height = MeterBGBottomFrame:GetHeight()
+	
+	local BottomLeft = DT:NewAnchor("Meter-Left", MeterBGBottomFrame)
+	BottomLeft:SetScaledWidth(Width, Height)
+	BottomLeft:SetScaledPoint("LEFT", MeterBGBottomFrame, 0, 0)
+	
+	local BottomMiddle = DT:NewAnchor("Meter-Middle", MeterBGBottomFrame)
+	BottomMiddle:SetScaledWidth(Width, Height)
+	BottomMiddle:SetScaledPoint("LEFT", BottomLeft, "RIGHT", 0, 0)
+	
+	local BottomRight = DT:NewAnchor("Meter-Right", MeterBGBottomFrame)
+	BottomRight:SetScaledWidth(Width, Height)
+	BottomRight:SetScaledPoint("LEFT", BottomMiddle, "RIGHT", 0, 0)
+	
+	DT:SetDataText("Meter-Left", "Durability")
+	DT:SetDataText("Meter-Middle", "Guild")
+	DT:SetDataText("Meter-Right", "Friends")
 end
 
 local Frame = CreateFrame("Frame")

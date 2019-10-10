@@ -281,7 +281,7 @@ local Lite = {}
 
 Lite[1] = {"F17171", "FFA071", "FFD071", "A2D471", "71E2D0", "71D0FF", "7EA9FF", "B38DFF", "FF71B7", "A2ADB8"}
 Lite[2] = {"EE4D4D", "FF884D", "FFC44D", "8BC94D", "4DDBC4", "4DC4FF", "5E94FF", "AD71FF", "FF4dA5", "8B98A6"}
-Lite[3] = {"D64545", "E57A45", "E5B045", "7DB545", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
+Lite[3] = {"D64545", "E57A45", "E5B045", "4C9900", "45C5B0", "45B0E5", "5485E5", "9065E5", "E54594", "7D8995"}
 
 local Flat = {}
 
@@ -362,7 +362,7 @@ Media:SetStyle("vUI", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFC44D",
 	
-	["color-casting-start"] = "7DB545",
+	["color-casting-start"] = "4C9900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -408,7 +408,7 @@ Media:SetStyle("vUI 2", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFB74D",
 	
-	["color-casting-start"] = "7DB545",
+	["color-casting-start"] = "4C9900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -500,7 +500,7 @@ Media:SetStyle("Zen", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "00FF99",
 	
-	["color-casting-start"] = "7DB545",
+	["color-casting-start"] = "4C9900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -546,7 +546,7 @@ Media:SetStyle("Slate", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "BBDEFB",
 	
-	["color-casting-start"] = "7DB545",
+	["color-casting-start"] = "4C9900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
@@ -592,7 +592,7 @@ Media:SetStyle("Smelly", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FC533E",
 	
-	["color-casting-start"] = "7DB545",
+	["color-casting-start"] = "4C9900",
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
