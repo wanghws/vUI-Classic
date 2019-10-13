@@ -31,7 +31,9 @@ local MinimapButtonsBlacklist = {
 	["MiniMapTrackingFrame"] = true,
 
 	-- Naughty AddOns
-	["QuestieFrameGroup"] = true
+	["QuestieFrameGroup"] = true,
+	-- NOTE: this one is really tricky as it includes a flyout
+	["ItemRackMinimapFrame"] = true,
 }
 
 local MinimapButtonTextureIdsToRemove = {
@@ -107,6 +109,8 @@ function MinimapButtons:SkinButtons()
 		local name = Child:GetName()
 
 		if (name and not MinimapButtonsBlacklist[name] and Child:IsShown()) then
+			local objectType = Child:GetObjectType()
+
 			Child:SetParent(self.Panel)
 
 			if (Child:HasScript("OnDragStart")) then
@@ -120,7 +124,7 @@ function MinimapButtons:SkinButtons()
 			for i = 1, Child:GetNumRegions() do
 				local region = select(i, Child:GetRegions())
 				
-				if region:GetObjectType() == "Texture" then
+				if (objectType == "Texture") then
 					local t = region:GetTexture() or ""
 					local texture = strlower(t)
 					local textureId = region:GetTextureFileID()
@@ -165,7 +169,7 @@ function MinimapButtons:SkinButtons()
 			Child:SetFrameLevel(Minimap:GetFrameLevel() + 10)
 			Child:SetFrameStrata(Minimap:GetFrameStrata())
 
-			if (Child:GetObjectType() == "Button") then
+			if (objectType == "Button" or objectType == "Frame") then
 				if (Child.SetHighlightTexture) then
 					local Highlight = Child:CreateTexture(nil, "ARTWORK", button)
 					Highlight:SetTexture(Media:GetTexture(Settings["action-bars-button-highlight"]))
