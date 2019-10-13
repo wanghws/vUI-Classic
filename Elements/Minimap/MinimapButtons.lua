@@ -124,7 +124,7 @@ function MinimapButtons:SkinButtons()
 			for i = 1, Child:GetNumRegions() do
 				local region = select(i, Child:GetRegions())
 				
-				if (objectType == "Texture") then
+				if (region:GetObjectType() == "Texture") then
 					local t = region:GetTexture() or ""
 					local texture = strlower(t)
 					local textureId = region:GetTextureFileID()
