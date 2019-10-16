@@ -56,16 +56,12 @@ local ResetMovers = function()
 	vUI:GetModule("Move"):ResetAll()
 end
 
-local SetSuggestedScale = function()
-	vUI:SetSuggestedScale()
-end
-
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["General"], true)
 	
 	Left:CreateHeader(Language["Welcome"])
 	Left:CreateSwitch("ui-display-welcome", Settings["ui-display-welcome"], Language["Display Welcome Message"], "Display a welcome message on|n login with UI information")
-	Left:CreateSwitch("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
+	--Left:CreateSwitch("ui-display-whats-new", Settings["ui-display-whats-new"], Language[ [[Display "What's New" Pop-ups]] ], "")
 	Left:CreateSwitch("ui-display-dev-tools", Settings["ui-display-dev-tools"], Language["Display Developer Chat Tools"], "", UpdateDisplayDevTools)
 	
 	Left:CreateHeader("Discord")
@@ -74,11 +70,6 @@ GUI:AddOptions(function(self)
 	--[[Right:CreateHeader(Language["Language"])
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)]]
-	
-	Right:CreateHeader(Language["Scale"])
-	--Right:CreateLine("|cFFE81123Do not use this to resize UI elements|r")
-	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
-	--Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
 	Left:CreateHeader(Language["Move UI"])
 	Left:CreateButton(Language["Toggle"], Language["Move UI"], "While toggled, you can drag some|nelements of vUI around the screen", ToggleMove)

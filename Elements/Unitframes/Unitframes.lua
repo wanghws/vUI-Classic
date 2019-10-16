@@ -1,6 +1,7 @@
 local addon, ns = ...
 local vUI, GUI, Language, Media, Settings = ns:get()
 
+local unpack = unpack
 local select = select
 local format = string.format
 local match = string.match
@@ -23,6 +24,9 @@ local UnitReaction = UnitReaction
 local GetPetHappiness = GetPetHappiness
 local IsResting = IsResting
 local GetQuestGreenRange = GetQuestGreenRange
+local UnitAura = UnitAura
+local GetTime = GetTime
+local Huge = math.huge
 
 local LCMH = LibStub("LibClassicMobHealth-1.0")
 local LCD = LibStub("LibClassicDurations")
@@ -32,6 +36,8 @@ LCD:Register("vUI")
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
 local Methods = oUF.Tags.Methods
+local Name, Duration, Expiration, Caster, SpellID, _
+local DurationNew, ExpirationNew, Enabled
 
 vUI.UnitFrames = {}
 
@@ -407,21 +413,17 @@ Methods["HappinessColor"] = function(unit)
 	end
 end
 
-local Name, Duration, Expiration, Caster, SpellID, _
-local DurationNew, ExpirationNew, Enabled
-local UnitAura = UnitAura
-local GetTime = GetTime
-
 local AuraOnUpdate = function(self, ela)
 	self.ela = self.ela + ela
 	
 	if (self.ela > 0.1) then
 		local Now = (self.Expiration - GetTime())
 		
-		if (Now > 0) then
+		if (Now > 0 and Now ~= Huge) then
 			self.Time:SetText(vUI:FormatTime(Now))
 		else
 			self:SetScript("OnUpdate", nil)
+			--self.Time:Hide()
 		end
 		
 		if (Now <= 0) then
@@ -738,6 +740,25 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
+	-- Energy ticks
+	local Tick = CreateFrame("StatusBar", nil, Power)
+	Tick:SetAllPoints(Power)
+	Tick:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	Tick:SetStatusBarColor(0, 0, 0, 0)
+	Tick:Hide()
+	
+	Tick.Spark = Tick:CreateTexture(nil, "ARTWORK")
+	Tick.Spark:SetScaledSize(3, 15)
+	Tick.Spark:SetScaledPoint("LEFT", Tick:GetStatusBarTexture(), "RIGHT", -1, 0)
+	Tick.Spark:SetTexture(Media:GetTexture("Blank"))
+	Tick.Spark:SetVertexColor(1, 1, 1, 0.2)
+	
+	Tick.Spark2 = Tick:CreateTexture(nil, "ARTWORK")
+	Tick.Spark2:SetScaledSize(1, 15)
+	Tick.Spark2:SetScaledPoint("CENTER", Tick.Spark, 0, 0)
+	Tick.Spark2:SetTexture(Media:GetTexture("Blank"))
+	Tick.Spark2:SetVertexColor(1, 1, 1, 0.8)
+	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
 	PowerRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	PowerRight:SetScaledPoint("RIGHT", Power, -3, 0)
@@ -815,6 +836,76 @@ local StylePlayer = function(self, unit)
     Castbar.SafeZone = SafeZone
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
+	
+	--[[ Swing timer
+	local swing = CreateFrame("Frame", nil, self)
+	
+	swing.Twohand = CreateFrame("Statusbar", nil, swing)
+	swing.Twohand:SetPoint("TOPLEFT")
+	swing.Twohand:SetPoint("BOTTOMRIGHT")
+	swing.Twohand:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	swing.Twohand:SetStatusBarColor(0.8, 0.3, 0.3)
+	swing.Twohand:SetFrameLevel(20)
+	swing.Twohand:SetFrameStrata("LOW")
+	swing.Twohand:Hide()
+	
+	swing.Twohand.Text = swing.Twohand:CreateFontString(nil, "OVERLAY")
+	swing.Twohand.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	swing.Twohand.Text:SetScaledPoint("LEFT", swing.Twohand, 3, 0)
+	swing.Twohand.Text:SetScaledSize(250 * 0.7, Settings["ui-font-size"])
+	swing.Twohand.Text:SetJustifyH("LEFT")
+	
+	swing.Twohand.Background = swing.Twohand:CreateTexture(nil, "BACKGROUND")
+    swing.Twohand.Background:SetScaledPoint("TOPLEFT", swing.Twohand, -1, 1)
+    swing.Twohand.Background:SetScaledPoint("BOTTOMRIGHT", swing.Twohand, 1, -1)
+    swing.Twohand.Background:SetTexture(Media:GetTexture("Blank"))
+    swing.Twohand.Background:SetVertexColor(0, 0, 0)
+	
+	swing.Mainhand = CreateFrame("Statusbar", nil, swing)
+	swing.Mainhand:SetPoint("BOTTOM", Castbar, 0, 0)
+	swing.Mainhand:SetScaledSize(250, 16)
+	swing.Mainhand:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	swing.Mainhand:SetStatusBarColor(0.8, 0.3, 0.3)
+	swing.Mainhand:SetFrameLevel(20)
+	swing.Mainhand:SetFrameStrata("LOW")
+	swing.Mainhand:Hide()
+	
+	swing.Mainhand.Text = swing.Mainhand:CreateFontString(nil, "OVERLAY")
+	swing.Mainhand.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	swing.Mainhand.Text:SetScaledPoint("LEFT", swing.Mainhand, 3, 0)
+	swing.Mainhand.Text:SetScaledSize(250 * 0.7, Settings["ui-font-size"])
+	swing.Mainhand.Text:SetJustifyH("LEFT")
+	
+	swing.Mainhand.Background = swing.Mainhand:CreateTexture(nil, "BACKGROUND")
+    swing.Mainhand.Background:SetScaledPoint("TOPLEFT", swing.Mainhand, -1, 1)
+    swing.Mainhand.Background:SetScaledPoint("BOTTOMRIGHT", swing.Mainhand, 1, -1)
+    swing.Mainhand.Background:SetTexture(Media:GetTexture("Blank"))
+    swing.Mainhand.Background:SetVertexColor(0, 0, 0)
+	
+	swing.Offhand = CreateFrame("Statusbar", nil, swing)
+	swing.Offhand:SetPoint("BOTTOM", swing.Mainhand, "TOP", 0, 2)
+	swing.Offhand:SetScaledSize(250, 16)
+	swing.Offhand:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	swing.Offhand:SetStatusBarColor(0.8, 0.3, 0.3)
+	swing.Offhand:SetFrameLevel(20)
+	swing.Offhand:SetFrameStrata("LOW")
+	swing.Offhand:Hide()
+	
+	swing.Offhand.Text = swing.Offhand:CreateFontString(nil, "OVERLAY")
+	swing.Offhand.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	swing.Offhand.Text:SetScaledPoint("LEFT", swing.Offhand, 3, 0)
+	swing.Offhand.Text:SetScaledSize(250 * 0.7, Settings["ui-font-size"])
+	swing.Offhand.Text:SetJustifyH("LEFT")
+	
+	swing.Offhand.Background = swing.Offhand:CreateTexture(nil, "BACKGROUND")
+    swing.Offhand.Background:SetScaledPoint("TOPLEFT", swing.Offhand, -1, 1)
+    swing.Offhand.Background:SetScaledPoint("BOTTOMRIGHT", swing.Offhand, 1, -1)
+    swing.Offhand.Background:SetTexture(Media:GetTexture("Blank"))
+    swing.Offhand.Background:SetVertexColor(0, 0, 0)
+	
+	swing.hideOoc = true
+	swing:SetAllPoints(Castbar)
+	self.Swing = swing]]
 	
 	if (vUI.UserClass == "SHAMAN") then
 		local Totems = CreateFrame("Frame", self:GetName() .. "Totems", self)
@@ -914,6 +1005,11 @@ local StylePlayer = function(self, unit)
 	Debuffs.PostUpdateIcon = PostUpdateIcon
 	Debuffs.onlyShowPlayer = Settings["unitframes-only-player-debuffs"]
 	
+	-- Resurrect
+	local Resurrect = Health:CreateTexture(nil, "OVERLAY")
+	Resurrect:SetScaledSize(16, 16)
+	Resurrect:SetScaledPoint("CENTER", Health, 0, 0)
+	
 	-- Tags
 	if Settings["unitframes-player-show-name"] then
 		self:Tag(HealthLeft, "[Name15]")
@@ -938,7 +1034,9 @@ local StylePlayer = function(self, unit)
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
 	--self.RaidTargetIndicator = RaidTarget
+	self.ResurrectIndicator = Resurrect
 	self.LeaderIndicator = Leader
+	self.Tick = Tick
 	
 	--self:UpdateTags()
 end
@@ -1382,9 +1480,14 @@ local StyleParty = function(self, unit)
     ReadyCheck:SetScaledPoint("CENTER", Health, 0, 0)
 	
 	-- Target Icon
-	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
+	local RaidTarget = Health:CreateTexture(nil, "OVERLAY")
 	RaidTarget:SetScaledSize(16, 16)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
+	
+    -- Resurrect
+	local Resurrect = Health:CreateTexture(nil, "OVERLAY")
+	Resurrect:SetScaledSize(16, 16)
+	Resurrect:SetScaledPoint("CENTER", Health, 0, 0)
 	
 	-- Tags
 	
@@ -1412,6 +1515,7 @@ local StyleParty = function(self, unit)
 	self.ReadyCheck = ReadyCheck
 	self.LeaderIndicator = Leader
 	self.ReadyCheckIndicator = ReadyCheck
+	self.ResurrectIndicator = Resurrect
 	self.RaidTargetIndicator = RaidTarget
 end
 
@@ -1569,6 +1673,11 @@ local StyleRaid = function(self, unit)
 		Power.colorClass = true
 	end
 	
+	-- Resurrect
+	local ResurrectIndicator = Health:CreateTexture(nil, "OVERLAY")
+	ResurrectIndicator:SetScaledSize(16, 16)
+	ResurrectIndicator:SetScaledPoint("CENTER", Health, 0, 0)
+	
 	-- Tags
 	if Settings["unitframes-class-color"] then
 		self:Tag(HealthLeft, "[Name5]")
@@ -1590,6 +1699,7 @@ local StyleRaid = function(self, unit)
 	self.HealthRight = HealthRight
 	self.Power = Power
 	self.Power.bg = PowerBG
+	self.ResurrectIndicator = ResurrectIndicator
 end
 
 local Style = function(self, unit)

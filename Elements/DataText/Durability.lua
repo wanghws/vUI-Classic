@@ -5,6 +5,7 @@ local DT = vUI:GetModule("DataText")
 local Slots = {1, 3, 5, 6, 7, 8, 9, 10, 16, 17, 18}
 local GetInventoryItemDurability = GetInventoryItemDurability
 local floor = math.floor
+local Label = Language["Durability"]
 
 local Update = function(self)
 	local Total, Count = 0, 0
@@ -19,7 +20,7 @@ local Update = function(self)
 		end
 	end
 	
-	self.Text:SetFormattedText("%s: %s%%", Language["Durability"], floor(Total / Count * 100))
+	self.Text:SetFormattedText("%s: %s%%", Label, floor(Total / Count * 100))
 end
 
 local OnEnable = function(self)
@@ -38,4 +39,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Durability", OnEnable, OnDisable, Update)
+DT:SetType("Durability", OnEnable, OnDisable, Update)

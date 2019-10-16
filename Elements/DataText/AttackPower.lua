@@ -4,8 +4,7 @@ local DT = vUI:GetModule("DataText")
 
 local UnitAttackPower = UnitAttackPower
 local UnitRangedAttackPower = UnitRangedAttackPower
-local GetSpellBonusDamage = GetSpellBonusDamage
-local GetSpellBonusHealing = GetSpellBonusHealing
+local Label = Language["Power"]
 
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
@@ -13,7 +12,6 @@ local Update = function(self, event, unit)
 	end
 	
 	local Rating
-	local Label
 	
 	local AttackBase, AttackPositiveBuffs, AttackNegativeBuffs = UnitAttackPower("player")
 	local Attack =  AttackBase + AttackPositiveBuffs + AttackNegativeBuffs
@@ -21,21 +19,10 @@ local Update = function(self, event, unit)
 	local RangedBase, RangedPositiveBuffs, RangedNegativeBuffs = UnitRangedAttackPower("player")
 	local Ranged = RangedBase + RangedPositiveBuffs + RangedNegativeBuffs
 	
-	local Spell = GetSpellBonusDamage(7)
-	local Healing = GetSpellBonusHealing()
-	
 	if (vUI.UserClass == "HUNTER") then
 		Rating = Ranged
-		Label = Language["Ranged"]
-	elseif (Healing > Spell) then
-		Rating = Healing
-		Label = Language["Healing"]
-	elseif (Spell > Attack) then
-		Rating = Spell
-		Label = Language["Spell"]
 	else
 		Rating = Attack
-		Label = Language["Power"]
 	end
 	
 	self.Text:SetFormattedText("%s: %s", Label, Rating)
@@ -61,4 +48,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Power", OnEnable, OnDisable, Update)
+DT:SetType("Attack Power", OnEnable, OnDisable, Update)

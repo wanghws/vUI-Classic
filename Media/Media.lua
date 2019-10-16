@@ -220,23 +220,23 @@ Media:SetTexture("vUI 1", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI1.tga")
 Media:SetTexture("vUI 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI2.tga")
 Media:SetTexture("vUI 3", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI3.tga")
 Media:SetTexture("vUI 4", "Interface\\AddOns\\vUI\\Media\\Textures\\vUI4.tga")
-Media:SetTexture("vUI Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)
-Media:SetTexture("vUI Mail 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMailTextured.tga", true)
-Media:SetTexture("vUI Close", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIClose.tga", true)
 Media:SetTexture("Bettina", "Interface\\AddOns\\vUI\\Media\\Textures\\Bettina.tga")
 Media:SetTexture("Ferous", "Interface\\AddOns\\vUI\\Media\\Textures\\Ferous.tga")
 Media:SetTexture("Halycon", "Interface\\AddOns\\vUI\\Media\\Textures\\Halycon.tga")
 Media:SetTexture("Kola", "Interface\\AddOns\\vUI\\Media\\Textures\\Kola.tga")
-Media:SetTexture("noInterrupt", "Interface\\AddOns\\vUI\\Media\\Textures\\noInterrupt.tga", true)
-Media:SetTexture("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\RenHorizonUp.tga", true)
-Media:SetTexture("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga", true)
 Media:SetTexture("Ferous 27", "Interface\\AddOns\\vUI\\Media\\Textures\\fer27.tga")
-Media:SetTexture("Ferous 35", "Interface\\AddOns\\vUI\\Media\\Textures\\fer35.tga", true)
 Media:SetTexture("pHishTex5", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex5.tga")
 Media:SetTexture("pHishTex6", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex6.tga")
 Media:SetTexture("pHishTex7", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex7.tga")
 Media:SetTexture("pHishTex11", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex11.tga")
 Media:SetTexture("pHishTex12", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex12.tga")
+
+Media:SetTexture("noInterrupt", "Interface\\AddOns\\vUI\\Media\\Textures\\noInterrupt.tga", true)
+Media:SetTexture("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\RenHorizonUp.tga", true)
+Media:SetTexture("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga", true)
+Media:SetTexture("vUI Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)
+Media:SetTexture("vUI Mail 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMailTextured.tga", true)
+Media:SetTexture("vUI Close", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIClose.tga", true)
 Media:SetTexture("pHishTex28", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex28.tga", true)
 Media:SetTexture("Warning", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIWarning.tga", true)
 Media:SetTexture("Leader", "Interface\\AddOns\\vUI\\Media\\Textures\\vUILeader.tga", true)
@@ -579,16 +579,16 @@ Media:SetStyle("Smelly", {
 	["ui-button-font-color"] = "FFFFFF",
 	["ui-button-texture-color"] = "66606B",
 	
-	["ui-font-size"] = 12,
-	["ui-header-font-size"] = 14,
-	["ui-title-font-size"] = 16,
+	["ui-font-size"] = 10,
+	["ui-header-font-size"] = 12,
+	["ui-title-font-size"] = 14,
 	
 	["chat-font"] = "Roboto",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
 	
 	["chat-tab-font"] = "FiraCode",
-	["chat-tab-font-size"] = 12,
+	["chat-tab-font-size"] = 10,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FC533E",
 	
@@ -597,6 +597,6 @@ Media:SetStyle("Smelly", {
 	["color-casting-interrupted"] = "D35400",
 	
 	["action-bars-font"] = "FiraCode",
-	["action-bars-font-size"] = 12,
+	["action-bars-font-size"] = 10,
 	["action-bars-font-flags"] = "",
 })

@@ -333,7 +333,7 @@ AutoVendor:SetScript("OnEvent", function(self, event)
 	end
 	
 	if (Profit > 0 and Settings["auto-vendor-report"]) then
-		vUI:print(format(Language["You sold %d items for a total of %s"], TotalCount, GetCoinTextureString(Profit)))
+		vUI:print(format(Language["You sold %d items for a total of %s"], TotalCount, GetCoinTextureString(Profit))) -- Fix "You have sold 1 items"
 	end
 end)
 
@@ -696,13 +696,23 @@ local UpdateEnableCooldownFlash = function(value)
 	end
 end
 
-GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Misc."])
+local UpdateUIScale = function(value)
+	value = tonumber(value)
 	
-	Left:CreateHeader(Language["Miscellaneous Modules"])
-	Left:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
-	Left:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
-	Left:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
+	vUI:SetScale(value)
+end
+
+local SetSuggestedScale = function()
+	vUI:SetSuggestedScale()
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:GetWindow(Language["General"])
+	
+	Right:CreateHeader(Language["Miscellaneous Modules"])
+	Right:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
+	Right:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
+	Right:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
 	
 	Left:CreateHeader(Language["Inventory"])
 	Left:CreateButton(Language["Search"], Language["Find Cheapest Item"], "Find the cheapest item|ncurrently in your inventory", PrintCheapest)
@@ -726,6 +736,11 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Cooldown Flash"])
 	Right:CreateSwitch("cooldowns-enable", Settings["cooldowns-enable"], Language["Enable Cooldown Flash"], "When an ability comes off cooldown|n the icon will flash as an alert", UpdateEnableCooldownFlash)
+	
+	Right:CreateHeader(Language["Scale"])
+	--Right:CreateLine("|cFFE81123Do not use this to resize UI elements|r")
+	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
+	--Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 end)

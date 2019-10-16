@@ -480,6 +480,7 @@ local StyleChatFrame = function(frame)
 	frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetJustifyH("LEFT")
+	frame:SetTextCopyable(true)
 	frame:Hide()
 	
 	FCF_SetChatWindowFontSize(nil, frame, 12)

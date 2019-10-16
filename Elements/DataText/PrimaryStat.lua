@@ -51,4 +51,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Primary Stat", OnEnable, OnDisable, Update)
+DT:SetType("Primary Stat", OnEnable, OnDisable, Update)

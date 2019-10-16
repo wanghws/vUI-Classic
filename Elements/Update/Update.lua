@@ -108,6 +108,8 @@ Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sende
 			vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
 			print("	https://www.curseforge.com/wow/addons/vui")
 			
+			-- Store this higher version and tell anyone else who asks?
+			
 			self:UnregisterEvent(event)
 		end
 	end

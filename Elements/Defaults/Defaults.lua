@@ -186,6 +186,7 @@ Defaults["chat-tab-font-flags"] = ""
 Defaults["chat-tab-font-color"] = "FFCE54" -- F1C40F
 Defaults["chat-frame-width"] = 392
 Defaults["chat-frame-height"] = 104
+Defaults["chat-fade-text"] = false
 
 -- Experience
 Defaults["experience-enable"] = true
@@ -216,6 +217,9 @@ Defaults["minimap-show-time"] = true
 
 -- Cooldowns
 Defaults["cooldowns-enable"] = true
+
+-- Meter Container
+Defaults["meters-container-show"] = true
 
 -- Micro Buttons
 Defaults["micro-buttons-show"] = false
@@ -281,3 +285,8 @@ Defaults["bags-loot-from-left"] = false
 Defaults["quest-watch-font"] = "Roboto"
 Defaults["quest-watch-font-size"] = 12
 Defaults["quest-watch-font-flags"] = ""
+
+-- Data Texts
+Defaults["data-text-chat-left"] = "Gold"
+Defaults["data-text-chat-middle"] = "Crit"
+Defaults["data-text-chat-right"] = "Primary Stat"

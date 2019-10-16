@@ -32,29 +32,23 @@ function Move:Toggle()
 		return
 	end
 	
-	local Frame
-	
 	if self.Active then
 		for i = 1, #self.Frames do
-			Frame = self.Frames[i]
-			
-			Frame:EnableMouse(false)
-			Frame:StopMovingOrSizing()
-			Frame:SetScript("OnDragStart", nil)
-			Frame:SetScript("OnDragStop", nil)
-			Frame:Hide()
+			self.Frames[i]:EnableMouse(false)
+			self.Frames[i]:StopMovingOrSizing()
+			self.Frames[i]:SetScript("OnDragStart", nil)
+			self.Frames[i]:SetScript("OnDragStop", nil)
+			self.Frames[i]:Hide()
 		end
 		
 		self.Active = false
 	else
 		for i = 1, #self.Frames do
-			Frame = self.Frames[i]
-			
-			Frame:EnableMouse(true)
-			Frame:RegisterForDrag("LeftButton")
-			Frame:SetScript("OnDragStart", OnDragStart)
-			Frame:SetScript("OnDragStop", OnDragStop)
-			Frame:Show()
+			self.Frames[i]:EnableMouse(true)
+			self.Frames[i]:RegisterForDrag("LeftButton")
+			self.Frames[i]:SetScript("OnDragStart", OnDragStart)
+			self.Frames[i]:SetScript("OnDragStop", OnDragStop)
+			self.Frames[i]:Show()
 		end
 	
 		self.Active = true
@@ -66,18 +60,14 @@ function Move:ResetAll()
 		vUIMove = {}
 	end
 	
-	local Frame
-	
 	for i = 1, #self.Frames do
-		Frame = self.Frames[i]
-		
-		if self.Defaults[Frame.Name] then
-			local A1, Parent, A2, X, Y = unpack(self.Defaults[Frame.Name])
+		if self.Defaults[self.Frames[i].Name] then
+			local A1, Parent, A2, X, Y = unpack(self.Defaults[self.Frames[i].Name])
 			
-			Frame:ClearAllPoints()
-			Frame:SetScaledPoint(A1, _G[Parent], A2, X, Y)
+			self.Frames[i]:ClearAllPoints()
+			self.Frames[i]:SetScaledPoint(A1, _G[Parent], A2, X, Y)
 			
-			vUIMove[Frame.Name] = {A1, Parent, A2, X, Y}
+			vUIMove[self.Frames[i].Name] = {A1, Parent, A2, X, Y}
 		end
 	end
 end
@@ -176,13 +166,21 @@ function Move:Add(frame, padding)
 		local ParentObject = _G[Parent]		
 		
 		Mover:SetScaledPoint(A1, ParentObject, A2, X, Y)
-	else
+	--[[else
 		Mover:SetScaledPoint(A1, ParentObject, A2, X, Y)
 		
-		vUIMove[Name] = {A1, ParentName, A2, X, Y}
+		vUIMove[Name] = {A1, ParentName, A2, X, Y}]]
 	end
 	
 	table.insert(self.Frames, Mover)
 	
 	return Mover
+end
+
+function Move:IsMoved(frame)
+	if (frame and frame.GetName) then
+		if vUIMove[frame:GetName()] then
+			return true
+		end
+	end
 end
