@@ -51,7 +51,7 @@ function DT:SetDataText(name, data)
 	Anchor:Enable()
 end
 
-function DT:SetType(name, enable, disable, update) -- id, name
+function DT:SetType(name, enable, disable, update) -- id, name (ex, "GOLD", Language["Gold"])
 	if self.Types[name] then
 		return
 	end

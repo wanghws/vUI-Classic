@@ -2,7 +2,6 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local DT = vUI:GetModule("DataText")
 
-local GetBestMapForUnit = C_Map.GetBestMapForUnit
 local GetFramerate = GetFramerate
 local GetNetStats = GetNetStats
 local floor = floor
