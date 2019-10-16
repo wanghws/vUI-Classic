@@ -18,7 +18,7 @@ local RunCommands = function(msg)
 	if Commands[msg] then
 		Commands[msg]()
 	else
-		GUI:Toggle()
+		Commands["settings"]()
 	end
 end
 
