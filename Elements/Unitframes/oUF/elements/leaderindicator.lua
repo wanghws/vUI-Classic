@@ -25,6 +25,10 @@ A default texture will be applied if the widget is a Texture and doesn't have a 
 local _, ns = ...
 local oUF = ns.oUF
 
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local UnitIsGroupLeader = UnitIsGroupLeader
+
 local function Update(self, event)
 	local element = self.LeaderIndicator
 	local unit = self.unit

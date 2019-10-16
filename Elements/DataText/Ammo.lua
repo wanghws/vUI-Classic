@@ -11,7 +11,7 @@ local Update = function(self)
 	
 	if (GetInventoryItemID("player", 0) > 0) then -- Ammo slot
 		Count = GetInventoryItemCount("player", 0)
-	elseif (GetInventoryItemID("player", 18) > 0) then -- Thrown weapons
+	elseif GetInventoryItemID("player", 18) then -- Thrown weapons
 		Count = GetInventoryItemCount("player", 18)
 	end
 	
