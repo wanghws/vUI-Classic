@@ -62,6 +62,7 @@ Elements\DataText\CritRating.lua
 Elements\DataText\ManaRegen.lua
 Elements\DataText\BagSlots.lua
 Elements\DataText\Durability.lua
+Elements\DataText\Empty.lua
 Elements\DataText\AttackPower.lua
 Elements\DataText\SpellPower.lua
 Elements\DataText\Guild.lua

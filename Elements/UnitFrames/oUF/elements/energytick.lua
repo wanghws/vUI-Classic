@@ -1,4 +1,4 @@
-if (select(2, UnitClass("player")) ~= "ROGUE") or (select(2, UnitClass("player")) ~= "DRUID")then
+if (select(2, UnitClass("player")) ~= ("ROGUE" or "DRUID")) then
 	return
 end
 
@@ -11,7 +11,7 @@ local GetTime = GetTime
 local LastTick = GetTime()
 local LastPower = 0
 
-local OnUpdate = function(self, elapsed)
+local OnUpdate = function(self)
 	local Power = UnitPower("player")
 	local Time = GetTime()
 	local Value = Time - LastTick
@@ -25,16 +25,16 @@ local OnUpdate = function(self, elapsed)
 	LastPower = Power
 end
 
-local Path = function(self, ...)
-	return (self.Tick.Override or Update)(self, ...)
+local Path = function(self)
+	return (self.EnergyTick.Override or Update)(self)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
+	return Path(element.__owner)
 end
 
 local Enable = function(self)
-	local element = self.Tick
+	local element = self.EnergyTick
 	
 	if element then
 		element.__owner = self
@@ -47,7 +47,7 @@ local Enable = function(self)
 end
 
 local Disable = function(self)
-	local element = self.Tick
+	local element = self.EnergyTick
 	
 	if element then
 		element:Hide()
@@ -55,4 +55,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("Energy Tick", Path, Enable, Disable)
+oUF:AddElement("EnergyTick", Path, Enable, Disable)

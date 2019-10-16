@@ -258,6 +258,8 @@ Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-class-color"] = true -- temporary
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
+Defaults["unitframes-show-mana-timer"] = false
+Defaults["unitframes-show-energy-timer"] = true
 
 -- Name Plates
 Defaults["nameplates-enable"] = true
@@ -289,4 +291,4 @@ Defaults["quest-watch-font-flags"] = ""
 -- Data Texts
 Defaults["data-text-chat-left"] = "Gold"
 Defaults["data-text-chat-middle"] = "Crit"
-Defaults["data-text-chat-right"] = "Primary Stat"
+Defaults["data-text-chat-right"] = "Durability"

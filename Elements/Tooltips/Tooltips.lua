@@ -209,6 +209,7 @@ local OnTooltipSetUnit = function(self)
 		local Guild, Rank = GetGuildInfo(UnitID)
 		local Color = GetUnitColor(UnitID)
 		local CreatureType = UnitCreatureType(UnitID)
+		local Classification = Tooltips.Classifications[UnitClassification(UnitID)]
 		local Flag = ""
 		local Line
 		
@@ -251,7 +252,11 @@ local OnTooltipSetUnit = function(self)
 				if Race then
 					Line:SetText(format("%s %s%s|r %s %s", LEVEL, LevelColor, Level, Race, Class))
 				elseif CreatureType then
-					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, CreatureType))
+					if Classification then
+						Line:SetText(format("%s %s%s|r %s %s", LEVEL, LevelColor, Level, Classification, CreatureType))
+					else
+						Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, CreatureType))
+					end
 				else
 					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, Class))
 				end

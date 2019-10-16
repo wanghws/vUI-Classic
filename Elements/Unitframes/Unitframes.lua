@@ -740,24 +740,51 @@ local StylePlayer = function(self, unit)
 	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
+	-- Mana regen
+	if Settings["unitframes-show-mana-timer"] then
+		local ManaTimer = CreateFrame("StatusBar", nil, Power)
+		ManaTimer:SetAllPoints(Power)
+		ManaTimer:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+		ManaTimer:SetStatusBarColor(0, 0, 0, 0)
+		ManaTimer:Hide()
+		
+		ManaTimer.Spark = ManaTimer:CreateTexture(nil, "ARTWORK")
+		ManaTimer.Spark:SetScaledSize(3, 15)
+		ManaTimer.Spark:SetScaledPoint("LEFT", ManaTimer:GetStatusBarTexture(), "RIGHT", -1, 0)
+		ManaTimer.Spark:SetTexture(Media:GetTexture("Blank"))
+		ManaTimer.Spark:SetVertexColor(1, 1, 1, 0.2)
+		
+		ManaTimer.Spark2 = ManaTimer:CreateTexture(nil, "ARTWORK")
+		ManaTimer.Spark2:SetScaledSize(1, 15)
+		ManaTimer.Spark2:SetScaledPoint("CENTER", ManaTimer.Spark, 0, 0)
+		ManaTimer.Spark2:SetTexture(Media:GetTexture("Blank"))
+		ManaTimer.Spark2:SetVertexColor(1, 1, 1, 0.8)
+		
+		self.ManaTimer = ManaTimer
+	end
+	
 	-- Energy ticks
-	local Tick = CreateFrame("StatusBar", nil, Power)
-	Tick:SetAllPoints(Power)
-	Tick:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	Tick:SetStatusBarColor(0, 0, 0, 0)
-	Tick:Hide()
-	
-	Tick.Spark = Tick:CreateTexture(nil, "ARTWORK")
-	Tick.Spark:SetScaledSize(3, 15)
-	Tick.Spark:SetScaledPoint("LEFT", Tick:GetStatusBarTexture(), "RIGHT", -1, 0)
-	Tick.Spark:SetTexture(Media:GetTexture("Blank"))
-	Tick.Spark:SetVertexColor(1, 1, 1, 0.2)
-	
-	Tick.Spark2 = Tick:CreateTexture(nil, "ARTWORK")
-	Tick.Spark2:SetScaledSize(1, 15)
-	Tick.Spark2:SetScaledPoint("CENTER", Tick.Spark, 0, 0)
-	Tick.Spark2:SetTexture(Media:GetTexture("Blank"))
-	Tick.Spark2:SetVertexColor(1, 1, 1, 0.8)
+		if Settings["unitframes-show-energy-timer"] then
+		local EnergyTick = CreateFrame("StatusBar", nil, Power)
+		EnergyTick:SetAllPoints(Power)
+		EnergyTick:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+		EnergyTick:SetStatusBarColor(0, 0, 0, 0)
+		EnergyTick:Hide()
+		
+		EnergyTick.Spark = EnergyTick:CreateTexture(nil, "ARTWORK")
+		EnergyTick.Spark:SetScaledSize(3, 15)
+		EnergyTick.Spark:SetScaledPoint("LEFT", EnergyTick:GetStatusBarTexture(), "RIGHT", -1, 0)
+		EnergyTick.Spark:SetTexture(Media:GetTexture("Blank"))
+		EnergyTick.Spark:SetVertexColor(1, 1, 1, 0.2)
+		
+		EnergyTick.Spark2 = EnergyTick:CreateTexture(nil, "ARTWORK")
+		EnergyTick.Spark2:SetScaledSize(1, 15)
+		EnergyTick.Spark2:SetScaledPoint("CENTER", EnergyTick.Spark, 0, 0)
+		EnergyTick.Spark2:SetTexture(Media:GetTexture("Blank"))
+		EnergyTick.Spark2:SetVertexColor(1, 1, 1, 0.8)
+		
+		self.EnergyTick = EnergyTick
+	end
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
 	PowerRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
@@ -1036,7 +1063,6 @@ local StylePlayer = function(self, unit)
 	--self.RaidTargetIndicator = RaidTarget
 	self.ResurrectIndicator = Resurrect
 	self.LeaderIndicator = Leader
-	self.Tick = Tick
 	
 	--self:UpdateTags()
 end
@@ -1732,6 +1758,30 @@ local UpdateShowPlayerBuffs = function(value)
 	end
 end
 
+local UpdateShowManaTimer = function(value)
+	if (not vUI.UnitFrames["player"]) then
+		return
+	end
+
+	if value then
+		vUI.UnitFrames["player"]:EnableElement("ManaRegen")
+	else
+		vUI.UnitFrames["player"]:DisableElement("ManaRegen")
+	end
+end
+
+local UpdateShowEnergyTimer = function(value)
+	if (not vUI.UnitFrames["player"]) then
+		return
+	end
+	
+	if value then
+		vUI.UnitFrames["player"]:EnableElement("EnergyTick")
+	else
+		vUI.UnitFrames["player"]:DisableElement("EnergyTick")
+	end
+end
+
 local PlateCVars = {
     nameplateGlobalScale = 1,
     NamePlateHorizontalScale = 1,
@@ -1870,6 +1920,8 @@ UF:SetScript("OnEvent", function(self, event)
 		Move:Add(self.RaidAnchor)
 	else
 		UpdateShowPlayerBuffs(Settings["unitframes-show-player-buffs"])
+		--UpdateShowManaTimer(Settings["unitframes-show-mana-timer"])
+		--UpdateShowEnergyTimer(Settings["unitframes-show-energy-timer"])
 	end
 end)
 
@@ -1893,17 +1945,19 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Unit Frames"])
 	
 	Left:CreateHeader(Language["Enable"])
-	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], "Enable the vUI unit frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-party", Settings["unitframes-enable-party"], Language["Enable Party Frames"], "Enable the vUI party frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-party-pets", Settings["unitframes-enable-party-pets"], Language["Enable Party Pet Frames"], "Enable the vUI party pet frames module", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames"], "Enable the vUI raid frames module", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable", Settings["unitframes-enable"], Language["Enable Unit Frames Module"], Language["Enable the vUI unit frames module"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party", Settings["unitframes-enable-party"], Language["Enable Party Frames"], Language["Enable the vUI party frames module"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-party-pets", Settings["unitframes-enable-party-pets"], Language["Enable Party Pet Frames"], Language["Enable the vUI party pet frames module"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-enable-raid", Settings["unitframes-enable-raid"], Language["Enable Raid Frames"], Language["Enable the vUI raid frames module"], ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Settings"])
-	Left:CreateSwitch("unitframes-show-player-buffs", Settings["unitframes-show-player-buffs"], Language["Show Player Buffs"], "Show your auras above the player unit frame", UpdateShowPlayerBuffs)
-	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will|n be displayed on the target", UpdateOnlyPlayerDebuffs)
+	Left:CreateSwitch("unitframes-show-player-buffs", Settings["unitframes-show-player-buffs"], Language["Show Player Buffs"], Language["Show your auras above the player unit frame"], UpdateShowPlayerBuffs)
+	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], Language["If enabled, only your own debuffs will|nbe displayed on the target"], UpdateOnlyPlayerDebuffs)
+	Left:CreateSwitch("unitframes-show-mana-timer", Settings["unitframes-show-mana-timer"], Language["Enable Mana Regen Timer"], Language["Display the time until your full mana|nregeneration is active"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-show-energy-timer", Settings["unitframes-show-energy-timer"], Language["Enable Energy Timer"], Language["Display the time until your next energy|ntick on the power bar"], ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Colors"])
-	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], "Color unit frame health by class or reaction", ReloadUI):RequiresReload(true)
+	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], Language["Color unit frame health by class or reaction"], ReloadUI):RequiresReload(true)
 	
 	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateSwitch("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)

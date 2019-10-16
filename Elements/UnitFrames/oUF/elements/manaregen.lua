@@ -20,7 +20,7 @@ local Update = function(self, event, unit)
 		return
 	end
 	
-	local element = self.Tick
+	local element = self.ManaTimer
 	
 	if element then
 		local Type = UnitPowerType(self.unit)
@@ -37,7 +37,7 @@ local Update = function(self, event, unit)
 end
 
 local Path = function(self, ...)
-	return (self.Tick.Override or Update)(self, ...)
+	return (self.ManaTimer.Override or Update)(self, ...)
 end
 
 local ForceUpdate = function(element)
@@ -45,7 +45,7 @@ local ForceUpdate = function(element)
 end
 
 local Enable = function(self)
-	local element = self.Tick
+	local element = self.ManaTimer
 	
 	if element then
 		element.__owner = self
@@ -58,7 +58,7 @@ local Enable = function(self)
 end
 
 local Disable = function(self)
-	local element = self.Tick
+	local element = self.ManaTimer
 	
 	if element then
 		element:Hide()
@@ -66,4 +66,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("Regen Tick", Path, Enable, Disable)
+oUF:AddElement("ManaRegen", Path, Enable, Disable)
