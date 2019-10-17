@@ -66,14 +66,18 @@ local UpdateXP = function(self, first)
 	self.HeaderBG.Text:SetText(format("|cFF%s%s:|r %s", Settings["ui-header-font-color"], Language["Level"], UnitLevel("player")))
 	self.HeaderBG:SetScaledWidth(self.HeaderBG.Text:GetWidth() + 14)
 	
-	if (XP > 0) and (self.Bar.Spark:GetAlpha() < 1) then
-		self.Bar.Spark:SetAlpha(1)
+	if (XP > 0) then
+		if (self.Bar.Spark:GetAlpha() == 0) then
+			self.Bar.Spark:SetAlpha(1)
+		end
 	elseif (self.Bar.Spark:GetAlpha() > 0) then
 		self.Bar.Spark:SetAlpha(0)
 	end
 	
-	if Rested and (Rested > 0) and (self.Bar.Rested.Spark:GetAlpha() < 1) then
-		self.Bar.Rested.Spark:SetAlpha(1)
+	if (Rested and (Rested > 0)) then
+		if (self.Bar.Rested.Spark:GetAlpha() == 0) then
+			self.Bar.Rested.Spark:SetAlpha(1)
+		end
 	elseif (self.Bar.Rested.Spark:GetAlpha() > 0) then
 		self.Bar.Rested.Spark:SetAlpha(0)
 	end

@@ -27,6 +27,9 @@ local Update = function(self, event, unit)
 			Rating = Spell
 			Label = SpellLabel
 		end
+	else
+		Label = SpellLabel
+		Rating = 0
 	end
 	
 	self.Text:SetFormattedText("%s: %s", Label, Rating)
