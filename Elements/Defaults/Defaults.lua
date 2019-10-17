@@ -193,6 +193,7 @@ Defaults["experience-enable"] = true
 Defaults["experience-display-level"] = false
 Defaults["experience-display-progress"] = true
 Defaults["experience-display-percent"] = true
+Defaults["experience-display-rested-value"] = true
 Defaults["experience-show-tooltip"] = true
 Defaults["experience-animate"] = true
 Defaults["experience-width"] = 310
