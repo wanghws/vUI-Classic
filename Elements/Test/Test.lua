@@ -702,8 +702,18 @@ local UpdateUIScale = function(value)
 	vUI:SetScale(value)
 end
 
-local SetSuggestedScale = function()
+local RevertScaleChange = function()
+	
+end
+
+local ScaleOnAccept = function()
 	vUI:SetSuggestedScale()
+end
+
+local SetSuggestedScale = function()
+	local Suggested = vUI:GetSuggestedScale()
+	
+	vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure you would like to change your UI scale to the suggested setting of %s?"], Suggested), "Accept", ScaleOnAccept, "Cancel")
 end
 
 GUI:AddOptions(function(self)
@@ -740,7 +750,7 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Scale"])
 	--Right:CreateLine("|cFFE81123Do not use this to resize UI elements|r")
 	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
-	--Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
+	Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])
 end)

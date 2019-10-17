@@ -615,7 +615,6 @@ local MoveChatFrames = function()
 		Frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 		Frame:SetFrameStrata("MEDIUM")
 		Frame:SetJustifyH("LEFT")
-		Frame:Hide()
 		
 		if (Frame:GetID() == 1) then
 			Frame:ClearAllPoints()

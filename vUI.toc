@@ -68,6 +68,7 @@ Elements\DataText\SpellPower.lua
 Elements\DataText\Guild.lua
 Elements\DataText\Friends.lua
 Elements\DataText\PrimaryStat.lua
+Elements\DataText\Quests.lua
 Elements\DataText\Coordinates.lua
 Elements\DataText\Level.lua
 Elements\DataText\Ammo.lua

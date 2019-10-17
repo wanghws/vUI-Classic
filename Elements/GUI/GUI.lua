@@ -3411,6 +3411,8 @@ function GUI:VARIABLES_LOADED()
 		SetCVar("useUIScale", 1)
 	end
 	
+	Defaults["ui-scale"] = vUI:GetSuggestedScale()
+	
 	Profiles:CreateProfileData()
 	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
