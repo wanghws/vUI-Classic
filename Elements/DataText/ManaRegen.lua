@@ -4,6 +4,7 @@ local DT = vUI:GetModule("DataText")
 
 local GetManaRegen = GetManaRegen
 local InCombatLockdown = InCombatLockdown
+local Label = Language["Regen"]
 
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
@@ -19,23 +20,23 @@ local Update = function(self, event, unit)
 		Regen = Base * 5
 	end
 	
-	self.Text:SetFormattedText("%s: %.2f", Language["Regen"], Regen)
+	self.Text:SetFormattedText("%s: %.2f", Label, Regen)
 end
 
 local OnEnable = function(self)
-	self:RegisterEvent("UNIT_STATS")
-	self:RegisterEvent("UNIT_AURA")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:SetScript("OnEvent", Update)
 	
 	self:Update("player")
 end
 
 local OnDisable = function(self)
-	self:UnregisterEvent("UNIT_STATS")
-	self:UnregisterEvent("UNIT_AURA")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
 	self:SetScript("OnEvent", nil)
 	
 	self.Text:SetText("")
 end
 
-DT:Register("Regen", OnEnable, OnDisable, Update)
+DT:SetType("Regen", OnEnable, OnDisable, Update)

@@ -1554,6 +1554,7 @@ local AddDropdownScrollBar = function(self)
 	ScrollBar:SetBackdropBorderColor(0, 0, 0)
 	ScrollBar:SetMinMaxValues(1, MaxValue)
 	ScrollBar:SetValue(1)
+	--ScrollBar:SetObeyStepOnDrag(true)
 	ScrollBar:EnableMouseWheel(true)
 	ScrollBar:SetScript("OnMouseWheel", DropdownScrollBarOnMouseWheel)
 	ScrollBar:SetScript("OnValueChanged", DropdownScrollBarOnValueChanged)
@@ -2120,6 +2121,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider:SetMinMaxValues(minvalue, maxvalue)
 	Slider:SetValue(value)
 	Slider:EnableMouseWheel(true)
+	Slider:SetObeyStepOnDrag(true)
 	Slider:SetScript("OnMouseWheel", SliderOnMouseWheel)
 	Slider:SetScript("OnValueChanged", SliderOnValueChanged)
 	Slider:SetScript("OnEnter", SliderOnEnter)
@@ -3409,6 +3411,8 @@ function GUI:VARIABLES_LOADED()
 		SetCVar("useUIScale", 1)
 	end
 	
+	Defaults["ui-scale"] = vUI:GetSuggestedScale()
+	
 	Profiles:CreateProfileData()
 	Profiles:UpdateProfileList()
 	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
@@ -3421,7 +3425,7 @@ function GUI:VARIABLES_LOADED()
 	self:RunQueue()
 	
 	-- Set the frame height
-	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 2
+	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 1
 	
 	self:SetScaledHeight(Height)
 	
@@ -3520,7 +3524,7 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
 	
 	Right:CreateHeader(Language["Buttons"])
-	Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
+	--Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
 	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
 	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")

@@ -1,14 +1,26 @@
 local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
 
-local Commands = function(msg)
-	if (msg == "move") then
-		vUI:GetModule("Move"):Toggle()
-	elseif (msg == "help") then
-		
+local Commands = {}
+
+Commands["move"] = function()
+	vUI:GetModule("Move"):Toggle()
+end
+
+Commands["help"] = function()
+	print("...")
+end
+
+Commands["settings"] = function()
+	GUI:Toggle()
+end
+
+local RunCommands = function(msg)
+	if Commands[msg] then
+		Commands[msg]()
 	else
-		GUI:Toggle()
+		Commands["settings"]()
 	end
 end
 
 SLASH_VUI1 = "/vui"
-SlashCmdList["VUI"] = Commands
+SlashCmdList["VUI"] = RunCommands

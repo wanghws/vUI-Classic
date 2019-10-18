@@ -25,14 +25,14 @@ OnEnter and OnLeave script handlers will be set to display a Tooltip if the `Tot
     local Totems = {}
     for index = 1, 5 do
         -- Position and size of the totem indicator
-        local Totem = CreateFrame('Button', nil, self)
+        local Totem = CreateFrame("Button", nil, self)
         Totem:SetSize(40, 40)
-        Totem:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * Totem:GetWidth(), 0)
+        Totem:SetPoint("TOPLEFT", self, "BOTTOMLEFT", index * Totem:GetWidth(), 0)
 
-        local Icon = Totem:CreateTexture(nil, 'OVERLAY')
+        local Icon = Totem:CreateTexture(nil, "OVERLAY")
         Icon:SetAllPoints()
 
-        local Cooldown = CreateFrame('Cooldown', nil, Totem, 'CooldownFrameTemplate')
+        local Cooldown = CreateFrame("Cooldown", nil, Totem, "CooldownFrameTemplate")
         Cooldown:SetAllPoints()
 
         Totem.Icon = Icon
@@ -51,18 +51,17 @@ local oUF = ns.oUF
 local GetTotemInfo = GetTotemInfo
 local GetTime = GetTime
 
-local function UpdateTooltip(self)
+local UpdateTooltip = function(self)
 	GameTooltip:SetTotem(self:GetID())
 end
 
-local function OnEnter(self)
+local OnEnter = function(self)
 	if(not self:IsVisible()) then return end
 
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-	--self:UpdateTooltip()
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 end
 
-local function OnLeave()
+local OnLeave = function()
 	GameTooltip:Hide()
 end
 
@@ -76,112 +75,79 @@ local TotemOnUpdate = function(self, elapsed)
 	end
 end
 
-local function UpdateTotem(self, event, slot)
+local UpdateTotem = function(self, event, slot)
 	local element = self.Totems
-	if(slot > #element) then return end
-
-	--[[ Callback: Totems:PreUpdate(slot)
-	Called before the element has been updated.
-
-	* self - the Totems element
-	* slot - the slot of the totem to be updated (number)
-	--]]
+	
 	if element.PreUpdate then
 		element:PreUpdate(slot)
 	end
 	
-	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
+	local Exists, Name, Start, Duration, Icon = GetTotemInfo(slot)
 	
-	if (haveTotem and duration > 0) then
-		local totem = element[slot]
-		totem.duration = start + duration - GetTime()
-		totem.ela = totem.duration
-		totem:SetScript("OnUpdate", TotemOnUpdate)
-		totem:SetMinMaxValues(0, totem.ela)
-		totem:SetValue(totem.ela)
+	if (Exists and Duration > 0) then
+		local Totem = element[slot]
+		Totem.duration = Start + Duration - GetTime()
+		Totem.ela = Totem.duration
+		Totem:SetScript("OnUpdate", TotemOnUpdate)
+		Totem:SetMinMaxValues(0, Totem.ela)
+		Totem:SetValue(Totem.ela)
 	end
-
-	--[[ Callback: Totems:PostUpdate(slot, haveTotem, name, start, duration, icon)
-	Called after the element has been updated.
-
-	* self      - the Totems element
-	* slot      - the slot of the updated totem (number)
-	* haveTotem - indicates if a totem is present in the given slot (boolean)
-	* name      - the name of the totem (string)
-	* start     - the value of `GetTime()` when the totem was created (number)
-	* duration  - the total duration for which the totem should last (number)
-	* icon      - the totem's icon (Texture)
-	--]]
+	
 	if element.PostUpdate then
-		return element:PostUpdate(slot, haveTotem, name, start, duration, icon)
+		return element:PostUpdate(slot, Exists, Name, Start, Duration, Icon)
 	end
 end
 
-local function Path(self, ...)
-	--[[ Override: Totem.Override(self, event, ...)
-	Used to completely override the internal update function.
-
-	* self  - the parent object
-	* event - the event triggering the update (string)
-	* ...   - the arguments accompanying the event
-	--]]
-	return (self.Totems.Override or UpdateTotem) (self, ...)
+local Path = function(self, ...)
+	return (self.Totems.Override or UpdateTotem)(self, ...)
 end
 
-local function Update(self, event)
+local Update = function(self, event)
 	for i = 1, #self.Totems do
 		Path(self, event, i)
 	end
 end
 
-local function ForceUpdate(element)
-	return Update(element.__owner, 'ForceUpdate')
+local ForceUpdate = function(element)
+	return Update(element.__owner, "ForceUpdate")
 end
 
-local function Enable(self)
+local Enable = function(self)
 	local element = self.Totems
-	if(element) then
+	
+	if element then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 		
 		for i = 1, #element do
-			local totem = element[i]
+			local Totem = element[i]
 			
-			totem:SetID(i)
-			totem:SetMinMaxValues(0, 1)
-			totem:SetValue(0)
+			Totem:SetID(i)
+			Totem:SetMinMaxValues(0, 1)
+			Totem:SetValue(0)
 			
-			if(totem:IsMouseEnabled()) then
-				totem:SetScript('OnEnter', OnEnter)
-				totem:SetScript('OnLeave', OnLeave)
-				
-				--[[ Override: Totems[slot]:UpdateTooltip()
-				Used to populate the tooltip when the totem is hovered.
-
-				* self - the widget at the given slot index
-				]]
-				
-				--[[if(not totem.UpdateTooltip) then
-					totem.UpdateTooltip = UpdateTooltip
-				end]]
+			if Totem:IsMouseEnabled() then
+				Totem:SetScript("OnEnter", OnEnter)
+				Totem:SetScript("OnLeave", OnLeave)
 			end
 		end
-
-		self:RegisterEvent('PLAYER_TOTEM_UPDATE', Path, true)
+		
+		self:RegisterEvent("PLAYER_TOTEM_UPDATE", Path, true)
 		
 		return true
 	end
 end
 
-local function Disable(self)
+local Disable = function(self)
 	local element = self.Totems
-	if(element) then
+	
+	if element then
 		for i = 1, #element do
 			element[i]:Hide()
 		end
 		
-		self:UnregisterEvent('PLAYER_TOTEM_UPDATE', Path)
+		self:UnregisterEvent("PLAYER_TOTEM_UPDATE", Path)
 	end
 end
 
-oUF:AddElement('Totems', Update, Enable, Disable)
+oUF:AddElement("Totems", Update, Enable, Disable)

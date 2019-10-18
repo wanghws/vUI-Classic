@@ -186,6 +186,7 @@ Defaults["chat-tab-font-flags"] = ""
 Defaults["chat-tab-font-color"] = "FFCE54" -- F1C40F
 Defaults["chat-frame-width"] = 392
 Defaults["chat-frame-height"] = 104
+Defaults["chat-fade-text"] = false
 
 -- Experience
 Defaults["experience-enable"] = true
@@ -220,6 +221,9 @@ Defaults["minimap-buttonbar-buttonsize"] = 20
 
 -- Cooldowns
 Defaults["cooldowns-enable"] = true
+
+-- Meter Container
+Defaults["meters-container-show"] = true
 
 -- Micro Buttons
 Defaults["micro-buttons-show"] = false
@@ -258,6 +262,8 @@ Defaults["unitframes-target-cc-health"] = false
 Defaults["unitframes-class-color"] = true -- temporary
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
+Defaults["unitframes-show-mana-timer"] = false
+Defaults["unitframes-show-energy-timer"] = true
 
 -- Name Plates
 Defaults["nameplates-enable"] = true
@@ -285,3 +291,8 @@ Defaults["bags-loot-from-left"] = false
 Defaults["quest-watch-font"] = "Roboto"
 Defaults["quest-watch-font-size"] = 12
 Defaults["quest-watch-font-flags"] = ""
+
+-- Data Texts
+Defaults["data-text-chat-left"] = "Gold"
+Defaults["data-text-chat-middle"] = "Crit"
+Defaults["data-text-chat-right"] = "Durability"

@@ -4,6 +4,7 @@ local DT = vUI:GetModule("DataText")
 
 local GetContainerNumSlots = GetContainerNumSlots
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local Label = Language["Bags"]
 
 local Update = function(self)
 	local TotalSlots = 0
@@ -18,7 +19,7 @@ local Update = function(self)
 		end
 	end
 	
-	self.Text:SetFormattedText("%s: %s/%s", Language["Bags"], FreeSlots, TotalSlots)
+	self.Text:SetFormattedText("%s: %s/%s", Label, FreeSlots, TotalSlots)
 end
 
 local OnEnable = function(self)
@@ -35,4 +36,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Bags", OnEnable, OnDisable, Update)
+DT:SetType("Bag Slots", OnEnable, OnDisable, Update)

@@ -2,6 +2,7 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Testing = {
 	["Hydrazine:Whitemane"] = 1,
+	["Vexisle:Whitemane"] = 1,
 }
 
 if (not Testing[vUI.UserProfileKey]) then
@@ -124,6 +125,7 @@ local CreateMetersPanels = function()
 	InnerRightOutline:SetBackdrop(vUI.Outline)
 	InnerRightOutline:SetBackdropBorderColor(0, 0, 0)
 	
+	-- Weird spot for this to live, right now.
 	local DT = vUI:GetModule("DataText")
 	
 	local Width = MeterBGBottomFrame:GetWidth() / 3
@@ -150,6 +152,10 @@ local Frame = CreateFrame("Frame")
 
 Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 Frame:SetScript("OnEvent", function(self, event)
+	if (not Settings["meters-container-show"]) then
+		
+	end
+	
 	CreateMetersPanels()
 	
 	self:UnregisterEvent(event)

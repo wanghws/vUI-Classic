@@ -4,6 +4,7 @@ local DT = vUI:GetModule("DataText")
 
 local UnitArmor = UnitArmor
 local UnitLevel = UnitLevel
+local Label = Language["Armor"]
 
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
@@ -13,9 +14,10 @@ local Update = function(self, event, unit)
 	local Base, EffectiveArmor, Armor, PosBuff, NegBuff = UnitArmor("player")
 	local Level = UnitLevel("player")
 	local Reduction = EffectiveArmor / ((85 * Level) + 400)
+	
 	Reduction = 100 * (Reduction / (Reduction + 1))
 	
-	self.Text:SetFormattedText("%s: %.1f%%", Language["Armor"], Reduction)
+	self.Text:SetFormattedText("%s: %.1f%%", Label, Reduction)
 end
 
 local OnEnable = function(self)
@@ -32,4 +34,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Armor", OnEnable, OnDisable, Update)
+DT:SetType("Armor", OnEnable, OnDisable, Update)

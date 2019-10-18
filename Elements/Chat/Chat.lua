@@ -480,6 +480,7 @@ local StyleChatFrame = function(frame)
 	frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetJustifyH("LEFT")
+	frame:SetTextCopyable(true)
 	frame:Hide()
 	
 	FCF_SetChatWindowFontSize(nil, frame, 12)
@@ -614,7 +615,6 @@ local MoveChatFrames = function()
 		Frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 		Frame:SetFrameStrata("MEDIUM")
 		Frame:SetJustifyH("LEFT")
-		Frame:Hide()
 		
 		if (Frame:GetID() == 1) then
 			Frame:ClearAllPoints()

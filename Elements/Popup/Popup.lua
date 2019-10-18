@@ -36,12 +36,10 @@ end
 
 local ButtonOnEnter = function(self)
 	self.Highlight:SetAlpha(0.1)
-	self.Text:SetTextColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 end
 
 local ButtonOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
-	self.Text:SetTextColor(1, 1, 1)
 end
 
 Popup.CreatePopupFrame = function(self)

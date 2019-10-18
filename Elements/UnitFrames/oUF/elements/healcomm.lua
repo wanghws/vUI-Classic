@@ -17,7 +17,7 @@ local Update = function(self, event, unit)
 	end
 	
 	local GUID = UnitGUID(unit)
-	local IncomingHeals = (HealComm:GetHealAmount(GUID, HealComm.CASTED_HEALS) or 0) * (HealComm:GetHealModifier(GUID) or 1)
+	local IncomingHeals = (HealComm:GetHealAmount(GUID, HealComm.ALL_HEALS) or 0) * (HealComm:GetHealModifier(GUID) or 1)
 	local Health = UnitHealth(unit)
 	local MaxHealth = UnitHealthMax(unit)
 	
@@ -46,8 +46,10 @@ local Enable = function(self)
 			for i = 1, select("#", ...) do
 				GUID = select(i, ...)
 				
-				if (self.unit and UnitGUID(self.unit) == GUID) then
+				if (UnitGUID(self.unit) == GUID) then
 					Update(self, nil, self.unit)
+					
+					break
 				end
 			end
 		end

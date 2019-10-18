@@ -2,22 +2,17 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local DT = vUI:GetModule("DataText")
 
-local GetBestMapForUnit = C_Map.GetBestMapForUnit
-local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local GetFramerate = GetFramerate
+local GetNetStats = GetNetStats
 local floor = floor
+local FPSLabel = "FPS"
+local MSLabel = "MS"
 
 local Update = function(self, elapsed)
 	self.Elapsed = self.Elapsed + elapsed
 	
-	if (self.Elapsed > 0.5) then
-		local MapID = GetBestMapForUnit("player")
-		local Position = GetPlayerMapPosition(MapID, "player")
-		local X, Y = Position:GetXY()
-		
-		X = X * 100
-		Y = Y * 100
-		
-		self.Text:SetFormattedText("%.2f, %.2f", X, Y)
+	if (self.Elapsed > 1) then
+		self.Text:SetFormattedText("%s: %s %s: %s", FPSLabel, floor(GetFramerate()), MSLabel, select(4, GetNetStats()))
 		
 		self.Elapsed = 0
 	end
@@ -28,7 +23,7 @@ local OnEnable = function(self)
 	
 	self.Elapsed = 0
 	
-	self:Update(1)
+	self:Update(2)
 end
 
 local OnDisable = function(self)
@@ -39,4 +34,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Coordinates", OnEnable, OnDisable, Update)
+DT:SetType("System", OnEnable, OnDisable, Update)

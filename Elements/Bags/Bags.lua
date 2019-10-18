@@ -179,7 +179,7 @@ function Bags:Load()
 	
 	self.Frame = Frame
 	
-	self:CreateBagFrame()
+	--self:CreateBagFrame()
 	
 	--self:RegisterEvent("BAG_OPEN")
 	--self:RegisterEvent("PLAYER_ENTERING_WORLD")

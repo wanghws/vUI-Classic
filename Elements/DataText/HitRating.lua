@@ -4,6 +4,7 @@ local DT = vUI:GetModule("DataText")
 
 local GetHitModifier = GetHitModifier
 local GetSpellHitModifier = GetSpellHitModifier
+local Label = Language["Hit"]
 
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
@@ -20,7 +21,7 @@ local Update = function(self, event, unit)
 		Rating = Hit
 	end
 	
-	self.Text:SetFormattedText("%s: %s", Language["Hit"], Rating)
+	self.Text:SetFormattedText("%s: %s%%", Label, Rating)
 end
 
 local OnEnable = function(self)
@@ -37,4 +38,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Hit", OnEnable, OnDisable, Update)
+DT:SetType("Hit", OnEnable, OnDisable, Update)

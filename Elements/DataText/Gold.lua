@@ -23,4 +23,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:Register("Gold", OnEnable, OnDisable, Update)
+DT:SetType("Gold", OnEnable, OnDisable, Update)
