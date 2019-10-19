@@ -186,7 +186,8 @@ Defaults["chat-tab-font-flags"] = ""
 Defaults["chat-tab-font-color"] = "FFCE54" -- F1C40F
 Defaults["chat-frame-width"] = 392
 Defaults["chat-frame-height"] = 104
-Defaults["chat-fade-text"] = false
+Defaults["chat-enable-fading"] = false
+Defaults["chat-fade-time"] = 15
 
 -- Experience
 Defaults["experience-enable"] = true
