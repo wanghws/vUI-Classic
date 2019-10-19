@@ -7,6 +7,7 @@ local SPACING = 2
 local Num = NUM_ACTIONBAR_BUTTONS
 local IsUsableAction = IsUsableAction
 local IsActionInRange = IsActionInRange
+local HasAction = HasAction
 
 local ActionBars = CreateFrame("Frame")
 
@@ -206,12 +207,20 @@ local ShowGridAndSkin = function()
 			Button:Show()
 		end
 		
+		if (Value == 0 and not HasAction(Button.action)) then
+			Button:Hide()
+		end
+		
 		Button = _G[format("MultiBarRightButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
 		SkinButton(Button)
 		
 		if Value then
 			Button:Show()
+		end
+		
+		if (Value == 0 and not HasAction(Button.action)) then
+			Button:Hide()
 		end
 		
 		Button = _G[format("MultiBarBottomRightButton%d", i)]
@@ -222,6 +231,10 @@ local ShowGridAndSkin = function()
 			Button:Show()
 		end
 		
+		if (Value == 0 and not HasAction(Button.action)) then
+			Button:Hide()
+		end
+		
 		Button = _G[format("MultiBarLeftButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
 		SkinButton(Button)
@@ -230,12 +243,20 @@ local ShowGridAndSkin = function()
 			Button:Show()
 		end
 		
+		if (Value == 0 and not HasAction(Button.action)) then
+			Button:Hide()
+		end
+		
 		Button = _G[format("MultiBarBottomLeftButton%d", i)]
 		Button:SetAttribute("showgrid", Value)
 		SkinButton(Button)
 		
 		if Value then
 			Button:Show()
+		end
+		
+		if (Value == 0 and not HasAction(Button.action)) then
+			Button:Hide()
 		end
 	end
 	
@@ -319,7 +340,6 @@ local CreateBar1 = function()
 	end
 	
 	UpdateBar1()
-	ShowGridAndSkin()
 	
 	MainMenuBar:SetParent(Hider)
 end
@@ -931,6 +951,8 @@ ActionBars:SetScript("OnEvent", function(self, event)
 	MultiBarRight:SetShown(true)
 	MultiBarLeft:SetShown(true)
 	MultiBarBottomRight:SetShown(true)
+	
+	ShowGridAndSkin()
 	
 	-- Remove blizzard options so people don't change them instead of our own
 	InterfaceOptionsActionBarsPanelBottomLeft:Hide()
