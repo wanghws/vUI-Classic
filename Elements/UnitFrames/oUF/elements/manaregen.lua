@@ -25,12 +25,11 @@ local Update = function(self, event, unit)
 	if element then
 		local Type = UnitPowerType(self.unit)
 		
-		if (Type ~= 0) or (UnitPower(self.unit) == UnitPowerMax(self.unit)) then
+		if (Type ~= 0) or (UnitPower(unit) == UnitPowerMax(unit)) then
 			return
 		end
 		
 		element.elapsed = 0
-		
 		element:Show()
 		element:SetScript("OnUpdate", OnUpdate)
 	end

@@ -480,7 +480,8 @@ local StyleChatFrame = function(frame)
 	frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetJustifyH("LEFT")
-	frame:SetTextCopyable(true)
+	frame:SetFading(Settings["chat-enable-fading"])
+	frame:SetTimeVisible(Settings["chat-fade-time"])
 	frame:Hide()
 	
 	FCF_SetChatWindowFontSize(nil, frame, 12)
@@ -918,6 +919,18 @@ local RunChatInstall = function()
 	ReloadUI()
 end
 
+local UpdateEnableFading = function(value)
+	for i = 1, NUM_CHAT_WINDOWS do
+		_G["ChatFrame"..i]:SetFading(value)
+	end
+end
+
+local UpdateFadeTime = function(value)
+	for i = 1, NUM_CHAT_WINDOWS do
+		_G["ChatFrame"..i]:SetTimeVisible(value)
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Chat"])
 	
@@ -928,24 +941,26 @@ GUI:AddOptions(function(self)
 	Left:CreateSlider("chat-frame-width", Settings["chat-frame-width"], 300, 500, 1, "Chat Width", "Set the width of the chat frame", UpdateChatFrameSize)
 	Left:CreateSlider("chat-frame-height", Settings["chat-frame-height"], 40, 200, 1, "Chat Height", "Set the height of the chat frame", UpdateChatFrameSize)
 	Left:CreateSlider("chat-bg-opacity", Settings["chat-bg-opacity"], 0, 100, 10, "Background Opacity", "Set the opacity of the chat background", UpdateOpacity, nil, "%")
+	Left:CreateSlider("chat-fade-time", Settings["chat-enable-fading"], 0, 60, 5, "Set Fade Time", "Set the duration to display text before fading out", UpdateFadeTime, nil, "s")
+	Left:CreateSwitch("chat-enable-fading", Settings["chat-enable-fading"], "Enable Text Fading", "Set the text to fade after the set amount of time", UpdateEnableFading)
 	
 	Right:CreateHeader(Language["Install"])
 	Right:CreateButton(Language["Install"], Language["Install Chat Defaults"], "Set default channels and settings related to chat", RunChatInstall):RequiresReload(true)
 	
-	Right:CreateHeader(Language["Links"])
-	Right:CreateSwitch("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "Enable URL links in the chat frame")
-	Right:CreateSwitch("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "Enable Discord links in the chat frame")
-	Right:CreateSwitch("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "Enable email links in the chat frame")
-	Right:CreateSwitch("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "Enable friend tag links in the chat frame")
+	Left:CreateHeader(Language["Links"])
+	Left:CreateSwitch("chat-enable-url-links", Settings["chat-enable-url-links"], Language["Enable URL Links"], "Enable URL links in the chat frame")
+	Left:CreateSwitch("chat-enable-discord-links", Settings["chat-enable-discord-links"], Language["Enable Discord Links"], "Enable Discord links in the chat frame")
+	Left:CreateSwitch("chat-enable-email-links", Settings["chat-enable-email-links"], Language["Enable Email Links"], "Enable email links in the chat frame")
+	Left:CreateSwitch("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "Enable friend tag links in the chat frame")
 	
-	Left:CreateHeader(Language["Chat Frame Font"])
-	Left:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame", UpdateChatFont, "Font")
-	Left:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame", UpdateChatFont)
-	Left:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame", UpdateChatFont)
+	Right:CreateHeader(Language["Chat Frame Font"])
+	Right:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame", UpdateChatFont, "Font")
+	Right:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame", UpdateChatFont)
+	Right:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame", UpdateChatFont)
 	
-	Left:CreateHeader(Language["Tab Font"])
-	Left:CreateDropdown("chat-tab-font", Settings["chat-tab-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame tabs", UpdateChatTabFont, "Font")
-	Left:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame tabs", UpdateChatTabFont)
-	Left:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
-	Left:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "Set the color of the chat frame tabs", UpdateChatTabFont)
+	Right:CreateHeader(Language["Tab Font"])
+	Right:CreateDropdown("chat-tab-font", Settings["chat-tab-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame tabs", UpdateChatTabFont, "Font")
+	Right:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame tabs", UpdateChatTabFont)
+	Right:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
+	Right:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "Set the color of the chat frame tabs", UpdateChatTabFont)
 end)

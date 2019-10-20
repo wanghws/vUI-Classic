@@ -96,7 +96,7 @@ local CreateMetersPanels = function()
 	TopRight.Texture:SetScaledPoint("TOPLEFT", TopRight, 1, -1)
 	TopRight.Texture:SetScaledPoint("BOTTOMRIGHT", TopRight, -1, 1)
 	TopRight.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	TopRight.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))	
+	TopRight.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	local MeterBGMiddle = CreateFrame("Frame", nil, UIParent)
 	MeterBGMiddle:SetScaledPoint("TOP", MeterBGTop, "BOTTOM", 0, 0)

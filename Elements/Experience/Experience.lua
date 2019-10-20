@@ -55,7 +55,12 @@ local UpdateXP = function(self, first)
 	
 	if Rested then
 		self.Bar.Rested:SetValue(XP + Rested)
-		self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(MaxXP), Comma(Rested), RestingText))
+		
+		if Settings["experience-display-rested-value"] then
+			self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(MaxXP), Comma(Rested), RestingText))
+		else
+			self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(MaxXP), RestingText))
+		end
 	else
 		self.Bar.Rested:SetValue(0)
 		self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(MaxXP), RestingText))
@@ -450,6 +455,10 @@ local UpdateRestedColor = function(value)
 	ExperienceBar.Bar.Rested:SetStatusBarColorHex(value)
 end
 
+local UpdateShowRestedValue = function()
+	UpdateXP(ExperienceBar)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Experience"])
 	
@@ -460,7 +469,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "Display your current level in the experience bar", UpdateDisplayLevel)
 	Left:CreateSwitch("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Text"], "Display your current progress|ninformation in the experience bar", UpdateDisplayProgress)
 	Left:CreateSwitch("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Text"], "Display your current percent|ninformation in the experience bar", UpdateDisplayPercent)
-	Left:CreateSwitch("experience-show-tooltip", Settings["experience-show-tooltip"], Language["Display Tooltip"], "Display a tooltip when mousing over the experience bar")
+	Left:CreateSwitch("experience-display-rested-value", Settings["experience-display-rested-value"], Language["Display Rested Value"], "Display your current rested|nvalue on the experience bar", UpdateShowRestedValue)
+	Left:CreateSwitch("experience-show-tooltip", Settings["experience-show-tooltip"], Language["Enable Tooltip"], "Display a tooltip when mousing over the experience bar")
 	Left:CreateSwitch("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "Smoothly animate changes to the experience bar")
 	
 	Right:CreateHeader(Language["Size"])

@@ -186,13 +186,15 @@ Defaults["chat-tab-font-flags"] = ""
 Defaults["chat-tab-font-color"] = "FFCE54" -- F1C40F
 Defaults["chat-frame-width"] = 392
 Defaults["chat-frame-height"] = 104
-Defaults["chat-fade-text"] = false
+Defaults["chat-enable-fading"] = false
+Defaults["chat-fade-time"] = 15
 
 -- Experience
 Defaults["experience-enable"] = true
 Defaults["experience-display-level"] = false
 Defaults["experience-display-progress"] = true
 Defaults["experience-display-percent"] = true
+Defaults["experience-display-rested-value"] = true
 Defaults["experience-show-tooltip"] = true
 Defaults["experience-animate"] = true
 Defaults["experience-width"] = 310

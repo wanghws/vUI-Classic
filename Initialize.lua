@@ -67,7 +67,7 @@ function vUI:LoadModule(name)
 	end
 end
 
-function vUI:LoadModules(version)
+function vUI:LoadModules()
 	for i = 1, #self.Modules do
 		if self.Modules[i].Load then
 			self.Modules[i]:Load()

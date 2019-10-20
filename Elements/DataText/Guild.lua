@@ -8,7 +8,7 @@ local select = select
 local Label = Language["Guild"]
 
 local Update = function(self)
-	if (not IsInGuild) then
+	if (not IsInGuild()) then
 		self.Text:SetText(Language["No Guild"])
 	end
 	
