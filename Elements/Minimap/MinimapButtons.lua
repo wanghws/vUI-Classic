@@ -1,3 +1,7 @@
+if (1 == 1) then
+	return
+end
+
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local MinimapButtons = vUI:NewModule("Minimap Buttons")
