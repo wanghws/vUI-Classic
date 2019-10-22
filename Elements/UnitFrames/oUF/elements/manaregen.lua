@@ -1,21 +1,27 @@
 local _, ns = ...
 local oUF = ns.oUF
 
+-- If drinking, add a 1s tick
+
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitPowerType = UnitPowerType
+local Update
 
 local OnUpdate = function(self, elapsed)
 	self.elapsed = self.elapsed + elapsed
 	
 	self:SetValue(self.elapsed)
 	
-	if (self.elapsed >= 5) then
+	if (self.elapsed >= self.max) then
+		self.LastPower = UnitPower("player")
 		self:Hide()
+		
+		self:RegisterEvent("UNIT_POWER_FREQUENT", Update)
 	end
 end
 
-local Update = function(self, event, unit)
+Update = function(self, event, unit)
 	if (unit ~= self.unit) then
 		return
 	end
@@ -26,14 +32,27 @@ local Update = function(self, event, unit)
 		local Type = UnitPowerType(self.unit)
 		local Power = UnitPower(unit)
 		
-		if (Type ~= 0) or (Power == UnitPowerMax(unit)) or (Power >= element.LastPower) then
+		if (Type ~= 0) or (Power == UnitPowerMax(unit)) then
 			return
 		end
 		
-		element.elapsed = 0
+		if (element.LastPower > Power) then -- Cast
+			element.elapsed = 0
+			element.max = 5
+			element:SetMinMaxValues(0, element.max)
+			element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
+			element:Show()
+			element:SetScript("OnUpdate", OnUpdate)
+		elseif (Power > element.LastPower) then -- Tick
+			element.elapsed = 0
+			element.max = 2
+			element:SetMinMaxValues(0, element.max)
+			element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
+			element:Show()
+			element:SetScript("OnUpdate", OnUpdate)
+		end
+		
 		element.LastPower = Power
-		element:Show()
-		element:SetScript("OnUpdate", OnUpdate)
 	end
 end
 
@@ -56,7 +75,7 @@ local Enable = function(self)
 		
 		element:Hide()
 		element:SetMinMaxValues(0, 5)
-		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
+		self:RegisterEvent("UNIT_POWER_FREQUENT", Update)
 	end
 end
 
@@ -65,7 +84,7 @@ local Disable = function(self)
 	
 	if element then
 		element:Hide()
-		element:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
+		element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
 	end
 end
 
