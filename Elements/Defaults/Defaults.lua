@@ -216,6 +216,10 @@ Defaults["auras-per-row"] = 12
 Defaults["minimap-enable"] = true
 Defaults["minimap-size"] = 140
 Defaults["minimap-show-time"] = true
+Defaults["minimap-buttonbar-enable"] = true
+Defaults["minimap-buttonbar-direction"] = "LEFT"
+Defaults["minimap-buttonbar-buttonspacing"] = 1
+Defaults["minimap-buttonbar-buttonsize"] = 20
 
 -- Cooldowns
 Defaults["cooldowns-enable"] = true
