@@ -369,6 +369,10 @@ Media:SetStyle("vUI", {
 	["action-bars-font"] = "Roboto",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "Roboto",
+	["tooltips-size"] = 12,
+	["tooltips-flags"] = "",
 })
 
 -- vUI 2
@@ -415,6 +419,10 @@ Media:SetStyle("vUI 2", {
 	["action-bars-font"] = "PT Sans",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "PT Sans",
+	["tooltips-size"] = 12,
+	["tooltips-flags"] = "",
 })
 
 -- Conjured Muffin -- Casting: 2ECC71 - Interrupted: F39C12 - Failed: D35400
@@ -461,6 +469,10 @@ Media:SetStyle("Conjured Muffin", {
 	["action-bars-font"] = "Roboto",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "Roboto",
+	["tooltips-size"] = 12,
+	["tooltips-flags"] = "",
 })
 
 -- Zen
@@ -507,6 +519,10 @@ Media:SetStyle("Zen", {
 	["action-bars-font"] = "Prototype",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "Prototype",
+	["tooltips-size"] = 12,
+	["tooltips-flags"] = "",
 })
 
 -- Slate
@@ -553,6 +569,10 @@ Media:SetStyle("Slate", {
 	["action-bars-font"] = "Prototype",
 	["action-bars-font-size"] = 12,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "Prototype",
+	["tooltips-size"] = 12,
+	["tooltips-flags"] = "",
 })
 
 -- Smelly
@@ -599,4 +619,8 @@ Media:SetStyle("Smelly", {
 	["action-bars-font"] = "FiraCode",
 	["action-bars-font-size"] = 10,
 	["action-bars-font-flags"] = "",
+	
+	["tooltips-font"] = "FiraCode",
+	["tooltips-size"] = 10,
+	["tooltips-flags"] = "",
 })

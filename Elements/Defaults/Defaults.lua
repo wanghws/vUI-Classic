@@ -224,10 +224,12 @@ Defaults["cooldowns-enable"] = true
 Defaults["meters-container-show"] = true
 
 -- Micro Buttons
-Defaults["micro-buttons-show"] = false
+Defaults["micro-buttons-visiblity"] = "HIDE"
+Defaults["micro-buttons-opacity"] = 40
 
 -- Bags Frame
-Defaults["bags-frame-show"] = true
+Defaults["bags-frame-visiblity"] = "SHOW"
+Defaults["bags-frame-opacity"] = 40
 
 -- Auto Repair
 Defaults["auto-repair-enable"] = true
@@ -281,6 +283,9 @@ Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
 Defaults["tooltips-on-cursor"] = false
 Defaults["tooltips-show-id"] = false
+Defaults["tooltips-font"] = "Roboto"
+Defaults["tooltips-font-size"] = 12
+Defaults["tooltips-font-flags"] = ""
 
 -- Bags
 Defaults["bags-loot-from-left"] = false

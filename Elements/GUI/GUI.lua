@@ -313,8 +313,8 @@ GUI.Widgets.CreateHeader = function(self, text)
 	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
 	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Text, "LEFT", -SPACING, 0)
 	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
-	HeaderLeft:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
-	HeaderLeft:SetBackdropBorderColor(0, 0, 0)
+	HeaderLeft:SetBackdropColorHex("000000")
+	HeaderLeft:SetBackdropBorderColorHex("000000")
 	
 	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
 	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
@@ -328,8 +328,8 @@ GUI.Widgets.CreateHeader = function(self, text)
 	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	HeaderRight:SetScaledPoint("LEFT", Anchor.Text, "RIGHT", SPACING, 0)
 	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
-	HeaderRight:SetBackdropColor(HexToRGB(Settings["ui-button-texture-color"]))
-	HeaderRight:SetBackdropBorderColor(0, 0, 0)
+	HeaderRight:SetBackdropColorHex("000000")
+	HeaderRight:SetBackdropBorderColorHex("000000")
 	
 	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
 	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
@@ -698,6 +698,20 @@ local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
+local SwitchEnable = function(self)
+	self.Switch:EnableMouse(true)
+	self.Switch:EnableMouseWheel(true)
+	
+	self.Switch.Flavor:SetVertexColorHex(Settings["ui-widget-color"])
+end
+
+local SwitchDisable = function(self)
+	self.Switch:EnableMouse(false)
+	self.Switch:EnableMouseWheel(false)
+	
+	self.Switch.Flavor:SetVertexColorHex("A5A5A5")
+end
+
 local SwitchRequiresReload = function(self, flag)
 	self.ReloadFlag = flag
 	
@@ -714,6 +728,8 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Anchor.ID = id
 	Anchor.Text = label
 	Anchor.Tooltip = tooltip
+	Anchor.Enable = SwitchEnable
+	Anchor.Disable = SwitchDisable
 	
 	Anchor:SetScript("OnEnter", AnchorOnEnter)
 	Anchor:SetScript("OnLeave", AnchorOnLeave)
@@ -782,6 +798,8 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	else
 		Switch.Thumb:SetScaledPoint("LEFT", Switch, 0, 0)
 	end
+	
+	Anchor.Switch = Switch
 	
 	tinsert(self.Widgets, Anchor)
 	
@@ -1467,6 +1485,26 @@ local MenuItemOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
 end
 
+local DropdownEnable = function(self)
+	self.Dropdown.Button:EnableMouse(true)
+	
+	self.Dropdown.Current:SetTextColorHex("FFFFFF")
+	
+	self.Dropdown.Button.ArrowBottom:SetVertexColorHex(Settings["ui-widget-color"])
+	self.Dropdown.Button.ArrowMiddle:SetVertexColorHex(Settings["ui-widget-color"])
+	self.Dropdown.Button.ArrowTop:SetVertexColorHex(Settings["ui-widget-color"])
+end
+
+local DropdownDisable = function(self)
+	self.Dropdown.Button:EnableMouse(false)
+	
+	self.Dropdown.Current:SetTextColorHex("A5A5A5")
+	
+	self.Dropdown.Button.ArrowBottom:SetVertexColorHex("A5A5A5")
+	self.Dropdown.Button.ArrowMiddle:SetVertexColorHex("A5A5A5")
+	self.Dropdown.Button.ArrowTop:SetVertexColorHex("A5A5A5")
+end
+
 local DropdownRequiresReload = function(self, flag)
 	self.ReloadFlag = flag
 	
@@ -1614,6 +1652,8 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Anchor.ID = id
 	Anchor.Text = label
 	Anchor.Tooltip = tooltip
+	Anchor.Enable = DropdownEnable
+	Anchor.Disable = DropdownDisable
 	
 	Anchor:SetScript("OnEnter", AnchorOnEnter)
 	Anchor:SetScript("OnLeave", AnchorOnLeave)
@@ -1856,6 +1896,8 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		Dropdown.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * Count) + 1)
 	end
 	
+	Anchor.Dropdown = Dropdown
+	
 	if self.Widgets then
 		tinsert(self.Widgets, Anchor)
 	end
@@ -2004,29 +2046,27 @@ local SliderOnLeave = function(self)
 end
 
 local SliderEnable = function(self)
-	self:EnableMouse(true)
-	self:EnableMouseWheel(true)
+	self.Slider:EnableMouse(true)
+	self.Slider:EnableMouseWheel(true)
 	
-	self.EditBox:EnableKeyboard(true)
-	self.EditBox:EnableMouse(true)
-	self.EditBox:EnableMouseWheel(true)
+	self.Slider.EditBox:EnableKeyboard(true)
+	self.Slider.EditBox:EnableMouse(true)
+	self.Slider.EditBox:EnableMouseWheel(true)
 	
-	self.EditBox:SetTextColor(1, 1, 1)
-	self.Progress:SetVertexColorHex(Settings["ui-widget-color"])
-	self.Disabled = false
+	self.Slider.EditBox:SetTextColorHex("FFFFFF")
+	self.Slider.Progress:SetVertexColorHex(Settings["ui-widget-color"])
 end
 
 local SliderDisable = function(self)
-	self:EnableMouse(false)
-	self:EnableMouseWheel(false)
+	self.Slider:EnableMouse(false)
+	self.Slider:EnableMouseWheel(false)
 	
-	self.EditBox:EnableKeyboard(false)
-	self.EditBox:EnableMouse(false)
-	self.EditBox:EnableMouseWheel(false)
+	self.Slider.EditBox:EnableKeyboard(false)
+	self.Slider.EditBox:EnableMouse(false)
+	self.Slider.EditBox:EnableMouseWheel(false)
 	
-	self.EditBox:SetTextColor(0.65, 0.65, 0.65)
-	self.Progress:SetVertexColor(0.65, 0.65, 0.65)
-	self.Disabled = true
+	self.Slider.EditBox:SetTextColorHex("A5A5A5")
+	self.Slider.Progress:SetVertexColorHex("A5A5A5")
 end
 
 local SliderRequiresReload = function(self, flag)
@@ -2045,19 +2085,17 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Anchor.ID = id
 	Anchor.Text = label
 	Anchor.Tooltip = tooltip
+	Anchor.Enable = SliderEnable
+	Anchor.Disable = SliderDisable
 	
 	Anchor:SetScript("OnEnter", AnchorOnEnter)
 	Anchor:SetScript("OnLeave", AnchorOnLeave)
 	
-	if prefix then
-		prefix = "|cFF"..Settings["ui-header-font-color"]..prefix.."|r"
-	else
+	if (not prefix) then
 		prefix = ""
 	end
 	
-	if postfix then
-		postfix = "|cFF"..Settings["ui-header-font-color"]..postfix.."|r"
-	else
+	if (not postfix) then
 		postfix = ""
 	end
 	
@@ -2065,7 +2103,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox:SetScaledSize(EDITBOX_WIDTH, WIDGET_HEIGHT)
 	EditBox:SetScaledPoint("RIGHT", Anchor, 0, 0)
 	EditBox:SetBackdrop(vUI.BackdropAndBorder)
-	EditBox:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	EditBox:SetBackdropColorHex(Settings["ui-window-main-color"])
 	EditBox:SetBackdropBorderColor(0, 0, 0)
 	
 	EditBox.Texture = EditBox:CreateTexture(nil, "ARTWORK")
@@ -2126,8 +2164,6 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider:SetScript("OnValueChanged", SliderOnValueChanged)
 	Slider:SetScript("OnEnter", SliderOnEnter)
 	Slider:SetScript("OnLeave", SliderOnLeave)
-	Slider.Enable = SliderEnable
-	Slider.Disable = SliderDisable
 	Slider.Prefix = prefix or ""
 	Slider.Postfix = postfix or ""
 	Slider.EditBox = EditBox.Box
@@ -2157,7 +2193,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.NewThumb:SetScaledPoint("TOPLEFT", Thumb, 0, -1)
 	Slider.NewThumb:SetScaledPoint("BOTTOMRIGHT", Thumb, 0, 1)
 	Slider.NewThumb:SetBackdrop(vUI.BackdropAndBorder)
-	Slider.NewThumb:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
+	Slider.NewThumb:SetBackdropColorHex(Settings["ui-widget-bg-color"])
 	Slider.NewThumb:SetBackdropBorderColor(0, 0, 0)
 	
 	Slider.NewThumb.Texture = Slider.NewThumb:CreateTexture(nil, "OVERLAY")
@@ -2180,6 +2216,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.Highlight:SetAlpha(0)
 	
 	EditBox.Box.Slider = Slider
+	Anchor.Slider = Slider
 	
 	Slider:Show()
 	
@@ -2823,7 +2860,7 @@ local ButtonOnLeave = function(self)
 	self.Text:SetTextColor(1, 1, 1)
 end
 
-GUI.SortButtons = function(self)
+function GUI:SortButtons()
 	tsort(self.Buttons, function(a, b)
 		return a.Name < b.Name
 	end)
@@ -3036,7 +3073,7 @@ local SortWindow = function(self)
 	AddScrollBar(self)
 end
 
-GUI.ShowWindow = function(self, name)
+function GUI:ShowWindow(name)
 	for WindowName, Window in pairs(self.Windows) do
 		if (WindowName ~= name) then
 			Window:Hide()
@@ -3108,7 +3145,7 @@ local GetNonDefault = function(self)
 
 end
 
-GUI.CreateWindow = function(self, name, default)
+function GUI:CreateWindow(name, default)
 	if self.Windows[name] then
 		return self.Windows[name]
 	end
@@ -3222,7 +3259,7 @@ GUI.CreateWindow = function(self, name, default)
 	return Window.LeftWidgetsBG, Window.RightWidgetsBG
 end
 
-GUI.GetWindow = function(self, name)
+function GUI:GetWindow(name)
 	if self.Windows[name] then
 		return self.Windows[name].LeftWidgetsBG, self.Windows[name].RightWidgetsBG
 	else
@@ -3230,7 +3267,7 @@ GUI.GetWindow = function(self, name)
 	end
 end
 
-GUI.GetWidgetByWindow = function(self, name, id)
+function GUI:GetWidgetByWindow(name, id)
 	if self.Windows[name] then
 		local Window = self.Windows[name]
 		
@@ -3248,7 +3285,7 @@ GUI.GetWidgetByWindow = function(self, name, id)
 	end
 end
 
-GUI.GetWidget = function(id)
+function GUI:GetWidget(id)
 	local Widget
 	
 	for Name in pairs(self.Windows) do
@@ -3260,7 +3297,7 @@ GUI.GetWidget = function(id)
 	end
 end
 
-GUI.UpdateWidget = function(id, ...)
+function GUI:UpdateWidget(id, ...)
 	-- Get the widget, add :Update() methods, and pass the vararg through it with the relevant information.
 end
 
@@ -3469,7 +3506,7 @@ GUI:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-GUI.Toggle = function(self)
+function GUI:Toggle()
 	if (not self:IsVisible()) then
 		if InCombatLockdown() then
 			vUI:print(ERR_NOT_IN_COMBAT)

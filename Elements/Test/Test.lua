@@ -134,10 +134,10 @@ UpdateZone:RegisterEvent("ZONE_CHANGED_INDOORS")
 UpdateZone:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 UpdateZone:RegisterEvent("PLAYER_ENTERING_WORLD")
 UpdateZone:SetScript("OnEvent", function(self)
-	if GUI:IsShown() then
+	--if GUI:IsShown() then
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
-	end
+	--end
 end)
 
 local Fonts = vUI:NewModule("Fonts")
@@ -164,6 +164,57 @@ BagsFrame.Objects = {
 	MainMenuBarBackpackButton,
 }
 
+local BagsFrameButtonOnEnter = function(self)
+	if (Settings["bags-frame-visiblity"] == "MOUSEOVER") then
+		self:GetParent():SetAlpha(1)
+	end
+end
+
+local BagsFrameOnEnter = function(self)
+	self:SetAlpha(1)
+end
+
+local BagsFrameButtonOnLeave = function(self)
+	if (Settings["bags-frame-visiblity"] == "MOUSEOVER") then
+		self:GetParent():SetAlpha(Settings["bags-frame-opacity"] / 100)
+	end
+end
+
+local BagsFrameOnLeave = function(self)
+	self:SetAlpha(Settings["bags-frame-opacity"] / 100)
+end
+
+function BagsFrame:UpdateVisibility()
+	local VisiblityWidget = GUI:GetWidgetByWindow(Language["General"], "bags-frame-visiblity")
+	local OpacityWidget = GUI:GetWidgetByWindow(Language["General"], "bags-frame-opacity")
+	
+	if (Settings["bags-frame-visiblity"] == "HIDE") then
+		self.Panel:SetScript("OnEnter", nil)
+		self.Panel:SetScript("OnLeave", nil)
+		self.Panel:SetAlpha(0)
+		self.Panel:Hide()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Disable()
+	elseif (Settings["bags-frame-visiblity"] == "MOUSEOVER") then
+		self.Panel:SetScript("OnEnter", BagsFrameOnEnter)
+		self.Panel:SetScript("OnLeave", BagsFrameOnLeave)
+		self.Panel:SetAlpha(Settings["bags-frame-opacity"] / 100)
+		self.Panel:Show()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Enable()
+	elseif (Settings["bags-frame-visiblity"] == "SHOW") then
+		self.Panel:SetScript("OnEnter", nil)
+		self.Panel:SetScript("OnLeave", nil)
+		self.Panel:SetAlpha(1)
+		self.Panel:Show()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Disable()
+	end
+end
+
 function BagsFrame:Load()
 	local Panel = CreateFrame("Frame", "vUI Bags Window", UIParent)
 	Panel:SetScaledSize(184, 40)
@@ -174,6 +225,8 @@ function BagsFrame:Load()
 	Panel:SetFrameStrata("LOW")
 	Move:Add(Panel)
 	
+	self.Panel = Panel
+	
 	local Object
 	
 	for i = 1, #self.Objects do
@@ -182,6 +235,8 @@ function BagsFrame:Load()
 		Object:SetParent(Panel)
 		Object:ClearAllPoints()
 		Object:SetScaledSize(32, 32)
+		Object:HookScript("OnEnter", BagsFrameButtonOnEnter)
+		Object:HookScript("OnLeave", BagsFrameButtonOnLeave)
 		
 		local Name = Object:GetName()
 		local Normal = _G[Name .. "NormalTexture"]
@@ -246,11 +301,7 @@ function BagsFrame:Load()
 		end
 	end
 	
-	if (not Settings["bags-frame-show"]) then
-		Panel:Hide()
-	end
-	
-	self.Panel = Panel
+	self:UpdateVisibility()
 end
 
 local MicroButtons = vUI:NewModule("Micro Buttons")
@@ -266,6 +317,49 @@ MicroButtons.Buttons = {
 	HelpMicroButton,
 }
 
+local MicroButtonsButtonOnEnter = function(self)
+	if (Settings["micro-buttons-visiblity"] == "MOUSEOVER") then
+		self:GetParent():SetAlpha(1)
+	end
+end
+
+local MicroButtonsButtonOnLeave = function(self)
+	if (Settings["micro-buttons-visiblity"] == "MOUSEOVER") then
+		self:GetParent():SetAlpha(0)
+	end
+end
+
+function MicroButtons:UpdateVisibility()
+	local VisiblityWidget = GUI:GetWidgetByWindow(Language["General"], "micro-buttons-visiblity")
+	local OpacityWidget = GUI:GetWidgetByWindow(Language["General"], "micro-buttons-opacity")
+	
+	if (Settings["micro-buttons-visiblity"] == "HIDE") then
+		self.Panel:SetScript("OnEnter", nil)
+		self.Panel:SetScript("OnLeave", nil)
+		self.Panel:SetAlpha(0)
+		self.Panel:Hide()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Disable()
+	elseif (Settings["micro-buttons-visiblity"] == "MOUSEOVER") then
+		self.Panel:SetScript("OnEnter", BagsFrameOnEnter)
+		self.Panel:SetScript("OnLeave", BagsFrameOnLeave)
+		self.Panel:SetAlpha(Settings["bags-frame-opacity"] / 100)
+		self.Panel:Show()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Enable()
+	elseif (Settings["micro-buttons-visiblity"] == "SHOW") then
+		self.Panel:SetScript("OnEnter", nil)
+		self.Panel:SetScript("OnLeave", nil)
+		self.Panel:SetAlpha(1)
+		self.Panel:Show()
+		
+		VisiblityWidget:Enable()
+		OpacityWidget:Disable()
+	end
+end
+
 function MicroButtons:Load()
 	local Panel = CreateFrame("Frame", "vUI Micro Buttons", UIParent)
 	Panel:SetScaledSize(232, 38)
@@ -276,6 +370,8 @@ function MicroButtons:Load()
 	Panel:SetFrameStrata("LOW")
 	Move:Add(Panel)
 	
+	self.Panel = Panel
+	
 	local Button
 	
 	for i = 1, #self.Buttons do
@@ -283,6 +379,8 @@ function MicroButtons:Load()
 		
 		Button:SetParent(Panel)
 		Button:ClearAllPoints()
+		Button:HookScript("OnEnter", MicroButtonsButtonOnEnter)
+		Button:HookScript("OnLeave", MicroButtonsButtonOnLeave)
 		
 		if (i == 1) then
 			Button:SetScaledPoint("TOPLEFT", Panel, 0, 20)
@@ -295,7 +393,7 @@ function MicroButtons:Load()
 		Panel:Hide()
 	end
 	
-	self.Panel = Panel
+	self:UpdateVisibility()
 end
 
 local AutoVendor = vUI:NewModule("Auto Vendor") -- Auto sell useless items
@@ -378,20 +476,12 @@ function AutoRepair:Load()
 	end
 end
 
-local UpdateShowMicroButtons = function(value)
-	if value then
-		MicroButtons.Panel:Show()
-	else
-		MicroButtons.Panel:Hide()
-	end
+local UpdateMicroVisibility = function(value)
+	MicroButtons:UpdateVisibility()
 end
 
-local UpdateShowBagsFrame = function(value)
-	if value then
-		BagsFrame.Panel:Show()
-	else
-		BagsFrame.Panel:Hide()
-	end
+local UpdateBagVisibility = function()
+	BagsFrame:UpdateVisibility()
 end
 
 local UpdateAutoVendor = function(value)
@@ -510,13 +600,13 @@ function BagSearch:Load()
 	Search:SetScript("OnEscapePressed", SearchOnEnterPressed)
 	Search:SetScript("OnEditFocusLost", SearchOnEditFocusLost)
 end
-
---[[local Icon = UIParent:CreateTexture(nil, "OVERLAY")
+--[[
+local Icon = UIParent:CreateTexture(nil, "OVERLAY")
 Icon:SetScaledSize(32, 32)
 Icon:SetScaledPoint("CENTER")
 Icon:SetTexture(Media:GetTexture("Warning"))
-Icon:SetVertexColorHex("FFEB3B")]]
-
+Icon:SetVertexColorHex("FFEB3B")
+]]
 --[[ 
 	Delete cheapest item
 	clear item space when you need to make room for more important items
@@ -719,10 +809,14 @@ end
 GUI:AddOptions(function(self)
 	local Left, Right = self:GetWindow(Language["General"])
 	
-	Right:CreateHeader(Language["Miscellaneous Modules"])
-	Right:CreateSwitch("bags-frame-show", Settings["bags-frame-show"], Language["Enable Bags Frame"], "Display the bag container frame", UpdateShowBagsFrame)
-	Right:CreateSwitch("micro-buttons-show", Settings["micro-buttons-show"], Language["Enable Micro Buttons"], "Enable micro menu buttons", UpdateShowMicroButtons)
+	Right:CreateHeader(Language["Bags Frame"])
+	Right:CreateDropdown("bags-frame-visiblity", Settings["bags-frame-visiblity"], {[Language["Hide"]] = "HIDE", [Language["Mouseover"]] = "MOUSEOVER", [Language["Show"]] = "SHOW"}, Language["Set Visibility"], "Set the visibility of the bag frame", UpdateBagVisibility)
+	Right:CreateSlider("bags-frame-opacity", Settings["bags-frame-opacity"], 0, 100, 10, Language["Set Faded Opacity"], Language["Set the opacity of the bags frame when|nvisiblity is set to Mouseover"], UpdateBagVisibility, nil, "%")
 	Right:CreateSwitch("bags-loot-from-left", Settings["bags-loot-from-left"], Language["Loot Left To Right"], "When looting, new items will be|nplaced into the leftmost bag", UpdateBagLooting)
+	
+	Right:CreateHeader(Language["Micro Menu Buttons"])
+	Right:CreateDropdown("micro-buttons-visiblity", Settings["micro-buttons-visiblity"], {[Language["Hide"]] = "HIDE", [Language["Mouseover"]] = "MOUSEOVER", [Language["Show"]] = "SHOW"}, Language["Set Visibility"], "Set the visibility of the micro menu buttons", UpdateMicroVisibility)
+	Right:CreateSlider("micro-buttons-opacity", Settings["micro-buttons-opacity"], 0, 100, 10, Language["Set Faded Opacity"], Language["Set the opacity of the micro menu buttons|n when visiblity is set to Mouseover"], UpdateMicroVisibility, nil, "%")
 	
 	Left:CreateHeader(Language["Inventory"])
 	Left:CreateButton(Language["Search"], Language["Find Cheapest Item"], "Find the cheapest item|ncurrently in your inventory", PrintCheapest)

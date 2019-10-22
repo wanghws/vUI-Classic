@@ -677,11 +677,11 @@ local StylePlayer = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1051,7 +1051,7 @@ local StylePlayer = function(self, unit)
 	self.Power = Power
 	self.Power.bg = PowerBG
 	self.PowerValue = PowerValue
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
 	self.PowerLeft = PowerLeft
@@ -1087,11 +1087,11 @@ local StyleTarget = function(self, unit)
 	Health:SetValue(1)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1257,7 +1257,7 @@ local StyleTarget = function(self, unit)
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
 	self.Power = Power
@@ -1287,11 +1287,11 @@ local StyleTargetTarget = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1343,7 +1343,7 @@ local StyleTargetTarget = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
@@ -1367,11 +1367,11 @@ local StylePet = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1413,7 +1413,7 @@ local StylePet = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 end
@@ -1435,11 +1435,11 @@ local StyleParty = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1530,7 +1530,7 @@ local StyleParty = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.Power = Power
 	self.Power.bg = PowerBG
@@ -1560,11 +1560,11 @@ local StylePartyPet = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1614,7 +1614,7 @@ local StylePartyPet = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
@@ -1639,11 +1639,11 @@ local StyleRaid = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
-	local HealBar = CreateFrame("StatusBar", nil, self)
+	--[[local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	HealBar:SetStatusBarColor(0, 0.48, 0)
-	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
+	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)]]
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
 	HealthBG:SetScaledPoint("TOPLEFT", Health, 0, 0)
@@ -1718,7 +1718,7 @@ local StyleRaid = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.HealBar = HealBar
+	--self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
@@ -1990,6 +1990,10 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "").Box:Save()
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "").Box:Save()
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "").Box:Save()
+	
+	if (not Settings["nameplates-display-debuffs"]) then
+		GUI:GetWidgetByWindow(Language["Name Plates"], "nameplates-only-player-debuffs"):Disable() -- Temporary
+	end
 end)
 
 --[[ /run FakeGroup()

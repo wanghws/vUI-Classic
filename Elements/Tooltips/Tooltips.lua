@@ -27,6 +27,8 @@ local GetMouseFocus = GetMouseFocus
 local GetItemInfo = GetItemInfo
 local GetCoinTextureString = GetCoinTextureString
 
+local HealthBar = GameTooltipStatusBar
+
 Tooltips.Handled = {
 	GameTooltip,
 	ItemRefTooltip,
@@ -52,46 +54,50 @@ Tooltips.HappinessLevels = {
 	[3] = Language["Happy"]
 }
 
-local UpdateFonts = function(self)
-	for i = 1, self:GetNumRegions() do
-		local Region = select(i, self:GetRegions())
+function Tooltips:UpdateFonts(tooltip)
+	for i = 1, tooltip:GetNumRegions() do
+		local Region = select(i, tooltip:GetRegions())
 		
-		if (Region:GetObjectType() == "FontString" and not Region.Handled) then
-			Region:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-			Region.Handled = true
+		--if (Region:GetObjectType() == "FontString" and not Region.Handled) then
+		if (Region:GetObjectType() == "FontString") then
+			Region:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+			--Region.Handled = true
 		end
 	end
 	
-	for i = 1, self:GetNumChildren() do
-		local Child = select(i, self:GetChildren())
+	for i = 1, tooltip:GetNumChildren() do
+		local Child = select(i, tooltip:GetChildren())
 		
 		if (Child and Child.GetName and Child:GetName() ~= nil and find(Child:GetName(), "MoneyFrame")) then
 			local Prefix = _G[Child:GetName() .. "PrefixText"]
 			local Suffix = _G[Child:GetName() .. "SuffixText"]
 			
-			if (Prefix and not Prefix.Handled) then
-				Prefix:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-				Prefix.SetFont = function() end
-				Prefix.SetFontObject = function() end
-				Prefix.Handled = true
+			--if (Prefix and not Prefix.Handled) then
+			if Prefix then
+				Prefix:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+				--Prefix.SetFont = function() end
+				--Prefix.SetFontObject = function() end
+				--Prefix.Handled = true
 			end
 			
-			if (Suffix and not Suffix.Handled) then
-				Suffix:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-				Suffix.SetFont = function() end
-				Suffix.SetFontObject = function() end
-				Suffix.Handled = true
+			--if (Suffix and not Suffix.Handled) then
+			if Suffix then
+				Suffix:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+				--Suffix.SetFont = function() end
+				--Suffix.SetFontObject = function() end
+				--Suffix.Handled = true
 			end
 		end
 	end
 	
-	if self.numMoneyFrames then
+	if tooltip.numMoneyFrames then
 		local MoneyFrame
 		
-		for i = 1, self.numMoneyFrames do
-			MoneyFrame = _G[self:GetName() .. "MoneyFrame" .. i]
+		for i = 1, tooltip.numMoneyFrames do
+			MoneyFrame = _G[tooltip:GetName() .. "MoneyFrame" .. i]
 			
-			if (MoneyFrame and not MoneyFrame.Handled) then
+			--if (MoneyFrame and not MoneyFrame.Handled) then
+			if MoneyFrame then
 				for j = 1, MoneyFrame:GetNumChildren() do
 					local Region = select(j, MoneyFrame:GetChildren())
 					
@@ -99,17 +105,19 @@ local UpdateFonts = function(self)
 						local Text = _G[Region:GetName() .. "Text"]
 						
 						if Text then
-							Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-							Text.SetFont = function() end
-							Text.SetFontObject = function() end
+							Text:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+							--Text.SetFont = function() end
+							--Text.SetFontObject = function() end
 						end
 					end
 				end
 				
-				MoneyFrame.Handled = true
+				--MoneyFrame.Handled = true
 			end
 		end
 	end
+	
+	self:UpdateStatusBarFonts()
 end
 
 local SetStyle = function(self)
@@ -122,7 +130,7 @@ local SetStyle = function(self)
 			self.OuterBG:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
 		end
 		
-		UpdateFonts(self)
+		Tooltips:UpdateFonts(self)
 		
 		return
 	end
@@ -152,16 +160,16 @@ local SetStyle = function(self)
 		for i = 1, AUTOCOMPLETE_MAX_BUTTONS do
 			local Text = _G["AutoCompleteButton" .. i .. "Text"]
 			
-			Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+			Text:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
 		end
 		
-		AutoCompleteInstructions:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		AutoCompleteInstructions:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
 		
 		AutoCompleteBox.Backdrop:SetFrameStrata("DIALOG")
 		AutoCompleteBox.OuterBG:SetFrameStrata("DIALOG")
 	end
 	
-	UpdateFonts(self)
+	Tooltips:UpdateFonts(self)
 	
 	self.SetBackdrop = function() end
 	
@@ -510,15 +518,18 @@ local OnValueChanged = function(self)
 	end
 end
 
+function Tooltips:UpdateStatusBarFonts()
+	HealthBar.HealthValue:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+	HealthBar.HealthPercent:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
+end
+
 function Tooltips:StyleStatusBar()
-	local HealthBar = GameTooltipStatusBar
-	
 	HealthBar:ClearAllPoints()
 	HealthBar:SetScaledHeight(15)
 	HealthBar:SetScaledPoint("TOPLEFT", HealthBar:GetParent(), "BOTTOMLEFT", 1, -3)
 	HealthBar:SetScaledPoint("TOPRIGHT", HealthBar:GetParent(), "BOTTOMRIGHT", -1, -3)
 	HealthBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	HealthBar:SetStatusBarColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	HealthBar:SetStatusBarColorHex(Settings["ui-header-texture-color"])
 	
 	HealthBar.BG = HealthBar:CreateTexture(nil, "ARTWORK")
 	HealthBar.BG:SetScaledPoint("TOPLEFT", HealthBar, 0, 0)
@@ -536,12 +547,12 @@ function Tooltips:StyleStatusBar()
 	HealthBar.Backdrop:SetFrameLevel(HealthBar:GetFrameLevel() - 1)
 	
 	HealthBar.HealthValue = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthValue:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	HealthBar.HealthValue:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
 	HealthBar.HealthValue:SetScaledPoint("LEFT", HealthBar, 3, 0)
 	HealthBar.HealthValue:SetJustifyH("LEFT")
 	
 	HealthBar.HealthPercent = HealthBar:CreateFontString(nil, "OVERLAY")
-	HealthBar.HealthPercent:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	HealthBar.HealthPercent:SetFontInfo(Settings["tooltips-font"], Settings["tooltips-font-size"], Settings["tooltips-font-flags"])
 	HealthBar.HealthPercent:SetScaledPoint("RIGHT", HealthBar, -3, 0)
 	HealthBar.HealthPercent:SetJustifyH("RIGHT")
 	
@@ -626,4 +637,9 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Vendor Price"], "Display the items value if sold to a vendor")
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")
+	
+	Right:CreateHeader(Language["Font"])
+	Right:CreateDropdown("tooltips-font", Settings["tooltips-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the tooltip text"], nil, "Font")
+	Right:CreateSlider("tooltips-font-size", Settings["tooltips-font-size"], 8, 18, 1, Language["Font Size"], Language["Set the font size of the tooltip text"])
+	Right:CreateDropdown("tooltips-font-flags", Settings["tooltips-font-flags"], Media:GetFlagsList(), Language["Font Flags"], Language["Set the font flags of the tooltip text"])
 end)

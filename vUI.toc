@@ -13,7 +13,6 @@ Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibClassicMobHealth-1.0.lua
 Elements\Libraries\LibClassicCasterino.lua
 Elements\Libraries\LibCompress.lua
-Elements\Libraries\LibClassicHealComm-1.0\lib.xml
 Elements\Libraries\LibAnim.lua
 Elements\UnitFrames\oUF\oUF.xml
 Elements\Libraries\LibClassicDurations\LibClassicDurations.xml

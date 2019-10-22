@@ -20,9 +20,6 @@ local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", UIParent)
 
-local WidthWidget
-local HeightWidget
-
 local Comma = function(number)
 	if (not number) then
 		return
@@ -152,6 +149,9 @@ local UpdateBarHeight = function(value)
 end
 
 local UpdateBarPosition = function(value)
+	local WidthWidget = GUI:GetWidgetByWindow(Language["Experience"], "experience-width")
+	local HeightWidget = GUI:GetWidgetByWindow(Language["Experience"], "experience-height")
+	
 	ExperienceBar:ClearAllPoints()
 	
 	if (value == "TOP") then
@@ -168,13 +168,8 @@ local UpdateBarPosition = function(value)
 			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
 		end
 		
-		if (WidthWidget and WidthWidget.Disabled) then
-			WidthWidget:Enable()
-		end
-		
-		if (HeightWidget and HeightWidget.Disabled) then
-			HeightWidget:Enable()
-		end
+		WidthWidget:Enable()
+		HeightWidget:Enable()
 	elseif (value == "CHATFRAME") then
 		vUIChatFrameBottom:Hide()
 		
@@ -192,13 +187,8 @@ local UpdateBarPosition = function(value)
 			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
 		end
 		
-		if (WidthWidget and not WidthWidget.Disabled) then
-			WidthWidget:Disable()
-		end
-		
-		if (HeightWidget and not HeightWidget.Disabled) then
-			HeightWidget:Disable()
-		end
+		WidthWidget:Disable()
+		HeightWidget:Disable()
 	elseif (value == "CLASSIC") then
 		vUIChatFrameBottom:Show()
 		
@@ -215,13 +205,8 @@ local UpdateBarPosition = function(value)
 			ExperienceBar:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - 6)
 		end
 		
-		if (WidthWidget and not WidthWidget.Disabled) then
-			WidthWidget:Disable()
-		end
-		
-		if (HeightWidget and HeightWidget.Disabled) then
-			HeightWidget:Enable()
-		end
+		WidthWidget:Disable()
+		HeightWidget:Enable()
 	end
 end
 
@@ -474,8 +459,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "Smoothly animate changes to the experience bar")
 	
 	Right:CreateHeader(Language["Size"])
-	WidthWidget = Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "Set the width of the experience bar", UpdateBarWidth)
-	HeightWidget = Right:CreateSlider("experience-height", Settings["experience-height"], 6, 30, 1, Language["Bar Height"], "Set the height of the experience bar", UpdateBarHeight)
+	Right:CreateSlider("experience-width", Settings["experience-width"], 240, 400, 10, Language["Bar Width"], "Set the width of the experience bar", UpdateBarWidth)
+	Right:CreateSlider("experience-height", Settings["experience-height"], 6, 30, 1, Language["Bar Height"], "Set the height of the experience bar", UpdateBarHeight)
 	
 	Right:CreateHeader(Language["Positioning"])
 	Right:CreateDropdown("experience-position", Settings["experience-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "Set the position of the experience bar", UpdateBarPosition)

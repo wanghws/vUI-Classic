@@ -12,11 +12,9 @@ local Update = function(self)
 		self.Text:SetText(Language["No Guild"])
 	end
 	
-	local NumOnline = select(3, GetNumGuildMembers())
-	
-	if NumOnline then
-		self.Text:SetFormattedText("%s: %s", Label, NumOnline)
-	end
+	local NumOnline = select(3, GetNumGuildMembers()) or 0
+
+	self.Text:SetFormattedText("%s: %s", Label, NumOnline)
 end
 
 local OnEnable = function(self)

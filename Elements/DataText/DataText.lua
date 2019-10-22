@@ -6,6 +6,16 @@ DT.Anchors = {}
 DT.Types = {}
 DT.List = {}
 
+local ShouldFlashUpdates = function(anchor)
+	
+end
+
+local PlayFlash = function(anchor)
+	if (not anchor.Fade:IsPlaying()) then
+		anchor.Fade:Play()
+	end
+end
+
 function DT:NewAnchor(name, parent)
 	if self.Anchors[name] then
 		return
@@ -21,6 +31,30 @@ function DT:NewAnchor(name, parent)
 	Anchor:SetFrameStrata(parent:GetFrameStrata())
 	Anchor:SetBackdrop(vUI.Backdrop)
 	Anchor:SetBackdropColor(0, 0, 0, 0)
+	
+	Anchor.Name = name
+	Anchor.PlayFlash = PlayFlash
+	Anchor.ShouldFlashUpdates = ShouldFlashUpdates
+	
+	Anchor.Highlight = Anchor:CreateTexture(nil, "OVERLAY")
+	Anchor.Highlight:SetScaledPoint("TOPLEFT", Anchor, 20, 0)
+	Anchor.Highlight:SetScaledPoint("BOTTOMRIGHT", Anchor, -20, 0)
+	Anchor.Highlight:SetTexture(Media:GetTexture("RenHorizonUp"))
+	Anchor.Highlight:SetVertexColorHex(Settings["ui-widget-color"])
+	Anchor.Highlight:SetAlpha(0)
+	
+	Anchor.Fade = CreateAnimationGroup(Anchor.Highlight)
+	
+	Anchor.FadeIn = Anchor.Fade:CreateAnimation("Fade")
+	Anchor.FadeIn:SetEasing("inout")
+	Anchor.FadeIn:SetDuration(0.15)
+	Anchor.FadeIn:SetChange(0.5)
+	
+	Anchor.FadeOut = Anchor.Fade:CreateAnimation("Fade")
+	Anchor.FadeOut:SetOrder(2)
+	Anchor.FadeOut:SetEasing("inout")
+	Anchor.FadeOut:SetDuration(0.6)
+	Anchor.FadeOut:SetChange(0)
 	
 	Anchor.Text = Anchor:CreateFontString(nil, "ARTWORK")
 	Anchor.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
