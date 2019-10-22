@@ -185,33 +185,21 @@ local BagsFrameOnLeave = function(self)
 end
 
 function BagsFrame:UpdateVisibility()
-	local VisiblityWidget = GUI:GetWidgetByWindow(Language["General"], "bags-frame-visiblity")
-	local OpacityWidget = GUI:GetWidgetByWindow(Language["General"], "bags-frame-opacity")
-	
 	if (Settings["bags-frame-visiblity"] == "HIDE") then
 		self.Panel:SetScript("OnEnter", nil)
 		self.Panel:SetScript("OnLeave", nil)
 		self.Panel:SetAlpha(0)
 		self.Panel:Hide()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Disable()
 	elseif (Settings["bags-frame-visiblity"] == "MOUSEOVER") then
 		self.Panel:SetScript("OnEnter", BagsFrameOnEnter)
 		self.Panel:SetScript("OnLeave", BagsFrameOnLeave)
 		self.Panel:SetAlpha(Settings["bags-frame-opacity"] / 100)
 		self.Panel:Show()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Enable()
 	elseif (Settings["bags-frame-visiblity"] == "SHOW") then
 		self.Panel:SetScript("OnEnter", nil)
 		self.Panel:SetScript("OnLeave", nil)
 		self.Panel:SetAlpha(1)
 		self.Panel:Show()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Disable()
 	end
 end
 
@@ -330,33 +318,21 @@ local MicroButtonsButtonOnLeave = function(self)
 end
 
 function MicroButtons:UpdateVisibility()
-	local VisiblityWidget = GUI:GetWidgetByWindow(Language["General"], "micro-buttons-visiblity")
-	local OpacityWidget = GUI:GetWidgetByWindow(Language["General"], "micro-buttons-opacity")
-	
 	if (Settings["micro-buttons-visiblity"] == "HIDE") then
 		self.Panel:SetScript("OnEnter", nil)
 		self.Panel:SetScript("OnLeave", nil)
 		self.Panel:SetAlpha(0)
 		self.Panel:Hide()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Disable()
 	elseif (Settings["micro-buttons-visiblity"] == "MOUSEOVER") then
 		self.Panel:SetScript("OnEnter", BagsFrameOnEnter)
 		self.Panel:SetScript("OnLeave", BagsFrameOnLeave)
 		self.Panel:SetAlpha(Settings["bags-frame-opacity"] / 100)
 		self.Panel:Show()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Enable()
 	elseif (Settings["micro-buttons-visiblity"] == "SHOW") then
 		self.Panel:SetScript("OnEnter", nil)
 		self.Panel:SetScript("OnLeave", nil)
 		self.Panel:SetAlpha(1)
 		self.Panel:Show()
-		
-		VisiblityWidget:Enable()
-		OpacityWidget:Disable()
 	end
 end
 
