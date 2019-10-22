@@ -24,12 +24,14 @@ local Update = function(self, event, unit)
 	
 	if element then
 		local Type = UnitPowerType(self.unit)
+		local Power = UnitPower(unit)
 		
-		if (Type ~= 0) or (UnitPower(unit) == UnitPowerMax(unit)) then
+		if (Type ~= 0) or (Power == UnitPowerMax(unit)) or (Power >= element.LastPower) then
 			return
 		end
 		
 		element.elapsed = 0
+		element.LastPower = Power
 		element:Show()
 		element:SetScript("OnUpdate", OnUpdate)
 	end
@@ -49,6 +51,8 @@ local Enable = function(self)
 	if element then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
+		
+		element.LastPower = UnitPower(self.unit)
 		
 		element:Hide()
 		element:SetMinMaxValues(0, 5)
