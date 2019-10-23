@@ -3,9 +3,6 @@ local oUF = ns.oUF
 
 local HealComm = LibStub("LibHealComm-4.0")
 
-local UnitGetIncomingHeals = UnitGetIncomingHeals
-local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
-local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitGUID = UnitGUID
