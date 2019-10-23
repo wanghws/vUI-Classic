@@ -1,12 +1,9 @@
 local _, ns = ...
 local oUF = ns.oUF
 
--- If drinking, add a 1s tick
-
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitPowerType = UnitPowerType
-local Update
 
 local OnUpdate = function(self, elapsed)
 	self.elapsed = self.elapsed + elapsed
@@ -17,51 +14,50 @@ local OnUpdate = function(self, elapsed)
 		self.LastPower = UnitPower("player")
 		self:Hide()
 		
-		self:RegisterEvent("UNIT_POWER_FREQUENT", Update)
+		self:ForceUpdate() -- Update to begin ticking
 	end
 end
 
-Update = function(self, event, unit)
-	if (unit ~= self.unit) then
+local Update = function(self, event, unit)
+	if (unit and unit ~= "player") then
 		return
 	end
 	
-	local element = self.ManaTimer
+	local Type = UnitPowerType("player")
+	local Power = UnitPower("player")
 	
-	if element then
-		local Type = UnitPowerType(self.unit)
-		local Power = UnitPower(unit)
+	if (Type ~= 0) then
+		return
+	elseif (Power == UnitPowerMax("player")) then -- Max mana or a level up
+		self.LastPower = UnitPower("player")
+		self:Hide()
 		
-		if (Type ~= 0) or (Power == UnitPowerMax(unit)) then
-			return
-		end
-		
-		if (element.LastPower > Power) then -- Cast
-			element.elapsed = 0
-			element.max = 5
-			element:SetMinMaxValues(0, element.max)
-			element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
-			element:Show()
-			element:SetScript("OnUpdate", OnUpdate)
-		elseif (Power > element.LastPower) then -- Tick
-			element.elapsed = 0
-			element.max = 2
-			element:SetMinMaxValues(0, element.max)
-			element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
-			element:Show()
-			element:SetScript("OnUpdate", OnUpdate)
-		end
-		
-		element.LastPower = Power
+		return
 	end
+	
+	if (self.LastPower > Power) then -- Cast
+		self.elapsed = 0
+		self.max = 5
+		self:SetMinMaxValues(0, self.max)
+		self:Show()
+		self:SetScript("OnUpdate", OnUpdate)
+	elseif (Power > self.LastPower) then -- Tick
+		self.elapsed = 0
+		self.max = 2
+		self:SetMinMaxValues(0, self.max)
+		self:Show()
+		self:SetScript("OnUpdate", OnUpdate)
+	end
+	
+	self.LastPower = Power
 end
 
 local Path = function(self, ...)
-	return (self.ManaTimer.Override or Update)(self, ...)
+	return (self.Override or Update)(self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
+	return Path(element, "ForceUpdate", element.__owner.unit)
 end
 
 local Enable = function(self)
@@ -71,11 +67,10 @@ local Enable = function(self)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 		
-		element.LastPower = UnitPower(self.unit)
-		
+		element.LastPower = UnitPower("player")
 		element:Hide()
-		element:SetMinMaxValues(0, 5)
-		self:RegisterEvent("UNIT_POWER_FREQUENT", Update)
+		element:RegisterEvent("UNIT_POWER_FREQUENT")
+		element:SetScript("OnEvent", Update)
 	end
 end
 
@@ -84,7 +79,8 @@ local Disable = function(self)
 	
 	if element then
 		element:Hide()
-		element:UnregisterEvent("UNIT_POWER_FREQUENT", Update)
+		element:UnregisterEvent("UNIT_POWER_FREQUENT")
+		element:SetScript("OnEvent", nil)
 	end
 end
 

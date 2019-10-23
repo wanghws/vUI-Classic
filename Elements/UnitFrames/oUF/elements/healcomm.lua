@@ -1,11 +1,7 @@
-if (1 == 1) then
-	return
-end
-
 local _, ns = ...
 local oUF = ns.oUF
 
---local HealComm = LibStub("LibClassicHealComm-1.0")
+local HealComm = LibStub("LibHealComm-4.0")
 
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
