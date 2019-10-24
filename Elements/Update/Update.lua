@@ -33,7 +33,7 @@ local UpdateOnMouseUp = function()
 	vUI:print("You can get an updated version of vUI here at https://www.curseforge.com/wow/addons/vui or by using the Twitch desktop app")
 end
 
-Update["PLAYER_ENTERING_WORLD"] = function(self, event)
+function Update:PLAYER_ENTERING_WORLD(event)
 	--[[if self.NewVersion then
 		vUI:SendAlert("What's new?", "Click here to learn more", nil, WhatsNewOnMouseUp, true)
 		
@@ -58,7 +58,7 @@ Update["PLAYER_ENTERING_WORLD"] = function(self, event)
 end
 
 -- /run vUIData.Version = 1 -- Leaving this here for a while so I can reset version manually for testing.
-Update["VARIABLES_LOADED"] = function(self, event)
+function Update:VARIABLES_LOADED(event)
 	if (not vUIData) then
 		vUIData = {}
 	end
@@ -84,7 +84,7 @@ Update["VARIABLES_LOADED"] = function(self, event)
 	self:UnregisterEvent(event)
 end
 
-Update["CHAT_MSG_ADDON"] = function(self, event, prefix, message, channel, sender)
+function Update:CHAT_MSG_ADDON(event, prefix, message, channel, sender)
 	sender = match(sender, "(%S+)-%S+")
 	
 	if (sender == vUI.UserName or prefix ~= "vUI-Version") then
@@ -117,6 +117,7 @@ end
 
 Update:RegisterEvent("VARIABLES_LOADED")
 Update:RegisterEvent("PLAYER_ENTERING_WORLD")
+Update:RegisterEvent("GUILD_ROSTER_UPDATE")
 Update:RegisterEvent("CHAT_MSG_ADDON")
 Update:SetScript("OnEvent", function(self, event, ...)
 	if self[event] then

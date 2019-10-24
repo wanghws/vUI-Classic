@@ -47,44 +47,6 @@ local TimeOnUpdate = function(self, elapsed)
 	end
 end
 
-local StatsOnUpdate = function(self, ela)
-	self.Ela = self.Ela + ela
-	
-	if (self.Ela >= 1) then
-		self:GetScript("OnEnter")(self)
-		
-		self.Ela = 0
-	end
-end
-
-local StatsOnEnter = function(self)
-	GameTooltip_SetDefaultAnchor(GameTooltip, self)
-	GameTooltip:ClearLines()
-	
-	HomeLatency, WorldLatency = select(3, GetNetStats())
-	Framerate = floor(GetFramerate())
-	ServerTime = GameTime_GetGameTime(true)
-	
-	GameTooltip:AddLine("Realm Time:", 1, 0.7, 0)
-	GameTooltip:AddLine(ServerTime, 1, 1, 1)
-	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("Latency:", 1, 0.7, 0)
-	GameTooltip:AddLine(HomeLatency .. " ms (home)", 1, 1, 1)
-	GameTooltip:AddLine(WorldLatency .. " ms (world)", 1, 1, 1)
-	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("Framerate:", 1, 0.7, 0)
-	GameTooltip:AddLine(Framerate .. " fps", 1, 1, 1)
-	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("Durability:", 1, 0.7, 0)
-	GameTooltip:AddLine(GetDurability(), 1, 1, 1)
-	
-	GameTooltip:Show()
-	
-	if (not self:GetScript("OnUpdate")) then
-		self:SetScript("OnUpdate", StatsOnUpdate)
-	end
-end
-
 local TimeOnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
 	GameTooltip:ClearLines()

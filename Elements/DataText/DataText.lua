@@ -6,14 +6,21 @@ DT.Anchors = {}
 DT.Types = {}
 DT.List = {}
 
-local ShouldFlashUpdates = function(anchor)
-	
+local ShouldFlash = function(anchor)
+	if (anchor.Text:GetText() ~= anchor.LastValue) then
+		return true
+	end
 end
 
 local PlayFlash = function(anchor)
-	if (not anchor.Fade:IsPlaying()) then
+	if anchor:ShouldFlash() and (not anchor.Fade:IsPlaying()) then
 		anchor.Fade:Play()
+		anchor:SaveValue()
 	end
+end
+
+local SaveValue = function(anchor)
+	anchor.LastValue = anchor.Text:GetText()
 end
 
 function DT:NewAnchor(name, parent)
@@ -34,7 +41,8 @@ function DT:NewAnchor(name, parent)
 	
 	Anchor.Name = name
 	Anchor.PlayFlash = PlayFlash
-	Anchor.ShouldFlashUpdates = ShouldFlashUpdates
+	Anchor.ShouldFlash = ShouldFlash
+	Anchor.SaveValue = SaveValue
 	
 	Anchor.Highlight = Anchor:CreateTexture(nil, "OVERLAY")
 	Anchor.Highlight:SetScaledPoint("TOPLEFT", Anchor, 20, 0)
@@ -85,7 +93,7 @@ function DT:SetDataText(name, data)
 	Anchor:Enable()
 end
 
-function DT:SetType(name, enable, disable, update) -- id, name (ex, "GOLD", Language["Gold"])
+function DT:SetType(name, enable, disable, update)
 	if self.Types[name] then
 		return
 	end

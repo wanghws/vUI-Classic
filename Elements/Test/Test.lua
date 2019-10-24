@@ -103,6 +103,28 @@ GUI:AddOptions(function(self)
 	Left:CreateMessage("Hello world. This is a variable length message for the GUI to process.")
 end)]]
 
+local GetNumLoadedAddOns = function()
+	local NumLoaded = 0
+	
+	for i = 1, GetNumAddOns() do
+		if IsAddOnLoaded(i) then
+			NumLoaded = NumLoaded + 1
+		end
+	end
+	
+	return NumLoaded
+end
+
+local GetClient = function()
+	if IsWindowsClient() then
+		return Language["Windows"]
+	elseif IsMacClient() then
+		return Language["Mac"]
+	else -- IsLinuxClient
+		return Language["Linux"]
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Debug"])
 	
@@ -114,9 +136,11 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine(Language["Resolution"], vUI.ScreenResolution)
 	Left:CreateDoubleLine(Language["Fullscreen"], vUI.IsFullScreen)
 	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())
-	Left:CreateDoubleLine(Language["Style"], Settings["ui-style"])
+	Left:CreateDoubleLine(Language["UI Style"], Settings["ui-style"])
 	Left:CreateDoubleLine(Language["Locale"], vUI.UserLocale)
+	Left:CreateDoubleLine(Language["Client"], GetClient())
 	--Left:CreateDoubleLine(Language["Language"], Settings["ui-language"])
+	Left:CreateDoubleLine(Language["Show Errors"], GetCVar("scriptErrors"))
 	
 	Right:CreateHeader(Language["User Information"])
 	Right:CreateDoubleLine(Language["User"], vUI.UserName)
@@ -126,18 +150,25 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine(Language["Realm"], vUI.UserRealm)
 	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
 	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
+	
+	Right:CreateHeader(Language["AddOns Information"])
+	Right:CreateDoubleLine(Language["Total AddOns"], GetNumAddOns())
+	Right:CreateDoubleLine(Language["Loaded AddOns"], GetNumLoadedAddOns())
+	Right:CreateDoubleLine(Language["Taint Log Level"], GetCVar("taintLog"))
 end)
 
-local UpdateZone = CreateFrame("Frame")
-UpdateZone:RegisterEvent("ZONE_CHANGED")
-UpdateZone:RegisterEvent("ZONE_CHANGED_INDOORS")
-UpdateZone:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-UpdateZone:RegisterEvent("PLAYER_ENTERING_WORLD")
-UpdateZone:SetScript("OnEvent", function(self)
-	--if GUI:IsShown() then
+local UpdateDebugInfo = CreateFrame("Frame")
+UpdateDebugInfo:RegisterEvent("ZONE_CHANGED")
+UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_INDOORS")
+UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+UpdateDebugInfo:RegisterEvent("PLAYER_ENTERING_WORLD")
+UpdateDebugInfo:SetScript("OnEvent", function(self, event)
+	if (event == "ADDON_LOADED") then
+		GUI:GetWidgetByWindow(Language["Debug"], "loaded").Right:SetText(GetLoadedAddOns())
+	else
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
-	--end
+	end
 end)
 
 local Fonts = vUI:NewModule("Fonts")
@@ -819,7 +850,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Scale"])
 	--Right:CreateLine("|cFFE81123Do not use this to resize UI elements|r")
-	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale).Box:Save()
+	Right:CreateInput("ui-scale", Settings["ui-scale"], Language["Set UI Scale"], "Set the scale for the UI", UpdateUIScale)
 	Right:CreateButton(Language["Apply"], Language["Set Suggested Scale"], Language["Apply the scale recommended based on your resolution"], SetSuggestedScale)
 	
 	SetInsertItemsLeftToRight(Settings["bags-loot-from-left"])

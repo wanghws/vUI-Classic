@@ -675,21 +675,6 @@ local SwitchOnMouseUp = function(self)
 	end
 end
 
-local SwitchOnMouseWheel = function(self, delta)
-	local CurrentValue = self.Value
-	local NewValue
-	
-	if (delta < 0) then
-		NewValue = false
-	else
-		NewValue = true
-	end
-	
-	if (CurrentValue ~= NewValue) then
-		SwitchOnMouseUp(self) -- This is already set up to handle everything, so just pass it along
-	end
-end
-
 local SwitchOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
 end
@@ -700,14 +685,12 @@ end
 
 local SwitchEnable = function(self)
 	self.Switch:EnableMouse(true)
-	self.Switch:EnableMouseWheel(true)
 	
 	self.Switch.Flavor:SetVertexColorHex(Settings["ui-widget-color"])
 end
 
 local SwitchDisable = function(self)
 	self.Switch:EnableMouse(false)
-	self.Switch:EnableMouseWheel(false)
 	
 	self.Switch.Flavor:SetVertexColorHex("A5A5A5")
 end
@@ -741,7 +724,6 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
 	Switch:SetBackdropBorderColor(0, 0, 0)
 	Switch:SetScript("OnMouseUp", SwitchOnMouseUp)
-	Switch:SetScript("OnMouseWheel", SwitchOnMouseWheel)
 	Switch:SetScript("OnEnter", SwitchOnEnter)
 	Switch:SetScript("OnLeave", SwitchOnLeave)
 	Switch.Value = value
@@ -807,56 +789,160 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 end
 
 -- Input
-local INPUT_WIDTH = 130
-
-local InputOnEscapePressed = function(self)
-	self:SetAutoFocus(false)
-	self:ClearFocus()
+function GUI:SetInputObject(input)
+	local Text = input.ButtonText:GetText() or ""
+	
+	self.InputWindow.ActiveInput = input
+	self.InputWindow.Input:SetText(Text)
+	self.InputWindow.Input:SetAutoFocus(true)
+	self.InputWindow:Show()
 end
 
-local InputOnEnterPressed = function(self)
-	local Value = self:GetText()
+function GUI:ToggleInputWindow(input)
+	if (not self.InputWindow) then
+		self:CreateInputWindow()
+	end
 	
-	self.Parent.Fade:Play()
+	if (self ~= self.InputWindow.ActiveInput) then
+		self:SetInputObject(input)
+	else
+		self.InputWindow:Hide()
+	end
 	
-	if (not match(Value, "%S")) then
+	if self.InputWindow:IsShown() then
+		self.InputWindow.ActiveInput = input or nil
+		
+		self.InputWindow:Hide()
+	else
+		self:SetInputObject(input)
+	end
+end
+
+local InputWindowOnEnterPressed = function(self)
+	local Text = self:GetText()
+	
+	if (not match(Text, "%S+")) then
 		self:SetAutoFocus(false)
 		self:ClearFocus()
 		
 		return
 	end
 	
-	--self:SetText("")
-	self:SetCursorPosition(0)
-	
 	self:SetAutoFocus(false)
 	self:ClearFocus()
 	
-	if self.SaveInput then
-		SetVariable(self.ID, Value)
-	end
-	
-	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel", nil, Value, self.ID)
-	elseif self.Hook then
-		self.Hook(Value, self.ID)
+	if GUI.InputWindow.ActiveInput then
+		local Input = GUI.InputWindow.ActiveInput
+		
+		if Input.IsSavingDisabled then
+			Input.ButtonText:SetText("")
+		else
+			SetVariable(Input.ID, Text)
+			Input.ButtonText:SetText(Text)
+		end
+		
+		if Input.ReloadFlag then
+			vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", Input.Hook, "Cancel", nil, Text, Input.ID)
+		elseif Input.Hook then
+			Input.Hook(Text, Input.ID)
+		end
 	end
 end
 
-local InputOnMouseDown = function(self)
+local InputWindowOnMouseDown = function(self)
+	self:HighlightText()
 	self:SetAutoFocus(true)
 end
 
-local InputOnEditFocusLost = function(self)
-	--self:SetText(self.Prefix..self.Value..self.Postfix)
+function GUI:CreateInputWindow()
+	if self.InputWindow then
+		return self.InputWindow
+	end
+	
+	local Window = CreateFrame("Frame", nil, self)
+	Window:SetScaledSize(300, 220)
+	Window:SetScaledPoint("CENTER", UIParent, 0, 0)
+	Window:SetBackdrop(vUI.BackdropAndBorder)
+	Window:SetBackdropColorHex(Settings["ui-window-bg-color"])
+	Window:SetBackdropBorderColor(0, 0, 0)
+	Window:SetFrameStrata("DIALOG")
+	Window:SetMovable(true)
+	Window:EnableMouse(true)
+	Window:RegisterForDrag("LeftButton")
+	Window:SetScript("OnDragStart", Window.StartMoving)
+	Window:SetScript("OnDragStop", Window.StopMovingOrSizing)
+	Window:SetClampedToScreen(true)
+	Window:Hide()
+	
+	-- Header
+	Window.Header = CreateFrame("Frame", nil, Window)
+	Window.Header:SetScaledHeight(HEADER_HEIGHT)
+	Window.Header:SetScaledPoint("TOPLEFT", Window, SPACING, -SPACING)
+	Window.Header:SetScaledPoint("TOPRIGHT", Window, -SPACING, -SPACING)
+	Window.Header:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Header:SetBackdropColor(0, 0, 0)
+	Window.Header:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.HeaderTexture = Window.Header:CreateTexture(nil, "OVERLAY")
+	Window.HeaderTexture:SetScaledPoint("TOPLEFT", Window.Header, 1, -1)
+	Window.HeaderTexture:SetScaledPoint("BOTTOMRIGHT", Window.Header, -1, 1)
+	Window.HeaderTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	Window.HeaderTexture:SetVertexColorHex(Settings["ui-header-texture-color"])
+	
+	Window.Header.Text = Window.Header:CreateFontString(nil, "OVERLAY")
+	Window.Header.Text:SetScaledPoint("LEFT", Window.Header, HEADER_SPACING, -1)
+	Window.Header.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-header-font-size"])
+	Window.Header.Text:SetJustifyH("LEFT")
+	Window.Header.Text:SetText("|cFF" .. Settings["ui-header-font-color"] .. Language["Input"] .. "|r")
+	
+	-- Close button
+	Window.Header.CloseButton = CreateFrame("Frame", nil, Window.Header)
+	Window.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
+	Window.Header.CloseButton:SetScaledPoint("RIGHT", Window.Header, 0, 0)
+	Window.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
+	Window.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
+	Window.Header.CloseButton:SetScript("OnMouseUp", function() GUI.InputWindow:Hide() end)
+	
+	Window.Header.CloseButton.Text = Window.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
+	Window.Header.CloseButton.Text:SetScaledPoint("CENTER", Window.Header.CloseButton, 0, 0)
+	Window.Header.CloseButton.Text:SetFontInfo("PT Sans", 18)
+	Window.Header.CloseButton.Text:SetJustifyH("CENTER")
+	Window.Header.CloseButton.Text:SetText("×")
+	
+	Window.Inner = CreateFrame("Frame", nil, Window)
+	Window.Inner:SetScaledPoint("TOPLEFT", Window.Header, "BOTTOMLEFT", 0, -2)
+	Window.Inner:SetScaledPoint("BOTTOMRIGHT", Window, -3, 3)
+	Window.Inner:SetBackdrop(vUI.BackdropAndBorder)
+	Window.Inner:SetBackdropColor(HexToRGB(Settings["ui-window-main-color"]))
+	Window.Inner:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.Input = CreateFrame("EditBox", nil, Window.Inner)
+	Window.Input:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Window.Input:SetScaledPoint("TOPLEFT", Window.Inner, 3, -3)
+	Window.Input:SetScaledPoint("BOTTOMRIGHT", Window.Inner, -3, 3)
+	Window.Input:SetFrameStrata("DIALOG")
+	Window.Input:SetFrameLevel(99)
+	Window.Input:SetJustifyH("LEFT")
+	Window.Input:SetAutoFocus(false)
+	Window.Input:EnableKeyboard(true)
+	Window.Input:EnableMouse(true)
+	Window.Input:SetMultiLine(true)
+	Window.Input:SetMaxLetters(255)
+	Window.Input:SetCursorPosition(0)
+	
+	Window.Input:SetScript("OnEnterPressed", InputWindowOnEnterPressed)
+	Window.Input:SetScript("OnEscapePressed", InputWindowOnEnterPressed)
+	Window.Input:SetScript("OnMouseDown", InputWindowOnMouseDown)
+	
+	self.InputWindow = Window
+	
+	return Window
 end
 
-local InputOnChar = function(self)
-	--[[local Value = tonumber(self:GetText())
-	
-	if (type(Value) ~= "number") then
-		self:SetText(self.Value)
-	end]]
+local INPUT_WIDTH = 130
+
+local InputOnMouseDown = function(self)
+	GUI:ToggleInputWindow(self)
 end
 
 local InputOnEnter = function(self)
@@ -873,8 +959,8 @@ local InputRequiresReload = function(self, flag)
 	return self
 end
 
-local InputSave = function(self)
-	self.SaveInput = true
+local InputDisableSaving = function(self)
+	self.IsSavingDisabled = true
 	
 	return self
 end
@@ -899,6 +985,15 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input:SetBackdrop(vUI.BackdropAndBorder)
 	Input:SetBackdropColor(HexToRGB(Settings["ui-widget-bg-color"]))
 	Input:SetBackdropBorderColor(0, 0, 0)
+	Input.ID = id
+	Input.Hook = hook
+	Input.Parent = Input
+	Input.RequiresReload = InputRequiresReload
+	Input.DisableSaving = InputDisableSaving
+	
+	Input:SetScript("OnEnter", InputOnEnter)
+	Input:SetScript("OnLeave", InputOnLeave)
+	Input:SetScript("OnMouseUp", InputOnMouseDown)
 	
 	Input.Texture = Input:CreateTexture(nil, "ARTWORK")
 	Input.Texture:SetScaledPoint("TOPLEFT", Input, 1, -1)
@@ -920,7 +1015,15 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Highlight:SetVertexColor(1, 1, 1, 0.4)
 	Input.Highlight:SetAlpha(0)
 	
-	Input.Box = CreateFrame("EditBox", nil, Input)
+	Input.ButtonText = Input:CreateFontString(nil, "OVERLAY")
+	Input.ButtonText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Input.ButtonText:SetScaledSize(INPUT_WIDTH, WIDGET_HEIGHT)
+	Input.ButtonText:SetScaledPoint("TOPLEFT", Input, SPACING, -SPACING)
+	Input.ButtonText:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, SPACING)
+	Input.ButtonText:SetJustifyH("LEFT")
+	Input.ButtonText:SetText(value)
+	
+	--[[Input.Box = CreateFrame("EditBox", nil, Input)
 	Input.Box:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
 	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
@@ -935,14 +1038,14 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.Box.Parent = Input
 	Input.Box.RequiresReload = InputRequiresReload
 	Input.Box.Save = InputSave
-	
-	Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
-	Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
-	Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
-	Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
-	Input.Box:SetScript("OnChar", InputOnChar)
-	Input.Box:SetScript("OnEnter", InputOnEnter)
-	Input.Box:SetScript("OnLeave", InputOnLeave)
+	]]
+	--Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
+	--Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
+	--Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
+	--Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
+	--Input.Box:SetScript("OnChar", InputOnChar)
+	--Input.Box:SetScript("OnEnter", InputOnEnter)
+	--Input.Box:SetScript("OnLeave", InputOnLeave)
 	
 	Input.Text = Input:CreateFontString(nil, "OVERLAY")
 	Input.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
@@ -1934,38 +2037,6 @@ local SliderOnValueChanged = function(self)
 	end
 end
 
-local SliderOnMouseWheel = function(self, delta)
-	local Value = self.EditBox.Value
-	local Step = self.EditBox.StepValue
-	
-	if (delta < 0) then
-		Value = Value - Step
-	else
-		Value = Value + Step
-	end
-	
-	if (Step >= 1) then
-		Value = floor(Value)
-	else
-		if (Step <= 0.01) then
-			Value = Round(Value, 2)
-		else
-			Value = Round(Value, 1)
-		end
-	end
-	
-	if (Value < self.EditBox.MinValue) then
-		Value = self.EditBox.MinValue
-	elseif (Value > self.EditBox.MaxValue) then
-		Value = self.EditBox.MaxValue
-	end
-	
-	self.EditBox.Value = Value
-	
-	self:SetValue(Value)
-	self.EditBox:SetText(self.Prefix..Value..self.Postfix)
-end
-
 local EditBoxOnEnterPressed = function(self)
 	local Value = tonumber(self:GetText())
 	
@@ -2005,30 +2076,6 @@ local EditBoxOnChar = function(self)
 	end
 end
 
-local EditBoxOnMouseWheel = function(self, delta)
-	if self:HasFocus() then
-		self:SetAutoFocus(false)
-		self:ClearFocus()
-	end
-	
-	if (delta > 0) then
-		self.Value = self.Value + self.StepValue
-		
-		if (self.Value > self.MaxValue) then
-			self.Value = self.MaxValue
-		end
-	else
-		self.Value = self.Value - self.StepValue
-		
-		if (self.Value < self.MinValue) then
-			self.Value = self.MinValue
-		end
-	end
-	
-	self:SetText(self.Value)
-	self.Slider:SetValue(self.Value)
-end
-
 local EditBoxOnEnter = function(self)
 	self.Parent.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
 end
@@ -2047,11 +2094,9 @@ end
 
 local SliderEnable = function(self)
 	self.Slider:EnableMouse(true)
-	self.Slider:EnableMouseWheel(true)
 	
 	self.Slider.EditBox:EnableKeyboard(true)
 	self.Slider.EditBox:EnableMouse(true)
-	self.Slider.EditBox:EnableMouseWheel(true)
 	
 	self.Slider.EditBox:SetTextColorHex("FFFFFF")
 	self.Slider.Progress:SetVertexColorHex(Settings["ui-widget-color"])
@@ -2059,11 +2104,9 @@ end
 
 local SliderDisable = function(self)
 	self.Slider:EnableMouse(false)
-	self.Slider:EnableMouseWheel(false)
 	
 	self.Slider.EditBox:EnableKeyboard(false)
 	self.Slider.EditBox:EnableMouse(false)
-	self.Slider.EditBox:EnableMouseWheel(false)
 	
 	self.Slider.EditBox:SetTextColorHex("A5A5A5")
 	self.Slider.Progress:SetVertexColorHex("A5A5A5")
@@ -2128,7 +2171,6 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box:SetAutoFocus(false)
 	EditBox.Box:EnableKeyboard(true)
 	EditBox.Box:EnableMouse(true)
-	EditBox.Box:EnableMouseWheel(true)
 	EditBox.Box:SetText(prefix..value..postfix)
 	EditBox.Box.MinValue = minvalue
 	EditBox.Box.MaxValue = maxvalue
@@ -2138,7 +2180,6 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box.Postfix = postfix
 	EditBox.Box.Parent = EditBox
 	
-	EditBox.Box:SetScript("OnMouseWheel", EditBoxOnMouseWheel)
 	EditBox.Box:SetScript("OnMouseDown", EditBoxOnMouseDown)
 	EditBox.Box:SetScript("OnEscapePressed", EditBoxOnEnterPressed)
 	EditBox.Box:SetScript("OnEnterPressed", EditBoxOnEnterPressed)
@@ -2158,9 +2199,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider:SetBackdropBorderColor(0, 0, 0)
 	Slider:SetMinMaxValues(minvalue, maxvalue)
 	Slider:SetValue(value)
-	Slider:EnableMouseWheel(true)
 	Slider:SetObeyStepOnDrag(true)
-	Slider:SetScript("OnMouseWheel", SliderOnMouseWheel)
 	Slider:SetScript("OnValueChanged", SliderOnValueChanged)
 	Slider:SetScript("OnEnter", SliderOnEnter)
 	Slider:SetScript("OnLeave", SliderOnLeave)
@@ -2359,6 +2398,16 @@ end
 
 local UpdateColorPalette = function(value)
 	GUI.ColorPicker:SetColorPalette(value)
+end
+
+local UpdateColorPickerTexture = function(value)
+	local Texture = Media:GetTexture(value)
+	
+	for i = 1, MAX_SWATCHES_Y do
+		for j = 1, MAX_SWATCHES_X do
+			GUI.ColorPicker.SwatchParent[i][j].Texture:SetTexture(Texture)
+		end
+	end
 end
 
 local CreateColorPicker = function()
@@ -2918,13 +2967,13 @@ local Scroll = function(self)
 end
 
 local SetOffsetByDelta = function(self, delta)
-	if (delta == 1) then -- up
+	if (delta == 1) then -- Up
 		self.Offset = self.Offset - 1
 		
 		if (self.Offset <= 1) then
 			self.Offset = 1
 		end
-	else -- down
+	else -- Down
 		self.Offset = self.Offset + 1
 		
 		if (self.Offset > (self.WidgetCount - (self:GetParent().WindowCount - 1))) then
@@ -3429,6 +3478,12 @@ function GUI:AddFooters()
 	end
 end
 
+function GUI:UpdateHeight()
+	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 1
+	
+	self:SetScaledHeight(Height)
+end
+
 function GUI:RunQueue()
 	if (#self.Queue > 0) then
 		local Func
@@ -3441,9 +3496,10 @@ function GUI:RunQueue()
 	end
 	
 	self:AddFooters()
+	self:UpdateHeight()
 end
 
-function GUI:VARIABLES_LOADED()
+--[[function GUI:VARIABLES_LOADED()
 	if (not GetCVar("useUIScale")) then
 		SetCVar("useUIScale", 1)
 	end
@@ -3461,18 +3517,13 @@ function GUI:VARIABLES_LOADED()
 	self:Create()
 	self:RunQueue()
 	
-	-- Set the frame height
-	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 1
-	
-	self:SetScaledHeight(Height)
-	
 	-- Show the default window, if one was found
 	if self.DefaultWindow then
 		self:ShowWindow(self.DefaultWindow)
 	end
 	
 	self:UnregisterEvent("VARIABLES_LOADED")
-end
+end]]
 
 function GUI:PLAYER_REGEN_DISABLED()
 	if self:IsVisible() then
@@ -3499,7 +3550,7 @@ end
 
 GUI:RegisterEvent("PLAYER_REGEN_DISABLED")
 GUI:RegisterEvent("PLAYER_REGEN_ENABLED")
-GUI:RegisterEvent("VARIABLES_LOADED")
+--GUI:RegisterEvent("VARIABLES_LOADED")
 GUI:SetScript("OnEvent", function(self, event)
 	if self[event] then
 		self[event](self)

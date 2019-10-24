@@ -3,6 +3,8 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 local Move = vUI:NewModule("Move")
 
 local unpack = unpack
+local find = string.find
+local gsub = string.gsub
 
 Move.Frames = {}
 Move.Defaults = {}
@@ -72,6 +74,16 @@ function Move:ResetAll()
 	end
 end
 
+function Move:IsMoved(frame)
+	local Name = frame:GetName()
+
+	if (not Name) then
+		return false
+	elseif self.Defaults[Name] then
+		return true
+	end
+end
+
 local OnSizeChanged = function(self)
 	self.Mover:SetScaledSize(self:GetSize())
 end
@@ -112,8 +124,8 @@ function Move:Add(frame, padding)
 	
 	local Label = Name
 	
-	if string.find(Label, "vUI") then
-		Label = string.gsub(Label, "vUI ", "")
+	if find(Label, "vUI") then
+		Label = gsub(Label, "vUI ", "")
 	end
 	
 	if (not Parent) then

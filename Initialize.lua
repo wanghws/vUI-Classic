@@ -75,15 +75,6 @@ function vUI:LoadModules()
 	end
 end
 
-function vUI:VARIABLES_LOADED(event) -- Migrate VARIABLES_LOADED from GUI to here eventually, unimportant now
-	
-end
-
-function vUI:PLAYER_ENTERING_WORLD(event)
-	self:LoadModules()
-	self:UnregisterEvent(event)
-end
-
 -- Some Data
 vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
 vUI.GameVersion = GetBuildInfo()
@@ -111,6 +102,37 @@ local Core = {
 	[6] = {}, -- Defaults
 	[7] = {}, -- Profiles
 }
+
+function vUI:VARIABLES_LOADED(event)
+	if (not GetCVar("useUIScale")) then
+		SetCVar("useUIScale", 1)
+	end
+	
+	Core[6]["ui-scale"] = self:GetSuggestedScale()
+	
+	Core[7]:CreateProfileData()
+	Core[7]:UpdateProfileList()
+	Core[7]:ApplyProfile(Core[7]:GetActiveProfileName())
+	
+	self:SetScale(Core[5]["ui-scale"])
+	self:UpdateoUFColors()
+	
+	-- Load the GUI
+	Core[2]:Create()
+	Core[2]:RunQueue()
+	
+	-- Show the default window, if one was found
+	if Core[2].DefaultWindow then
+		Core[2]:ShowWindow(Core[2].DefaultWindow)
+	end
+	
+	self:UnregisterEvent(event)
+end
+
+function vUI:PLAYER_ENTERING_WORLD(event)
+	self:LoadModules()
+	self:UnregisterEvent(event)
+end
 
 Core[2].Queue = {}
 
