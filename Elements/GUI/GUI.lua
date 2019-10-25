@@ -20,7 +20,6 @@ GUI.Widgets = {}
 	
 	Thoughts:
 	
-	- Add Window.IgnoreScroll = true to stop a side of the window from scrolling. 
 	- Rename RequiresReload to RequiresWarning etc
 	
 	To do:
@@ -764,6 +763,7 @@ function GUI:SetInputObject(input)
 	self.InputWindow.Input:SetText(Text)
 	self.InputWindow.Input:SetAutoFocus(true)
 	self.InputWindow:Show()
+	self.InputWindow.FadeIn:Play()
 end
 
 function GUI:ToggleInputWindow(input)
@@ -775,7 +775,7 @@ function GUI:ToggleInputWindow(input)
 		if (input ~= self.InputWindow.ActiveInput) then
 			self:SetInputObject(input)
 		else
-			self.InputWindow:Hide()
+			self.InputWindow.FadeOut:Play()
 		end
 	else
 		self:SetInputObject(input)
@@ -829,6 +829,7 @@ function GUI:CreateInputWindow()
 	Window:SetScript("OnDragStart", Window.StartMoving)
 	Window:SetScript("OnDragStop", Window.StopMovingOrSizing)
 	Window:SetClampedToScreen(true)
+	Window:SetAlpha(0)
 	Window:Hide()
 	
 	-- Header
@@ -2891,32 +2892,43 @@ function GUI:SortButtons()
 	end
 end
 
+local SetIgnoreScrolling = function(self, flag)
+	self.IgnoreScrolling = flag
+end
+
 local Scroll = function(self)
 	local LeftFirst = false
 	local RightFirst = false
+	local Offset
+	
+	Offset = self.LeftWidgetsBG.IgnoreScrolling and 1 or self.Offset
 	
 	for i = 1, self.WidgetCount do
 		if self.LeftWidgets[i] then
 			self.LeftWidgets[i]:ClearAllPoints()
 			
-			if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
+			if (i >= Offset) and (i <= Offset + self:GetParent().WindowCount - 1) then
 				if (not LeftFirst) then
 					self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self.LeftWidgetsBG, SPACING, -SPACING)
 					LeftFirst = true
 				else
 					self.LeftWidgets[i]:SetScaledPoint("TOP", self.LeftWidgets[i-1], "BOTTOM", 0, -2)
 				end
-				
+					
 				self.LeftWidgets[i]:Show()
 			else
 				self.LeftWidgets[i]:Hide()
 			end
 		end
-		
+	end
+	
+	Offset = self.RightWidgetsBG.IgnoreScrolling and 1 or self.Offset
+	
+	for i = 1, self.WidgetCount do
 		if self.RightWidgets[i] then
 			self.RightWidgets[i]:ClearAllPoints()
 			
-			if (i >= self.Offset) and (i <= self.Offset + self:GetParent().WindowCount - 1) then
+			if (i >= Offset) and (i <= Offset + self:GetParent().WindowCount - 1) then
 				if (not RightFirst) then
 					self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self.RightWidgetsBG, -SPACING, -SPACING)
 					RightFirst = true
@@ -3254,7 +3266,9 @@ function GUI:CreateWindow(name, default)
 	Window.CreateWidget = CreateWidget
 	
 	Window.LeftWidgetsBG.Widgets = Window.LeftWidgets
+	Window.LeftWidgetsBG.SetIgnoreScrolling = SetIgnoreScrolling
 	Window.RightWidgetsBG.Widgets = Window.RightWidgets
+	Window.RightWidgetsBG.SetIgnoreScrolling = SetIgnoreScrolling
 	
 	for Name, Function in pairs(self.Widgets) do
 		Window.LeftWidgetsBG[Name] = Function

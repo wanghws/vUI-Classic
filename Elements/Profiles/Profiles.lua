@@ -598,6 +598,8 @@ end
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
+	Left:SetIgnoreScrolling(true)
+	
 	Left:CreateHeader(Language["Profiles"])
 	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Select Profile"], "", UpdateActiveProfile)
 	--Left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
