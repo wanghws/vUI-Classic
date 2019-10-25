@@ -37,7 +37,7 @@ local Update = function(self, event, unit)
 	
 	if (self.LastPower > Power) then -- Cast
 		self.elapsed = 0
-		self.max = 5
+		self.max = 5.5 -- 5-ish second rule
 		self:SetMinMaxValues(0, self.max)
 		self:Show()
 		self:SetScript("OnUpdate", OnUpdate)

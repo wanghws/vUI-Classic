@@ -24,7 +24,9 @@ local OnEnter = function(self)
 				Name = GetInventoryItemLink("player", ContainerIDToInventoryID(i))
 			end
 			
-			GameTooltip:AddDoubleLine(Name, format("%s/%s", NumSlots-FreeSlots, NumSlots), nil, nil, nil, 1, 1, 1)
+			if Name then
+				GameTooltip:AddDoubleLine(Name, format("%s/%s", NumSlots-FreeSlots, NumSlots), nil, nil, nil, 1, 1, 1)
+			end
 		end
 	end
 	
