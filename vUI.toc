@@ -32,7 +32,7 @@ Languages\zhCN.lua
 Languages\zhTW.lua
 Elements\Defaults\Defaults.lua
 Elements\Profiles\Profiles.lua
-Elements\GUI\GUI.lua
+Elements\Settings\Settings.lua
 Elements\Colors\Colors.lua
 Elements\Throttle\Throttle.lua
 Elements\Move\Move.lua
