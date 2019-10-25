@@ -507,6 +507,28 @@ local PostCreateIcon = function(unit, button)
 	button.ela = 0
 end
 
+local NamePlateCallback = function(self) -- plate, event, unit
+	if (not self) then
+		return
+	end
+	
+	if Settings["nameplates-display-debuffs"] then
+		self:EnableElement("Auras")
+	else
+		self:DisableElement("Auras")
+	end
+	
+	if self.Debuffs then
+		self.Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
+	end
+	
+	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	
+	self.Health.colorTapping = Settings["nameplates-color-by-tapped"]
+	self.Health.colorClass = Settings["nameplates-color-by-class"]
+	self.Health.colorReaction = Settings["nameplates-color-by-reaction"]
+end
+
 local StyleNamePlate = function(self, unit)
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self:SetPoint("CENTER", 0, 0)
@@ -559,37 +581,29 @@ local StyleNamePlate = function(self, unit)
 	BottomLeft:SetScaledPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
 	BottomLeft:SetJustifyH("LEFT")
 	
-	Health.colorTapping = true
-	Health.colorDisconnected = true
 	Health.Smooth = true
-	
-	if Settings["nameplates-class-color"] then
-		Health.colorReaction = true
-		Health.colorClass = true
-	else
-		Health.colorHealth = true
-	end
+	Health.colorTapping = Settings["nameplates-color-by-tapped"]
+	Health.colorDisconnected = true
+	Health.colorClass = Settings["nameplates-color-by-class"]
+	Health.colorReaction = Settings["nameplates-color-by-reaction"]
+	Health.colorHealth = true
 	
 	-- Debuffs
-	if Settings["nameplates-display-debuffs"] then
-		local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-		Debuffs:SetScaledSize(Settings["nameplates-width"], 26)
-		Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 18)
-		Debuffs.size = 26
-		Debuffs.spacing = 2
-		Debuffs.num = 5
-		Debuffs.numRow = 4
-		Debuffs.numDebuffs = 16
-		Debuffs.initialAnchor = "TOPLEFT"
-		Debuffs["growth-x"] = "RIGHT"
-		Debuffs["growth-y"] = "UP"
-		Debuffs.PostCreateIcon = PostCreateIcon
-		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
-		Debuffs.disableMouse = true
-		
-		self.Debuffs = Debuffs
-	end
+	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+	Debuffs:SetScaledSize(Settings["nameplates-width"], 26)
+	Debuffs:SetScaledPoint("BOTTOM", Health, "TOP", 0, 18)
+	Debuffs.size = 26
+	Debuffs.spacing = 2
+	Debuffs.num = 5
+	Debuffs.numRow = 4
+	Debuffs.numDebuffs = 16
+	Debuffs.initialAnchor = "TOPLEFT"
+	Debuffs["growth-x"] = "RIGHT"
+	Debuffs["growth-y"] = "UP"
+	Debuffs.PostCreateIcon = PostCreateIcon
+	Debuffs.PostUpdateIcon = PostUpdateIcon
+	Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
+	Debuffs.disableMouse = true
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
@@ -653,6 +667,7 @@ local StyleNamePlate = function(self, unit)
 	self.TopRight = TopRight
 	self.BottomRight = BottomRight
 	self.Health.bg = HealthBG
+	self.Debuffs = Debuffs
 	self.Castbar = Castbar
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
@@ -1781,7 +1796,7 @@ local UpdateShowEnergyTimer = function(value)
 	end
 end
 
-local PlateCVars = {
+local NamePlateCVars = {
     nameplateGlobalScale = 1,
     NamePlateHorizontalScale = 1,
     NamePlateVerticalScale = 1,
@@ -1893,7 +1908,7 @@ UF:SetScript("OnEvent", function(self, event)
 		vUI.UnitFrames["pet"] = Pet
 		
 		if Settings["nameplates-enable"] then
-			oUF:SpawnNamePlates(nil, nil, PlateCVars)
+			oUF:SpawnNamePlates(nil, NamePlateCallback, NamePlateCVars)
 		end
 		
 		if Settings["unitframes-enable-raid"] then
@@ -1968,22 +1983,72 @@ GUI:AddOptions(function(self)
 	]]
 end)
 
+local NamePlatesUpdateEnableDebuffs = function(self)
+	if Settings["nameplates-display-debuffs"] then
+		self:EnableElement("Auras")
+	else
+		self:DisableElement("Auras")
+	end
+end
+
+local NamePlatesUpdateShowPlayerDebuffs = function(self)
+	if self.Debuffs then
+		self.Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
+	end
+end
+
+local UpdateNamePlatesEnableDebuffs = function()
+	oUF:RunForAllNamePlates(NamePlatesUpdateEnableDebuffs)
+end
+
+local UpdateNamePlatesShowPlayerDebuffs = function()
+	oUF:RunForAllNamePlates(NamePlatesUpdateShowPlayerDebuffs)
+end
+
+local NamePlateSetWidth = function(self)
+	self:SetWidth(Settings["nameplates-width"])
+end
+
+local UpdateNamePlatesWidth = function()
+	oUF:RunForAllNamePlates(NamePlateSetWidth)
+end
+
+local NamePlateSetHeight = function(self)
+	self:SetHeight(Settings["nameplates-height"])
+end
+
+local UpdateNamePlatesHeight = function()
+	oUF:RunForAllNamePlates(NamePlateSetHeight)
+end
+
+local NamePlateSetHealthColor = function(self)
+	self.Health.colorTapping = Settings["nameplates-color-by-tapped"]
+	self.Health.colorClass = Settings["nameplates-color-by-class"]
+	self.Health.colorReaction = Settings["nameplates-color-by-reaction"]
+end
+
+local UpdateNamePlateColors = function()
+	oUF:RunForAllNamePlates(NamePlateSetHealthColor)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], "Enable the vUI name plates module", ReloadUI):RequiresReload(true)
 	
+	Left:CreateHeader(Language["Sizes"])
+	Left:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "Set the width of name plates", UpdateNamePlatesWidth)
+	Left:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "Set the height of name plates", UpdateNamePlatesHeight)
+	
 	Left:CreateHeader(Language["Debuffs"])
-	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", ReloadUI):RequiresReload(true)
-	Left:CreateSwitch("nameplates-only-player-debuffs", Settings["nameplates-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", UpdateNamePlatesEnableDebuffs)
+	Left:CreateSwitch("nameplates-only-player-debuffs", Settings["nameplates-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", UpdateNamePlatesShowPlayerDebuffs)
 	
 	Right:CreateHeader(Language["Colors"])
-	Right:CreateSwitch("nameplates-class-color", Settings["nameplates-class-color"], Language["Use Class/Reaction Colors"], "Color name plate health by class or reaction", ReloadUI):RequiresReload(true)
-	
-	Right:CreateHeader(Language["Sizes"])
-	Right:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "Set the width of name plates")
-	Right:CreateSlider("nameplates-height", Settings["nameplates-height"], 4, 50, 1, "Set Height", "Set the height of name plates")
+	Right:CreateSwitch("nameplates-color-by-tapped", Settings["nameplates-color-by-tapped"], Language["Use Tapped Colors"], "Color name plate health if the unit is tapped by another player", UpdateNamePlateColors)
+	Right:CreateSwitch("nameplates-color-by-class", Settings["nameplates-color-by-class"], Language["Use Class Colors"], "Color name plate health by class", UpdateNamePlateColors)
+	Right:CreateSwitch("nameplates-color-by-reaction", Settings["nameplates-color-by-reaction"], Language["Use Reaction Colors"], "Color name plate health by unit reaction", UpdateNamePlateColors)
 	
 	Right:CreateHeader(Language["Information"])
 	Right:CreateInput("nameplates-topleft-text", Settings["nameplates-topleft-text"], Language["Top Left Text"], "")
@@ -1991,9 +2056,9 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
 	
-	if (not Settings["nameplates-display-debuffs"]) then
+	--[[if (not Settings["nameplates-display-debuffs"]) then
 		GUI:GetWidgetByWindow(Language["Name Plates"], "nameplates-only-player-debuffs"):Disable() -- Temporary
-	end
+	end]]
 end)
 
 --[[ /run FakeGroup()

@@ -892,6 +892,13 @@ function GUI:CreateInputWindow()
 	Window.Input:SetScript("OnEscapePressed", InputWindowOnEnterPressed)
 	Window.Input:SetScript("OnMouseDown", InputWindowOnMouseDown)
 	
+	--[[ This just makes the animation look better. That's all. ಠ_ಠ
+	Window.BlackTexture = Window:CreateTexture(nil, "BACKGROUND", -7)
+	Window.BlackTexture:SetScaledPoint("TOPLEFT", Window, 0, 0)
+	Window.BlackTexture:SetScaledPoint("BOTTOMRIGHT", Window, 0, 0)
+	Window.BlackTexture:SetTexture(Media:GetTexture("Blank"))
+	Window.BlackTexture:SetVertexColor(0, 0, 0, 0)]]
+	
 	Window.Fade = CreateAnimationGroup(Window)
 	
 	Window.FadeIn = Window.Fade:CreateAnimation("Fade")

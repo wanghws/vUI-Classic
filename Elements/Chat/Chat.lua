@@ -514,10 +514,6 @@ local StyleChatFrame = function(frame)
 	EditBox.HeaderBackdrop.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	EditBox.HeaderBackdrop.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
-	EditBox.HeaderBackdrop.AnimateWidth = CreateAnimationGroup(EditBox.HeaderBackdrop):CreateAnimation("Width")
-	EditBox.HeaderBackdrop.AnimateWidth:SetEasing("in")
-	EditBox.HeaderBackdrop.AnimateWidth:SetDuration(0.15)
-	
 	EditBox.Backdrop = CreateFrame("Frame", nil, EditBox)
 	EditBox.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	EditBox.Backdrop:SetBackdropColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))

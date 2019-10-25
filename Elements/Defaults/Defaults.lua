@@ -279,8 +279,10 @@ Defaults["nameplates-topright-text"] = "" -- [LevelColor][Level][Plus]
 Defaults["nameplates-bottomleft-text"] = "" -- [Classification]
 Defaults["nameplates-bottomright-text"] = "[HealthColor][perhp]"
 Defaults["nameplates-display-debuffs"] = true
-Defaults["nameplates-class-color"] = true -- temporary
 Defaults["nameplates-only-player-debuffs"] = true
+Defaults["nameplates-color-by-class"] = true
+Defaults["nameplates-color-by-reaction"] = true
+Defaults["nameplates-color-by-tapped"] = true
 
 -- Tooltips
 Defaults["tooltips-enable"] = true
