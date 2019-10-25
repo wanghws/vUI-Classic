@@ -803,30 +803,19 @@ function GUI:ToggleInputWindow(input)
 		self:CreateInputWindow()
 	end
 	
-	if (self ~= self.InputWindow.ActiveInput) then
-		self:SetInputObject(input)
-	else
-		self.InputWindow:Hide()
-	end
-	
 	if self.InputWindow:IsShown() then
-		self.InputWindow.ActiveInput = input or nil
-		
-		self.InputWindow:Hide()
+		if (input ~= self.InputWindow.ActiveInput) then
+			self:SetInputObject(input)
+		else
+			self.InputWindow:Hide()
+		end
 	else
 		self:SetInputObject(input)
 	end
 end
 
 local InputWindowOnEnterPressed = function(self)
-	local Text = self:GetText()
-	
-	if (not match(Text, "%S+")) then
-		self:SetAutoFocus(false)
-		self:ClearFocus()
-		
-		return
-	end
+	local Text = self:GetText() or ""
 	
 	self:SetAutoFocus(false)
 	self:ClearFocus()
@@ -3499,32 +3488,6 @@ function GUI:RunQueue()
 	self:UpdateHeight()
 end
 
---[[function GUI:VARIABLES_LOADED()
-	if (not GetCVar("useUIScale")) then
-		SetCVar("useUIScale", 1)
-	end
-	
-	Defaults["ui-scale"] = vUI:GetSuggestedScale()
-	
-	Profiles:CreateProfileData()
-	Profiles:UpdateProfileList()
-	Profiles:ApplyProfile(Profiles:GetActiveProfileName())
-	
-	vUI:SetScale(Settings["ui-scale"])
-	vUI:UpdateoUFColors()
-	
-	-- Load the GUI
-	self:Create()
-	self:RunQueue()
-	
-	-- Show the default window, if one was found
-	if self.DefaultWindow then
-		self:ShowWindow(self.DefaultWindow)
-	end
-	
-	self:UnregisterEvent("VARIABLES_LOADED")
-end]]
-
 function GUI:PLAYER_REGEN_DISABLED()
 	if self:IsVisible() then
 		self:SetAlpha(0)
@@ -3550,7 +3513,6 @@ end
 
 GUI:RegisterEvent("PLAYER_REGEN_DISABLED")
 GUI:RegisterEvent("PLAYER_REGEN_ENABLED")
---GUI:RegisterEvent("VARIABLES_LOADED")
 GUI:SetScript("OnEvent", function(self, event)
 	if self[event] then
 		self[event](self)
