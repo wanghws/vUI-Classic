@@ -42,9 +42,9 @@ end
 local UpdateScratchyBoi = function(self)
 	ShapeshiftForm = GetShapeshiftForm()
 	
-	if (ShapeshiftForm == 3 and not self.ComboPoints:IsShown()) then
+	if (ShapeshiftForm == 3) then
 		self.ComboPoints:Show()
-	elseif self:IsShown() then
+	else
 		self.ComboPoints:Hide()
 	end
 	
@@ -63,8 +63,10 @@ local Enable = function(self)
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", Path, true)
 		self:RegisterEvent("UNIT_POWER_UPDATE", Path, true)
 		
-		if (vUI.UserClass == "DRUID") then
-			self:RegisterEvent("UPDATE_SHAPESHIFT_FORMS", UpdateScratchyBoi, true)
+		local playerClass = select(2, UnitClass("player"))
+
+		if (playerClass == "DRUID") then
+			self:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UpdateScratchyBoi, true)
 			self:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateScratchyBoi, true)
 		end
 		
@@ -90,7 +92,7 @@ local Disable = function(self)
 		self:UnregisterEvent("UNIT_POWER_UPDATE", Path)
 		
 		if self:IsEventRegistered("UPDATE_SHAPESHIFT_FORMS") then
-			self:UnregisterEvent("UPDATE_SHAPESHIFT_FORMS", UpdateScratchyBoi)
+			self:UnregisterEvent("UPDATE_SHAPESHIFT_FORM", UpdateScratchyBoi)
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD", UpdateScratchyBoi)
 		end
 	end
