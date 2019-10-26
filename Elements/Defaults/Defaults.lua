@@ -269,6 +269,8 @@ Defaults["unitframes-show-player-buffs"] = true
 Defaults["unitframes-show-mana-timer"] = false
 Defaults["unitframes-show-energy-timer"] = true
 
+Defaults["party-show-debuffs"] = true
+
 -- Name Plates
 Defaults["nameplates-enable"] = true
 Defaults["nameplates-width"] = 134

@@ -413,6 +413,18 @@ Methods["HappinessColor"] = function(unit)
 	end
 end
 
+local ComboPointsUpdateShapeshiftForm = function(self, form)
+	local Parent = self:GetParent()
+	
+	Parent.Buffs:ClearAllPoints()
+	
+	if (form == 3) then
+		Parent.Buffs:SetScaledPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
+	else
+		Parent.Buffs:SetScaledPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
+	end
+end
+
 local AuraOnUpdate = function(self, ela)
 	self.ela = self.ela + ela
 	
@@ -596,7 +608,6 @@ local StyleNamePlate = function(self, unit)
 	Debuffs.spacing = 2
 	Debuffs.num = 5
 	Debuffs.numRow = 4
-	Debuffs.numDebuffs = 16
 	Debuffs.initialAnchor = "TOPLEFT"
 	Debuffs["growth-x"] = "RIGHT"
 	Debuffs["growth-y"] = "UP"
@@ -994,6 +1005,7 @@ local StylePlayer = function(self, unit)
 		ComboPoints:SetBackdrop(vUI.Backdrop)
 		ComboPoints:SetBackdropColor(0, 0, 0)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
+		ComboPoints.UpdateShapeshiftForm = ComboPointsUpdateShapeshiftForm
 		
 		local Width = (238 / 5)
 		local Color
@@ -1506,6 +1518,24 @@ local StyleParty = function(self, unit)
 		Power.colorClass = true
 	end
 	
+	-- Debuffs
+	if Settings["party-show-debuffs"] then
+		local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
+		Debuffs:SetScaledSize((31 * 5), 29)
+		Debuffs:SetScaledPoint("LEFT", Health, "RIGHT", 2, 0)
+		Debuffs.size = 29
+		Debuffs.spacing = 2
+		Debuffs.num = 5
+		Debuffs.numRow = 1
+		Debuffs.initialAnchor = "LEFT"
+		Debuffs["growth-x"] = "RIGHT"
+		Debuffs["growth-y"] = "UP"
+		Debuffs.PostCreateIcon = PostCreateIcon
+		Debuffs.PostUpdateIcon = PostUpdateIcon
+		
+		self.Debuffs = Debuffs
+	end
+	
 	-- Leader
     local Leader = Health:CreateTexture(nil, "OVERLAY")
     Leader:SetSize(16, 16)
@@ -1972,6 +2002,9 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Colors"])
 	Right:CreateSwitch("unitframes-class-color", Settings["unitframes-class-color"], Language["Use Class/Reaction Colors"], Language["Color unit frame health by class or reaction"], ReloadUI):RequiresReload(true)
+	
+	Right:CreateHeader(Language["Party"])
+	Right:CreateSwitch("party-show-debuffs", Settings["party-show-debuffs"], Language["Enable Debuffs"], "Enable to display debuffs on party members", ReloadUI):RequiresReload(true)
 	
 	--[[Left:CreateHeader(Language["Player"])
 	Left:CreateSwitch("unitframes-player-show-name", Settings["unitframes-player-show-name"], Language["Enable Name"], "", TogglePlayerName)
