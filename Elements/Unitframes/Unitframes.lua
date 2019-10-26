@@ -419,7 +419,7 @@ local ComboPointsUpdateShapeshiftForm = function(self, form)
 	Parent.Buffs:ClearAllPoints()
 	
 	if (form == 3) then
-		Parent.Buffs:SetScaledPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
+		Parent.Buffs:SetScaledPoint("BOTTOMLEFT", Parent.ComboPoints, "TOPLEFT", 0, 2)
 	else
 		Parent.Buffs:SetScaledPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
 	end
