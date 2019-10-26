@@ -2489,20 +2489,6 @@ local CreateColorPicker = function()
 	ColorPicker.SwatchParent:SetBackdropColorHex(Settings["ui-window-main-color"])
 	ColorPicker.SwatchParent:SetBackdropBorderColor(0, 0, 0)
 	
-	--[[ Close button
-	ColorPicker.Header.CloseButton = CreateFrame("Frame", nil, ColorPicker.Header)
-	ColorPicker.Header.CloseButton:SetScaledSize(HEADER_HEIGHT, HEADER_HEIGHT)
-	ColorPicker.Header.CloseButton:SetScaledPoint("RIGHT", ColorPicker.Header, 0, 0)
-	ColorPicker.Header.CloseButton:SetScript("OnEnter", function(self) self.Text:SetTextColor(1, 0, 0) end)
-	ColorPicker.Header.CloseButton:SetScript("OnLeave", function(self) self.Text:SetTextColor(1, 1, 1) end)
-	ColorPicker.Header.CloseButton:SetScript("OnMouseUp", function() ColorPicker.FadeOut:Play() end)
-	
-	ColorPicker.Header.CloseButton.Text = ColorPicker.Header.CloseButton:CreateFontString(nil, "OVERLAY", 7)
-	ColorPicker.Header.CloseButton.Text:SetScaledPoint("CENTER", ColorPicker.Header.CloseButton, 0, 0)
-	ColorPicker.Header.CloseButton.Text:SetFontInfo("PT Sans", 18)
-	ColorPicker.Header.CloseButton.Text:SetJustifyH("CENTER")
-	ColorPicker.Header.CloseButton.Text:SetText("×")]]
-	
 	-- Current
 	ColorPicker.Current = CreateFrame("Frame", nil, ColorPicker)
 	ColorPicker.Current:SetScaledSize((390 / 3), 20)
@@ -3609,9 +3595,9 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("ui-widget-texture", Settings["ui-widget-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Left:CreateDropdown("ui-widget-font", Settings["ui-widget-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
 	
-	Right:CreateHeader("What is a style?")
-	Right:CreateLine("Styles store media settings such as fonts,")
-	Right:CreateLine("textures, and colors to create an overall theme.")
+	Right:CreateHeader(Language["What is a style?"])
+	Right:CreateLine(Language["Styles store media settings such as fonts,"])
+	Right:CreateLine(Language["textures, and colors to create an overall theme."])
 	
 	Right:CreateHeader(Language["Console"])
 	Right:CreateButton(Language["Reload"], Language["Reload UI"], "", ReloadUI)
@@ -3622,8 +3608,12 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("ui-window-main-color", Settings["ui-window-main-color"], Language["Main Color"], "")
 	
 	Right:CreateHeader(Language["Buttons"])
-	--Right:CreateColorSelection("ui-button-font-color", Settings["ui-button-font-color"], Language["Text Color"], "")
 	Right:CreateColorSelection("ui-button-texture-color", Settings["ui-button-texture-color"], Language["Texture Color"], "")
 	Right:CreateDropdown("ui-button-texture", Settings["ui-button-texture"], Media:GetTextureList(), Language["Texture"], "", nil, "Texture")
 	Right:CreateDropdown("ui-button-font", Settings["ui-button-font"], Media:GetFontList(), Language["Font"], "", nil, "Font")
+	
+	Left:CreateHeader(Language["Font Sizes"])
+	Left:CreateSlider("ui-font-size", Settings["ui-font-size"], 8, 18, 1, Language["UI Font Size"], Language["Set the general font size of the UI"])
+	Left:CreateSlider("ui-header-font-size", Settings["ui-header-font-size"], 8, 18, 1, Language["Header Font Size"], Language["Set the font size of header elements in the UI"])
+	Left:CreateSlider("ui-title-font-size", Settings["ui-title-font-size"], 8, 18, 1, Language["Title Font Size"], Language["Set the font size of title elements in the UI"])
 end)
