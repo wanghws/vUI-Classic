@@ -1,5 +1,6 @@
 local _, ns = ...
 local oUF = ns.oUF
+local vUI = ns:get()
 
 local GetShapeshiftForm = GetShapeshiftForm
 local GetComboPoints = GetComboPoints
@@ -62,10 +63,8 @@ local Enable = function(self)
 		
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", Path, true)
 		self:RegisterEvent("UNIT_POWER_UPDATE", Path, true)
-		
-		local playerClass = select(2, UnitClass("player"))
 
-		if (playerClass == "DRUID") then
+		if (vUI.UserClass == "DRUID") then
 			self:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UpdateScratchyBoi, true)
 			self:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateScratchyBoi, true)
 		end
