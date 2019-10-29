@@ -13,6 +13,8 @@ local lower = string.lower
 local sub = string.sub
 local gsub = string.gsub
 local floor = math.floor
+local IsModifierKeyDown = IsModifierKeyDown
+local GetMouseFocus = GetMouseFocus
 
 GUI.Widgets = {}
 
@@ -642,22 +644,51 @@ local SwitchOnMouseUp = function(self)
 	end
 end
 
+local SwitchOnMouseWheel = function(self, delta)
+	if (not IsModifierKeyDown()) then
+		return
+	end
+	
+	local CurrentValue = self.Value
+	local NewValue
+	
+	if (delta < 0) then
+		NewValue = false
+	else
+		NewValue = true
+	end
+	
+	if (CurrentValue ~= NewValue) then
+		SwitchOnMouseUp(self) -- This is already set up to handle everything, so just pass it along
+	end
+end
+
 local SwitchOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
+	
+	if IsModifierKeyDown() then
+		self:SetScript("OnMouseWheel", self.OnMouseWheel)
+	end
 end
 
 local SwitchOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
+	
+	if self:HasScript("OnMouseWheel") then
+		self:SetScript("OnMouseWheel", nil)
+	end
 end
 
 local SwitchEnable = function(self)
 	self.Switch:EnableMouse(true)
+	self.Switch:EnableMouseWheel(true)
 	
 	self.Switch.Flavor:SetVertexColorHex(Settings["ui-widget-color"])
 end
 
 local SwitchDisable = function(self)
 	self.Switch:EnableMouse(false)
+	self.Switch:EnableMouseWheel(false)
 	
 	self.Switch.Flavor:SetVertexColorHex("A5A5A5")
 end
@@ -691,6 +722,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch:SetBackdropColorHex(Settings["ui-window-main-color"])
 	Switch:SetBackdropBorderColor(0, 0, 0)
 	Switch:SetScript("OnMouseUp", SwitchOnMouseUp)
+	--Switch:SetScript("OnMouseWheel", SwitchOnMouseWheel)
 	Switch:SetScript("OnEnter", SwitchOnEnter)
 	Switch:SetScript("OnLeave", SwitchOnLeave)
 	Switch.Value = value
@@ -698,6 +730,7 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Tooltip = tooltip
 	Switch.ID = id
 	Switch.RequiresReload = SwitchRequiresReload
+	Switch.OnMouseWheel = SwitchOnMouseWheel
 	
 	Switch.BG = Switch:CreateTexture(nil, "ARTWORK")
 	Switch.BG:SetScaledPoint("TOPLEFT", Switch, 1, -1)
@@ -1647,6 +1680,10 @@ local SetDropdownOffsetByDelta = function(self, delta)
 end
 
 local DropdownOnMouseWheel = function(self, delta)
+	if (not IsModifierKeyDown()) then
+		return
+	end
+	
 	self:SetDropdownOffsetByDelta(delta)
 	self:ScrollMenu()
 	self.ScrollBar:SetValue(self.Offset)
@@ -2032,6 +2069,42 @@ local SliderOnValueChanged = function(self)
 	end
 end
 
+local SliderOnMouseWheel = function(self, delta)
+	if (not IsModifierKeyDown()) then
+		return
+	end
+	
+	local Value = self.EditBox.Value
+	local Step = self.EditBox.StepValue
+	
+	if (delta < 0) then
+		Value = Value - Step
+	else
+		Value = Value + Step
+	end
+	
+	if (Step >= 1) then
+		Value = floor(Value)
+	else
+		if (Step <= 0.01) then
+			Value = Round(Value, 2)
+		else
+			Value = Round(Value, 1)
+		end
+	end
+	
+	if (Value < self.EditBox.MinValue) then
+		Value = self.EditBox.MinValue
+	elseif (Value > self.EditBox.MaxValue) then
+		Value = self.EditBox.MaxValue
+	end
+	
+	self.EditBox.Value = Value
+	
+	self:SetValue(Value)
+	self.EditBox:SetText(self.Prefix..Value..self.Postfix)
+end
+
 local EditBoxOnEnterPressed = function(self)
 	local Value = tonumber(self:GetText())
 	
@@ -2071,27 +2144,73 @@ local EditBoxOnChar = function(self)
 	end
 end
 
+local EditBoxOnMouseWheel = function(self, delta)
+	if (not IsModifierKeyDown()) then
+		return
+	end
+	
+	if self:HasFocus() then
+		self:SetAutoFocus(false)
+		self:ClearFocus()
+	end
+	
+	if (delta > 0) then
+		self.Value = self.Value + self.StepValue
+		
+		if (self.Value > self.MaxValue) then
+			self.Value = self.MaxValue
+		end
+	else
+		self.Value = self.Value - self.StepValue
+		
+		if (self.Value < self.MinValue) then
+			self.Value = self.MinValue
+		end
+	end
+	
+	self:SetText(self.Value)
+	self.Slider:SetValue(self.Value)
+end
+
 local EditBoxOnEnter = function(self)
 	self.Parent.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
+	
+	if IsModifierKeyDown() then
+		self:SetScript("OnMouseWheel", self.OnMouseWheel)
+	end
 end
 
 local EditboxOnLeave = function(self)
 	self.Parent.Highlight:SetAlpha(0)
+	
+	if self:HasScript("OnMouseWheel") then
+		self:SetScript("OnMouseWheel", nil)
+	end
 end
 
 local SliderOnEnter = function(self)
 	self.Highlight:SetAlpha(MOUSEOVER_HIGHLIGHT_ALPHA)
+	
+	if IsModifierKeyDown() then
+		self:SetScript("OnMouseWheel", self.OnMouseWheel)
+	end
 end
 
 local SliderOnLeave = function(self)
 	self.Highlight:SetAlpha(0)
+	
+	if self:HasScript("OnMouseWheel") then
+		self:SetScript("OnMouseWheel", nil)
+	end
 end
 
 local SliderEnable = function(self)
 	self.Slider:EnableMouse(true)
+	self.Slider:EnableMouseWheel(true)
 	
 	self.Slider.EditBox:EnableKeyboard(true)
 	self.Slider.EditBox:EnableMouse(true)
+	self.Slider.EditBox:EnableMouseWheel(true)
 	
 	self.Slider.EditBox:SetTextColorHex("FFFFFF")
 	self.Slider.Progress:SetVertexColorHex(Settings["ui-widget-color"])
@@ -2099,9 +2218,11 @@ end
 
 local SliderDisable = function(self)
 	self.Slider:EnableMouse(false)
+	self.Slider:EnableMouseWheel(false)
 	
 	self.Slider.EditBox:EnableKeyboard(false)
 	self.Slider.EditBox:EnableMouse(false)
+	self.Slider.EditBox:EnableMouseWheel(false)
 	
 	self.Slider.EditBox:SetTextColorHex("A5A5A5")
 	self.Slider.Progress:SetVertexColorHex("A5A5A5")
@@ -2166,6 +2287,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box:SetAutoFocus(false)
 	EditBox.Box:EnableKeyboard(true)
 	EditBox.Box:EnableMouse(true)
+	EditBox.Box:EnableMouseWheel(true)
 	EditBox.Box:SetText(prefix..value..postfix)
 	EditBox.Box.MinValue = minvalue
 	EditBox.Box.MaxValue = maxvalue
@@ -2174,6 +2296,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	EditBox.Box.Prefix = prefix
 	EditBox.Box.Postfix = postfix
 	EditBox.Box.Parent = EditBox
+	EditBox.Box.OnMouseWheel = EditBoxOnMouseWheel
 	
 	EditBox.Box:SetScript("OnMouseDown", EditBoxOnMouseDown)
 	EditBox.Box:SetScript("OnEscapePressed", EditBoxOnEnterPressed)
@@ -2194,6 +2317,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider:SetBackdropBorderColor(0, 0, 0)
 	Slider:SetMinMaxValues(minvalue, maxvalue)
 	Slider:SetValue(value)
+	Slider:EnableMouseWheel(true)
 	Slider:SetObeyStepOnDrag(true)
 	Slider:SetScript("OnValueChanged", SliderOnValueChanged)
 	Slider:SetScript("OnEnter", SliderOnEnter)
@@ -2204,6 +2328,7 @@ GUI.Widgets.CreateSlider = function(self, id, value, minvalue, maxvalue, step, l
 	Slider.Hook = hook
 	Slider.ID = id
 	Slider.RequiresReload = SliderRequiresReload
+	Slider.OnMouseWheel = SliderOnMouseWheel
 	
 	Slider.Text = Slider:CreateFontString(nil, "OVERLAY")
 	Slider.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
@@ -3545,11 +3670,22 @@ function GUI:PLAYER_REGEN_ENABLED()
 	self.WasCombatClosed = false
 end
 
+-- Enabling the mouse wheel will stop the scrolling if we pass over a widget, but I really want mousewheeling 
+function GUI:MODIFIER_STATE_CHANGED(key, state)
+	local MouseFocus = GetMouseFocus()
+	
+	if (MouseFocus.OnMouseWheel and state == 1) then
+		MouseFocus:SetScript("OnMouseWheel", MouseFocus.OnMouseWheel)
+	elseif MouseFocus:HasScript("OnMouseWheel") then
+		MouseFocus:SetScript("OnMouseWheel", nil)
+	end
+end
+
 GUI:RegisterEvent("PLAYER_REGEN_DISABLED")
 GUI:RegisterEvent("PLAYER_REGEN_ENABLED")
-GUI:SetScript("OnEvent", function(self, event)
+GUI:SetScript("OnEvent", function(self, event, ...)
 	if self[event] then
-		self[event](self)
+		self[event](self, ...)
 	end
 end)
 
@@ -3561,10 +3697,12 @@ function GUI:Toggle()
 			return
 		end
 		
+		self:RegisterEvent("MODIFIER_STATE_CHANGED")
 		self:SetAlpha(0)
 		self:Show()
 		self.FadeIn:Play()
 	else
+		self:UnregisterEvent("MODIFIER_STATE_CHANGED")
 		self.FadeOut:Play()
 		
 		if (self.ColorPicker and self.ColorPicker:GetAlpha() > 0) then

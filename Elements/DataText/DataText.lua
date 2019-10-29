@@ -14,8 +14,8 @@ end
 
 local PlayFlash = function(anchor)
 	if anchor:ShouldFlash() and (not anchor.Fade:IsPlaying()) then
-		anchor.Fade:Play()
 		anchor:SaveValue()
+		anchor.Fade:Play()
 	end
 end
 
