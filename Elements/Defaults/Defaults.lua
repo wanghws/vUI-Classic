@@ -189,6 +189,13 @@ Defaults["chat-frame-height"] = 104
 Defaults["chat-enable-fading"] = false
 Defaults["chat-fade-time"] = 15
 
+-- Chat Bubbles
+Defaults["chat-bubbles-enable"] = true
+Defaults["chat-bubbles-opacity"] = 70
+Defaults["chat-bubbles-font"] = "PT Sans"
+Defaults["chat-bubbles-font-size"] = 14
+Defaults["chat-bubbles-font-flags"] = ""
+
 -- Experience
 Defaults["experience-enable"] = true
 Defaults["experience-display-level"] = false
@@ -260,7 +267,7 @@ Defaults["delete-filter-tradeskill"] = false
 Defaults["announcements-enable"] = true
 Defaults["announcements-channel"] = "GROUP"
 
--- Unitframes
+-- Unitframes -- Add option to color health backdrops by reaction/class color, or use health color, or set a color
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-enable-raid"] = true
 Defaults["unitframes-enable-party"] = true

@@ -30,6 +30,7 @@ Languages\ptBR.lua
 Languages\ruRU.lua
 Languages\zhCN.lua
 Languages\zhTW.lua
+Elements\Styles\Styles.lua
 Elements\Defaults\Defaults.lua
 Elements\Profiles\Profiles.lua
 Elements\Settings\Settings.lua

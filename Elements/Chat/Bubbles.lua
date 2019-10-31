@@ -1,13 +1,18 @@
-if (1 == 1) then
-	return
-end
-
 local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Bubbles = vUI:NewModule("Chat Bubbles")
 
 local select = select
 local GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
+
+function Bubbles:RefreshBubble(bubble)
+	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
+	
+	bubble.Text:SetFontInfo(Settings["chat-bubbles-font"], Settings["chat-bubbles-font-size"], Settings["chat-bubbles-font-flags"])
+	bubble:SetBackdropColor(R, G, B, Settings["chat-bubbles-opacity"] / 100)
+	
+	self.NeedsRefresh = false	
+end
 
 function Bubbles:SkinBubble(bubble)
 	for i = 1, bubble:GetNumRegions() do
@@ -20,15 +25,14 @@ function Bubbles:SkinBubble(bubble)
 		end
 	end
 	
-	bubble.Text:SetFontInfo(Settings["ui-font"], 14, Settings["ui-font-flags"])
+	bubble.Text:SetFontInfo(Settings["chat-bubbles-font"], Settings["chat-bubbles-font-size"], Settings["chat-bubbles-font-flags"])
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
+	local Scale = vUI:GetSuggestedScale()
 	
 	bubble:SetBackdrop(vUI.BackdropAndBorder)
-	bubble:SetBackdropColor(R, G, B, 0.7)
+	bubble:SetBackdropColor(R, G, B, Settings["chat-bubbles-opacity"] / 100)
 	bubble:SetBackdropBorderColor(0, 0, 0)
-	
-	local Scale = vUI:GetSuggestedScale()
 	
 	bubble:SetScale(Scale)
 	
@@ -73,7 +77,9 @@ function Bubbles:ScanForBubbles()
 	local Bubble
 	
 	for Index, Bubble in pairs(GetAllChatBubbles()) do
-		if (Bubble and not Bubble.Skinned) then
+		if self.NeedsRefresh then
+			self:RefreshBubble(Bubble)
+		elseif (not Bubble.Skinned) then
 			self:SkinBubble(Bubble)
 		end
 	end
@@ -93,3 +99,18 @@ function Bubbles:Load()
 	self.Elapsed = 0
 	self:SetScript("OnUpdate", OnUpdate)
 end
+
+local SetToRefresh = function()
+	Bubbles.NeedsRefresh = true
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:GetWindow(Language["Chat"])
+	
+	Right:CreateHeader(Language["Chat Bubbles"])
+	Right:CreateSwitch("chat-bubbles-enable", Settings["chat-bubbles-enable"], Language["Enable Chat Bubbles Module"], "Enable the vUI chat bubbles module", ReloadUI):RequiresReload(true)
+	Right:CreateSlider("chat-bubbles-opacity", Settings["chat-bubbles-opacity"], 0, 100, 10, "Background Opacity", "Set the opacity of the chat bubbles background", SetToRefresh, nil, "%")
+	Right:CreateDropdown("chat-bubbles-font", Settings["chat-bubbles-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat bubbles", SetToRefresh, "Font")
+	Right:CreateSlider("chat-bubbles-font-size", Settings["chat-bubbles-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat bubbles", SetToRefresh)
+	Right:CreateDropdown("chat-bubbles-font-flags", Settings["chat-bubbles-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat bubbles", SetToRefresh)
+end)
