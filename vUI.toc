@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Author: Hydra
-## Version: 1.00387
+## Version: 1.00388
 ## Title: |cFFFFCE54vUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIMove
@@ -38,6 +38,7 @@ Elements\Throttle\Throttle.lua
 Elements\Move\Move.lua
 Elements\General\General.lua
 Elements\Chat\Chat.lua
+Elements\Chat\Bubbles.lua
 Elements\Experience\Experience.lua
 Elements\Reputation\Reputation.lua
 Elements\ActionBars\ActionBars.lua

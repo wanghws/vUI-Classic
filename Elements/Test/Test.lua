@@ -466,7 +466,6 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 				end
 			else
 				local Required = Cost - Money
-				
 				local RequiredString = GetCoinTextureString(Required)
 				
 				if Settings["auto-repair-report"] then

@@ -198,20 +198,29 @@ GUI.Widgets.CreateLine = function(self, text)
 	return Anchor.Text
 end
 
-local GET_LENGTH = UIParent:CreateFontString(nil, "OVERLAY")
-GET_LENGTH:SetScaledPoint("CENTER", UIParent, 0, 100)
-GET_LENGTH:SetJustifyH("LEFT")
-GET_LENGTH:SetScaledWidth(GROUP_WIDTH - 6)
+local CheckStringLength = UIParent:CreateFontString(nil, "OVERLAY")
+CheckStringLength:SetScaledWidth(GROUP_WIDTH - 6)
+CheckStringLength:SetJustifyH("LEFT")
+CheckStringLength:SetWordWrap(true)
+CheckStringLength:SetIndentedWordWrap(false)
+
+--[[local CheckLineHeight = function(msg)
+	WrapCheck:SetText(msg)
+	
+	local LineHeight = ceil(WrapCheck:GetStringWidth() / 383) * 12
+	
+	return LineHeight
+end]]
 
 GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
-	if (not GET_LENGTH.FontSet) then
-		GET_LENGTH:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-		GET_LENGTH.FontSet = true
+	if (not CheckStringLength.FontSet) then
+		CheckStringLength:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+		CheckStringLength.FontSet = true
 	end
 	
-	GET_LENGTH:SetText(text)
+	CheckStringLength:SetText(text)
 	
-	local NumLines = ceil(GET_LENGTH:GetStringHeight() / Settings["ui-font-size"])
+	local NumLines = ceil(CheckStringLength:GetStringHeight() / Settings["ui-font-size"])
 	local Message = text
 	
 	--[[for i = 1, NumLines do
@@ -1052,30 +1061,6 @@ GUI.Widgets.CreateInput = function(self, id, value, label, tooltip, hook)
 	Input.ButtonText:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, SPACING)
 	Input.ButtonText:SetJustifyH("LEFT")
 	Input.ButtonText:SetText(value)
-	
-	--[[Input.Box = CreateFrame("EditBox", nil, Input)
-	Input.Box:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-	Input.Box:SetScaledPoint("TOPLEFT", Input, SPACING, -2)
-	Input.Box:SetScaledPoint("BOTTOMRIGHT", Input, -SPACING, 2)
-	Input.Box:SetJustifyH("LEFT")
-	Input.Box:SetAutoFocus(false)
-	Input.Box:EnableKeyboard(true)
-	Input.Box:EnableMouse(true)
-	Input.Box:SetText(value)
-	Input.Box:SetCursorPosition(0)
-	Input.Box.ID = id
-	Input.Box.Hook = hook
-	Input.Box.Parent = Input
-	Input.Box.RequiresReload = InputRequiresReload
-	Input.Box.Save = InputSave
-	]]
-	--Input.Box:SetScript("OnMouseDown", InputOnMouseDown)
-	--Input.Box:SetScript("OnEscapePressed", InputOnEscapePressed)
-	--Input.Box:SetScript("OnEnterPressed", InputOnEnterPressed)
-	--Input.Box:SetScript("OnEditFocusLost", InputOnEditFocusLost)
-	--Input.Box:SetScript("OnChar", InputOnChar)
-	--Input.Box:SetScript("OnEnter", InputOnEnter)
-	--Input.Box:SetScript("OnLeave", InputOnLeave)
 	
 	Input.Text = Input:CreateFontString(nil, "OVERLAY")
 	Input.Text:SetScaledPoint("LEFT", Anchor, LABEL_SPACING, 0)
