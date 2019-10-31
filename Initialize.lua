@@ -6,8 +6,11 @@ local sub = string.sub
 local len = string.len
 local format = string.format
 local floor = math.floor
+local match = string.match
+local reverse = string.reverse
 local min = math.min
 local max = math.max
+local gsub = gsub
 local type = type
 local UnitLevel = UnitLevel
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
@@ -217,6 +220,17 @@ function vUI:ShortValue(num)
 	else
 		return num
 	end
+end
+
+function vUI:Comma(number)
+	if (not number) then
+		return
+	end
+	
+	local Number = format("%.0f", floor(number + 0.5))
+   	local Left, Number, Right = match(Number, "^([^%d]*%d)(%d+)(.-)$")
+	
+	return Left and Left .. reverse(gsub(reverse(Number), "(%d%d%d)", "%1,")) or number
 end
 
 function vUI:UnitDifficultyColor(unit)

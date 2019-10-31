@@ -125,12 +125,20 @@ local GetClient = function()
 	end
 end
 
+local GetQuests = function()
+	local NumQuests = select(2, GetNumQuestLogEntries())
+	local MaxQuests = C_QuestLog.GetMaxNumQuestsCanAccept()
+	
+	return format("%s / %s", NumQuests, MaxQuests)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Debug"])
 	
 	Left:CreateHeader(Language["UI Information"])
 	Left:CreateDoubleLine(Language["UI Version"], vUI.UIVersion)
 	Left:CreateDoubleLine(Language["Game Version"], vUI.GameVersion)
+	Left:CreateDoubleLine(Language["Client"], GetClient())
 	Left:CreateDoubleLine(Language["UI Scale"], Settings["ui-scale"])
 	Left:CreateDoubleLine(Language["Suggested Scale"], vUI:GetSuggestedScale())
 	Left:CreateDoubleLine(Language["Resolution"], vUI.ScreenResolution)
@@ -138,7 +146,6 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())
 	Left:CreateDoubleLine(Language["UI Style"], Settings["ui-style"])
 	Left:CreateDoubleLine(Language["Locale"], vUI.UserLocale)
-	Left:CreateDoubleLine(Language["Client"], GetClient())
 	--Left:CreateDoubleLine(Language["Language"], Settings["ui-language"])
 	Left:CreateDoubleLine(Language["Display Errors"], GetCVar("scriptErrors"))
 	
@@ -150,11 +157,11 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine(Language["Realm"], vUI.UserRealm)
 	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
 	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
+	Right:CreateDoubleLine(Language["Quests"], GetQuests())
 	
 	Right:CreateHeader(Language["AddOns Information"])
 	Right:CreateDoubleLine(Language["Total AddOns"], GetNumAddOns())
 	Right:CreateDoubleLine(Language["Loaded AddOns"], GetNumLoadedAddOns())
-	Right:CreateDoubleLine(Language["Taint Log Level"], GetCVar("taintLog"))
 end)
 
 local UpdateDebugInfo = CreateFrame("Frame")
@@ -162,9 +169,12 @@ UpdateDebugInfo:RegisterEvent("ZONE_CHANGED")
 UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_INDOORS")
 UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 UpdateDebugInfo:RegisterEvent("PLAYER_ENTERING_WORLD")
+UpdateDebugInfo:RegisterEvent("QUEST_LOG_UPDATE")
 UpdateDebugInfo:SetScript("OnEvent", function(self, event)
 	if (event == "ADDON_LOADED") then
 		GUI:GetWidgetByWindow(Language["Debug"], "loaded").Right:SetText(GetLoadedAddOns())
+	elseif (event == "QUEST_LOG_UPDATE") then
+		GUI:GetWidgetByWindow(Language["Debug"], "quests").Right:SetText(GetQuests())
 	else
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())

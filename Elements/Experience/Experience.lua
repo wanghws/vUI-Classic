@@ -2,12 +2,7 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local Experience = vUI:NewModule("Experience")
 
-local type = type
-local tonumber = tonumber
-local match = string.match
-local reverse = string.reverse
 local format = format
-local gsub = gsub
 local floor = floor
 local XP, MaxXP, Rested
 local IsResting = IsResting
@@ -19,17 +14,6 @@ local GetXPExhaustion = GetXPExhaustion
 local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", UIParent)
-
-local Comma = function(number)
-	if (not number) then
-		return
-	end
-	
-	local Number = format("%.0f", floor(number + 0.5))
-   	local Left, Number, Right = match(Number, "^([^%d]*%d)(%d+)(.-)$")
-	
-	return Left and Left .. reverse(gsub(reverse(Number), "(%d%d%d)", "%1,")) or number
-end
 
 local UpdateXP = function(self, first)
 	if (UnitLevel("player") == MAX_PLAYER_LEVEL) then

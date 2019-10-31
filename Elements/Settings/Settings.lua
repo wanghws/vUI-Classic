@@ -3508,6 +3508,19 @@ function GUI:Create()
 	self:SetClampedToScreen(true)
 	self:Hide()
 	
+	self.Fade = CreateAnimationGroup(self)
+	
+	self.FadeIn = self.Fade:CreateAnimation("Fade")
+	self.FadeIn:SetEasing("in")
+	self.FadeIn:SetDuration(0.15)
+	self.FadeIn:SetChange(1)
+	
+	self.FadeOut = self.Fade:CreateAnimation("Fade")
+	self.FadeOut:SetEasing("out")
+	self.FadeOut:SetDuration(0.15)
+	self.FadeOut:SetChange(0)
+	self.FadeOut:SetScript("OnFinished", FadeOnFinished)
+	
 	-- Header
 	self.Header = CreateFrame("Frame", nil, self)
 	self.Header:SetScaledSize(HEADER_WIDTH - (HEADER_HEIGHT - 2) - SPACING - 1, HEADER_HEIGHT)
@@ -3581,19 +3594,6 @@ end
 -- Groups
 GUI.Buttons = {}
 GUI.Windows = {}
-
-GUI.Fade = CreateAnimationGroup(GUI)
-
-GUI.FadeIn = GUI.Fade:CreateAnimation("Fade")
-GUI.FadeIn:SetEasing("in")
-GUI.FadeIn:SetDuration(0.15)
-GUI.FadeIn:SetChange(1)
-
-GUI.FadeOut = GUI.Fade:CreateAnimation("Fade")
-GUI.FadeOut:SetEasing("out")
-GUI.FadeOut:SetDuration(0.15)
-GUI.FadeOut:SetChange(0)
-GUI.FadeOut:SetScript("OnFinished", FadeOnFinished)
 
 function GUI:AddFooters()
 	local Window
