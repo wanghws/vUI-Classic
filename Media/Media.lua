@@ -242,6 +242,7 @@ Media:SetTexture("Warning", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIWarning
 Media:SetTexture("Leader", "Interface\\AddOns\\vUI\\Media\\Textures\\vUILeader.tga", true)
 Media:SetTexture("Heart", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIHeart.tga", true)
 Media:SetTexture("Arrow Down", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowDown.tga", true)
+Media:SetTexture("Skull", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISkull.tga", true)
 
 -- Highlights
 Media:SetHighlight("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")

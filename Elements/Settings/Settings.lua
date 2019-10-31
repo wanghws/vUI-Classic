@@ -1797,7 +1797,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	
 	Dropdown.Current = Dropdown:CreateFontString(nil, "ARTWORK")
 	Dropdown.Current:SetScaledPoint("LEFT", Dropdown, HEADER_SPACING, 0)
-	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 20, WIDGET_HEIGHT)
+	Dropdown.Current:SetScaledSize(DROPDOWN_WIDTH - 20, Settings["ui-font-size"])
 	Dropdown.Current:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Dropdown.Current:SetJustifyH("LEFT")
 	

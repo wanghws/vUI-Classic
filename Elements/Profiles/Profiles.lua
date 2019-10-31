@@ -476,9 +476,9 @@ function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata(
 	end
 end
 
-local UpdateActiveProfile = function()
-	if (Settings["ui-profile"] ~= Profiles:GetActiveProfileName()) then
-		Profiles:SetActiveProfile(Settings["ui-profile"])
+local UpdateActiveProfile = function(value)
+	if (value ~= Profiles:GetActiveProfileName()) then
+		Profiles:SetActiveProfile(value)
 		
 		ReloadUI()
 		--Profiles:UpdateProfileInfo()

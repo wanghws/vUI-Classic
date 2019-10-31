@@ -19,13 +19,13 @@ function Bubbles:SkinBubble(bubble)
 		local Region = select(i, bubble:GetRegions())
 		
 		if Region:IsObjectType("Texture") then
-			Region:SetTexture()
+			Region:SetTexture(nil)
 		elseif Region:IsObjectType("FontString") then
+			Region:SetFontInfo(Settings["chat-bubbles-font"], Settings["chat-bubbles-font-size"], Settings["chat-bubbles-font-flags"])
+			
 			bubble.Text = Region
 		end
 	end
-	
-	bubble.Text:SetFontInfo(Settings["chat-bubbles-font"], Settings["chat-bubbles-font-size"], Settings["chat-bubbles-font-flags"])
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-window-main-color"])
 	local Scale = vUI:GetSuggestedScale()
@@ -88,7 +88,7 @@ end
 local OnUpdate = function(self, elapsed)
 	self.Elapsed = self.Elapsed + elapsed
 	
-	if (self.Elapsed > 0.1) then
+	if (self.Elapsed > 0.15) then
 		self:ScanForBubbles()
 		
 		self.Elapsed = 0

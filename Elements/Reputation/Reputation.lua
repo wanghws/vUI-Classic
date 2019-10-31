@@ -269,8 +269,4 @@ GUI:AddOptions(function(self)
 	--Right:CreateHeader(Language["Visibility"])
 	--Right:CreateDropdown("reputation-progress-visibility", Settings["reputation-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "Set when to display the progress information", UpdateProgressVisibility)
 	--Right:CreateDropdown("reputation-percent-visibility", Settings["reputation-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "Set when to display the percent information", UpdatePercentVisibility)
-	
-	--Left:CreateHeader(Language["Colors"])
-	--Left:CreateColorSelection("reputation-bar-color", Settings["reputation-bar-color"], "Reputation Color", "Set the color of the reputation bar", UpdateBarColor)
-	--Left:CreateColorSelection("reputation-rested-color", Settings["reputation-rested-color"], "Rested Color", "Set the color of the rested bar", UpdateRestedColor)
 end)
