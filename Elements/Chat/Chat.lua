@@ -384,7 +384,14 @@ local OnEditFocusLost = function(self)
 	if (Settings["experience-position"] == "CHATFRAME") then
 		vUIExperienceBar:Show()
 		vUIChatFrameBottom:Hide()
-	else
+	end
+	
+	if (Settings["reputation-position"] == "CHATFRAME") then
+		vUI:GetModule("Reputation"):Show()
+		vUIChatFrameBottom:Hide()
+	end
+	
+	if (Settings["experience-position"] ~= "CHATFRAME" or Settings["reputation-position"] ~= "CHATFRAME") then
 		vUIChatFrameBottom:Show()
 	end
 	
@@ -394,6 +401,10 @@ end
 local OnEditFocusGained = function(self)
 	if (Settings["experience-position"] == "CHATFRAME") then
 		vUIExperienceBar:Hide()
+	end
+	
+	if (Settings["reputation-position"] == "CHATFRAME") then
+		vUI:GetModule("Reputation"):Hide()
 	end
 	
 	vUIChatFrameBottom:Hide()

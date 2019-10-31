@@ -205,7 +205,7 @@ Defaults["experience-display-rested-value"] = true
 Defaults["experience-show-tooltip"] = true
 Defaults["experience-animate"] = true
 Defaults["experience-width"] = 310
-Defaults["experience-height"] = 16
+Defaults["experience-height"] = 18
 Defaults["experience-position"] = "TOP"
 Defaults["experience-progress-visibility"] = "ALWAYS"
 Defaults["experience-percent-visibility"] = "ALWAYS"
@@ -215,7 +215,10 @@ Defaults["experience-rested-color"] = "00B4FF"
 -- Reputation
 Defaults["reputation-enable"] = true
 Defaults["reputation-width"] = 310
-Defaults["reputation-height"] = 16
+Defaults["reputation-height"] = 18
+Defaults["reputation-display-progress"] = true
+Defaults["reputation-display-percent"] = true
+Defaults["reputation-position"] = "TOP"
 
 -- Auras
 Defaults["auras-enable"] = true

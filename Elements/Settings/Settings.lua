@@ -3608,7 +3608,7 @@ function GUI:AddFooters()
 end
 
 function GUI:UpdateHeight()
-	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 1
+	local Height = HEADER_HEIGHT + (self.WindowCount * (WIDGET_HEIGHT + SPACING)) - 2
 	
 	self:SetScaledHeight(Height)
 end

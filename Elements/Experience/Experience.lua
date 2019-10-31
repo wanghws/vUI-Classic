@@ -38,13 +38,13 @@ local UpdateXP = function(self, first)
 		self.Bar.Rested:SetValue(XP + Rested)
 		
 		if Settings["experience-display-rested-value"] then
-			self.Progress:SetText(format("%s / %s (+%s) %s", Comma(XP), Comma(MaxXP), Comma(Rested), RestingText))
+			self.Progress:SetText(format("%s / %s (+%s) %s", vUI:Comma(XP), vUI:Comma(MaxXP), vUI:Comma(Rested), RestingText))
 		else
-			self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(MaxXP), RestingText))
+			self.Progress:SetText(format("%s / %s %s", vUI:Comma(XP), vUI:Comma(MaxXP), RestingText))
 		end
 	else
 		self.Bar.Rested:SetValue(0)
-		self.Progress:SetText(format("%s / %s %s", Comma(XP), Comma(MaxXP), RestingText))
+		self.Progress:SetText(format("%s / %s %s", vUI:Comma(XP), vUI:Comma(MaxXP), RestingText))
 	end
 	
 	self.Percentage:SetText(floor((XP / MaxXP * 100 + 0.05) * 10) / 10 .. "%")
@@ -149,7 +149,12 @@ local UpdateBarPosition = function(value)
 		
 		if vUIBottomActionBarsPanel then
 			vUIBottomActionBarsPanel:ClearAllPoints()
-			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			
+			if (Settings["reputation-enable"] and GetWatchedFactionInfo() and Settings["reputation-position"] ~= "CLASSIC") then
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			else
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", vUI:GetModule("Reputation"), "TOP", 0, 5)
+			end
 		end
 		
 		WidthWidget:Enable()
@@ -168,7 +173,12 @@ local UpdateBarPosition = function(value)
 		
 		if vUIBottomActionBarsPanel then
 			vUIBottomActionBarsPanel:ClearAllPoints()
-			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			
+			if (Settings["reputation-enable"] and GetWatchedFactionInfo() and Settings["reputation-position"] ~= "CLASSIC") then
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			else
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", vUI:GetModule("Reputation"), "TOP", 0, 5)
+			end
 		end
 		
 		WidthWidget:Disable()
@@ -219,9 +229,9 @@ local OnEnter = function(self)
 		local Perc = floor(XP / Max * 100 + 0.5)
 		
 		if Rested then
-			GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r - |cFF%s%s%%|r", XPColor, Comma(XP), Comma(Max), RestedColor, Comma(Rested), XPColor, Perc))
+			GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r - |cFF%s%s%%|r", XPColor, vUI:Comma(XP), vUI:Comma(Max), RestedColor, vUI:Comma(Rested), XPColor, Perc))
 		else
-			GameTooltip:AddLine(format("|cFF%s%s / %s|r - |cFF%s%s%%|r", XPColor, Comma(XP), Comma(Max), XPColor, Perc))
+			GameTooltip:AddLine(format("|cFF%s%s / %s|r - |cFF%s%s%%|r", XPColor, vUI:Comma(XP), vUI:Comma(Max), XPColor, Perc))
 		end
 		
 		GameTooltip:Show()

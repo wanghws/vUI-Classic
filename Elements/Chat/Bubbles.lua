@@ -104,6 +104,19 @@ local SetToRefresh = function()
 	Bubbles.NeedsRefresh = true
 end
 
+local UpdateShowBubbles = function(value)
+	if (value == "ALL") then
+		SetCVar("chatBubbles", 1)
+		SetCVar("chatBubblesParty", 1)
+	elseif (value == "EXCLUDE_PARTY") then
+		SetCVar("chatBubbles", 1)
+		SetCVar("chatBubblesParty", 0)
+	else -- "NONE"
+		SetCVar("chatBubbles", 0)
+		SetCVar("chatBubblesParty", 0)
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:GetWindow(Language["Chat"])
 	
@@ -113,4 +126,5 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("chat-bubbles-font", Settings["chat-bubbles-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat bubbles", SetToRefresh, "Font")
 	Right:CreateSlider("chat-bubbles-font-size", Settings["chat-bubbles-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat bubbles", SetToRefresh)
 	Right:CreateDropdown("chat-bubbles-font-flags", Settings["chat-bubbles-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat bubbles", SetToRefresh)
+	--Right:CreateDropdown("chat-bubbles-show", Settings["chat-bubbles-show"], {[Language["All"]] = "ALL", [Language["None"]] = "NONE", [Language["Exclude Party"]] = "EXCLUDE_PARTY"}, Language["Show Chat Bubbles"], "Set who to display chat bubbles from", UpdateShowBubbles)
 end)

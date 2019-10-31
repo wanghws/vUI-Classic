@@ -10,6 +10,80 @@ local FadeOnFinished = function(self)
 	self.Parent:Hide()
 end
 
+function Reputation:UpdateBarPosition(value)
+	local WidthWidget = GUI:GetWidgetByWindow(Language["Reputation"], "reputation-width")
+	local HeightWidget = GUI:GetWidgetByWindow(Language["Reputation"], "reputation-height")
+	
+	self:ClearAllPoints()
+	
+	if (value == "TOP") then
+		self.BGAll:Show()
+		self:SetScaledSize(Settings["reputation-width"], Settings["reputation-height"])
+		self.Bar.Spark:SetScaledHeight(Settings["reputation-height"])
+		
+		if (Settings["experience-enable"] and Settings["experience-position"] == "TOP") then
+			self:SetScaledPoint("TOP", vUIExperienceBar, "BOTTOM", 0, -8)
+		else
+			self:SetScaledPoint("TOP", UIParent, 0, -13)
+		end
+		
+		vUIChatFrameBottom:Show()
+		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			
+			if (Settings["experience-enable"] and Settings["experience-position"] ~= "CLASSIC") then
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			else
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
+			end
+		end
+		
+		WidthWidget:Enable()
+		HeightWidget:Enable()
+	elseif (value == "CHATFRAME") then
+		vUIChatFrameBottom:Hide()
+		
+		local Height = vUIChatFrameBottom:GetHeight()
+		
+		self.BGAll:Hide()
+		self:SetScaledSize(vUIChatFrameBottom:GetWidth(), Height)
+		self:SetScaledPoint("CENTER", vUIChatFrameBottom, 0, 0)
+		
+		self.Bar.Spark:SetScaledHeight(Height)
+		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			
+			if (Settings["experience-enable"] and Settings["experience-position"] ~= "CLASSIC") then
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
+			else
+				vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
+			end
+		end
+		
+		WidthWidget:Disable()
+		HeightWidget:Disable()
+	elseif (value == "CLASSIC") then
+		vUIChatFrameBottom:Show()
+		
+		self.BGAll:Show()
+		self:SetScaledHeight(Settings["reputation-height"])
+		self:SetScaledPoint("BOTTOM", UIParent, 0, 13)
+		self.Bar.Spark:SetScaledHeight(Settings["reputation-height"])
+		
+		if vUIBottomActionBarsPanel then
+			vUIBottomActionBarsPanel:ClearAllPoints()
+			vUIBottomActionBarsPanel:SetScaledPoint("BOTTOM", self, "TOP", 0, 5)
+			
+			self:SetScaledWidth(vUIBottomActionBarsPanel:GetWidth() - 6)
+		end
+		
+		WidthWidget:Disable()
+		HeightWidget:Enable()
+	end
+end
+
 function Reputation:CreateBar()
 	if (not Settings["reputation-enable"]) then
 		self:UnregisterAllEvents()
@@ -18,7 +92,6 @@ function Reputation:CreateBar()
 	end
 	
 	self:SetScaledSize(Settings["reputation-width"], Settings["reputation-height"])
-	self:SetScaledPoint("TOP", UIParent, 0, -13)
 	self:SetFrameStrata("HIGH")
 	
 	self.Fade = CreateAnimationGroup(self)
@@ -90,10 +163,20 @@ function Reputation:CreateBar()
 	self.Progress:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.Progress:SetJustifyH("LEFT")
 	
+	if (not Settings["reputation-display-progress"]) then
+		self.Progress:Hide()
+	end
+	
 	self.Percentage = self.Bar:CreateFontString(nil, "OVERLAY")
 	self.Percentage:SetScaledPoint("RIGHT", self.Bar, -5, 0)
 	self.Percentage:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	self.Percentage:SetJustifyH("RIGHT")
+	
+	if (not Settings["reputation-display-percent"]) then
+		self.Percentage:Hide()
+	end
+	
+	self:UpdateBarPosition(Settings["reputation-position"])
 end
 
 function Reputation:OnEvent()
@@ -122,9 +205,72 @@ function Reputation:OnEvent()
 end
 
 function Reputation:Load()
+	if (not Settings["reputation-enable"]) then
+		return
+	end
+	
 	self:CreateBar()
 	self:OnEvent()
 	
 	self:RegisterEvent("UPDATE_FACTION")
 	self:SetScript("OnEvent", self.OnEvent)
 end
+
+local UpdateDisplayProgress = function(value)
+	if value then
+		Reputation.Progress:Show()
+	else
+		Reputation.Progress:Hide()
+	end
+end
+
+local UpdateDisplayPercent = function(value)
+	if value then
+		Reputation.Percentage:Show()
+	else
+		Reputation.Percentage:Hide()
+	end
+end
+
+local UpdateBarWidth = function(value)
+	if (Settings["reputation-position"] ~= "CHATFRAME") then
+		Reputation:SetScaledWidth(value)
+	end
+end
+
+local UpdateBarHeight = function(value)
+	if (Settings["reputation-position"] ~= "CHATFRAME") then
+		Reputation:SetScaledHeight(value)
+		Reputation.Bar.Spark:SetScaledHeight(value)
+	end
+end
+
+local UpdateBarPosition = function(value)
+	Reputation:UpdateBarPosition(value)
+end
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:CreateWindow(Language["Reputation"])
+	
+	Left:CreateHeader(Language["Enable"])
+	Left:CreateSwitch("reputation-enable", true, Language["Enable Reputation Module"], "Enable the vUI reputation module", ReloadUI):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Styling"])
+	Left:CreateSwitch("reputation-display-progress", Settings["reputation-display-progress"], Language["Display Progress Value"], "Display your current progress|ninformation in the reputation bar", UpdateDisplayProgress)
+	Left:CreateSwitch("reputation-display-percent", Settings["reputation-display-percent"], Language["Display Percent Value"], "Display your current percent|ninformation in the reputation bar", UpdateDisplayPercent)
+	
+	Right:CreateHeader(Language["Size"])
+	Right:CreateSlider("reputation-width", Settings["reputation-width"], 240, 400, 10, Language["Bar Width"], "Set the width of the reputation bar", UpdateBarWidth)
+	Right:CreateSlider("reputation-height", Settings["reputation-height"], 6, 30, 1, Language["Bar Height"], "Set the height of the reputation bar", UpdateBarHeight)
+	
+	Right:CreateHeader(Language["Positioning"])
+	Right:CreateDropdown("reputation-position", Settings["reputation-position"], {[Language["Top"]] = "TOP", [Language["Chat Frame"]] = "CHATFRAME", [Language["Classic"]] = "CLASSIC"}, Language["Set Position"], "Set the position of the reputation bar", UpdateBarPosition)
+	
+	--Right:CreateHeader(Language["Visibility"])
+	--Right:CreateDropdown("reputation-progress-visibility", Settings["reputation-progress-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Progress Text"], "Set when to display the progress information", UpdateProgressVisibility)
+	--Right:CreateDropdown("reputation-percent-visibility", Settings["reputation-percent-visibility"], {[Language["Always Show"]] = "ALWAYS", [Language["Mouseover"]] = "MOUSEOVER"}, Language["Percent Text"], "Set when to display the percent information", UpdatePercentVisibility)
+	
+	--Left:CreateHeader(Language["Colors"])
+	--Left:CreateColorSelection("reputation-bar-color", Settings["reputation-bar-color"], "Reputation Color", "Set the color of the reputation bar", UpdateBarColor)
+	--Left:CreateColorSelection("reputation-rested-color", Settings["reputation-rested-color"], "Rested Color", "Set the color of the rested bar", UpdateRestedColor)
+end)
