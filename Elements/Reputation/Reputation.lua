@@ -11,13 +11,13 @@ local FadeOnFinished = function(self)
 end
 
 function Reputation:CreateBar()
-	--[[if (not Settings["experience-enable"]) then
+	if (not Settings["reputation-enable"]) then
 		self:UnregisterAllEvents()
 		
 		return
-	end]]
+	end
 	
-	self:SetScaledSize(Settings["experience-width"], Settings["experience-height"])
+	self:SetScaledSize(Settings["reputation-width"], Settings["reputation-height"])
 	self:SetScaledPoint("TOP", UIParent, 0, -13)
 	self:SetFrameStrata("HIGH")
 	
@@ -56,7 +56,6 @@ function Reputation:CreateBar()
 	
 	self.Bar = CreateFrame("StatusBar", nil, self.BarBG)
 	self.Bar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-	self.Bar:SetStatusBarColorHex(Settings["experience-bar-color"])
 	self.Bar:SetScaledPoint("TOPLEFT", self.BarBG, 1, -1)
 	self.Bar:SetScaledPoint("BOTTOMRIGHT", self.BarBG, -1, 1)
 	self.Bar:SetFrameLevel(6)
@@ -69,7 +68,7 @@ function Reputation:CreateBar()
 	
 	self.Bar.Spark = self.Bar:CreateTexture(nil, "OVERLAY")
 	self.Bar.Spark:SetDrawLayer("OVERLAY", 7)
-	self.Bar.Spark:SetScaledSize(1, Settings["experience-height"])
+	self.Bar.Spark:SetScaledSize(1, Settings["reputation-height"])
 	self.Bar.Spark:SetScaledPoint("LEFT", self.Bar:GetStatusBarTexture(), "RIGHT", 0, 0)
 	self.Bar.Spark:SetTexture(Media:GetTexture("Blank"))
 	self.Bar.Spark:SetVertexColor(0, 0, 0)
@@ -83,7 +82,7 @@ function Reputation:CreateBar()
 	
 	self.Change = CreateAnimationGroup(self.Bar):CreateAnimation("Progress")
 	self.Change:SetOrder(1)
-	self.Change:SetEasing("in")
+	self.Change:SetEasing("inout")
 	self.Change:SetDuration(0.3)
 	
 	self.Progress = self.Bar:CreateFontString(nil, "OVERLAY")

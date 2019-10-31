@@ -1665,10 +1665,6 @@ local SetDropdownOffsetByDelta = function(self, delta)
 end
 
 local DropdownOnMouseWheel = function(self, delta)
-	if (not IsModifierKeyDown()) then
-		return
-	end
-	
 	self:SetDropdownOffsetByDelta(delta)
 	self:ScrollMenu()
 	self.ScrollBar:SetValue(self.Offset)

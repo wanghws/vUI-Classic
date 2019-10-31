@@ -205,6 +205,11 @@ Defaults["experience-percent-visibility"] = "ALWAYS"
 Defaults["experience-bar-color"] = "4C9900" -- 1AE045
 Defaults["experience-rested-color"] = "00B4FF"
 
+-- Reputation
+Defaults["reputation-enable"] = true
+Defaults["reputation-width"] = 310
+Defaults["reputation-height"] = 16
+
 -- Auras
 Defaults["auras-enable"] = true
 Defaults["auras-size"] = 30
