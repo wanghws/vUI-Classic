@@ -3655,6 +3655,10 @@ end
 function GUI:MODIFIER_STATE_CHANGED(key, state)
 	local MouseFocus = GetMouseFocus()
 	
+	if (not MouseFocus) then
+		return
+	end
+	
 	if (MouseFocus.OnMouseWheel and state == 1) then
 		MouseFocus:SetScript("OnMouseWheel", MouseFocus.OnMouseWheel)
 	elseif MouseFocus:HasScript("OnMouseWheel") then

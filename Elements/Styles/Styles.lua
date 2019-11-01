@@ -28,7 +28,7 @@ Media:SetStyle("vUI", {
 	["ui-header-font-size"] = 14,
 	["ui-title-font-size"] = 16,
 	
-	["chat-font"] = "Roboto",
+	["chat-font"] = "PT Sans",
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
 	
@@ -37,7 +37,7 @@ Media:SetStyle("vUI", {
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FFC44D",
 	
-	["chat-bubbles-font"] = "Roboto",
+	["chat-bubbles-font"] = "PT Sans",
 	["chat-bubbles-font-size"] = 14,
 	["chat-bubbles-font-flags"] = "",
 	
