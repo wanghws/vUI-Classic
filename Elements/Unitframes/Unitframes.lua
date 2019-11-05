@@ -830,7 +830,7 @@ local StylePlayer = function(self, unit)
 	end
 	
 	-- Energy ticks
-		if Settings["unitframes-show-energy-timer"] then
+	if Settings["unitframes-show-energy-timer"] then
 		local EnergyTick = CreateFrame("StatusBar", nil, Power)
 		EnergyTick:SetAllPoints(Power)
 		EnergyTick:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))

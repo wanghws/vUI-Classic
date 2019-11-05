@@ -15,12 +15,13 @@ local type = type
 local UnitLevel = UnitLevel
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local vUI = CreateFrame("Frame", nil, UIParent)
+local GUI = CreateFrame("Frame", nil, UIParent)
 
 vUI.Modules = {}
 
 local Core = {
 	[1] = vUI, -- Functions/Constants
-	[2] = CreateFrame("Frame", nil, UIParent), -- GUI
+	[2] = GUI, -- Settings GUI
 	[3] = {}, -- Language
 	[4] = {}, -- Media
 	[5] = {}, -- Settings
@@ -45,7 +46,7 @@ local Hook = function(self, global, hook)
 end
 
 local ModuleAddOptions = function(self, func)
-	local Left, Right = Core[2]:CreateWindow(self.Name)
+	local Left, Right = GUI:CreateWindow(self.Name)
 	
 	if func then
 		func(self, Left, Right)
@@ -130,12 +131,12 @@ function vUI:VARIABLES_LOADED(event)
 	self:UpdateoUFColors()
 	
 	-- Load the GUI
-	Core[2]:Create()
-	Core[2]:RunQueue()
+	GUI:Create()
+	GUI:RunQueue()
 	
 	-- Show the default window, if one was found
-	if Core[2].DefaultWindow then
-		Core[2]:ShowWindow(Core[2].DefaultWindow)
+	if GUI.DefaultWindow then
+		GUI:ShowWindow(GUI.DefaultWindow)
 	end
 	
 	self:UnregisterEvent(event)
@@ -146,17 +147,17 @@ function vUI:PLAYER_ENTERING_WORLD(event)
 	self:UnregisterEvent(event)
 end
 
-Core[2].Queue = {}
+GUI.Queue = {}
 
-Core[2].CreateWindow = function(self, name, func)
+function GUI:CreateWindow(name, func)
 	-- add to a table by name where the function is run when the window is selected. After this and AddToWindow are run, flag for a sort
 end
 
-Core[2].AddToWindow = function(self, name, func)
+function GUI:AddToWindow(name, func)
 	
 end
 
-Core[2].AddOptions = function(self, func)
+function GUI:AddOptions(func)
 	if (type(func) == "function") then
 		tinsert(self.Queue, func)
 	end
@@ -393,10 +394,21 @@ local SetScaledSize = function(self, width, height)
 end
 
 local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
-	if (type(parent) == "number") then parent = GetScale(parent) end
-	if (type(anchor2) == "number") then anchor2 = GetScale(anchor2) end
-	if (type(x) == "number") then x = GetScale(x) end
-	if (type(y) == "number") then y = GetScale(y) end
+	if (type(parent) == "number") then
+		parent = GetScale(parent)
+	end
+	
+	if (type(anchor2) == "number") then
+		anchor2 = GetScale(anchor2)
+	end
+	
+	if (type(x) == "number") then
+		x = GetScale(x)
+	end
+	
+	if (type(y) == "number") then
+		y = GetScale(y)
+	end
 	
 	self:SetPoint(anchor1, parent, anchor2, x, y)
 end

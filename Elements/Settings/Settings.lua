@@ -922,7 +922,7 @@ function GUI:CreateInputWindow()
 	Window.CloseButton.Cross = Window.CloseButton:CreateTexture(nil, "OVERLAY")
 	Window.CloseButton.Cross:SetPoint("CENTER", Window.CloseButton, 0, 0)
 	Window.CloseButton.Cross:SetScaledSize(16, 16)
-	Window.CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
+	Window.CloseButton.Cross:SetTexture(Media:GetTexture("Close"))
 	Window.CloseButton.Cross:SetVertexColorHex("EEEEEE")
 	
 	Window.Inner = CreateFrame("Frame", nil, Window)
@@ -2580,7 +2580,7 @@ local CreateColorPicker = function()
 	ColorPicker.CloseButton.Cross = ColorPicker.CloseButton:CreateTexture(nil, "OVERLAY")
 	ColorPicker.CloseButton.Cross:SetPoint("CENTER", ColorPicker.CloseButton, 0, 0)
 	ColorPicker.CloseButton.Cross:SetScaledSize(16, 16)
-	ColorPicker.CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
+	ColorPicker.CloseButton.Cross:SetTexture(Media:GetTexture("Close"))
 	ColorPicker.CloseButton.Cross:SetVertexColorHex("EEEEEE")
 	
 	-- Selection parent
@@ -3588,7 +3588,7 @@ function GUI:Create()
 	self.CloseButton.Cross = self.CloseButton:CreateTexture(nil, "OVERLAY")
 	self.CloseButton.Cross:SetPoint("CENTER", self.CloseButton, 0, 0)
 	self.CloseButton.Cross:SetScaledSize(16, 16)
-	self.CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
+	self.CloseButton.Cross:SetTexture(Media:GetTexture("Close"))
 	self.CloseButton.Cross:SetVertexColorHex("EEEEEE")
 end
 

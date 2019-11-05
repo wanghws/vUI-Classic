@@ -211,7 +211,7 @@ Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.tt
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
 Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", nil, true)
-Media:SetFont("Pixel Arial", "Interface\\Addons\\vUI\\Media\\Fonts\\PixelArial.ttf", nil, true)
+--Media:SetFont("Pixel Arial", "Interface\\Addons\\vUI\\Media\\Fonts\\PixelArial.ttf", nil, true)
 Media:SetFont("FiraCode", "Interface\\Addons\\vUI\\Media\\Fonts\\FiraCode.ttf")
 
 -- Textures
@@ -234,14 +234,15 @@ Media:SetTexture("pHishTex12", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTe
 Media:SetTexture("noInterrupt", "Interface\\AddOns\\vUI\\Media\\Textures\\noInterrupt.tga", true)
 Media:SetTexture("RenHorizonUp", "Interface\\AddOns\\vUI\\Media\\Textures\\RenHorizonUp.tga", true)
 Media:SetTexture("RenaitreTunnel", "Interface\\AddOns\\vUI\\Media\\Textures\\RenaitreTunnel.tga", true)
-Media:SetTexture("vUI Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)
-Media:SetTexture("vUI Mail 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMailTextured.tga", true)
-Media:SetTexture("vUI Close", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIClose.tga", true)
+Media:SetTexture("Mail", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMail.tga", true)
+Media:SetTexture("Mail 2", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIMailTextured.tga", true)
+Media:SetTexture("Close", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIClose.tga", true)
 Media:SetTexture("pHishTex28", "Interface\\AddOns\\vUI\\Media\\Textures\\pHishTex28.tga", true)
 Media:SetTexture("Warning", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIWarning.tga", true)
 Media:SetTexture("Leader", "Interface\\AddOns\\vUI\\Media\\Textures\\vUILeader.tga", true)
 Media:SetTexture("Heart", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIHeart.tga", true)
 Media:SetTexture("Arrow Down", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowDown.tga", true)
+Media:SetTexture("Arrow Up", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowUp.tga", true)
 Media:SetTexture("Skull", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISkull.tga", true)
 Media:SetTexture("Small Star", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISmallStar.tga", true)
 
