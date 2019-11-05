@@ -519,6 +519,38 @@ local PostCreateIcon = function(unit, button)
 	button.ela = 0
 end
 
+local BuffsSetPosition = function(element, from, to)
+	local SizeX = (element.size or 16) + (element['spacing-x'] or element.spacing or 0)
+	local SizeY = (element.size or 16) + (element['spacing-y'] or element.spacing or 0)
+	local Anchor = element.initialAnchor or 'BOTTOMLEFT'
+	local GrowthX = (element['growth-x'] == 'LEFT' and -1) or 1
+	local GrowthY = (element['growth-y'] == 'DOWN' and -1) or 1
+	local Columns = floor(element:GetWidth() / SizeX + 0.5)
+	local Rows = floor(to / Columns)
+	local Button
+	
+	for i = from, to do
+		Button = element[i]
+		
+		-- Bail out if the to range is out of scope.
+		if (not Button) then
+			break
+		end
+		
+		local Column = (i - 1) % Columns
+		local Row = floor((i - 1) / Columns)
+		
+		Button:ClearAllPoints()
+		Button:SetPoint(Anchor, element, Anchor, Column * SizeX * GrowthX, Row * SizeY * GrowthY)
+	end
+	
+	if (Rows > 0) then
+		element:SetScaledHeight(element.size * Rows + ((Rows - 1) * element.spacing))
+	else
+		element:SetScaledHeight(element.size)
+	end
+end
+
 local NamePlateCallback = function(self) -- plate, event, unit
 	if (not self) then
 		return
@@ -1049,12 +1081,13 @@ local StylePlayer = function(self, unit)
 	Buffs:SetScaledPoint("BOTTOMLEFT", self.AuraParent, "TOPLEFT", 0, 2)
 	Buffs.size = 28
 	Buffs.spacing = 2
-	Buffs.num = 16
+	Buffs.num = 40
 	Buffs.initialAnchor = "TOPLEFT"
 	Buffs["growth-x"] = "RIGHT"
 	Buffs["growth-y"] = "UP"
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
+	Buffs.SetPosition = BuffsSetPosition
 	
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
 	Debuffs:SetScaledSize(238, 28)

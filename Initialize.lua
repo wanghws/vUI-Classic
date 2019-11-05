@@ -18,6 +18,16 @@ local vUI = CreateFrame("Frame", nil, UIParent)
 
 vUI.Modules = {}
 
+local Core = {
+	[1] = vUI, -- Functions/Constants
+	[2] = CreateFrame("Frame", nil, UIParent), -- GUI
+	[3] = {}, -- Language
+	[4] = {}, -- Media
+	[5] = {}, -- Settings
+	[6] = {}, -- Defaults
+	[7] = {}, -- Profiles
+}
+
 local Hook = function(self, global, hook)
 	if _G[global] then
 		local Func
@@ -34,6 +44,14 @@ local Hook = function(self, global, hook)
 	end
 end
 
+local ModuleAddOptions = function(self, func)
+	local Left, Right = Core[2]:CreateWindow(self.Name)
+	
+	if func then
+		func(self, Left, Right)
+	end
+end
+
 function vUI:NewModule(name)
 	if self.Modules[name] then
 		return self.Modules[name]
@@ -44,6 +62,7 @@ function vUI:NewModule(name)
 	Module.Name = name
 	Module.Loaded = false
 	Module.Hook = Hook
+	Module.AddOptions = ModuleAddOptions
 	
 	self.Modules[name] = Module
 	self.Modules[#self.Modules + 1] = Module
@@ -95,16 +114,6 @@ vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFactio
 if (vUI.UserLocale == "enGB") then
 	vUI.UserLocale = "enUS"
 end
-
-local Core = {
-	[1] = vUI, -- Functions/Constants
-	[2] = CreateFrame("Frame", nil, UIParent), -- GUI
-	[3] = {}, -- Language
-	[4] = {}, -- Media
-	[5] = {}, -- Settings
-	[6] = {}, -- Defaults
-	[7] = {}, -- Profiles
-}
 
 function vUI:VARIABLES_LOADED(event)
 	if (not GetCVar("useUIScale")) then

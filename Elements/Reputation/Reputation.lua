@@ -180,14 +180,14 @@ function Reputation:CreateBar()
 end
 
 function Reputation:OnEvent()
-	local Name, Standing, Min, Max, Value, FactionID = GetWatchedFactionInfo()
+	local Name, StandingID, Min, Max, Value, FactionID = GetWatchedFactionInfo()
 	
 	if Name then
 		Max = Max - Min
 		Value = Value - Min
 		
 		self.Bar:SetMinMaxValues(0, Max)
-		self.Bar:SetStatusBarColorHex(Settings["color-reaction-" .. Standing])
+		self.Bar:SetStatusBarColorHex(Settings["color-reaction-" .. StandingID])
 		
 		self.Progress:SetText(format("%s: %s / %s", Name, vUI:Comma(Value), vUI:Comma(Max)))
 		self.Percentage:SetText(floor((Value / Max * 100 + 0.05) * 10) / 10 .. "%")

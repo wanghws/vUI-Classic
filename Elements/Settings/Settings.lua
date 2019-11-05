@@ -3661,7 +3661,7 @@ function GUI:MODIFIER_STATE_CHANGED(key, state)
 	
 	if (MouseFocus.OnMouseWheel and state == 1) then
 		MouseFocus:SetScript("OnMouseWheel", MouseFocus.OnMouseWheel)
-	elseif MouseFocus:HasScript("OnMouseWheel") then
+	elseif (MouseFocus.HasScript and MouseFocus:HasScript("OnMouseWheel")) then
 		MouseFocus:SetScript("OnMouseWheel", nil)
 	end
 end
