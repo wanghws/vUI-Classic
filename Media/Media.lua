@@ -210,8 +210,8 @@ Media:SetFont("Matthan", "Interface\\Addons\\vUI\\Media\\Fonts\\MatthanSans.ttf"
 Media:SetFont("Expressway", "Interface\\Addons\\vUI\\Media\\Fonts\\Expressway.ttf")
 Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldRegular.ttf")
 Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
-Media:SetFont("Noto Sans Bold", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedBold.ttf")
 Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", nil, true)
+Media:SetFont("Pixel Arial", "Interface\\Addons\\vUI\\Media\\Fonts\\PixelArial.ttf", nil, true)
 Media:SetFont("FiraCode", "Interface\\Addons\\vUI\\Media\\Fonts\\FiraCode.ttf")
 
 -- Textures
@@ -243,6 +243,7 @@ Media:SetTexture("Leader", "Interface\\AddOns\\vUI\\Media\\Textures\\vUILeader.t
 Media:SetTexture("Heart", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIHeart.tga", true)
 Media:SetTexture("Arrow Down", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowDown.tga", true)
 Media:SetTexture("Skull", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISkull.tga", true)
+Media:SetTexture("Small Star", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISmallStar.tga", true)
 
 -- Highlights
 Media:SetHighlight("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")

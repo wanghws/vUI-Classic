@@ -597,6 +597,8 @@ local CreateBarPanels = function()
 	
 	if (Settings["experience-enable"] and Settings["experience-position"] == "CLASSIC") then
 		BottomPanel:SetScaledPoint("BOTTOM", vUIExperienceBar, "TOP", 0, 5)
+	elseif (Settings["reputation-enable"] and Settings["reputation-position"] == "CLASSIC") then
+		BottomPanel:SetScaledPoint("BOTTOM", vUI:GetModule("Reputation"), "TOP", 0, 5)
 	else
 		BottomPanel:SetScaledPoint("BOTTOM", UIParent, 0, 10)
 	end

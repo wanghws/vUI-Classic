@@ -699,6 +699,13 @@ local StyleNamePlate = function(self, unit)
     Castbar.showTradeSkills = true
     Castbar.timeToHold = 0.3
 	
+	--[[ Elite icon
+	local EliteIndicator = Health:CreateTexture(nil, "OVERLAY")
+    EliteIndicator:SetSize(16, 16)
+    EliteIndicator:SetPoint("RIGHT", Health, "LEFT", -1, 0)
+    EliteIndicator:SetTexture(Media:GetTexture("Small Star"))
+    EliteIndicator:Hide()]]
+	
 	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
@@ -712,6 +719,7 @@ local StyleNamePlate = function(self, unit)
 	self.Health.bg = HealthBG
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
+	--self.EliteIndicator = EliteIndicator
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
 

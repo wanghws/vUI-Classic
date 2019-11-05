@@ -282,9 +282,6 @@ GUI.Widgets.CreateHeader = function(self, text)
 	Anchor.Text:SetJustifyH("CENTER")
 	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
 	
-	Anchor.Reference = CreateFrame("Frame", nil, Anchor)
-	Anchor.Reference:SetAllPoints(Anchor.Text)
-	
 	-- Header Left Line
 	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
 	HeaderLeft:SetScaledHeight(4)
@@ -1960,7 +1957,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 		MenuItem.Text = MenuItem:CreateFontString(nil, "OVERLAY")
 		MenuItem.Text:SetScaledPoint("LEFT", MenuItem, 5, 0)
 		MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 10, WIDGET_HEIGHT)
-		MenuItem.Text:SetFontInfo(Settings["ui-widget-font"], 12)
+		MenuItem.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 		MenuItem.Text:SetJustifyH("LEFT")
 		MenuItem.Text:SetText(Key)
 		
@@ -2681,7 +2678,7 @@ local CreateColorPicker = function()
 	ColorPicker.NewHexTexture:SetVertexColorHex(Settings["ui-widget-bright-color"])
 	
 	ColorPicker.NewHexText = CreateFrame("EditBox", nil, ColorPicker.NewHex)
-	ColorPicker.NewHexText:SetFontInfo(Settings["ui-wudget-font"], Settings["ui-font-size"])
+	ColorPicker.NewHexText:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	ColorPicker.NewHexText:SetScaledPoint("TOPLEFT", ColorPicker.NewHex, SPACING, -2)
 	ColorPicker.NewHexText:SetScaledPoint("BOTTOMRIGHT", ColorPicker.NewHex, -SPACING, 2)
 	ColorPicker.NewHexText:SetJustifyH("CENTER")
@@ -3048,24 +3045,22 @@ local SetIgnoreScrolling = function(self, flag)
 end
 
 local Scroll = function(self)
-	local LeftFirst = false
-	local RightFirst = false
-	local Offset
-	
-	Offset = self.LeftWidgetsBG.IgnoreScrolling and 1 or self.Offset
+	local FirstLeft
+	local FirstRight
+	local Offset = self.LeftWidgetsBG.IgnoreScrolling and 1 or self.Offset
 	
 	for i = 1, self.WidgetCount do
 		if self.LeftWidgets[i] then
 			self.LeftWidgets[i]:ClearAllPoints()
 			
 			if (i >= Offset) and (i <= Offset + self:GetParent().WindowCount - 1) then
-				if (not LeftFirst) then
+				if (not FirstLeft) then
 					self.LeftWidgets[i]:SetScaledPoint("TOPLEFT", self.LeftWidgetsBG, SPACING, -SPACING)
-					LeftFirst = true
+					FirstLeft = i
 				else
 					self.LeftWidgets[i]:SetScaledPoint("TOP", self.LeftWidgets[i-1], "BOTTOM", 0, -2)
 				end
-					
+				
 				self.LeftWidgets[i]:Show()
 			else
 				self.LeftWidgets[i]:Hide()
@@ -3080,9 +3075,9 @@ local Scroll = function(self)
 			self.RightWidgets[i]:ClearAllPoints()
 			
 			if (i >= Offset) and (i <= Offset + self:GetParent().WindowCount - 1) then
-				if (not RightFirst) then
+				if (not FirstRight) then
 					self.RightWidgets[i]:SetScaledPoint("TOPRIGHT", self.RightWidgetsBG, -SPACING, -SPACING)
-					RightFirst = true
+					FirstRight = i
 				else
 					self.RightWidgets[i]:SetScaledPoint("TOP", self.RightWidgets[i-1], "BOTTOM", 0, -2)
 				end
@@ -3130,9 +3125,9 @@ local SetOffset = function(self, offset)
 end
 
 local WindowScrollBarOnValueChanged = function(self)
-	local Value = Round(self:GetValue())
 	local Parent = self:GetParent()
-	Parent.Offset = Value
+	
+	Parent.Offset = Round(self:GetValue())
 	
 	Parent:Scroll()
 end
@@ -3397,17 +3392,27 @@ function GUI:CreateWindow(name, default)
 	Window.LeftWidgetsBG:SetScaledWidth(GROUP_WIDTH + (SPACING * 2))
 	Window.LeftWidgetsBG:SetScaledPoint("TOPLEFT", Window, 0, 0)
 	Window.LeftWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window, 0, 0)
-	Window.LeftWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.LeftWidgetsBG:SetBackdropColorHex(Settings["ui-window-main-color"])
-	Window.LeftWidgetsBG:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.LeftWidgetsBG.Backdrop = CreateFrame("Frame", nil, Window)
+	Window.LeftWidgetsBG.Backdrop:SetScaledWidth(GROUP_WIDTH + (SPACING * 2))
+	Window.LeftWidgetsBG.Backdrop:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, 0, 0)
+	Window.LeftWidgetsBG.Backdrop:SetScaledPoint("BOTTOMLEFT", Window.LeftWidgetsBG, 0, 0)
+	Window.LeftWidgetsBG.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	Window.LeftWidgetsBG.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
+	Window.LeftWidgetsBG.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.RightWidgetsBG = CreateFrame("Frame", nil, Window)
 	Window.RightWidgetsBG:SetScaledWidth(GROUP_WIDTH + (SPACING * 2))
 	Window.RightWidgetsBG:SetScaledPoint("TOPLEFT", Window.LeftWidgetsBG, "TOPRIGHT", 2, 0)
 	Window.RightWidgetsBG:SetScaledPoint("BOTTOMLEFT", Window.LeftWidgetsBG, "BOTTOMRIGHT", 2, 0)
-	Window.RightWidgetsBG:SetBackdrop(vUI.BackdropAndBorder)
-	Window.RightWidgetsBG:SetBackdropColorHex(Settings["ui-window-main-color"])
-	Window.RightWidgetsBG:SetBackdropBorderColor(0, 0, 0)
+	
+	Window.RightWidgetsBG.Backdrop = CreateFrame("Frame", nil, Window)
+	Window.RightWidgetsBG.Backdrop:SetScaledWidth(GROUP_WIDTH + (SPACING * 2))
+	Window.RightWidgetsBG.Backdrop:SetScaledPoint("TOPLEFT", Window.RightWidgetsBG, 0, 0)
+	Window.RightWidgetsBG.Backdrop:SetScaledPoint("BOTTOMLEFT", Window.RightWidgetsBG, 0, 0)
+	Window.RightWidgetsBG.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
+	Window.RightWidgetsBG.Backdrop:SetBackdropColorHex(Settings["ui-window-main-color"])
+	Window.RightWidgetsBG.Backdrop:SetBackdropBorderColor(0, 0, 0)
 	
 	Window.Parent = self
 	Window.Button = Button

@@ -283,7 +283,6 @@ Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
 Defaults["unitframes-show-mana-timer"] = false
 Defaults["unitframes-show-energy-timer"] = true
-Defaults["unitframes-max-buffs"] = 40
 
 Defaults["party-show-debuffs"] = true
 
@@ -301,6 +300,7 @@ Defaults["nameplates-only-player-debuffs"] = true
 Defaults["nameplates-color-by-class"] = true
 Defaults["nameplates-color-by-reaction"] = true
 Defaults["nameplates-color-by-tapped"] = true
+Defaults["nameplates-enable-elite-indicator"] = true
 
 -- Tooltips
 Defaults["tooltips-enable"] = true
