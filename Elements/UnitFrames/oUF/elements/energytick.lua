@@ -25,12 +25,8 @@ local OnUpdate = function(self)
 	LastPower = Power
 end
 
-local Path = function(self)
-	return (self.EnergyTick.Override or Update)(self)
-end
-
 local ForceUpdate = function(element)
-	return Path(element.__owner)
+	return OnUpdate(element)
 end
 
 local Enable = function(self)

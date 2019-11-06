@@ -24,16 +24,13 @@ local Update = function(self, elapsed)
 end
 
 local OnEnable = function(self)
-	self:SetScript("OnUpdate", Update)
-	
 	self.Elapsed = 0
-	
+	self:SetScript("OnUpdate", Update)
 	self:Update(1)
 end
 
 local OnDisable = function(self)
 	self:SetScript("OnUpdate", nil)
-	
 	self.Elapsed = 0
 	
 	self.Text:SetText("")

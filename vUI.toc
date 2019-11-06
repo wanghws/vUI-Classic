@@ -64,6 +64,7 @@ Elements\DataText\HitRating.lua
 Elements\DataText\CritRating.lua
 Elements\DataText\ManaRegen.lua
 Elements\DataText\BagSlots.lua
+Elements\DataText\CombatTime.lua
 Elements\DataText\Durability.lua
 Elements\DataText\Empty.lua
 Elements\DataText\AttackPower.lua
