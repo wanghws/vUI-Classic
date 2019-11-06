@@ -276,7 +276,6 @@ GUI.Widgets.CreateHeader = function(self, text)
 	
 	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
 	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
-	--Anchor.Text:SetScaledPoint("LEFT", Anchor, 12, 0)
 	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
 	Anchor.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"]) -- 14
 	Anchor.Text:SetJustifyH("CENTER")
@@ -728,7 +727,6 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch:SetBackdropColorHex(Settings["ui-window-main-color"])
 	Switch:SetBackdropBorderColor(0, 0, 0)
 	Switch:SetScript("OnMouseUp", SwitchOnMouseUp)
-	--Switch:SetScript("OnMouseWheel", SwitchOnMouseWheel)
 	Switch:SetScript("OnEnter", SwitchOnEnter)
 	Switch:SetScript("OnLeave", SwitchOnLeave)
 	Switch.Value = value
@@ -749,11 +747,12 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Thumb:SetBackdrop(vUI.BackdropAndBorder)
 	Switch.Thumb:SetBackdropBorderColor(0, 0, 0)
 	Switch.Thumb:SetBackdropColorHex(Settings["ui-widget-bright-color"])
+	Switch.Thumb:SetScaledPoint(Switch.Value and "RIGHT" or "LEFT", Switch, 0, 0)
 	
 	Switch.ThumbTexture = Switch.Thumb:CreateTexture(nil, "ARTWORK")
 	Switch.ThumbTexture:SetScaledSize(WIDGET_HEIGHT - 2, WIDGET_HEIGHT - 2)
 	Switch.ThumbTexture:SetScaledPoint("TOPLEFT", Switch.Thumb, 1, -1)
-	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, -1, 1) -- the slider blur
+	Switch.ThumbTexture:SetScaledPoint("BOTTOMRIGHT", Switch.Thumb, -1, 1)
 	Switch.ThumbTexture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	Switch.ThumbTexture:SetVertexColorHex(Settings["ui-widget-bright-color"])
 	
@@ -780,12 +779,6 @@ GUI.Widgets.CreateSwitch = function(self, id, value, label, tooltip, hook)
 	Switch.Move = CreateAnimationGroup(Switch.Thumb):CreateAnimation("Move")
 	Switch.Move:SetEasing("in")
 	Switch.Move:SetDuration(0.1)
-	
-	if Switch.Value then
-		Switch.Thumb:SetScaledPoint("RIGHT", Switch, 0, 0)
-	else
-		Switch.Thumb:SetScaledPoint("LEFT", Switch, 0, 0)
-	end
 	
 	Anchor.Switch = Switch
 	
@@ -1548,6 +1541,7 @@ local MenuItemOnMouseUp = function(self)
 	SetArrowDown(self.GrandParent.Button)
 	
 	self.Highlight:SetAlpha(0)
+	self.Texture:SetVertexColorHex(Settings["ui-widget-bright-color"])
 	
 	if self.GrandParent.SpecificType then
 		SetVariable(self.ID, self.Key)
@@ -1578,6 +1572,12 @@ local MenuItemOnMouseUp = function(self)
 	end
 	
 	self.GrandParent.Current:SetText(self.Key)
+end
+
+local MenuItemOnMouseDown = function(self)
+	local R, G, B = HexToRGB(Settings["ui-widget-bright-color"])
+	
+	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
 local DropdownUpdateList = function(self)
@@ -1757,6 +1757,85 @@ local AddDropdownScrollBar = function(self)
 	self:SetScaledHeight(((WIDGET_HEIGHT - 1) * DROPDOWN_MAX_SHOWN) + 1)
 end
 
+local DropdownSort = function(self)
+	tsort(self.Menu, function(a, b)
+		return TrimHex(a.Key) < TrimHex(b.Key)
+	end)
+	
+	for i = 1, #self.Menu do
+		if (i == 1) then
+			self.Menu[i]:SetScaledPoint("TOP", self.Menu, 0, 0)
+		else
+			self.Menu[i]:SetScaledPoint("TOP", self.Menu[i-1], "BOTTOM", 0, 1)
+		end
+	end
+	
+	self.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * #self.Menu) + 1)
+end
+
+local DropdownCreateSelection = function(self, key, value)
+	local MenuItem = CreateFrame("Frame", nil, self.Menu)
+	MenuItem:SetScaledSize(DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
+	MenuItem:SetBackdrop(vUI.BackdropAndBorder)
+	MenuItem:SetBackdropColorHex(Settings["ui-widget-bg-color"])
+	MenuItem:SetBackdropBorderColor(0, 0, 0)
+	MenuItem:SetScript("OnMouseDown", MenuItemOnMouseDown)
+	MenuItem:SetScript("OnMouseUp", MenuItemOnMouseUp)
+	MenuItem:SetScript("OnEnter", MenuItemOnEnter)
+	MenuItem:SetScript("OnLeave", MenuItemOnLeave)
+	MenuItem.Parent = MenuItem:GetParent()
+	MenuItem.GrandParent = MenuItem:GetParent():GetParent()
+	MenuItem.Key = key
+	MenuItem.Value = value
+	MenuItem.ID = self.ID
+	
+	MenuItem.Highlight = MenuItem:CreateTexture(nil, "OVERLAY")
+	MenuItem.Highlight:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
+	MenuItem.Highlight:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
+	MenuItem.Highlight:SetTexture(Media:GetTexture("Blank"))
+	MenuItem.Highlight:SetVertexColor(1, 1, 1, 0.4)
+	MenuItem.Highlight:SetAlpha(0)
+	
+	MenuItem.Texture = MenuItem:CreateTexture(nil, "ARTWORK")
+	MenuItem.Texture:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
+	MenuItem.Texture:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
+	MenuItem.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	MenuItem.Texture:SetVertexColorHex(Settings["ui-widget-bright-color"])
+	
+	MenuItem.Selected = MenuItem:CreateTexture(nil, "OVERLAY")
+	MenuItem.Selected:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
+	MenuItem.Selected:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
+	MenuItem.Selected:SetTexture(Media:GetTexture("RenHorizonUp"))
+	MenuItem.Selected:SetVertexColorHex(Settings["ui-widget-color"])
+	MenuItem.Selected:SetAlpha(SELECTED_HIGHLIGHT_ALPHA)
+	
+	MenuItem.Text = MenuItem:CreateFontString(nil, "OVERLAY")
+	MenuItem.Text:SetScaledPoint("LEFT", MenuItem, 5, 0)
+	MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 10, WIDGET_HEIGHT)
+	MenuItem.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	MenuItem.Text:SetJustifyH("LEFT")
+	MenuItem.Text:SetText(key)
+	
+	tinsert(self.Menu, MenuItem)
+	
+	return MenuItem
+end
+
+local DropdownRemoveSelection = function(self, key)
+	for i = 1, #self.Menu do
+		if (self.Menu[i].Key == key) then
+			self.Menu[i]:Hide() -- Handle this more thoroughly
+			self.Menu[i]:EnableMouse(false)
+			
+			tremove(self.Menu, i)
+			
+			self:Sort()
+			
+			return
+		end
+	end
+end
+
 GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, hook, specific)
 	if (Settings[id] ~= nil) then
 		value = Settings[id]
@@ -1782,10 +1861,15 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown:SetFrameLevel(self:GetFrameLevel() + 1)
 	Dropdown.Values = values
 	Dropdown.Value = value
+	Dropdown.ID = id
 	Dropdown.Hook = hook
 	Dropdown.Tooltip = tooltip
 	Dropdown.SpecificType = specific
 	Dropdown.RequiresReload = DropdownRequiresReload
+	
+	Dropdown.Sort = DropdownSort
+	Dropdown.CreateSelection = DropdownCreateSelection
+	Dropdown.RemoveSelection = DropdownRemoveSelection
 	
 	Dropdown.Texture = Dropdown:CreateTexture(nil, "ARTWORK")
 	Dropdown.Texture:SetScaledPoint("TOPLEFT", Dropdown, 1, -1)
@@ -1914,52 +1998,8 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	Dropdown.Menu.BG:EnableMouse(true)
 	Dropdown.Menu.BG:SetScript("OnMouseWheel", function() end) -- Just to prevent misclicks from going through the frame
 	
-	local Count = 0
-	local LastMenuItem
-	
-	for Key, Value in SortedPairs(values) do
-		Count = Count + 1
-		
-		local MenuItem = CreateFrame("Frame", nil, Dropdown.Menu)
-		MenuItem:SetScaledSize(DROPDOWN_WIDTH - 6, WIDGET_HEIGHT)
-		MenuItem:SetBackdrop(vUI.BackdropAndBorder)
-		MenuItem:SetBackdropColorHex(Settings["ui-widget-bg-color"])
-		MenuItem:SetBackdropBorderColor(0, 0, 0)
-		MenuItem:SetScript("OnMouseUp", MenuItemOnMouseUp)
-		MenuItem:SetScript("OnEnter", MenuItemOnEnter)
-		MenuItem:SetScript("OnLeave", MenuItemOnLeave)
-		MenuItem.Key = Key
-		MenuItem.Value = Value
-		MenuItem.ID = id
-		MenuItem.Parent = MenuItem:GetParent()
-		MenuItem.GrandParent = MenuItem:GetParent():GetParent()
-		
-		MenuItem.Highlight = MenuItem:CreateTexture(nil, "OVERLAY")
-		MenuItem.Highlight:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
-		MenuItem.Highlight:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
-		MenuItem.Highlight:SetTexture(Media:GetTexture("Blank"))
-		MenuItem.Highlight:SetVertexColor(1, 1, 1, 0.4)
-		MenuItem.Highlight:SetAlpha(0)
-		
-		MenuItem.Texture = MenuItem:CreateTexture(nil, "ARTWORK")
-		MenuItem.Texture:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
-		MenuItem.Texture:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
-		MenuItem.Texture:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-		MenuItem.Texture:SetVertexColorHex(Settings["ui-widget-bright-color"])
-		
-		MenuItem.Selected = MenuItem:CreateTexture(nil, "OVERLAY")
-		MenuItem.Selected:SetScaledPoint("TOPLEFT", MenuItem, 1, -1)
-		MenuItem.Selected:SetScaledPoint("BOTTOMRIGHT", MenuItem, -1, 1)
-		MenuItem.Selected:SetTexture(Media:GetTexture("RenHorizonUp"))
-		MenuItem.Selected:SetVertexColorHex(Settings["ui-widget-color"])
-		MenuItem.Selected:SetAlpha(SELECTED_HIGHLIGHT_ALPHA)
-		
-		MenuItem.Text = MenuItem:CreateFontString(nil, "OVERLAY")
-		MenuItem.Text:SetScaledPoint("LEFT", MenuItem, 5, 0)
-		MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 10, WIDGET_HEIGHT)
-		MenuItem.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-		MenuItem.Text:SetJustifyH("LEFT")
-		MenuItem.Text:SetText(Key)
+	for Key, Value in pairs(values) do
+		local MenuItem = Dropdown:CreateSelection(Key, Value)
 		
 		if (specific == "Texture") then
 			MenuItem.Texture:SetTexture(Media:GetTexture(Key))
@@ -1983,15 +2023,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 			end
 		end
 		
-		tinsert(Dropdown.Menu, MenuItem)
-		
-		if LastMenuItem then
-			MenuItem:SetScaledPoint("TOP", LastMenuItem, "BOTTOM", 0, 1)
-		else
-			MenuItem:SetScaledPoint("TOP", Dropdown.Menu, 0, 0)
-		end
-		
-		LastMenuItem = MenuItem
+		Dropdown:Sort()
 	end
 	
 	if (specific == "Texture") then
@@ -2006,7 +2038,7 @@ GUI.Widgets.CreateDropdown = function(self, id, value, values, label, tooltip, h
 	if (#Dropdown.Menu > DROPDOWN_MAX_SHOWN) then
 		AddDropdownScrollBar(Dropdown.Menu)
 	else
-		Dropdown.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * Count) + 1)
+		Dropdown.Menu:SetScaledHeight(((WIDGET_HEIGHT - 1) * #Dropdown.Menu) + 1)
 	end
 	
 	Anchor.Dropdown = Dropdown

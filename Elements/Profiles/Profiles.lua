@@ -489,14 +489,21 @@ local CreateProfile = function(value)
 	Profiles:CreateProfile(value)
 	Profiles:UpdateProfileInfo()
 	
-	ReloadUI() -- Temp
+	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
+	Widget.Dropdown:CreateSelection(value, value)
+	Widget.Dropdown:Sort()
+	
+	--ReloadUI() -- Temp
 end
 
 local DeleteProfile = function(value)
 	Profiles:DeleteProfile(value)
 	Profiles:UpdateProfileInfo()
 	
-	ReloadUI() -- Temp
+	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
+	Widget.Dropdown:RemoveSelection(value)
+	Widget.Dropdown.Current:SetText(Profiles:GetActiveProfileName())
+	--ReloadUI() -- Temp
 end
 
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
@@ -577,7 +584,7 @@ local DeleteUnused = function()
 end
 
 local RenameProfile = function(value)
-	if value and match(value, "%S+") then
+	if (value and match(value, "%S+")) then
 		local Active = Profiles:GetActiveProfileName()
 		
 		Profiles:RenameProfile(Active, value)

@@ -3,6 +3,7 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 local Testing = {
 	["Hydrazine:Whitemane"] = 1,
 	["Vexisle:Whitemane"] = 1,
+	["Hydrazine:Sulfuras"] = 1,
 }
 
 if (not Testing[vUI.UserProfileKey]) then

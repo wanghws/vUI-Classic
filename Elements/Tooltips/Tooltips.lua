@@ -607,7 +607,7 @@ function Tooltips:SkinItemRef()
 	CloseButton.Cross = CloseButton:CreateTexture(nil, "OVERLAY")
 	CloseButton.Cross:SetPoint("CENTER", CloseButton, 0, 0)
 	CloseButton.Cross:SetScaledSize(16, 16)
-	CloseButton.Cross:SetTexture(Media:GetTexture("vUI Close"))
+	CloseButton.Cross:SetTexture(Media:GetTexture("Close"))
 	CloseButton.Cross:SetVertexColorHex("EEEEEE")
 	
 	ItemRefTooltip.NewCloseButton = CloseButton
