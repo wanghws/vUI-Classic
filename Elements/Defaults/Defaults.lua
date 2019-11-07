@@ -45,6 +45,9 @@ Defaults["ui-title-font-size"] = 16
 Defaults["ui-highlight-texture"] = "Blank" -- TBI
 Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
+Defaults["gui-enable-fade"] = false
+Defaults["gui-faded-alpha"] = 20
+
 -- Classes (populating retail colors as well) -- The commented colors are 10% darker, I like it better on some textures
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
 Defaults["color-demon-hunter"] = "A330C9" -- 922BB4

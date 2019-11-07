@@ -456,31 +456,6 @@ local SetFontInfo = function(self, font, size, flags)
 	end
 end
 
-	--[[local Selected = CreateFrame("Frame", nil, self)
-	Selected:SetScaledPoint("TOPLEFT", Health, -2, 2)
-	Selected:SetScaledPoint("BOTTOMRIGHT", Health, 2, -2)
-	Selected:SetBackdrop(vUI.Outline)
-	Selected:SetBackdropBorderColorHex("BDBDBD")
-	Selected:SetFrameLevel(Health:GetFrameLevel() - 2)
-	--Selected:SetAlpha(0.5)
-	Selected:Hide()
-	
-	Selected.Outer1 = CreateFrame("Frame", nil, Selected)
-	Selected.Outer1:SetScaledPoint("TOPLEFT", Health, -3, 3)
-	Selected.Outer1:SetScaledPoint("BOTTOMRIGHT", Health, 3, -3)
-	Selected.Outer1:SetBackdrop(vUI.Outline)
-	Selected.Outer1:SetBackdropBorderColorHex("000000")
-	Selected.Outer1:SetFrameLevel(Health:GetFrameLevel() - 2)
-	Selected.Outer1:SetAlpha(0.5)
-	
-	Selected.Outer2 = CreateFrame("Frame", nil, Selected)
-	Selected.Outer2:SetScaledPoint("TOPLEFT", Health, -4, 4)
-	Selected.Outer2:SetScaledPoint("BOTTOMRIGHT", Health, 4, -4)
-	Selected.Outer2:SetBackdrop(vUI.Outline)
-	Selected.Outer2:SetBackdropBorderColorHex("000000")
-	Selected.Outer2:SetFrameLevel(Health:GetFrameLevel() - 2)
-	Selected.Outer2:SetAlpha(0.25)]]
-
 local SetShadowed = function(self, flag)
 	if (flag and not self.Shadow) then
 		local Shadow = CreateFrame("Frame", nil, self)

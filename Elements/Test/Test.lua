@@ -816,8 +816,23 @@ local SetSuggestedScale = function()
 	vUI:DisplayPopup(Language["Attention"], format(Language["Are you sure you would like to change your UI scale to the suggested setting of %s?"], Suggested), "Accept", ScaleOnAccept, "Cancel")
 end
 
+local UpdateGUIEnableFade = function(value)
+	if value then
+		GUI:RegisterEvent("PLAYER_STARTED_MOVING")
+		GUI:RegisterEvent("PLAYER_STOPPED_MOVING")
+	else
+		GUI:UnregisterEvent("PLAYER_STARTED_MOVING")
+		GUI:UnregisterEvent("PLAYER_STOPPED_MOVING")
+		GUI:SetAlpha(1)
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:GetWindow(Language["General"])
+	
+	Right:CreateHeader(Language["Settings Window"])
+	Right:CreateSwitch("gui-enable-fade", Settings["gui-enable-fade"], Language["Fade While Moving"], "The settings window will fade out while moving", UpdateGUIEnableFade)
+	Right:CreateSlider("gui-faded-alpha", Settings["gui-faded-alpha"], 0, 100, 10, Language["Set Faded Opacity"], Language["Set the opacity of the settings window|n while faded"], nil, nil, "%")
 	
 	Right:CreateHeader(Language["Bags Frame"])
 	Right:CreateDropdown("bags-frame-visiblity", Settings["bags-frame-visiblity"], {[Language["Hide"]] = "HIDE", [Language["Mouseover"]] = "MOUSEOVER", [Language["Show"]] = "SHOW"}, Language["Set Visibility"], "Set the visibility of the bag frame", UpdateBagVisibility)

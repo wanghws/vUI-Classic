@@ -56,7 +56,7 @@ local OnEnable = function(self)
 	self:RegisterEvent("FRIENDLIST_UPDATE")
 	self:SetScript("OnEvent", Update)
 	--self:SetScript("OnEnter", OnEnter)
-	--self:SetScript("OnLeave", Onleave)
+	--self:SetScript("OnLeave", OnLeave)
 	
 	C_FriendList.ShowFriends()
 	

@@ -3312,7 +3312,7 @@ end
 
 function GUI:CreateWindow(name, default)
 	if self.Windows[name] then
-		return self.Windows[name]
+		return self:GetWindow(name)
 	end
 	
 	self.WindowCount = self.WindowCount or 0
@@ -3514,6 +3514,9 @@ function GUI:Create()
 	self.FadeOut:SetChange(0)
 	self.FadeOut:SetScript("OnFinished", FadeOnFinished)
 	
+	self.Fader = self.Fade:CreateAnimation("Fade")
+	self.Fader:SetDuration(0.15)
+	
 	-- Header
 	self.Header = CreateFrame("Frame", nil, self)
 	self.Header:SetScaledSize(HEADER_WIDTH - (HEADER_HEIGHT - 2) - SPACING - 1, HEADER_HEIGHT)
@@ -3663,6 +3666,26 @@ function GUI:MODIFIER_STATE_CHANGED(key, state)
 	end
 end
 
+function GUI:PLAYER_STARTED_MOVING()
+	if self.Fader:IsPlaying() then
+		self.Fader:Stop()
+	end
+	
+	self.Fader:SetEasing("out")
+	self.Fader:SetChange(Settings["gui-faded-alpha"] / 100)
+	self.Fader:Play()
+end
+
+function GUI:PLAYER_STOPPED_MOVING()
+	if self.Fader:IsPlaying() then
+		self.Fader:Stop()
+	end
+	
+	self.Fader:SetEasing("in")
+	self.Fader:SetChange(1)
+	self.Fader:Play()
+end
+
 GUI:RegisterEvent("PLAYER_REGEN_DISABLED")
 GUI:RegisterEvent("PLAYER_REGEN_ENABLED")
 GUI:SetScript("OnEvent", function(self, event, ...)
@@ -3679,16 +3702,27 @@ function GUI:Toggle()
 			return
 		end
 		
+		if Settings["gui-enable-fade"] then
+			self:RegisterEvent("PLAYER_STARTED_MOVING")
+			self:RegisterEvent("PLAYER_STOPPED_MOVING")
+		end
+		
 		self:RegisterEvent("MODIFIER_STATE_CHANGED")
 		self:SetAlpha(0)
 		self:Show()
 		self.FadeIn:Play()
 	else
-		self:UnregisterEvent("MODIFIER_STATE_CHANGED")
 		self.FadeOut:Play()
 		
 		if (self.ColorPicker and self.ColorPicker:GetAlpha() > 0) then
 			self.ColorPicker.FadeOut:Play()
+		end
+		
+		self:UnregisterEvent("MODIFIER_STATE_CHANGED")
+		
+		if Settings["gui-enable-fade"] then
+			self:UnregisterEvent("PLAYER_STARTED_MOVING")
+			self:UnregisterEvent("PLAYER_STOPPED_MOVING")
 		end
 		
 		CloseLastDropdown()
