@@ -244,7 +244,9 @@ Media:SetTexture("Heart", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIHeart.tga
 Media:SetTexture("Arrow Down", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowDown.tga", true)
 Media:SetTexture("Arrow Up", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowUp.tga", true)
 Media:SetTexture("Arrow Left", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowLeft.tga", true)
+Media:SetTexture("Arrow Left Large", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowLeftLarge.tga", true)
 Media:SetTexture("Arrow Right", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowRight.tga", true)
+Media:SetTexture("Arrow Right Large", "Interface\\AddOns\\vUI\\Media\\Textures\\vUIArrowRightLarge.tga", true)
 Media:SetTexture("Skull", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISkull.tga", true)
 Media:SetTexture("Small Star", "Interface\\AddOns\\vUI\\Media\\Textures\\vUISmallStar.tga", true)
 

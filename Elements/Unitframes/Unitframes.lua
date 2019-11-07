@@ -712,6 +712,7 @@ local StyleNamePlate = function(self, unit)
     EliteIndicator:SetTexture(Media:GetTexture("Small Star"))
     EliteIndicator:Hide()]]
 	
+	-- Target
 	local TargetIndicator = CreateFrame("Frame", nil, self)
 	TargetIndicator:SetScaledPoint("TOPLEFT", Health, 0, 0)
 	TargetIndicator:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
