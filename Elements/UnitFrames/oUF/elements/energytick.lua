@@ -29,6 +29,10 @@ local ForceUpdate = function(element)
 	return OnUpdate(element)
 end
 
+local Path = function(self)
+	return OnUpdate(self.EnergyTick)
+end
+
 local Enable = function(self)
 	local element = self.EnergyTick
 	

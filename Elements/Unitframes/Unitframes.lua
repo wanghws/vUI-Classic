@@ -193,14 +193,14 @@ Methods["HealthValues"] = function(unit)
 	return vUI:ShortValue(Current) .. " / " .. vUI:ShortValue(Max)
 end
 
-Events["PartyInfo"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS PLAYER_ENTERING_WORLD"
-Methods["PartyInfo"] = function(unit)
+Events["GroupStatus"] = "UNIT_HEALTH_FREQUENT UNIT_CONNECTION UNIT_FLAGS PLAYER_ENTERING_WORLD"
+Methods["GroupStatus"] = function(unit)
 	if UnitIsDead(unit) then
-		return "|cFFEE4D4D" .. Language["Dead"]
+		return "|cFFEE4D4D" .. Language["Dead"] .. "|r"
 	elseif UnitIsGhost(unit) then
-		return "|cFFEEEEEE" .. Language["Ghost"]
+		return "|cFFEEEEEE" .. Language["Ghost"] .. "|r"
 	elseif (not UnitIsConnected(unit)) then
-		return "|cFFEEEEEE" .. Language["Offline"]
+		return "|cFFEEEEEE" .. Language["Offline"] .. "|r"
 	end
 	
 	local Current, Max, Found = LCMH:GetUnitHealth(unit)
@@ -551,7 +551,7 @@ local BuffsSetPosition = function(element, from, to)
 	end
 end
 
-local NamePlateCallback = function(self) -- plate, event, unit
+local NamePlateCallback = function(self)
 	if (not self) then
 		return
 	end
@@ -560,6 +560,12 @@ local NamePlateCallback = function(self) -- plate, event, unit
 		self:EnableElement("Auras")
 	else
 		self:DisableElement("Auras")
+	end
+	
+	if Settings["nameplates-enable-target-indicator"] then
+		self:EnableElement("TargetIndicator")
+	else
+		self:DisableElement("TargetIndicator")
 	end
 	
 	if self.Debuffs then
@@ -706,6 +712,23 @@ local StyleNamePlate = function(self, unit)
     EliteIndicator:SetTexture(Media:GetTexture("Small Star"))
     EliteIndicator:Hide()]]
 	
+	local TargetIndicator = CreateFrame("Frame", nil, self)
+	TargetIndicator:SetScaledPoint("TOPLEFT", Health, 0, 0)
+	TargetIndicator:SetScaledPoint("BOTTOMRIGHT", Health, 0, 0)
+	TargetIndicator:Hide()
+	
+	TargetIndicator.Left = TargetIndicator:CreateTexture(nil, "ARTWORK")
+	TargetIndicator.Left:SetScaledSize(16, 16)
+	TargetIndicator.Left:SetScaledPoint("RIGHT", TargetIndicator, "LEFT", 2, 0)
+	TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left"))
+	TargetIndicator.Left:SetVertexColorHex(Settings["ui-widget-color"])
+	
+	TargetIndicator.Right = TargetIndicator:CreateTexture(nil, "ARTWORK")
+	TargetIndicator.Right:SetScaledSize(16, 16)
+	TargetIndicator.Right:SetScaledPoint("LEFT", TargetIndicator, "RIGHT", -3, 0)
+	TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right"))
+	TargetIndicator.Right:SetVertexColorHex(Settings["ui-widget-color"])
+	
 	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
 	self:Tag(BottomRight, Settings["nameplates-bottomright-text"])
@@ -720,6 +743,7 @@ local StyleNamePlate = function(self, unit)
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
 	--self.EliteIndicator = EliteIndicator
+	self.TargetIndicator = TargetIndicator
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
@@ -1620,7 +1644,7 @@ local StyleParty = function(self, unit)
 		self:Tag(HealthLeft, "[LevelColor][Level] [NameColor][Name10]")
 	end
 	
-	self:Tag(HealthRight, "[PartyInfo]")
+	self:Tag(HealthRight, "[GroupStatus]")
 	
 	self.Range = {
 		insideAlpha = 1,
@@ -1808,7 +1832,8 @@ local StyleRaid = function(self, unit)
 		self:Tag(HealthLeft, "[NameColor][Name5]")
 	end
 	
-	self:Tag(HealthRight, "[HealthColor][perhp]")
+	--self:Tag(HealthRight, "[HealthColor][perhp]")
+	self:Tag(HealthRight, "[GroupStatus]")
 	
 	self.Range = {
 		insideAlpha = 1,
@@ -2069,12 +2094,16 @@ GUI:AddOptions(function(self)
 	]]
 end)
 
-local NamePlatesUpdateEnableDebuffs = function(self)
-	if Settings["nameplates-display-debuffs"] then
+local NamePlatesUpdateEnableDebuffs = function(self, value)
+	if value then
 		self:EnableElement("Auras")
 	else
 		self:DisableElement("Auras")
 	end
+end
+
+local UpdateNamePlatesEnableDebuffs = function(value)
+	oUF:RunForAllNamePlates(NamePlatesUpdateEnableDebuffs, value)
 end
 
 local NamePlatesUpdateShowPlayerDebuffs = function(self)
@@ -2083,12 +2112,8 @@ local NamePlatesUpdateShowPlayerDebuffs = function(self)
 	end
 end
 
-local UpdateNamePlatesEnableDebuffs = function()
-	oUF:RunForAllNamePlates(NamePlatesUpdateEnableDebuffs)
-end
-
-local UpdateNamePlatesShowPlayerDebuffs = function()
-	oUF:RunForAllNamePlates(NamePlatesUpdateShowPlayerDebuffs)
+local UpdateNamePlatesShowPlayerDebuffs = function(value)
+	oUF:RunForAllNamePlates(NamePlatesUpdateShowPlayerDebuffs, value)
 end
 
 local NamePlateSetWidth = function(self)
@@ -2117,6 +2142,18 @@ local UpdateNamePlateColors = function()
 	oUF:RunForAllNamePlates(NamePlateSetHealthColor)
 end
 
+local NamePlateSetTargetHightlight = function(self, value)
+	if value then
+		self:EnableElement("TargetIndicator")
+	else
+		self:DisableElement("TargetIndicator")
+	end
+end
+
+local UpdateNamePlatesTargetHighlight = function(value)
+	oUF:RunForAllNamePlates(NamePlateSetTargetHightlight, value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
@@ -2141,6 +2178,9 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "")
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
+	
+	Left:CreateHeader(Language["Target Indicator"])
+	Left:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)
 	
 	--[[if (not Settings["nameplates-display-debuffs"]) then
 		GUI:GetWidgetByWindow(Language["Name Plates"], "nameplates-only-player-debuffs"):Disable() -- Temporary

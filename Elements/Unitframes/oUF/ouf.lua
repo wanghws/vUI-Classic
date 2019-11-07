@@ -756,7 +756,7 @@ function oUF:UpdateAllNamePlates()
 	end
 end
 
-function oUF:RunForAllNamePlates(func)
+function oUF:RunForAllNamePlates(func, value)
 	if (type(func) ~= "function") then
 		return
 	end
@@ -765,7 +765,7 @@ function oUF:RunForAllNamePlates(func)
 	
 	if NamePlates then
 		for i = 1, #NamePlates do
-			func(NamePlates[i].unitFrame)
+			func(NamePlates[i].unitFrame, value)
 			
 			NamePlates[i].unitFrame:UpdateAllElements("ForceUpdate")
 		end

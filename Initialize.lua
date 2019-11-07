@@ -456,6 +456,60 @@ local SetFontInfo = function(self, font, size, flags)
 	end
 end
 
+	--[[local Selected = CreateFrame("Frame", nil, self)
+	Selected:SetScaledPoint("TOPLEFT", Health, -2, 2)
+	Selected:SetScaledPoint("BOTTOMRIGHT", Health, 2, -2)
+	Selected:SetBackdrop(vUI.Outline)
+	Selected:SetBackdropBorderColorHex("BDBDBD")
+	Selected:SetFrameLevel(Health:GetFrameLevel() - 2)
+	--Selected:SetAlpha(0.5)
+	Selected:Hide()
+	
+	Selected.Outer1 = CreateFrame("Frame", nil, Selected)
+	Selected.Outer1:SetScaledPoint("TOPLEFT", Health, -3, 3)
+	Selected.Outer1:SetScaledPoint("BOTTOMRIGHT", Health, 3, -3)
+	Selected.Outer1:SetBackdrop(vUI.Outline)
+	Selected.Outer1:SetBackdropBorderColorHex("000000")
+	Selected.Outer1:SetFrameLevel(Health:GetFrameLevel() - 2)
+	Selected.Outer1:SetAlpha(0.5)
+	
+	Selected.Outer2 = CreateFrame("Frame", nil, Selected)
+	Selected.Outer2:SetScaledPoint("TOPLEFT", Health, -4, 4)
+	Selected.Outer2:SetScaledPoint("BOTTOMRIGHT", Health, 4, -4)
+	Selected.Outer2:SetBackdrop(vUI.Outline)
+	Selected.Outer2:SetBackdropBorderColorHex("000000")
+	Selected.Outer2:SetFrameLevel(Health:GetFrameLevel() - 2)
+	Selected.Outer2:SetAlpha(0.25)]]
+
+local SetShadowed = function(self, flag)
+	if (flag and not self.Shadow) then
+		local Shadow = CreateFrame("Frame", nil, self)
+		Shadow:SetScaledPoint("TOPLEFT", self, -1, 1)
+		Shadow:SetScaledPoint("BOTTOMRIGHT", self, 1, -1)
+		Shadow:SetBackdrop(vUI.Outline)
+		Shadow:SetBackdropBorderColor(0, 0, 0)
+		Shadow:SetAlpha(0.4)
+		
+		Shadow.Outer1 = CreateFrame("Frame", nil, Shadow)
+		Shadow.Outer1:SetScaledPoint("TOPLEFT", self, -2, 2)
+		Shadow.Outer1:SetScaledPoint("BOTTOMRIGHT", self, 2, -2)
+		Shadow.Outer1:SetBackdrop(vUI.Outline)
+		Shadow.Outer1:SetBackdropBorderColor(0, 0, 0)
+		Shadow.Outer1:SetAlpha(0.2)
+		
+		Shadow.Outer2 = CreateFrame("Frame", nil, Shadow)
+		Shadow.Outer2:SetScaledPoint("TOPLEFT", self, -3, 3)
+		Shadow.Outer2:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
+		Shadow.Outer2:SetBackdrop(vUI.Outline)
+		Shadow.Outer2:SetBackdropBorderColor(0, 0, 0)
+		Shadow.Outer2:SetAlpha(0.1)
+		
+		self.Shadow = Shadow
+	elseif (not flag and self.Shadow) then
+		self.Shadow:Hide()
+	end
+end
+
 local AddMethodByReference = function(self, key, newkey, value)
 	if (self[key] and not self[newkey]) then
 		rawset(self, newkey, value)
@@ -485,6 +539,7 @@ local AddMethodsToObject = function(object)
 	AddMethodByReference(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
 	AddMethodByReference(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
 	AddMethodByReference(Metatable, "SetFont", "SetFontInfo", SetFontInfo)
+	AddMethodByReference(Metatable, "SetBackdrop", "SetShadowed", SetShadowed)
 	
 	Handled[object:GetObjectType()] = true
 end

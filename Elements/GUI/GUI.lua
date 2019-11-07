@@ -2,7 +2,6 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 
 local type = type
 local pairs = pairs
-local ipairs = ipairs
 local tonumber = tonumber
 local tinsert = table.insert
 local tremove = table.remove
@@ -110,45 +109,6 @@ local TrimHex = function(s)
 	local Subbed = match(s, "|c%x%x%x%x%x%x%x%x(.-)|r")
 	
 	return Subbed or s
-end
-
-local GetOrderedIndex = function(t)
-    local OrderedIndex = {}
-	
-    for Key in pairs(t) do
-        tinsert(OrderedIndex, Key)
-    end
-	
-	tsort(OrderedIndex, function(a, b)
-		return TrimHex(a) < TrimHex(b)
-	end)
-	
-    return OrderedIndex
-end
-
-local OrderedNext = function(t, key)
-	local OrderedIndex = GetOrderedIndex(t)
-	local Key
-	
-    if (key == nil) then
-        Key = OrderedIndex[1]
-		
-        return Key, t[Key]
-    end
-	
-    for i = 1, #OrderedIndex do
-        if (OrderedIndex[i] == key) then
-            Key = OrderedIndex[i + 1]
-        end
-    end
-	
-    if Key then
-        return Key, t[Key]
-    end
-end
-
-local SortedPairs = function(t)
-    return OrderedNext, t, nil
 end
 
 local CreateID = function(text)
