@@ -419,7 +419,36 @@ AutoVendor.Filter = {
 	[6196] = true,
 }
 
-AutoVendor:SetScript("OnEvent", function(self, event)
+function vUI:GetTrashValue()
+	local Profit = 0
+	local TotalCount = 0
+	
+	for Bag = 0, 4 do
+		for Slot = 1, GetContainerNumSlots(Bag) do
+			local Link, ID = GetContainerItemLink(Bag, Slot), GetContainerItemID(Bag, Slot)
+			
+			if (Link and ID and not AutoVendor.Filter[ID]) then
+				local TotalPrice = 0
+				local Quality = select(3, GetItemInfo(Link))
+				local SellPrice = select(11, GetItemInfo(Link))
+				local Count = select(2, GetContainerItemInfo(Bag, Slot))
+				
+				if ((SellPrice and (SellPrice > 0)) and Count) then
+					TotalPrice = SellPrice * Count
+				end
+				
+				if ((Quality and Quality <= 0) and TotalPrice > 0) then
+					Profit = Profit + TotalPrice
+					TotalCount = TotalCount + Count
+				end
+			end
+		end
+	end
+	
+	return TotalCount, Profit
+end
+
+function AutoVendor:OnEvent()
 	local Profit = 0
 	local TotalCount = 0
 	
@@ -448,19 +477,20 @@ AutoVendor:SetScript("OnEvent", function(self, event)
 	end
 	
 	if (Profit > 0 and Settings["auto-vendor-report"]) then
-		vUI:print(format(Language["You sold %d items for a total of %s"], TotalCount, GetCoinTextureString(Profit))) -- Fix "You have sold 1 items"
+		vUI:print(format(Language["You sold %d %s for a total of %s"], TotalCount, TotalCount > 0 and "items" or "item", GetCoinTextureString(Profit)))
 	end
-end)
+end
 
 function AutoVendor:Load()
 	if Settings["auto-vendor-enable"] then
 		self:RegisterEvent("MERCHANT_SHOW")
+		self:SetScript("OnEvent", AutoVendor.OnEvent)
 	end
 end
 
 local AutoRepair = vUI:NewModule("Auto Repair") -- Check against the rep with the faction of the merchant, add option to repair if honored +
 
-AutoRepair:SetScript("OnEvent", function(self, event)
+function AutoRepair:OnEvent()
 	local Money = GetMoney()
 	
 	if CanMerchantRepair() then
@@ -484,11 +514,12 @@ AutoRepair:SetScript("OnEvent", function(self, event)
 			end
 		end
 	end
-end)
+end
 
 function AutoRepair:Load()
 	if Settings["auto-repair-enable"] then
 		self:RegisterEvent("MERCHANT_SHOW")
+		self:SetScript("OnEvent", AutoRepair.OnEvent)
 	end
 end
 

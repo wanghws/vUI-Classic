@@ -45,8 +45,9 @@ function DT:NewAnchor(name, parent)
 	Anchor.SaveValue = SaveValue
 	
 	Anchor.Highlight = Anchor:CreateTexture(nil, "OVERLAY")
-	Anchor.Highlight:SetScaledPoint("TOPLEFT", Anchor, 20, 0)
+	Anchor.Highlight:SetScaledPoint("BOTTOMLEFT", Anchor, 20, 0)
 	Anchor.Highlight:SetScaledPoint("BOTTOMRIGHT", Anchor, -20, 0)
+	Anchor.Highlight:SetScaledHeight(14)
 	Anchor.Highlight:SetTexture(Media:GetTexture("RenHorizonUp"))
 	Anchor.Highlight:SetVertexColorHex(Settings["ui-widget-color"])
 	Anchor.Highlight:SetAlpha(0)

@@ -30,6 +30,11 @@ local OnEnter = function(self)
 		end
 	end
 	
+	local Total, Profit = vUI:GetTrashValue()
+	
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine(Language["Trash item vendor value:"], GetCoinTextureString(Profit), 1, 1, 1, 1, 1, 1)
+	
 	GameTooltip:Show()
 end
 

@@ -33,17 +33,17 @@ local OnEnter = function(self)
 	
 	local GuildName = GetGuildInfo("player")
 	local NumTotal, NumOnline, NumOnlineAndMobile = GetNumGuildMembers()
-	local GuildMessage = GetGuildRosterMOTD()
+	--local GuildMessage = GetGuildRosterMOTD()
 	local Name, Rank, RankIndex, Level, ClassName, Zone, Note, OfficerNote, Online, Status, Class
 	local Color, LevelColor
 	
 	GameTooltip:AddDoubleLine(GuildName, format("%s/%s", NumOnlineAndMobile, NumTotal))
 	GameTooltip:AddLine(" ")
 	
-	if (GuildMessage and GuildMessage ~= "") then
+	--[[if (GuildMessage and GuildMessage ~= "") then
 		GameTooltip:AddLine(GuildMessage)
 		GameTooltip:AddLine(" ")
-	end
+	end]]
 	
 	local Limit = NumOnlineAndMobile > MaxCharacters and MaxCharacters or NumOnlineAndMobile
 	
@@ -72,7 +72,7 @@ local OnEnter = function(self)
 	
 	if (NumOnlineAndMobile > MaxCharacters) then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(NumOnlineAndMobile - MaxCharacters .. Language[" more characters not shown."])
+		GameTooltip:AddLine(NumOnlineAndMobile - MaxCharacters .. Language[" more characters not shown"])
 	end
 	
 	self.TooltipShown = true
@@ -105,6 +105,8 @@ local Update = function(self, event)
 		local NumOnline = select(3, GetNumGuildMembers())
 		
 		self.Text:SetFormattedText("%s: %s", Label, NumOnline)
+		
+		--self:PlayFlash()
 	end
 end
 

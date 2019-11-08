@@ -5,11 +5,211 @@ local DT = vUI:GetModule("DataText")
 local GetNumFriends = C_FriendList.GetNumFriends
 local GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local BNGetNumFriends = BNGetNumFriends
-local BNGetFriendInfoByID = BNGetFriendInfoByID
+local BNGetFriendInfo = BNGetFriendInfo
+local BNGetGameAccountInfo = BNGetGameAccountInfo
 local GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local pairs = pairs
 local Label = Language["Friends"]
 
+local ClientToName = {
+	["App"] = Language["B.Net"],
+	["BSAp"] = Language["B.Net"],
+	["DST2"] = Language["Destiny 2"],
+	["D3"] = Language["Diablo 3"],
+	["Hero"] = Language["Heroes of the Storm"],
+	["Pro"] = Language["Overwatch"],
+	["S1"] = Language["StarCraft: Remastered"],
+	["S2"] = Language["StarCraft 2"],
+	["VIPR"] = Language["Call of Duty: Black Ops 4"],
+	["WoW"] = Language["World of Warcraft"],
+	["WTCG"] = Language["Hearthstone"],
+}
+
+local ProjectIDToName = {
+	[1] = Language["Battle for Azeroth"],
+	[2] = Language["Classic"],
+}
+
+local GetClass = function(class)
+	for Token, Localized in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+		if (Localized == class) then
+			return Token
+		end
+	end
+end
+
 local PresenceID, AccountName, BattleTag, IsBattleTagPresence, CharacterName, BNetIDGameAccount, Client, IsOnline, LastOnline, IsAFK, IsDND
+
+local ClientInfo = {}
+
+ClientInfo["App"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["BSAp"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["DST2"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["D3"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["Hero"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["Pro"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["S1"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["S2"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["VIPR"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["WoW"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	local ClassColor = RAID_CLASS_COLORS[GetClass(Class)].colorStr
+	local LevelColor = GetQuestDifficultyColor(Level)
+	LevelColor = vUI:RGBToHex(LevelColor.r, LevelColor.g, LevelColor.b)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	local NameInfo = format("%s |cFFFFFFFF(|cFF%s%s|r |c%s%s|r|cFFFFFFFF)|r", name, LevelColor, Level, ClassColor, CharacterName)
+	
+	return NameInfo, ProjectIDToName[WoWProjectID]
+end
+
+ClientInfo["WTCG"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+local ProcessClientInformation = function(client, name, id)
+	if ClientInfo[client] then
+		local Left, Right = ClientInfo[client](name, id)
+		
+		return Left, Right
+	end
+end
 
 local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
@@ -18,16 +218,22 @@ local OnEnter = function(self)
 	local NumOnline = GetNumOnlineFriends()
 	local NumBNFriends, NumBNOnline = BNGetNumFriends()
 	local FriendInfo
+	local Name
 	
-	-- BNet Friends
+	-- B.Net friends
 	for i = 1, NumBNFriends do
-		PresenceID, AccountName, BattleTag, IsBattleTagPresence, CharacterName, BNetIDGameAccount, Client, IsOnline, LastOnline, IsAFK, IsDND = BNGetFriendInfoByID(i)
+		local PresenceID, AccountName, BattleTag, IsBattleTagPresence, CharacterName, BNetIDGameAccount, Client, IsOnline, LastOnline, IsAFK, IsDND = BNGetFriendInfo(i)
 		
-		if (PresenceID and IsOnline) then
-			GameTooltip:AddDoubleLine(AccountName, CharacterName)
+		local Left, Right = ProcessClientInformation(Client, AccountName, (BNetIDGameAccount or PresenceID))
+		
+		if Right then
+			GameTooltip:AddDoubleLine(Left, Right)
+		else
+			GameTooltip:AddLine(Left)
 		end
 	end
 	
+	-- Regular friends
 	for i = 1, NumFriends do
 		FriendInfo = GetFriendInfoByIndex(i)
 		
@@ -50,13 +256,15 @@ local Update = function(self)
 	local Online = NumOnline + NumBNOnline
 	
 	self.Text:SetFormattedText("%s: %s", Label, Online)
+	
+	--self:PlayFlash()
 end
 
 local OnEnable = function(self)
 	self:RegisterEvent("FRIENDLIST_UPDATE")
 	self:SetScript("OnEvent", Update)
-	--self:SetScript("OnEnter", OnEnter)
-	--self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnEnter", OnEnter)
+	self:SetScript("OnLeave", OnLeave)
 	
 	C_FriendList.ShowFriends()
 	
@@ -66,8 +274,8 @@ end
 local OnDisable = function(self)
 	self:UnregisterEvent("FRIENDLIST_UPDATE")
 	self:SetScript("OnEvent", nil)
-	--self:SetScript("OnEnter", nil)
-	--self:SetScript("OnLeave", nil)
+	self:SetScript("OnEnter", nil)
+	self:SetScript("OnLeave", nil)
 	
 	self.Text:SetText("")
 end
