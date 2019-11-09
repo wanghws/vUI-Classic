@@ -574,6 +574,11 @@ local NamePlateCallback = function(self)
 	
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	
+	self.TopLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.BottomRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.BottomLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	
 	self.Health.colorTapping = Settings["nameplates-color-by-tapped"]
 	self.Health.colorClass = Settings["nameplates-color-by-class"]
 	self.Health.colorReaction = Settings["nameplates-color-by-reaction"]
@@ -606,28 +611,28 @@ local StyleNamePlate = function(self, unit)
 	RaidTargetIndicator:SetSize(16, 16)
 	RaidTargetIndicator:SetPoint("LEFT", Health, "RIGHT", 5, 0)
 	
+	--[[local Top = Health:CreateFontString(nil, "OVERLAY")
+	Top:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 3)
+	Top:SetJustifyH("CENTER")]]
+	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
-	TopLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	TopLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	TopLeft:SetScaledPoint("LEFT", Health, "TOPLEFT", 4, 3)
 	TopLeft:SetJustifyH("LEFT")
 	
-	local Top = Health:CreateFontString(nil, "OVERLAY")
-	Top:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
-	Top:SetScaledPoint("CENTER", Health, "TOP", 0, 3)
-	Top:SetJustifyH("CENTER")
-	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
-	TopRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	TopRight:SetScaledPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
 	TopRight:SetJustifyH("RIGHT")
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
-	BottomRight:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	BottomRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	BottomRight:SetScaledPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
 	BottomRight:SetJustifyH("RIGHT")
 	
 	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
-	BottomLeft:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	BottomLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	BottomLeft:SetScaledPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
 	BottomLeft:SetJustifyH("LEFT")
 	
@@ -736,10 +741,11 @@ local StyleNamePlate = function(self, unit)
 	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
 	
 	self.Health = Health
+	--self.Top = Top
 	self.TopLeft = TopLeft
-	self.Top = Top
 	self.TopRight = TopRight
 	self.BottomRight = BottomRight
+	self.BottomLeft = BottomLeft
 	self.Health.bg = HealthBG
 	self.Debuffs = Debuffs
 	self.Castbar = Castbar
@@ -2155,11 +2161,27 @@ local UpdateNamePlatesTargetHighlight = function(value)
 	oUF:RunForAllNamePlates(NamePlateSetTargetHightlight, value)
 end
 
+local NamePlateSetFont = function(self)
+	self.TopLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.BottomRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.BottomLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+end
+
+local UpdateNamePlatesFont = function()
+	oUF:RunForAllNamePlates(NamePlateSetFont)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("nameplates-enable", Settings["nameplates-enable"], Language["Enable Name Plates Module"], "Enable the vUI name plates module", ReloadUI):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Name Plates Font"])
+	Left:CreateDropdown("nameplates-font", Settings["nameplates-font"], Media:GetFontList(), Language["Font"], "Set the font of the name plates", UpdateNamePlatesFont, "Font")
+	Left:CreateSlider("nameplates-font-size", Settings["nameplates-font-size"], 8, 18, 1, "Font Size", "Set the font size of the name plates", UpdateNamePlatesFont)
+	Left:CreateDropdown("nameplates-font-flags", Settings["nameplates-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the name plates", UpdateNamePlatesFont)
 	
 	Left:CreateHeader(Language["Sizes"])
 	Left:CreateSlider("nameplates-width", Settings["nameplates-width"], 60, 220, 1, "Set Width", "Set the width of name plates", UpdateNamePlatesWidth)
@@ -2180,8 +2202,8 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
 	
-	Left:CreateHeader(Language["Target Indicator"])
-	Left:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)
+	Right:CreateHeader(Language["Target Indicator"])
+	Right:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)
 	
 	--[[if (not Settings["nameplates-display-debuffs"]) then
 		GUI:GetWidgetByWindow(Language["Name Plates"], "nameplates-only-player-debuffs"):Disable() -- Temporary

@@ -52,6 +52,10 @@ Media:SetStyle("vUI", {
 	["tooltips-font"] = "Roboto",
 	["tooltips-size"] = 12,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "Roboto",
+	["nameplate-font-size"] = 12,
+	["nameplate-font-flags"] = "",
 })
 
 -- vUI 2
@@ -106,6 +110,10 @@ Media:SetStyle("vUI 2", {
 	["tooltips-font"] = "PT Sans",
 	["tooltips-size"] = 12,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "PT Sans",
+	["nameplate-font-size"] = 12,
+	["nameplate-font-flags"] = "",
 })
 
 -- Conjured Muffin -- Casting: 2ECC71 - Interrupted: F39C12 - Failed: D35400
@@ -160,6 +168,10 @@ Media:SetStyle("Conjured Muffin", {
 	["tooltips-font"] = "Roboto",
 	["tooltips-size"] = 12,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "Roboto",
+	["nameplate-font-size"] = 12,
+	["nameplate-font-flags"] = "",
 })
 
 -- Zen
@@ -214,6 +226,10 @@ Media:SetStyle("Zen", {
 	["tooltips-font"] = "Prototype",
 	["tooltips-size"] = 12,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "Prototype",
+	["nameplate-font-size"] = 12,
+	["nameplate-font-flags"] = "",
 })
 
 -- Slate
@@ -268,13 +284,17 @@ Media:SetStyle("Slate", {
 	["tooltips-font"] = "Prototype",
 	["tooltips-size"] = 12,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "Prototype",
+	["nameplate-font-size"] = 12,
+	["nameplate-font-flags"] = "",
 })
 
 -- Smelly
 Media:SetStyle("Smelly", {
-	["ui-widget-font"] = "FiraCode",
-	["ui-header-font"] = "FiraCode",
-	["ui-button-font"] = "FiraCode",
+	["ui-widget-font"] = "Fira Code",
+	["ui-header-font"] = "Fira Code",
+	["ui-button-font"] = "Fira Code",
 	
 	["ui-widget-texture"] = "Bettina",
 	["ui-header-texture"] = "Bettina",
@@ -302,12 +322,12 @@ Media:SetStyle("Smelly", {
 	["chat-font-size"] = 12,
 	["chat-font-flags"] = "",
 	
-	["chat-tab-font"] = "FiraCode",
+	["chat-tab-font"] = "Fira Code",
 	["chat-tab-font-size"] = 10,
 	["chat-tab-font-flags"] = "",
 	["chat-tab-font-color"] = "FC533E",
 	
-	["chat-bubbles-font"] = "FiraCode",
+	["chat-bubbles-font"] = "Fira Code",
 	["chat-bubbles-font-size"] = 12,
 	["chat-bubbles-font-flags"] = "",
 	
@@ -315,11 +335,15 @@ Media:SetStyle("Smelly", {
 	["color-casting-stopped"] = "F39C12",
 	["color-casting-interrupted"] = "D35400",
 	
-	["action-bars-font"] = "FiraCode",
+	["action-bars-font"] = "Fira Code",
 	["action-bars-font-size"] = 10,
 	["action-bars-font-flags"] = "",
 	
-	["tooltips-font"] = "FiraCode",
+	["tooltips-font"] = "Fira Code",
 	["tooltips-size"] = 10,
 	["tooltips-flags"] = "",
+	
+	["nameplate-font"] = "Fira Code",
+	["nameplate-font-size"] = 10,
+	["nameplate-font-flags"] = "",
 })

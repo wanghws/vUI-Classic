@@ -212,7 +212,7 @@ Media:SetFont("FranKlein", "Interface\\Addons\\vUI\\Media\\Fonts\\FranKleinBoldR
 Media:SetFont("Noto Sans", "Interface\\Addons\\vUI\\Media\\Fonts\\NotoSansCondensedSemiBold.ttf")
 Media:SetFont("Visitor", "Interface\\Addons\\vUI\\Media\\Fonts\\Visitor.ttf", nil, true)
 Media:SetFont("Pixel Arial", "Interface\\Addons\\vUI\\Media\\Fonts\\PixelArial.ttf", nil, true)
-Media:SetFont("FiraCode", "Interface\\Addons\\vUI\\Media\\Fonts\\FiraCode.ttf")
+Media:SetFont("Fira Code", "Interface\\Addons\\vUI\\Media\\Fonts\\FiraCode.ttf")
 
 -- Textures
 Media:SetTexture("Blank", "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga")

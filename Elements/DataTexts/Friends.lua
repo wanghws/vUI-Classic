@@ -172,7 +172,12 @@ end
 
 ClientInfo["WoW"] = function(name, id)
 	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
-	local ClassColor = RAID_CLASS_COLORS[GetClass(Class)].colorStr
+	
+	Class = GetClass(Class)
+	
+	local ClassColor = vUI.ClassColors[Class]
+	ClassColor = vUI:RGBToHex(ClassColor[1], ClassColor[2], ClassColor[3])
+	
 	local LevelColor = GetQuestDifficultyColor(Level)
 	LevelColor = vUI:RGBToHex(LevelColor.r, LevelColor.g, LevelColor.b)
 	
@@ -184,7 +189,7 @@ ClientInfo["WoW"] = function(name, id)
 		name = format("|cFF00FFF6%s|r", name)
 	end
 	
-	local NameInfo = format("%s |cFFFFFFFF(|cFF%s%s|r |c%s%s|r|cFFFFFFFF)|r", name, LevelColor, Level, ClassColor, CharacterName)
+	local NameInfo = format("%s |cFFFFFFFF(|cFF%s%s|r |cFF%s%s|r|cFFFFFFFF)|r", name, LevelColor, Level, ClassColor, CharacterName)
 	
 	return NameInfo, ProjectIDToName[WoWProjectID]
 end
@@ -203,7 +208,8 @@ ClientInfo["WTCG"] = function(name, id)
 	return name, ClientToName[Client]
 end
 
-local ProcessClientInformation = function(client, name, id)
+local GetClientInformation = function(client, name, id)
+	
 	if ClientInfo[client] then
 		local Left, Right = ClientInfo[client](name, id)
 		
@@ -224,7 +230,7 @@ local OnEnter = function(self)
 	for i = 1, NumBNFriends do
 		local PresenceID, AccountName, BattleTag, IsBattleTagPresence, CharacterName, BNetIDGameAccount, Client, IsOnline, LastOnline, IsAFK, IsDND = BNGetFriendInfo(i)
 		
-		local Left, Right = ProcessClientInformation(Client, AccountName, (BNetIDGameAccount or PresenceID))
+		local Left, Right = GetClientInformation(Client, AccountName, (BNetIDGameAccount or PresenceID))
 		
 		if Right then
 			GameTooltip:AddDoubleLine(Left, Right)
