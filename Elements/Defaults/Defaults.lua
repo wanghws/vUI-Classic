@@ -308,6 +308,7 @@ Defaults["nameplates-color-by-reaction"] = true
 Defaults["nameplates-color-by-tapped"] = true
 Defaults["nameplates-enable-elite-indicator"] = true
 Defaults["nameplates-enable-target-indicator"] = true
+Defaults["nameplates-enable-castbar"] = true
 
 -- Tooltips
 Defaults["tooltips-enable"] = true

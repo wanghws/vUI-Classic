@@ -568,6 +568,12 @@ local NamePlateCallback = function(self)
 		self:DisableElement("TargetIndicator")
 	end
 	
+	if Settings["nameplates-enable-castbar"] then
+		self:EnableElement("Castbar")
+	else
+		self:DisableElement("Castbar")
+	end
+	
 	if self.Debuffs then
 		self.Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
 	end
@@ -578,6 +584,8 @@ local NamePlateCallback = function(self)
 	self.TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	self.BottomRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	self.BottomLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.Castbar.Time:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.Castbar.Text:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	
 	self.Health.colorTapping = Settings["nameplates-color-by-tapped"]
 	self.Health.colorClass = Settings["nameplates-color-by-class"]
@@ -680,13 +688,13 @@ local StyleNamePlate = function(self, unit)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
-	Time:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Time:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	Time:SetScaledPoint("RIGHT", Castbar, "BOTTOMRIGHT", -4, -3)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
-	Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Text:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	Text:SetScaledPoint("LEFT", Castbar, "BOTTOMLEFT", 4, -3)
 	Text:SetScaledWidth(Settings["nameplates-width"] / 2 + 4)
 	Text:SetJustifyH("LEFT")
@@ -2166,10 +2174,24 @@ local NamePlateSetFont = function(self)
 	self.TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	self.BottomRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	self.BottomLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.Castbar.Time:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
+	self.Castbar.Text:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 end
 
 local UpdateNamePlatesFont = function()
 	oUF:RunForAllNamePlates(NamePlateSetFont)
+end
+
+local NamePlateEnableCastBars = function(self, value)
+	if value then
+		self:EnableElement("Castbar")
+	else
+		self:DisableElement("Castbar")
+	end
+end
+
+local UpdateNamePlatesEnableCastBars = function(value)
+	oUF:RunForAllNamePlates(NamePlateSetTargetHightlight, value)
 end
 
 GUI:AddOptions(function(self)
@@ -2201,6 +2223,9 @@ GUI:AddOptions(function(self)
 	Right:CreateInput("nameplates-topright-text", Settings["nameplates-topright-text"], Language["Top Right Text"], "")
 	Right:CreateInput("nameplates-bottomleft-text", Settings["nameplates-bottomleft-text"], Language["Bottom Left Text"], "")
 	Right:CreateInput("nameplates-bottomright-text", Settings["nameplates-bottomright-text"], Language["Bottom Right Text"], "")
+	
+	Right:CreateHeader(Language["Casting Bar"])
+	Right:CreateSwitch("nameplates-enable-castbar", Settings["nameplates-enable-castbar"], Language["Enable Casting Bar"], "Enable the casting bar the name plates", UpdateNamePlatesEnableCastBars)
 	
 	Right:CreateHeader(Language["Target Indicator"])
 	Right:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)

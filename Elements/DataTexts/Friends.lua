@@ -221,7 +221,6 @@ local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
 	
 	local NumFriends = GetNumFriends()
-	local NumOnline = GetNumOnlineFriends()
 	local NumBNFriends, NumBNOnline = BNGetNumFriends()
 	local FriendInfo
 	local Name
