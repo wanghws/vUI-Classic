@@ -47,6 +47,7 @@ Defaults["ui-highlight-color"] = "FFFFFF" -- TBI
 
 Defaults["gui-enable-fade"] = false
 Defaults["gui-faded-alpha"] = 20
+Defaults["gui-hide-in-combat"] = true
 
 -- Classes (populating retail colors as well) -- The commented colors are 10% darker, I like it better on some textures
 Defaults["color-death-knight"] = "C41F3B" -- 7F222D
@@ -268,6 +269,7 @@ Defaults["delete-filter-weapon"] = true
 Defaults["delete-filter-armor"] = true
 Defaults["delete-filter-reagent"] = false
 Defaults["delete-filter-tradeskill"] = false
+Defaults["delete-filter-quest"] = true
 
 -- Announcements
 Defaults["announcements-enable"] = true
@@ -309,6 +311,8 @@ Defaults["nameplates-color-by-tapped"] = true
 Defaults["nameplates-enable-elite-indicator"] = true
 Defaults["nameplates-enable-target-indicator"] = true
 Defaults["nameplates-enable-castbar"] = true
+Defaults["nameplates-castbar-height"] = 12
+Defaults["nameplates-castbar-enable-icon"] = true
 
 -- Tooltips
 Defaults["tooltips-enable"] = true

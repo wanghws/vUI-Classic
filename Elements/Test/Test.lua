@@ -684,6 +684,10 @@ function Delete:UpdateFilterTradeskill(value)
 	self.FilterClassIDs[7] = value
 end
 
+function Delete:UpdateFilterQuest(value)
+	self.FilterClassIDs[12] = value
+end
+
 function Delete:EvaluateItem(link)
 	local ItemType, ItemSubType, _, _, _, _, ClassID, SubClassID = select(6, GetItemInfo(link))
 	local ID = match(link, ":(%w+)")
@@ -766,24 +770,28 @@ local UpdateDeleteFilterConsumable = function(value)
 	Delete:UpdateFilterConsumable(value)
 end
 
-local UpdateUpdateFilterContainer = function(value)
+local UpdateFilterContainer = function(value)
 	Delete:UpdateFilterContainer(value)
 end
 
-local UpdateUpdateFilterWeapon = function(value)
+local UpdateFilterWeapon = function(value)
 	Delete:UpdateFilterWeapon(value)
 end
 
-local UpdateUpdateFilterArmor = function(value)
+local UpdateFilterArmor = function(value)
 	Delete:UpdateFilterArmor(value)
 end
 
-local UpdateUpdateFilterReagent = function(value)
+local UpdateFilterReagent = function(value)
 	Delete:UpdateFilterReagent(value)
 end
 
-local UpdateUpdateFilterTradeskill = function(value)
+local UpdateFilterTradeskill = function(value)
 	Delete:UpdateFilterTradeskill(value)
+end
+
+local UpdateFilterQuest = function(value)
+	Delete:UpdateFilterQuest(value)
 end
 
 function Delete:Load()
@@ -793,6 +801,7 @@ function Delete:Load()
 	self:UpdateFilterArmor(Settings["delete-filter-armor"])
 	self:UpdateFilterReagent(Settings["delete-filter-reagent"])
 	self:UpdateFilterTradeskill(Settings["delete-filter-tradeskill"])
+	self:UpdateFilterQuest(Settings["delete-filter-quest"])
 end
 
 local PrintCheapest = function()
@@ -862,7 +871,8 @@ GUI:AddOptions(function(self)
 	local Left, Right = self:GetWindow(Language["General"])
 	
 	Right:CreateHeader(Language["Settings Window"])
-	Right:CreateSwitch("gui-enable-fade", Settings["gui-enable-fade"], Language["Fade While Moving"], "The settings window will fade out while moving", UpdateGUIEnableFade)
+	Right:CreateSwitch("gui-hide-in-combat", Settings["gui-hide-in-combat"], Language["Hide In Combat"], "Hide the settings window when engaging in combat")
+	Right:CreateSwitch("gui-enable-fade", Settings["gui-enable-fade"], Language["Fade While Moving"], "Fade out The settings window while moving", UpdateGUIEnableFade)
 	Right:CreateSlider("gui-faded-alpha", Settings["gui-faded-alpha"], 0, 100, 10, Language["Set Faded Opacity"], Language["Set the opacity of the settings window|n while faded"], nil, nil, "%")
 	
 	Right:CreateHeader(Language["Bags Frame"])
@@ -878,11 +888,12 @@ GUI:AddOptions(function(self)
 	Left:CreateButton(Language["Search"], Language["Find Cheapest Item"], "Find the cheapest item|ncurrently in your inventory", PrintCheapest)
 	Left:CreateButton(Language["Delete"], Language["Delete Cheapest Item"], "Delete the cheapest item|ncurrently in your inventory", DeleteCheapest)
 	Left:CreateSwitch("delete-filter-consumable", Settings["delete-filter-consumable"], Language["Filter Consumables"], "Exclude consumables", UpdateDeleteFilterConsumable)
-	Left:CreateSwitch("delete-filter-container", Settings["delete-filter-container"], Language["Filter Containers"], "Exclude container items", UpdateUpdateFilterContainer)
-	Left:CreateSwitch("delete-filter-weapon", Settings["delete-filter-weapon"], Language["Filter Weapons"], "Exclude weapons items", UpdateUpdateFilterWeapon)
-	Left:CreateSwitch("delete-filter-armor", Settings["delete-filter-armor"], Language["Filter Armor"], "Exclude armor items", UpdateUpdateFilterArmor)
-	Left:CreateSwitch("delete-filter-reagent", Settings["delete-filter-reagent"], Language["Filter Reagents"], "Exclude reagent related items", UpdateUpdateFilterReagent)
-	Left:CreateSwitch("delete-filter-tradeskill", Settings["delete-filter-tradeskill"], Language["Filter Tradeskills"], "Exclude tradeskill related items", UpdateUpdateFilterTradeskill)
+	Left:CreateSwitch("delete-filter-container", Settings["delete-filter-container"], Language["Filter Containers"], "Exclude container items", UpdateFilterContainer)
+	Left:CreateSwitch("delete-filter-weapon", Settings["delete-filter-weapon"], Language["Filter Weapons"], "Exclude weapons items", UpdateFilterWeapon)
+	Left:CreateSwitch("delete-filter-armor", Settings["delete-filter-armor"], Language["Filter Armor"], "Exclude armor items", UpdateFilterArmor)
+	Left:CreateSwitch("delete-filter-reagent", Settings["delete-filter-reagent"], Language["Filter Reagents"], "Exclude reagent related items", UpdateFilterReagent)
+	Left:CreateSwitch("delete-filter-tradeskill", Settings["delete-filter-tradeskill"], Language["Filter Tradeskills"], "Exclude tradeskill related items", UpdateFilterTradeskill)
+	Left:CreateSwitch("delete-filter-quest", Settings["delete-filter-quest"], Language["Filter Quest Items"], "Exclude quest related items", UpdateFilterQuest)
 	
 	Right:CreateHeader(Language["Merchant"])
 	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items|nwhen visiting a repair merchant", UpdateAutoRepair)

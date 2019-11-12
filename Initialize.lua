@@ -293,6 +293,33 @@ vUI.Outline = {
 	insets = {left = 0, right = 0, top = 0, bottom = 0},
 }
 
+vUI.TimerPool = {}
+
+local TimerOnFinished = function(self)
+	self.Hook(self.Arg)
+	tinsert(vUI.TimerPool, self)
+end
+
+function vUI:StartTimer(seconds, callback, arg)
+	local Timer
+	
+	if (not self.TimerParent) then
+		self.TimerParent = CreateAnimationGroup(self)
+	end
+	
+	if self.TimerPool[1] then
+		Timer = tremove(self.TimerPool, 1)
+	else
+		Timer = self.TimerParent:CreateAnimation("sleep")
+	end
+	
+	Timer.Hook = callback
+	Timer.Arg = arg
+	Timer:SetDuration(seconds)
+	Timer:SetScript("OnFinished", TimerOnFinished)
+	Timer:Play()
+end
+
 function vUI:HexToRGB(hex)
 	if (not hex) then
 		return

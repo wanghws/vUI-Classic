@@ -579,6 +579,7 @@ local NamePlateCallback = function(self)
 	end
 	
 	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	self.Castbar:SetScaledHeight(Settings["nameplates-castbar-height"])
 	
 	self.TopLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	self.TopRight:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
@@ -669,7 +670,7 @@ local StyleNamePlate = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
-    Castbar:SetScaledSize(Settings["nameplates-width"] - 2, 12)
+    Castbar:SetScaledSize(Settings["nameplates-width"] - 2, Settings["nameplates-castbar-height"])
 	Castbar:SetScaledPoint("TOP", Health, "BOTTOM", 0, -4)
     Castbar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -2194,6 +2195,14 @@ local UpdateNamePlatesEnableCastBars = function(value)
 	oUF:RunForAllNamePlates(NamePlateSetTargetHightlight, value)
 end
 
+local NamePlateSetCastBarsHeight = function(self, value)
+	self.Castbar:SetScaledHeight(value)
+end
+
+local UpdateNamePlatesCastBarsHeight = function(value)
+	oUF:RunForAllNamePlates(NamePlateSetCastBarsHeight, value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
@@ -2213,7 +2222,7 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("nameplates-display-debuffs", Settings["nameplates-display-debuffs"], Language["Enable Name Plates Debuffs"], "Display your debuffs above enemy name plates", UpdateNamePlatesEnableDebuffs)
 	Left:CreateSwitch("nameplates-only-player-debuffs", Settings["nameplates-only-player-debuffs"], Language["Only Display Player Debuffs"], "If enabled, only your own debuffs will be displayed", UpdateNamePlatesShowPlayerDebuffs)
 	
-	Right:CreateHeader(Language["Colors"])
+	Right:CreateHeader(Language["Health Colors"])
 	Right:CreateSwitch("nameplates-color-by-tapped", Settings["nameplates-color-by-tapped"], Language["Use Tapped Colors"], "Color name plate health if the unit is tapped by another player", UpdateNamePlateColors)
 	Right:CreateSwitch("nameplates-color-by-class", Settings["nameplates-color-by-class"], Language["Use Class Colors"], "Color name plate health by class", UpdateNamePlateColors)
 	Right:CreateSwitch("nameplates-color-by-reaction", Settings["nameplates-color-by-reaction"], Language["Use Reaction Colors"], "Color name plate health by unit reaction", UpdateNamePlateColors)
@@ -2226,6 +2235,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Casting Bar"])
 	Right:CreateSwitch("nameplates-enable-castbar", Settings["nameplates-enable-castbar"], Language["Enable Casting Bar"], "Enable the casting bar the name plates", UpdateNamePlatesEnableCastBars)
+	Right:CreateSlider("nameplates-castbar-height", Settings["nameplates-castbar-height"], 3, 28, 1, "Set Height", "Set the height of name plate casting bars", UpdateNamePlatesCastBarsHeight)
 	
 	Right:CreateHeader(Language["Target Indicator"])
 	Right:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)

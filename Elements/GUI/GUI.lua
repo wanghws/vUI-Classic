@@ -3629,7 +3629,7 @@ function GUI:RunQueue()
 end
 
 function GUI:PLAYER_REGEN_DISABLED()
-	if self:IsVisible() then
+	if (Settings["gui-hide-in-combat"] and self:IsVisible()) then
 		self:SetAlpha(0)
 		self:Hide()
 		CloseLastDropdown()
@@ -3637,15 +3637,15 @@ function GUI:PLAYER_REGEN_DISABLED()
 	end
 end
 
-local ReOpenWindow = function(self)
+local ReopenWindow = function(self)
 	GUI:SetAlpha(0)
 	GUI:Show()
 	GUI.FadeIn:Play()
 end
 
 function GUI:PLAYER_REGEN_ENABLED()
-	if self.WasCombatClosed then
-		vUI:DisplayPopup(Language["Attention"], Language["The settings window was automatically closed due to combat. Would you like to open it again?"], "Yes", ReOpenWindow, "No", nil)
+	if (Settings["gui-hide-in-combat"] and self.WasCombatClosed) then
+		vUI:DisplayPopup(Language["Attention"], Language["The settings window was automatically closed due to combat. Would you like to open it again?"], "Yes", ReopenWindow, "No", nil)
 	end
 	
 	self.WasCombatClosed = false
