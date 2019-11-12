@@ -3696,7 +3696,7 @@ end)
 
 function GUI:Toggle()
 	if (not self:IsVisible()) then
-		if InCombatLockdown() then
+		if (Settings["gui-hide-in-combat"] and InCombatLockdown()) then
 			vUI:print(ERR_NOT_IN_COMBAT)
 			
 			return
