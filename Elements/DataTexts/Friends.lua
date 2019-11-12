@@ -254,6 +254,10 @@ local OnLeave = function()
 	GameTooltip:Hide()
 end
 
+local OnMouseUp = function()
+	ToggleFriendsFrame(1)
+end
+
 local Update = function(self)
 	local NumOnline = GetNumOnlineFriends()
 	local NumBNFriends, NumBNOnline = BNGetNumFriends()
@@ -270,6 +274,7 @@ local OnEnable = function(self)
 	self:SetScript("OnEvent", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	C_FriendList.ShowFriends()
 	
@@ -281,6 +286,7 @@ local OnDisable = function(self)
 	self:SetScript("OnEvent", nil)
 	self:SetScript("OnEnter", nil)
 	self:SetScript("OnLeave", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

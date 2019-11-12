@@ -541,7 +541,7 @@ local BuffsSetPosition = function(element, from, to)
 		local Row = floor((i - 1) / Columns)
 		
 		Button:ClearAllPoints()
-		Button:SetPoint(Anchor, element, Anchor, Column * SizeX * GrowthX, Row * SizeY * GrowthY)
+		Button:SetScaledPoint(Anchor, element, Anchor, Column * SizeX * GrowthX, Row * SizeY * GrowthY)
 	end
 	
 	if (Rows > 0) then
@@ -564,6 +564,14 @@ local NamePlateCallback = function(self)
 	
 	if Settings["nameplates-enable-target-indicator"] then
 		self:EnableElement("TargetIndicator")
+		
+		if (Settings["nameplates-target-indicator-size"] == "SMALL") then
+			self.TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left"))
+			self.TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right"))
+		elseif (Settings["nameplates-target-indicator-size"] == "LARGE") then
+			self.TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left Large"))
+			self.TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right Large"))
+		end
 	else
 		self:DisableElement("TargetIndicator")
 	end
@@ -578,7 +586,7 @@ local NamePlateCallback = function(self)
 		self.Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
 	end
 	
-	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	self:SetScaledSize(Settings["nameplates-width"], Settings["nameplates-height"])
 	self.Castbar:SetScaledHeight(Settings["nameplates-castbar-height"])
 	
 	self.TopLeft:SetFontInfo(Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
@@ -594,10 +602,9 @@ local NamePlateCallback = function(self)
 end
 
 local StyleNamePlate = function(self, unit)
-	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
-	self:SetPoint("CENTER", 0, 0)
 	self:SetScale(Settings["ui-scale"])
-	
+	self:SetScaledSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	self:SetScaledPoint("CENTER", 0, 0)
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -735,14 +742,20 @@ local StyleNamePlate = function(self, unit)
 	TargetIndicator.Left = TargetIndicator:CreateTexture(nil, "ARTWORK")
 	TargetIndicator.Left:SetScaledSize(16, 16)
 	TargetIndicator.Left:SetScaledPoint("RIGHT", TargetIndicator, "LEFT", 2, 0)
-	TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left"))
 	TargetIndicator.Left:SetVertexColorHex(Settings["ui-widget-color"])
 	
 	TargetIndicator.Right = TargetIndicator:CreateTexture(nil, "ARTWORK")
 	TargetIndicator.Right:SetScaledSize(16, 16)
 	TargetIndicator.Right:SetScaledPoint("LEFT", TargetIndicator, "RIGHT", -3, 0)
-	TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right"))
 	TargetIndicator.Right:SetVertexColorHex(Settings["ui-widget-color"])
+	
+	if (Settings["nameplates-target-indicator-size"] == "SMALL") then
+		TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left"))
+		TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right"))
+	elseif (Settings["nameplates-target-indicator-size"] == "LARGE") then
+		TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left Large"))
+		TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right Large"))
+	end
 	
 	self:Tag(TopLeft, Settings["nameplates-topleft-text"])
 	self:Tag(TopRight, Settings["nameplates-topright-text"])
@@ -2203,6 +2216,20 @@ local UpdateNamePlatesCastBarsHeight = function(value)
 	oUF:RunForAllNamePlates(NamePlateSetCastBarsHeight, value)
 end
 
+local NamePlateSetTargetIndicatorSize = function(self, value)
+	if (value == "SMALL") then
+		self.TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left"))
+		self.TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right"))
+	elseif (value == "LARGE") then
+		self.TargetIndicator.Left:SetTexture(Media:GetTexture("Arrow Left Large"))
+		self.TargetIndicator.Right:SetTexture(Media:GetTexture("Arrow Right Large"))
+	end
+end
+
+local UpdateNamePlatesTargetIndicatorSize = function(value)
+	oUF:RunForAllNamePlates(NamePlateSetTargetIndicatorSize, value)
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Name Plates"])
 	
@@ -2239,6 +2266,7 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Target Indicator"])
 	Right:CreateSwitch("nameplates-enable-target-indicator", Settings["nameplates-enable-target-indicator"], Language["Enable Target Indicator"], "Display an indication on the targetted unit name plate", UpdateNamePlatesTargetHighlight)
+	Right:CreateDropdown("nameplates-target-indicator-size", Settings["nameplates-target-indicator-size"], {["Small"] = "SMALL", ["Large"] = "LARGE"}, "Indicator Size", "Select the size of the target indicator", UpdateNamePlatesTargetIndicatorSize)
 	
 	--[[if (not Settings["nameplates-display-debuffs"]) then
 		GUI:GetWidgetByWindow(Language["Name Plates"], "nameplates-only-player-debuffs"):Disable() -- Temporary

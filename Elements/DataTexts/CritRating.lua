@@ -17,6 +17,10 @@ local OnLeave = function()
 	GameTooltip:Hide()
 end
 
+local OnMouseUp = function()
+	ToggleCharacter("PaperDollFrame")
+end
+
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
 		return
@@ -44,6 +48,7 @@ local OnEnable = function(self)
 	self:SetScript("OnEvent", Update)
 	--self:SetScript("OnEnter", OnEnter)
 	--self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update(nil, "player")
 end
@@ -53,8 +58,9 @@ local OnDisable = function(self)
 	self:UnregisterEvent("UNIT_AURA")
 	self:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED")
 	self:SetScript("OnEvent", nil)
-	self:SetScript("OnEnter", nil)
-	self:SetScript("OnLeave", nil)
+	--self:SetScript("OnEnter", nil)
+	--self:SetScript("OnLeave", nil)
+	self:SetScript("OnLeave", OnMouseUp)
 	
 	self.Text:SetText("")
 end

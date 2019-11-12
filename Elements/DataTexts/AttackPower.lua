@@ -6,6 +6,10 @@ local UnitAttackPower = UnitAttackPower
 local UnitRangedAttackPower = UnitRangedAttackPower
 local Label = Language["Power"]
 
+local OnMouseUp = function()
+	ToggleCharacter("PaperDollFrame")
+end
+
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
 		return
@@ -34,6 +38,7 @@ local OnEnable = function(self)
 	self:RegisterEvent("UNIT_RANGED_ATTACK_POWER")
 	self:RegisterEvent("UNIT_AURA")
 	self:SetScript("OnEvent", Update)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update(nil, "player")
 end
@@ -44,6 +49,7 @@ local OnDisable = function(self)
 	self:UnregisterEvent("UNIT_RANGED_ATTACK_POWER")
 	self:UnregisterEvent("UNIT_AURA")
 	self:SetScript("OnEvent", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

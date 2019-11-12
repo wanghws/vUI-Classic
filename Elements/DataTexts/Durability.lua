@@ -2,7 +2,7 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local DT = vUI:GetModule("DataText")
 
-local Slots = {1, 3, 5, 6, 7, 8, 9, 10, 16, 17, 18}
+local Slots = {1, 3, 5, 9, 10, 6, 7, 8, 16, 17, 18}
 local GetRepairAllCost = GetRepairAllCost
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemDurability = GetInventoryItemDurability
@@ -34,7 +34,7 @@ local OnEnter = function(self)
 	
 	if (TotalCost > 0) then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(Language["Repair cost"], GetCoinTextureString(TotalCost))
+		GameTooltip:AddDoubleLine(Language["Repair cost"], GetCoinTextureString(TotalCost), 1, 1, 1, 1, 1, 1)
 	end
 	
 	GameTooltip:Show()
@@ -42,6 +42,10 @@ end
 
 local OnLeave = function()
 	GameTooltip:Hide()
+end
+
+local OnMouseUp = function()
+	ToggleCharacter("PaperDollFrame")
 end
 
 local Update = function(self)
@@ -66,6 +70,7 @@ local OnEnable = function(self)
 	self:SetScript("OnEvent", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update()
 end
@@ -76,6 +81,7 @@ local OnDisable = function(self)
 	self:SetScript("OnEvent", nil)
 	self:SetScript("OnEnter", nil)
 	self:SetScript("OnLeave", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

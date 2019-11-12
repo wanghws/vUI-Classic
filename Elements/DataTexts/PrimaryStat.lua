@@ -10,6 +10,10 @@ local ValidStat = {
 	[4] = SPELL_STAT4_NAME,
 }
 
+local OnMouseUp = function()
+	ToggleCharacter("PaperDollFrame")
+end
+
 local Update = function(self, event, unit)
 	if (unit and unit ~= "player") then
 		return
@@ -39,6 +43,7 @@ local OnEnable = function(self)
 	self:RegisterEvent("UNIT_STATS")
 	self:RegisterEvent("UNIT_AURA")
 	self:SetScript("OnEvent", Update)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update(nil, "player")
 end
@@ -47,6 +52,7 @@ local OnDisable = function(self)
 	self:UnregisterEvent("UNIT_STATS")
 	self:UnregisterEvent("UNIT_AURA")
 	self:SetScript("OnEvent", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

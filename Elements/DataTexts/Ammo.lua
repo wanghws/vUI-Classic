@@ -23,6 +23,10 @@ local OnLeave = function()
 	GameTooltip:Hide()
 end
 
+local OnMouseUp = function()
+	ToggleCharacter("PaperDollFrame")
+end
+
 local Update = function(self)
 	local Count = 0
 	
@@ -41,6 +45,7 @@ local OnEnable = function(self)
 	self:SetScript("OnEvent", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update()
 end
@@ -51,6 +56,7 @@ local OnDisable = function(self)
 	self:SetScript("OnEvent", nil)
 	self:SetScript("OnEnter", nil)
 	self:SetScript("OnLeave", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

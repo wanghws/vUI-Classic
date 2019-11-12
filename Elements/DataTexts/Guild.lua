@@ -86,6 +86,17 @@ local OnLeave = function(self)
 	self.TooltipShown = false
 end
 
+local OnMouseUp = function()
+	--[[if FriendsFrame:IsShown() then
+		HideUIPanel(FriendsFrame)
+	else
+		PanelTemplates_SetTab(FriendsFrame, 3)
+		ShowUIPanel(FriendsFrame)
+	end]]
+	
+	ToggleFriendsFrame(3)
+end
+
 local Update = function(self, event)
 	if (not IsInGuild()) then
 		self.Text:SetText(Language["No Guild"])
@@ -116,6 +127,7 @@ local OnEnable = function(self)
 	self:SetScript("OnEvent", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self:Update()
 end
@@ -126,6 +138,7 @@ local OnDisable = function(self)
 	self:SetScript("OnEvent", nil)
 	self:SetScript("OnEnter", nil)
 	self:SetScript("OnLeave", nil)
+	self:SetScript("OnMouseUp", nil)
 	
 	self.Text:SetText("")
 end

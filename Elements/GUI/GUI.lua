@@ -12,6 +12,7 @@ local lower = string.lower
 local sub = string.sub
 local gsub = string.gsub
 local floor = math.floor
+local InCombatLockdown = InCombatLockdown
 local IsModifierKeyDown = IsModifierKeyDown
 local GetMouseFocus = GetMouseFocus
 
