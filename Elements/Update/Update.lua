@@ -96,17 +96,17 @@ function Update:CHAT_MSG_ADDON(event, prefix, message, channel, sender)
 	if (channel == "WHISPER") then
 		if (message > AddOnVersion) then
 			--vUI:SendAlert("New Version", format("Update to version |cFF%s%s|r!", Settings["ui-header-font-color"], Version), nil, UpdateOnMouseUp, true)
-				vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
-				print("	https://www.curseforge.com/wow/addons/vui")
-				
+			vUI:print(format("Update to version |cFF%s%s|r! www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], message))
+			print("Join the Discord community for support and feedback https://discord.gg/BKzWPhT")
+			
 			self:UnregisterEvent(event)
 		end
 	else
 		if (AddOnVersion > message) then -- We have a higher version, share it
 			SendAddonMessage("vUI-Version", AddOnVersion, "WHISPER", sender)
 		elseif (message > AddOnVersion) then -- We're behind!
-			vUI:print(format("Update to version |cFF%s%s|r! https://discord.gg/BKzWPhT", Settings["ui-header-font-color"], message))
-			print("	https://www.curseforge.com/wow/addons/vui")
+			vUI:print(format("Update to version |cFF%s%s|r! www.curseforge.com/wow/addons/vui", Settings["ui-header-font-color"], message))
+			print("Join the Discord community for support and feedback https://discord.gg/BKzWPhT")
 			
 			-- Store this higher version and tell anyone else who asks?
 			

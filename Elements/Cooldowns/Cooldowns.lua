@@ -74,12 +74,12 @@ Frame.Anim = CreateAnimationGroup(Frame)
 Frame.AnimIn = Frame.Anim:CreateAnimation("Fade")
 Frame.AnimIn:SetChange(1)
 Frame.AnimIn:SetDuration(0.2) -- 0.3
-Frame.AnimIn:SetSmoothing("in")
+Frame.AnimIn:SetEasing("in")
 
 Frame.AnimOut = Frame.Anim:CreateAnimation("Fade")
 Frame.AnimOut:SetChange(0)
 Frame.AnimOut:SetDuration(0.6)
-Frame.AnimOut:SetSmoothing("out")
+Frame.AnimOut:SetEasing("out")
 
 Frame.Sleep = Frame.Anim:CreateAnimation("Sleep")
 Frame.Sleep:SetDuration(1.4)
