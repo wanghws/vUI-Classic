@@ -174,7 +174,7 @@ Media:SetStyle("Conjured Muffin", {
 	["nameplate-font-flags"] = "",
 })
 
--- Zen
+--[[ Zen
 Media:SetStyle("Zen", {
 	["ui-widget-font"] = "Prototype",
 	["ui-header-font"] = "Prototype",
@@ -230,9 +230,9 @@ Media:SetStyle("Zen", {
 	["nameplate-font"] = "Prototype",
 	["nameplate-font-size"] = 12,
 	["nameplate-font-flags"] = "",
-})
+})]]
 
--- Slate
+--[[ Slate
 Media:SetStyle("Slate", {
 	["ui-widget-font"] = "PT Sans",
 	["ui-header-font"] = "PT Sans",
@@ -288,7 +288,7 @@ Media:SetStyle("Slate", {
 	["nameplate-font"] = "Prototype",
 	["nameplate-font-size"] = 12,
 	["nameplate-font-flags"] = "",
-})
+})]]
 
 -- Smelly
 Media:SetStyle("Smelly", {
