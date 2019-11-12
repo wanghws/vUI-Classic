@@ -320,7 +320,6 @@ local OnMouseWheel = function(self, delta)
 	end
 end
 
--- To do: Print channel isn't setting width properly. don't have time to investigate atm, so making a note.
 local UpdateEditBoxColor = function(editbox)
 	local ChatType = editbox:GetAttribute("chatType")
 	local Backdrop = editbox.Backdrop

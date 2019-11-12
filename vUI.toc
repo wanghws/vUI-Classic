@@ -38,6 +38,7 @@ Elements\Colors\Colors.lua
 Elements\Throttle\Throttle.lua
 Elements\Move\Move.lua
 Elements\General\General.lua
+Elements\Gold\Gold.lua
 Elements\Chat\Chat.lua
 Elements\Chat\Bubbles.lua
 Elements\Experience\Experience.lua

@@ -3280,32 +3280,6 @@ local WindowButtonOnMouseDown = function(self)
 	self.Texture:SetVertexColor(R * 0.85, G * 0.85, B * 0.85)
 end
 
-local Storage = {
-	["button"] = CreateButton,
-	["color"] = CreateColorSelection,
-	["dropdown"] = CreateDropdown,
-	["header"] = CreateHeader,
-	["footer"] = CreateFooter,
-	["line"] = CreateLine,
-	["doubleline"] = CreateDoubleLine,
-	["slider"] = CreateSlider,
-	["input"] = CreateInput,
-	["inputwithbutton"] = CreateInputWithButton,
-	["checkbox"] = CreateCheckbox,
-	["switch"] = CreateSwitch,
-	["statusbar"] = CreateStatusBar,
-}
-
-local CreateWidget = function(self, name, ...)
-	local WidgetType = lower(name)
-	
-	if Storage[WidgetType] then
-		Storage[WidgetType](...)
-	else
-		vUI:print("Invalid widget type: " .. WidgetType)
-	end
-end
-
 -- local Table, Count = Window:GetNonDefault()
 local GetNonDefault = function(self)
 
@@ -3412,7 +3386,6 @@ function GUI:CreateWindow(name, default)
 	Window.LeftWidgets = {}
 	Window.RightWidgets = {}
 	Window.SortWindow = SortWindow
-	Window.CreateWidget = CreateWidget
 	
 	Window.LeftWidgetsBG.Widgets = Window.LeftWidgets
 	Window.LeftWidgetsBG.SetIgnoreScrolling = SetIgnoreScrolling

@@ -87,19 +87,14 @@ local OnLeave = function(self)
 end
 
 local OnMouseUp = function()
-	--[[if FriendsFrame:IsShown() then
-		HideUIPanel(FriendsFrame)
-	else
-		PanelTemplates_SetTab(FriendsFrame, 3)
-		ShowUIPanel(FriendsFrame)
-	end]]
-	
 	ToggleFriendsFrame(3)
 end
 
 local Update = function(self, event)
 	if (not IsInGuild()) then
 		self.Text:SetText(Language["No Guild"])
+		
+		return
 	end
 	
 	if (event == "MODIFIER_STATE_CHANGED") then
