@@ -204,6 +204,10 @@ function Reputation:OnEvent()
 	end
 end
 
+function Reputation:OnMouseUp()
+	ToggleCharacter("ReputationFrame")
+end
+
 function Reputation:Load()
 	if (not Settings["reputation-enable"]) then
 		return
@@ -214,6 +218,7 @@ function Reputation:Load()
 	
 	self:RegisterEvent("UPDATE_FACTION")
 	self:SetScript("OnEvent", self.OnEvent)
+	self:SetScript("OnMouseUp", self.OnMouseUp)
 end
 
 local UpdateDisplayProgress = function(value)
