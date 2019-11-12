@@ -1,8 +1,6 @@
 -- LibAnim by Hydra
 local Version = 2.03
 
--- Note, deprecated items will be removed next version. Please update your usage accordingly. (ctrl + f - "Deprecated")
-
 if (_LibAnim and _LibAnim >= Version) then
 	return
 end
@@ -376,7 +374,6 @@ Easing["inout-elastic"] = InOutElastic
 Easing["in"] = Easing["in-quadratic"]
 Easing["out"] = Easing["out-quadratic"]
 Easing["inout"] = Easing["inout-quadratic"]
-Easing["bounce"] = Easing["out-bounce"] -- Deprecated, don't use bounce without an explicit motion anymore
 
 local AnimMethods = {
 	All = {
@@ -450,16 +447,6 @@ local AnimMethods = {
 		end,
 		
 		GetEasing = function(self)
-			return self.Easing
-		end,
-		
-		SetSmoothing = function(self, easing) -- Deprecated, change "SetSmoothing" to "SetEasing"
-			easing = lower(easing)
-			
-			self.Easing = Easing[easing] and easing or "linear"
-		end,
-		
-		GetSmoothing = function(self) -- Deprecated, change "GetSmoothing" to "GetEasing"
 			return self.Easing
 		end,
 		
