@@ -224,14 +224,25 @@ local OnEnter = function(self)
 		XP = UnitXP("player")
 		Max = UnitXPMax("player")
 		
-		local XPColor = Settings["experience-bar-color"]
-		local RestedColor = Settings["experience-rested-color"]
-		local Perc = floor(XP / Max * 100 + 0.5)
+		local Percent = floor((XP / Max * 100 + 0.05) * 10) / 10
+		local Remaining = Max - XP
+		local RemainingPercent = floor((Remaining / Max * 100 + 0.05) * 10) / 10
+		
+		GameTooltip:AddLine(LEVEL .. " " .. UnitLevel("player"))
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(Language["Current experience"])
+		GameTooltip:AddDoubleLine(format("%s / %s", vUI:Comma(XP), vUI:Comma(Max)), format("%s%%", Percent), 1, 1, 1, 1, 1, 1)
+		
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(Language["Remaining experience"])
+		GameTooltip:AddDoubleLine(format("%s", vUI:Comma(Remaining)), format("%s%%", RemainingPercent), 1, 1, 1, 1, 1, 1)
 		
 		if Rested then
-			GameTooltip:AddLine(format("|cFF%s%s / %s|r |cFF%s(+%s)|r - |cFF%s%s%%|r", XPColor, vUI:Comma(XP), vUI:Comma(Max), RestedColor, vUI:Comma(Rested), XPColor, Perc))
-		else
-			GameTooltip:AddLine(format("|cFF%s%s / %s|r - |cFF%s%s%%|r", XPColor, vUI:Comma(XP), vUI:Comma(Max), XPColor, Perc))
+			local RestedPercent = floor((Rested / Max * 100 + 0.05) * 10) / 10
+			
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(Language["Rested experience"])
+			GameTooltip:AddDoubleLine(vUI:Comma(Rested), format("%s%%", RestedPercent), 1, 1, 1, 1, 1, 1)
 		end
 		
 		GameTooltip:Show()

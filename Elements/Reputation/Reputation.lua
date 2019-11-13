@@ -218,7 +218,7 @@ function Reputation:Load()
 	
 	self:RegisterEvent("UPDATE_FACTION")
 	self:SetScript("OnEvent", self.OnEvent)
-	self:SetScript("OnMouseUp", self.OnMouseUp)
+	--self:SetScript("OnMouseUp", self.OnMouseUp)
 end
 
 local UpdateDisplayProgress = function(value)

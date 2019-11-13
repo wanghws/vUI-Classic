@@ -11,33 +11,33 @@ local OnEnter = function(self)
 	
 	local TrashValue = select(2, vUI:GetTrashValue())
 	local ServerInfo, ServerTotalGold = Gold:GetServerInfo()
-	local Gain, Loss = Gold:GetSessionStats()
+	local Change = Gold:GetSessionStats()
 	
-	GameTooltip:AddLine(format("%s - %s", vUI.UserRealm, vUI.UserFaction))
+	GameTooltip:AddLine(vUI.UserRealm)
 	GameTooltip:AddLine(" ")
 	
 	if (#ServerInfo > 1) then
-		GameTooltip:AddDoubleLine(Language["Total"], GetCoinTextureString(ServerTotalGold))
+		GameTooltip:AddDoubleLine(Language["Total"], GetCoinTextureString(ServerTotalGold), 1, 0.82, 0, 1, 1, 1)
 	end
 	
 	for i = 1, #ServerInfo do
-		GameTooltip:AddDoubleLine(ServerInfo[i][1], GetCoinTextureString(ServerInfo[i][2]))
+		GameTooltip:AddDoubleLine(ServerInfo[i][1], GetCoinTextureString(ServerInfo[i][2]), 1, 1, 1, 1, 1, 1)
 	end
 	
-	if ((Gain > 0) or (Loss > 0)) then
+	if (Change ~= 0) then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(Language["Session"])
 		
-		if (Gain > Loss) then
-			GameTooltip:AddDoubleLine(Language["Profit"], GetCoinTextureString(Gain))
+		if (Change > 0) then
+			GameTooltip:AddDoubleLine(Language["|cFF66FF66Profit|r"], GetCoinTextureString(Change), 1, 1, 1, 1, 1, 1)
 		else
-			GameTooltip:AddDoubleLine(Language["Loss"], GetCoinTextureString(Loss))
+			GameTooltip:AddDoubleLine(Language["|cFFFF6666Loss|r"], GetCoinTextureString(Change * -1), 1, 1, 1, 1, 1, 1)
 		end
 	end
 	
 	if (TrashValue > 0) then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(Language["Trash item vendor value:"], GetCoinTextureString(TrashValue))
+		GameTooltip:AddDoubleLine(Language["Trash item vendor value:"], GetCoinTextureString(TrashValue), 1, 1, 1, 1, 1, 1)
 	end
 	
 	GameTooltip:Show()

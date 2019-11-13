@@ -6,8 +6,7 @@ local GetMoney = GetMoney
 local tinsert = table.insert
 local tremove = table.remove
 
-Gold.SessionGain = 0
-Gold.SessionLoss = 0
+Gold.SessionChange = 0
 Gold.Sorted = {}
 Gold.TablePool = {}
 
@@ -32,7 +31,7 @@ function Gold:GetColoredName(name)
 end
 
 function Gold:GetSessionStats()
-	return self.SessionGain, self.SessionLoss, GetMoney()
+	return self.SessionChange, GetMoney()
 end
 
 function Gold:GetServerInfo()
@@ -68,11 +67,9 @@ function Gold:PLAYER_MONEY()
 	local LastValue = vUIGold[vUI.UserRealm][self.CurrentUser]
 	local Diff = CurrentValue - LastValue
 	
-	if (CurrentValue > LastValue) then
-		self.SessionGain = self.SessionGain + Diff
-	else
-		self.SessionLoss = self.SessionLoss - Diff
-	end
+	self.SessionChange = self.SessionChange + Diff
+	
+	vUIGold[vUI.UserRealm][self.CurrentUser] = CurrentValue
 end
 
 function Gold:OnEvent(event)

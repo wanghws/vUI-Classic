@@ -2,6 +2,8 @@ local vUI, GUI, Language, Media, Settings = select(2, ...):get()
 
 local DT = vUI:GetModule("DataText")
 
+local select = select
+local GetItemInfo = GetItemInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemCount = GetInventoryItemCount
@@ -32,8 +34,12 @@ local Update = function(self)
 	
 	if (GetInventoryItemID("player", 0) > 0) then -- Ammo slot
 		Count = GetInventoryItemCount("player", 0)
-	elseif GetInventoryItemID("player", 18) then -- Thrown weapons
-		Count = GetInventoryItemCount("player", 18)
+	elseif (GetInventoryItemID("player", 18) > 0) then -- Thrown weapons
+		local ItemSubType = select(7, GetItemInfo(GetInventoryItemID("player", 18)))
+		
+		if (ItemSubType and ItemSubType == LE_ITEM_WEAPON_THROWN) then
+			Count = GetInventoryItemCount("player", 18)
+		end
 	end
 	
 	self.Text:SetFormattedText("%s: %s", Label, Count)

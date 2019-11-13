@@ -75,13 +75,13 @@ function DT:NewAnchor(name, parent)
 	return Anchor
 end
 
-function DT:SetDataText(name, data)
-	if ((not self.Anchors[name]) or (not self.Types[data])) then
+function DT:SetDataText(anchor, name)
+	if ((not self.Anchors[anchor]) or (not self.Types[name])) then
 		return
 	end
 	
-	local Anchor = self.Anchors[name]
-	local Type = self.Types[data]
+	local Anchor = self.Anchors[anchor]
+	local Type = self.Types[name]
 	
 	if Anchor.Disable then
 		Anchor:Disable()
