@@ -244,8 +244,7 @@ local OnEvent = function(self, event)
 	end
 	
 	if MiniMapTrackingBorder then
-		MiniMapTrackingBorder:Hide()
-		MiniMapTrackingBorder.Show = function() end
+		Kill(MiniMapTrackingBorder)
 	end
 	
 	if MiniMapTrackingIcon then

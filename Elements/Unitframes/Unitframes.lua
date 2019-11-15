@@ -23,7 +23,6 @@ local UnitLevel = UnitLevel
 local UnitReaction = UnitReaction
 local GetPetHappiness = GetPetHappiness
 local IsResting = IsResting
-local GetQuestGreenRange = GetQuestGreenRange
 local UnitAura = UnitAura
 local GetTime = GetTime
 local Huge = math.huge
@@ -532,7 +531,6 @@ local BuffsSetPosition = function(element, from, to)
 	for i = from, to do
 		Button = element[i]
 		
-		-- Bail out if the to range is out of scope.
 		if (not Button) then
 			break
 		end
