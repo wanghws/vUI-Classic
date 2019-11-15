@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 
 Media.Fonts = {}
@@ -151,7 +151,7 @@ function Media:ApplyStyle(name)
 		return vUI:print(format('No template exists with the name "%s"', name))
 	end
 	
-	local Profile = Profiles:GetActiveProfile()
+	local Profile = vUI:GetActiveProfile()
 	
 	if Profile then
 		for ID, Value in pairs(self.Styles[name]) do

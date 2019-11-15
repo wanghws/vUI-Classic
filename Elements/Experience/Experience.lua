@@ -83,6 +83,11 @@ local UpdateXP = function(self, first)
 		self.Bar:SetValue(XP)
 	end
 	
+	if self.TooltipShown then
+		GameTooltip:ClearLines()
+		self:OnEnter()
+	end
+	
 	self.LastXP = XP
 end
 
@@ -204,7 +209,7 @@ local UpdateBarPosition = function(value)
 	end
 end
 
-local OnEnter = function(self)
+function ExperienceBar:OnEnter()
 	if (Settings["experience-display-progress"] and Settings["experience-progress-visibility"] == "MOUSEOVER") then
 		if (not self.Progress:IsShown()) then
 			self.Progress:Show()
@@ -245,13 +250,17 @@ local OnEnter = function(self)
 			GameTooltip:AddDoubleLine(vUI:Comma(Rested), format("%s%%", RestedPercent), 1, 1, 1, 1, 1, 1)
 		end
 		
+		self.TooltipShown = true
+		
 		GameTooltip:Show()
 	end
 end
 
-local OnLeave = function(self)
+function ExperienceBar:OnLeave()
 	if Settings["experience-show-tooltip"] then
 		GameTooltip:Hide()
+		
+		self.TooltipShown = false
 	end
 	
 	if (Settings["experience-display-progress"] and Settings["experience-progress-visibility"] == "MOUSEOVER") then
@@ -298,8 +307,8 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	self:SetScaledSize(Settings["experience-width"], Settings["experience-height"])
 	self:SetScaledPoint("TOP", UIParent, 0, -13)
 	self:SetFrameStrata("HIGH")
-	self:SetScript("OnEnter", OnEnter)
-	self:SetScript("OnLeave", OnLeave)
+	self:SetScript("OnEnter", self.OnEnter)
+	self:SetScript("OnLeave", self.OnLeave)
 	
 	self.LastXP = 0
 	

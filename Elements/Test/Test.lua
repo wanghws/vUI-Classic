@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 -- The most important file there is.
 
@@ -143,7 +143,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine(Language["Suggested Scale"], vUI:GetSuggestedScale())
 	Left:CreateDoubleLine(Language["Resolution"], vUI.ScreenResolution)
 	Left:CreateDoubleLine(Language["Fullscreen"], vUI.IsFullScreen)
-	Left:CreateDoubleLine(Language["Profile"], Profiles:GetActiveProfileName())
+	Left:CreateDoubleLine(Language["Profile"], vUI:GetActiveProfileName())
 	Left:CreateDoubleLine(Language["UI Style"], Settings["ui-style"])
 	Left:CreateDoubleLine(Language["Locale"], vUI.UserLocale)
 	--Left:CreateDoubleLine(Language["Language"], Settings["ui-language"])

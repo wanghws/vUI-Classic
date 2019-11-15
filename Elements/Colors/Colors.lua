@@ -1,5 +1,5 @@
 local AddonName, Namespace = ...
-local vUI, GUI, Language, Media, Settings, Defaults, Profiles = Namespace:get()
+local vUI, GUI, Language, Media, Settings, Defaults = Namespace:get()
 local oUF = Namespace.oUF
 
 vUI.ClassColors = {}

@@ -208,6 +208,46 @@ function Reputation:OnMouseUp()
 	ToggleCharacter("ReputationFrame")
 end
 
+function Reputation:OnEnter()
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -8)
+	
+	local Name, StandingID, Min, Max, Value, FactionID = GetWatchedFactionInfo()
+	
+	if (not Name) then
+		return
+	end
+	
+	GameTooltip:AddLine(Name)
+	GameTooltip:AddLine(" ")
+	
+	Max = Max - Min
+	Value = Value - Min
+	
+	local Remaining = Max - Value
+	local RemainingPercent = floor((Remaining / Max * 100 + 0.05) * 10) / 10
+	
+	GameTooltip:AddLine(Language["Current reputation"])
+	GameTooltip:AddDoubleLine(format("%s / %s", vUI:Comma(Value), vUI:Comma(Max)), format("%s%%", floor((Value / Max * 100 + 0.05) * 10) / 10), 1, 1, 1, 1, 1, 1)
+	
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(Language["Remaining reputation"])
+	GameTooltip:AddDoubleLine(format("%s", vUI:Comma(Remaining)), format("%s%%", RemainingPercent), 1, 1, 1, 1, 1, 1)
+	
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddLine(Language["Faction standing"])
+	GameTooltip:AddLine(_G["FACTION_STANDING_LABEL" .. StandingID], 1, 1, 1)
+	
+	self.TooltipShown = true
+	
+	GameTooltip:Show()
+end
+
+function Reputation:OnLeave()
+	GameTooltip:Hide()
+	
+	self.TooltipShown = false
+end
+
 function Reputation:Load()
 	if (not Settings["reputation-enable"]) then
 		return
@@ -218,6 +258,8 @@ function Reputation:Load()
 	
 	self:RegisterEvent("UPDATE_FACTION")
 	self:SetScript("OnEvent", self.OnEvent)
+	self:SetScript("OnEnter", self.OnEnter)
+	self:SetScript("OnLeave", self.OnLeave)
 	--self:SetScript("OnMouseUp", self.OnMouseUp)
 end
 

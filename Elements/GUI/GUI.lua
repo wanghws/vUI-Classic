@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 local type = type
 local pairs = pairs
@@ -81,13 +81,13 @@ local SetVariable = function(id, value)
 		return
 	end
 	
-	local Name = Profiles:GetActiveProfileName()
+	local Name = vUI:GetActiveProfileName()
 	
 	if Name then
 		if (value ~= Defaults[id]) then -- Only saving a value if it's different than default
 			vUIProfiles[Name][id] = value
 			
-			Profiles:UpdateLastModified(Name)
+			vUI:UpdateProfileLastModified(Name)
 		else
 			vUIProfiles[Name][id] = nil
 		end
@@ -1323,11 +1323,11 @@ local ImportWindowOnEnterPressed = function(self)
 		return
 	end
 	
-	local Profile = Profiles:GetDecoded(Text)
+	local Profile = vUI:GetDecoded(Text)
 	
 	if Profile then
 		print('something?')
-		Profiles:AddProfile(Profile)
+		vUI:AddProfile(Profile)
 	end
 	
 	self:SetText("")
@@ -1745,7 +1745,7 @@ local DropdownCreateSelection = function(self, key, value)
 	MenuItem:SetScript("OnEnter", MenuItemOnEnter)
 	MenuItem:SetScript("OnLeave", MenuItemOnLeave)
 	MenuItem.Parent = MenuItem:GetParent()
-	MenuItem.GrandParent = MenuItem:GetParent():GetParent()
+	MenuItem.GrandParent = MenuItem.Parent:GetParent()
 	MenuItem.Key = key
 	MenuItem.Value = value
 	MenuItem.ID = self.ID
@@ -1772,7 +1772,7 @@ local DropdownCreateSelection = function(self, key, value)
 	
 	MenuItem.Text = MenuItem:CreateFontString(nil, "OVERLAY")
 	MenuItem.Text:SetScaledPoint("LEFT", MenuItem, 5, 0)
-	MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 10, WIDGET_HEIGHT)
+	MenuItem.Text:SetScaledSize((DROPDOWN_WIDTH - 6) - 12, WIDGET_HEIGHT)
 	MenuItem.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	MenuItem.Text:SetJustifyH("LEFT")
 	MenuItem.Text:SetText(key)
@@ -3033,14 +3033,14 @@ function GUI:SortButtons()
 	end
 end
 
-local SetIgnoreScrolling = function(self, flag)
-	self.IgnoreScrolling = flag
+local DisableScrolling = function(self)
+	self.ScrollingDisabled = true
 end
 
 local Scroll = function(self)
 	local FirstLeft
 	local FirstRight
-	local Offset = self.LeftWidgetsBG.IgnoreScrolling and 1 or self.Offset
+	local Offset = self.LeftWidgetsBG.ScrollingDisabled and 1 or self.Offset
 	
 	for i = 1, self.WidgetCount do
 		if self.LeftWidgets[i] then
@@ -3061,7 +3061,7 @@ local Scroll = function(self)
 		end
 	end
 	
-	Offset = self.RightWidgetsBG.IgnoreScrolling and 1 or self.Offset
+	Offset = self.RightWidgetsBG.ScrollingDisabled and 1 or self.Offset
 	
 	for i = 1, self.WidgetCount do
 		if self.RightWidgets[i] then
@@ -3388,9 +3388,9 @@ function GUI:CreateWindow(name, default)
 	Window.SortWindow = SortWindow
 	
 	Window.LeftWidgetsBG.Widgets = Window.LeftWidgets
-	Window.LeftWidgetsBG.SetIgnoreScrolling = SetIgnoreScrolling
+	Window.LeftWidgetsBG.DisableScrolling = DisableScrolling
 	Window.RightWidgetsBG.Widgets = Window.RightWidgets
-	Window.RightWidgetsBG.SetIgnoreScrolling = SetIgnoreScrolling
+	Window.RightWidgetsBG.DisableScrolling = DisableScrolling
 	
 	for Name, Function in pairs(self.Widgets) do
 		Window.LeftWidgetsBG[Name] = Function

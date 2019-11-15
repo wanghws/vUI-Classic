@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):get()
+local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 local DefaultKey = "%s-%s"
 local date = date
@@ -6,15 +6,15 @@ local pairs = pairs
 local format = format
 local match = string.match
 
-Profiles.List = {}
+vUI.ProfileList = {}
 
 --[[
 	To do:
 	
-	Profiles:CopyProfile(from, to)
+	vUI:CopyProfile(from, to)
 --]]
 
-Profiles.Metadata = {
+vUI.ProfileMetadata = {
 	["profile-name"] = true,
 	["profile-created"] = true,
 	["profile-created-by"] = true,
@@ -22,12 +22,12 @@ Profiles.Metadata = {
 }
 
 -- Some settings shouldn't be sent to others
-Profiles.Preserve = {
+vUI.PreserveSettings = {
 	["ui-scale"] = true,
 	["ui-language"] = true,
 }
 
-function Profiles:GetCurrentDate()
+function vUI:GetCurrentDate()
 	return date("%Y-%m-%d %I:%M %p")
 end
 
@@ -46,11 +46,11 @@ local IsToday = function(s)
 	return s
 end
 
-function Profiles:UpdateProfileInfo()
+function vUI:UpdateProfileInfo()
 	local Name = self:GetActiveProfileName()
 	local Profile = self:GetProfile(Name)
 	local MostUsed = self:GetMostUsedProfile()
-	local NumServed, IsAll = self:GetNumServedBy(Name)
+	local NumServed, IsAll = self:GetNumServedByProfile(Name)
 	local MostUsedServed = NumServed
 	
 	if IsAll then
@@ -58,7 +58,7 @@ function Profiles:UpdateProfileInfo()
 	end
 	
 	if (Profile ~= MostUsed) then
-		MostUsedServed = self:GetNumServedBy(MostUsed)
+		MostUsedServed = self:GetNumServedByProfile(MostUsed)
 	end
 	
 	GUI:GetWidgetByWindow(Language["Profiles"], "current-profile").Right:SetText(Name)
@@ -74,58 +74,58 @@ function Profiles:UpdateProfileInfo()
 	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(self:CountUnusedProfiles())
 end
 
-function Profiles:UpdateProfileList()
+function vUI:UpdateProfileList()
 	if vUIProfiles then
 		for Name in pairs(vUIProfiles) do
-			self.List[Name] = Name
+			self.ProfileList[Name] = Name
 		end
 	end
 end
 
-function Profiles:UpdateLastModified(name)
+function vUI:UpdateProfileLastModified(name)
 	local Profile = self:GetProfile(name)
 	
 	Profile["profile-last-modified"] = self:GetCurrentDate()
 end
 
-function Profiles:GetProfileCount()
+function vUI:GetProfileCount()
 	local Count = 0
 	
-	for Name in pairs(self.List) do
+	for Name in pairs(self.ProfileList) do
 		Count = Count + 1
 	end
 	
 	return Count
 end
 
-function Profiles:GetDefaultProfileKey()
-	return format(DefaultKey, vUI.UserName, vUI.UserRealm)
+function vUI:GetDefaultProfileKey()
+	return format(DefaultKey, self.UserName, self.UserRealm)
 end
 
-function Profiles:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
-	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
-		return vUIProfileData[vUI.UserProfileKey]
+function vUI:GetActiveProfileName() -- Will this ever be called in a case where it needs a fallback?
+	if (vUIProfileData and vUIProfileData[self.UserProfileKey]) then
+		return vUIProfileData[self.UserProfileKey]
 	end
 end
 
-function Profiles:GetActiveProfile()
-	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
-		return self:GetProfile(vUIProfileData[vUI.UserProfileKey])
+function vUI:GetActiveProfile()
+	if (vUIProfileData and vUIProfileData[self.UserProfileKey]) then
+		return self:GetProfile(vUIProfileData[self.UserProfileKey])
 	end
 end
 
-function Profiles:SetActiveProfile(name)
-	if (vUIProfileData and vUIProfileData[vUI.UserProfileKey]) then
-		vUIProfileData[vUI.UserProfileKey] = name
+function vUI:SetActiveProfile(name)
+	if (vUIProfileData and vUIProfileData[self.UserProfileKey]) then
+		vUIProfileData[self.UserProfileKey] = name
 	end
 end
 
-function Profiles:CountChangedValues(name)
+function vUI:CountChangedValues(name)
 	local Profile = self:GetProfile(name)
 	local Count = 0
 	
 	for ID, Value in pairs(Profile) do
-		if (not self.Metadata[ID]) then
+		if (not self.ProfileMetadata[ID]) then
 			Count = Count + 1
 		end
 	end
@@ -133,36 +133,36 @@ function Profiles:CountChangedValues(name)
 	return Count
 end
 
-function Profiles:CreateProfileData()
+function vUI:CreateProfileData()
 	if (not vUIProfileData) then -- No profile data exists, create a default
 		self:CreateProfile(Language["Default"])
 	end
 	
-	if (not vUIProfileData[vUI.UserProfileKey]) then
-		vUIProfileData[vUI.UserProfileKey] = self:GetMostUsedProfile()
+	if (not vUIProfileData[self.UserProfileKey]) then
+		vUIProfileData[self.UserProfileKey] = self:GetMostUsedProfile()
 	end
 end
 
-function Profiles:AddProfile(profile)
+function vUI:AddProfile(profile)
 	if (type(profile) ~= "table") then
 		return
 	end
 	
 	local Name = profile["profile-name"]
 	
-	-- Do I overwrite the imported profiles metadata with new stuff for the player?
+	-- Do I overwrite the imported profile's metadata with new stuff for the player?
 	
 	if (Name and not vUIProfiles[Name]) then
 		vUIProfiles[Name] = profile
-		self.List[Name] = Name
+		self.ProfileList[Name] = Name
 		
-		vUI:SendAlert(Language["Import successful"], format(Language["New profile: %s"], Name))
+		self:SendAlert(Language["Import successful"], format(Language["New profile: %s"], Name))
 	else
-		vUI:print(format('A profile already exists with the name "%s."', Name))
+		self:print(format('A profile already exists with the name "%s."', Name))
 	end
 end
 
-function Profiles:CreateProfile(name)
+function vUI:CreateProfile(name)
 	if (not vUIProfileData) then
 		vUIProfileData = {}
 	end
@@ -175,12 +175,12 @@ function Profiles:CreateProfile(name)
 		name = self:GetDefaultProfileKey()
 	end
 	
-	if (not vUIProfileData[vUI.UserProfileKey]) then
-		vUIProfileData[vUI.UserProfileKey] = name
+	if (not vUIProfileData[self.UserProfileKey]) then
+		vUIProfileData[self.UserProfileKey] = name
 	end
 	
 	if vUIProfiles[name] then
-		self.List[name] = name
+		self.ProfileList[name] = name
 		
 		return vUIProfiles[name]
 	end
@@ -193,28 +193,28 @@ function Profiles:CreateProfile(name)
 	vUIProfiles[name]["profile-created-by"] = self:GetDefaultProfileKey()
 	vUIProfiles[name]["profile-last-modified"] = self:GetCurrentDate()
 	
-	--vUIProfileData[vUI.UserProfileKey] = name
+	--vUIProfileData[self.UserProfileKey] = name
 	
-	self.List[name] = name
+	self.ProfileList[name] = name
 	
 	return vUIProfiles[name]
 end
 
-function Profiles:RestoreToDefault(name)
+function vUI:RestoreToDefault(name)
 	if (not vUIProfiles[name]) then
 		return
 	end
 	
 	for ID, Value in pairs(vUIProfiles[name]) do
-		if (not self.Metadata[ID]) then
+		if (not self.ProfileMetadata[ID]) then
 			vUIProfiles[name][ID] = nil
 		end
 	end
 	
-	vUI:print(format('Restored profile "%s" to default.', name))
+	self:print(format('Restored profile "%s" to default.', name))
 end
 
-function Profiles:GetProfile(name)
+function vUI:GetProfile(name)
 	if vUIProfiles[name] then
 		return vUIProfiles[name]
 	else
@@ -228,15 +228,15 @@ function Profiles:GetProfile(name)
 	end
 end
 
-function Profiles:GetProfileList()
-	return self.List
+function vUI:GetProfileList()
+	return self.ProfileList
 end
 
-function Profiles:IsUsedBy(name)
+function vUI:IsUsedBy(name)
 	
 end
 
-function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
+function vUI:GetMostUsedProfile() -- Return most used profile as a fallback instead of "Default" which may not even exist if the user deletes it
 	local Temp = {}
 	local HighestValue = 0
 	local HighestName
@@ -259,7 +259,7 @@ function Profiles:GetMostUsedProfile() -- Return most used profile as a fallback
 	return HighestName, vUIProfileData[HighestName]
 end
 
-function Profiles:GetNumServedBy(name)
+function vUI:GetNumServedByProfile(name)
 	local Count = 0
 	local Total = 0
 	
@@ -274,10 +274,10 @@ function Profiles:GetNumServedBy(name)
 	return Count, (Count == Total)
 end
 
-function Profiles:DeleteProfile(name)
+function vUI:DeleteProfile(name)
 	if vUIProfiles[name] then
 		vUIProfiles[name] = nil
-		self.List[name] = nil
+		self.ProfileList[name] = nil
 		
 		local Default = self:GetMostUsedProfile()
 		
@@ -288,9 +288,9 @@ function Profiles:DeleteProfile(name)
 			end
 		end
 		
-		vUI:print(format('Deleted profile "%s".', name))
+		self:print(format('Deleted profile "%s".', name))
 	else
-		vUI:print(format('No profile exists with the name "%s".', name))
+		self:print(format('No profile exists with the name "%s".', name))
 	end
 	
 	if (self:GetProfileCount() == 0) then
@@ -302,7 +302,7 @@ function Profiles:DeleteProfile(name)
 	end
 end
 
-function Profiles:MergeWithDefaults(name)
+function vUI:MergeWithDefaults(name)
 	local Profile = self:GetProfile(name)
 	local Values = {}
 	
@@ -321,19 +321,19 @@ function Profiles:MergeWithDefaults(name)
 	return Values
 end
 
-function Profiles:ApplyProfile(name)
+function vUI:ApplyProfile(name)
 	local Values = self:MergeWithDefaults(name)
 	
 	for ID, Value in pairs(Values) do
 		Settings[ID] = Value
 	end
 	
-	vUIProfileData[vUI.UserProfileKey] = name
+	vUIProfileData[self.UserProfileKey] = name
 	
 	Values = nil
 end
 
-function Profiles:DeleteEmptyProfiles()
+function vUI:DeleteEmptyProfiles()
 	local Count = 0
 	local Deleted = 0
 	
@@ -341,7 +341,7 @@ function Profiles:DeleteEmptyProfiles()
 		Count = 0
 		
 		for ID in pairs(Value) do
-			if (not self.Metadata[ID]) then
+			if (not self.ProfileMetadata[ID]) then
 				Count = Count + 1
 			end
 		end
@@ -353,10 +353,10 @@ function Profiles:DeleteEmptyProfiles()
 		end
 	end
 	
-	vUI:print(format("Deleted %s empty profiles.", Deleted))
+	AddProfile:print(format("Deleted %s empty profiles.", Deleted))
 end
 
-function Profiles:CountEmptyProfiles()
+function vUI:CountEmptyProfiles()
 	local Count = 0
 	local Total = 0
 	
@@ -364,7 +364,7 @@ function Profiles:CountEmptyProfiles()
 		Count = 0
 		
 		for ID in pairs(Value) do
-			if (not self.Metadata[ID]) then
+			if (not self.ProfileMetadata[ID]) then
 				Count = Count + 1
 			end
 		end
@@ -377,13 +377,13 @@ function Profiles:CountEmptyProfiles()
 	return Total
 end
 
-function Profiles:DeleteUnusedProfiles()
+function vUI:DeleteUnusedProfiles()
 	local Counts = {}
 	local Deleted = 0
 	
 	self:UpdateProfileList()
 	
-	for Name in pairs(self.List) do
+	for Name in pairs(self.ProfileList) do
 		Counts[Name] = 0
 	end
 	
@@ -405,16 +405,16 @@ function Profiles:DeleteUnusedProfiles()
 	
 	Counts = nil
 	
-	vUI:print(format("Deleted %s unused profiles.", Deleted))
+	self:print(format("Deleted %s unused profiles.", Deleted))
 end
 
-function Profiles:CountUnusedProfiles()
+function vUI:CountUnusedProfiles()
 	local Counts = {}
 	local Unused = 0
 	
 	self:UpdateProfileList()
 	
-	for Name in pairs(self.List) do
+	for Name in pairs(self.ProfileList) do
 		Counts[Name] = 0
 	end
 	
@@ -437,14 +437,14 @@ function Profiles:CountUnusedProfiles()
 	return Unused
 end
 
-function Profiles:RenameProfile(from, to)
+function vUI:RenameProfile(from, to)
 	local FromProfile = vUIProfiles[from]
 	local ToProfile = vUIProfiles[to]
 	
 	if (not FromProfile) then
 		return
 	elseif ToProfile then
-		vUI:print(format('A profile already exists with the name "%s".', to))
+		self:print(format('A profile already exists with the name "%s".', to))
 		
 		return
 	end
@@ -453,8 +453,8 @@ function Profiles:RenameProfile(from, to)
 	vUIProfiles[to]["profile-name"] = to
 	
 	vUIProfiles[from] = nil
-	self.List[from] = nil
-	self.List[to] = to
+	self.ProfileList[from] = nil
+	self.ProfileList[to] = to
 	
 	-- Reroute characters who used this profile
 	for Key, ProfileName in pairs(vUIProfileData) do
@@ -465,29 +465,29 @@ function Profiles:RenameProfile(from, to)
 	
 	-- Update dropdown menu if needed
 	
-	vUI:print(format('Profile "%s" has been renamed to "%s".', from, to))
+	self:print(format('Profile "%s" has been renamed to "%s".', from, to))
 end
 
-function Profiles:SetMetadata(name, meta, value) -- /run vUI:get(7):SetMetadata("ProfileName", "profile-created-by", "Hydra")
+function vUI:SetProfileMetadata(name, meta, value) -- /run vUI:get(7):SetProfileMetadata("ProfileName", "profile-created-by", "Hydra")
 	if vUIProfiles[name] then
-		if self.Metadata[meta] then
+		if self.ProfileMetadata[meta] then
 			vUIProfiles[name][meta] = value
 		end
 	end
 end
 
 local UpdateActiveProfile = function(value)
-	if (value ~= Profiles:GetActiveProfileName()) then
-		Profiles:SetActiveProfile(value)
+	if (value ~= vUI:GetActiveProfileName()) then
+		vUI:SetActiveProfile(value)
 		
 		ReloadUI()
-		--Profiles:UpdateProfileInfo()
+		--vUI:UpdateProfileInfo()
 	end
 end
 
 local CreateProfile = function(value)
-	Profiles:CreateProfile(value)
-	Profiles:UpdateProfileInfo()
+	vUI:CreateProfile(value)
+	vUI:UpdateProfileInfo()
 	
 	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
 	Widget.Dropdown:CreateSelection(value, value)
@@ -497,12 +497,12 @@ local CreateProfile = function(value)
 end
 
 local DeleteProfile = function(value)
-	Profiles:DeleteProfile(value)
-	Profiles:UpdateProfileInfo()
+	vUI:DeleteProfile(value)
+	vUI:UpdateProfileInfo()
 	
 	local Widget = GUI:GetWidgetByWindow(Language["Profiles"], "ui-profile")
 	Widget.Dropdown:RemoveSelection(value)
-	Widget.Dropdown.Current:SetText(Profiles:GetActiveProfileName())
+	Widget.Dropdown.Current:SetText(vUI:GetActiveProfileName())
 	--ReloadUI() -- Temp
 end
 
@@ -510,7 +510,7 @@ local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 local LibCompress = LibStub:GetLibrary("LibCompress")
 local Encoder = LibCompress:GetAddonEncodeTable()
 
-function Profiles:GetEncoded()
+function vUI:GetEncoded()
 	local Profile = self:GetActiveProfile()
 	local Serialized = AceSerializer:Serialize(Profile)
 	local Compressed = LibCompress:Compress(Serialized)
@@ -519,21 +519,21 @@ function Profiles:GetEncoded()
 	return Encoded
 end
 
-function Profiles:GetDecoded(encoded)
+function vUI:GetDecoded(encoded)
 	local Decoded = Encoder:Decode(encoded)
 	local Decompressed = LibCompress:Decompress(Decoded)
 	local Message, Deserialized = AceSerializer:Deserialize(Decompressed)
 	
 	if (not Message) then
-		vUI:print("Failure deserializing.")
+		self:print("Failure deserializing.")
 	else
 		return Deserialized
 	end
 end
 
 -- Test
-local TestProfileString = function()
-	local Profile = Profiles:GetActiveProfile()
+local TestvUItring = function()
+	local Profile = vUI:GetActiveProfile()
 	
 	local Result = AceSerializer:Serialize(Profile)
 	local Compressed = LibCompress:Compress(Result)
@@ -553,11 +553,11 @@ local TestProfileString = function()
 end
 
 __testSerialize = function() -- /run __testSerialize()
-	TestProfileString()
+	TestvUItring()
 end
 
 local ShowExportWindow = function()
-	local Encoded = Profiles:GetEncoded()
+	local Encoded = vUI:GetEncoded()
 	
 	GUI:CreateExportWindow()
 	GUI:SetExportWindowText(Encoded)
@@ -570,34 +570,32 @@ local ShowImportWindow = function()
 end
 
 local DeleteEmpty = function()
-	Profiles:DeleteEmptyProfiles()
-	Profiles:UpdateProfileInfo()
+	vUI:DeleteEmptyProfiles()
+	vUI:UpdateProfileInfo()
 	
 	ReloadUI() -- Temp
 end
 
 local DeleteUnused = function()
-	Profiles:DeleteUnusedProfiles()
-	Profiles:UpdateProfileInfo()
+	vUI:DeleteUnusedProfiles()
+	vUI:UpdateProfileInfo()
 	
 	ReloadUI() -- Temp
 end
 
 local RenameProfile = function(value)
 	if (value and match(value, "%S+")) then
-		local Active = Profiles:GetActiveProfileName()
-		
-		Profiles:RenameProfile(Active, value)
-		Profiles:UpdateProfileInfo()
+		vUI:RenameProfile(vUI:GetActiveProfileName(), value)
+		vUI:UpdateProfileInfo()
 	end
 end
 
 local UpdateProfileInfo = function()
-	Profiles:UpdateProfileInfo()
+	vUI:UpdateProfileInfo()
 end
 
 local RestoreToDefault = function()
-	Profiles:RestoreToDefault(Profiles:GetActiveProfileName())
+	vUI:RestoreToDefault(vUI:GetActiveProfileName())
 	
 	ReloadUI() -- Temp
 end
@@ -605,15 +603,15 @@ end
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Profiles"])
 	
-	Left:SetIgnoreScrolling(true)
+	Left:DisableScrolling()
 	
 	Left:CreateHeader(Language["Profiles"])
-	Left:CreateDropdown("ui-profile", Profiles:GetActiveProfileName(), Profiles:GetProfileList(), Language["Select Profile"], "", UpdateActiveProfile)
+	Left:CreateDropdown("ui-profile", vUI:GetActiveProfileName(), vUI:GetProfileList(), Language["Select Profile"], "", UpdateActiveProfile)
 	--Left:CreateButton("Apply", "Apply Current Profile", "", UpdateActiveProfile)
 	
 	Left:CreateHeader(Language["Modify"])
-	Left:CreateInput("profile-key", Profiles:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile):DisableSaving()
-	Left:CreateInput("profile-delete", Profiles:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile):DisableSaving()
+	Left:CreateInput("profile-key", vUI:GetDefaultProfileKey(), "Create New Profile", "", CreateProfile):DisableSaving()
+	Left:CreateInput("profile-delete", vUI:GetDefaultProfileKey(), "Delete Profile", "", DeleteProfile):DisableSaving()
 	Left:CreateInput("profile-rename", "", "Rename Profile", "", RenameProfile):DisableSaving()
 	Left:CreateButton("Restore", "Restore To Default", "", RestoreToDefault):RequiresReload(true)
 	Left:CreateButton("Delete", "Delete Empty Profiles", "", DeleteEmpty):RequiresReload(true)
@@ -627,12 +625,12 @@ GUI:AddOptions(function(self)
 	Right:CreateLine("Profiles store your settings so that you can easily")
 	Right:CreateLine("and quickly change between configurations.")
 	
-	local Name = Profiles:GetActiveProfileName()
-	local Profile = Profiles:GetProfile(Name)
-	local MostUsed = Profiles:GetMostUsedProfile()
-	local NumServed, IsAll = Profiles:GetNumServedBy(Name)
-	local NumEmpty = Profiles:CountEmptyProfiles()
-	local NumUnused = Profiles:CountUnusedProfiles()
+	local Name = vUI:GetActiveProfileName()
+	local Profile = vUI:GetProfile(Name)
+	local MostUsed = vUI:GetMostUsedProfile()
+	local NumServed, IsAll = vUI:GetNumServedByProfile(Name)
+	local NumEmpty = vUI:CountEmptyProfiles()
+	local NumUnused = vUI:CountUnusedProfiles()
 	local MostUsedServed = NumServed
 	
 	if IsAll then
@@ -640,7 +638,7 @@ GUI:AddOptions(function(self)
 	end
 	
 	if (Profile ~= MostUsed) then
-		MostUsedServed = Profiles:GetNumServedBy(MostUsed)
+		MostUsedServed = vUI:GetNumServedByProfile(MostUsed)
 	end
 	
 	Right:CreateHeader(Language["Info"])
@@ -648,12 +646,12 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine("Created By:", Profile["profile-created-by"])
 	Right:CreateDoubleLine("Created On:", IsToday(Profile["profile-created"]))
 	Right:CreateDoubleLine("Last Modified:", IsToday(Profile["profile-last-modified"]))
-	Right:CreateDoubleLine("Modifications:", Profiles:CountChangedValues(Name))
+	Right:CreateDoubleLine("Modifications:", vUI:CountChangedValues(Name))
 	Right:CreateDoubleLine("Serving Characters:", NumServed)
 	
 	Right:CreateHeader(Language["General"])
 	Right:CreateDoubleLine("Popular Profile:", format("%s (%d)", MostUsed, MostUsedServed))
-	Right:CreateDoubleLine("Stored Profiles:", Profiles:GetProfileCount())
+	Right:CreateDoubleLine("Stored Profiles:", vUI:GetProfileCount())
 	Right:CreateDoubleLine("Empty Profiles:", NumEmpty)
 	Right:CreateDoubleLine("Unused Profiles:", NumUnused)
 end)

@@ -26,7 +26,6 @@ local Core = {
 	[4] = {}, -- Media
 	[5] = {}, -- Settings
 	[6] = {}, -- Defaults
-	[7] = {}, -- Profiles
 }
 
 local Hook = function(self, global, hook)
@@ -123,9 +122,9 @@ function vUI:VARIABLES_LOADED(event)
 	
 	Core[6]["ui-scale"] = self:GetSuggestedScale()
 	
-	Core[7]:CreateProfileData()
-	Core[7]:UpdateProfileList()
-	Core[7]:ApplyProfile(Core[7]:GetActiveProfileName())
+	self:CreateProfileData()
+	self:UpdateProfileList()
+	self:ApplyProfile(self:GetActiveProfileName())
 	
 	self:SetScale(Core[5]["ui-scale"])
 	self:UpdateoUFColors()
@@ -402,7 +401,7 @@ end
 
 function Namespace:get(key)
 	if (not key) then
-		return Core[1], Core[2], Core[3], Core[4], Core[5], Core[6], Core[7]
+		return Core[1], Core[2], Core[3], Core[4], Core[5], Core[6]
 	else
 		return Core[key]
 	end
@@ -551,6 +550,8 @@ AddMethodsToObject(Object:CreateTexture())
 AddMethodsToObject(Object:CreateFontString())
 
 local HandledCount = 0
+local EnumerateFrames = EnumerateFrames
+local CanAccessObject = CanAccessObject
 Object = EnumerateFrames()
 
 while Object do

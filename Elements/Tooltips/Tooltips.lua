@@ -42,9 +42,9 @@ Tooltips.Handled = {
 }
 
 Tooltips.Classifications = {
-	["rare"] = Language["Rare"],
-	["elite"] = Language["Elite"],
-	["rareelite"] = Language["Rare Elite"],
+	["rare"] = Language["|cFFBDBDBDRare|r"],
+	["elite"] = Language["|cFFFDD835Elite|r"],
+	["rareelite"] = Language["|cFFBDBDBDRare Elite|r"],
 	["worldboss"] = Language["Boss"],
 }
 
@@ -120,7 +120,7 @@ function Tooltips:UpdateFonts(tooltip)
 	self:UpdateStatusBarFonts()
 end
 
-local SetStyle = function(self)
+local SetTooltipStyle = function(self)
 	if self.Styled then
 	--	self.Backdrop:SetVertexColorHex(Settings["ui-window-main-color"])
 		
@@ -135,7 +135,7 @@ local SetStyle = function(self)
 		return
 	end
 	
-	self:SetBackdrop(nil) -- To stop blue tooltips
+	self:SetBackdrop(nil) -- To stop blue selfs
 	self:SetFrameLevel(10)
 	self.SetFrameLevel = function() end
 	
@@ -462,7 +462,7 @@ end
 
 function Tooltips:AddHooks()
 	for i = 1, #self.Handled do
-		self.Handled[i]:HookScript("OnShow", SetStyle)
+		self.Handled[i]:HookScript("OnShow", SetTooltipStyle)
 	end
 	
 	GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)

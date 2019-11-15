@@ -326,12 +326,16 @@ local UpdateEditBoxColor = function(editbox)
 	
 	if Backdrop then
 		if (ChatType == "CHANNEL") then
-			local ID = GetChannelName(editbox:GetAttribute("channelTarget"))
-			
-			if (ID == 0) then
-				Backdrop.Change:SetChange(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+			if editbox:GetAttribute("channelTarget") then
+				local ID = GetChannelName(editbox:GetAttribute("channelTarget"))
+				
+				if (ID == 0) then
+					Backdrop.Change:SetChange(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+				else
+					Backdrop.Change:SetChange(ChatTypeInfo[ChatType..ID].r * 0.2, ChatTypeInfo[ChatType..ID].g * 0.2, ChatTypeInfo[ChatType..ID].b * 0.2)
+				end
 			else
-				Backdrop.Change:SetChange(ChatTypeInfo[ChatType..ID].r * 0.2, ChatTypeInfo[ChatType..ID].g * 0.2, ChatTypeInfo[ChatType..ID].b * 0.2)
+				Backdrop.Change:SetChange(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 			end
 		else
 			Backdrop.Change:SetChange(ChatTypeInfo[ChatType].r * 0.2, ChatTypeInfo[ChatType].g * 0.2, ChatTypeInfo[ChatType].b * 0.2)

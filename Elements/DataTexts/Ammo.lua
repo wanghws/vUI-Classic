@@ -7,7 +7,9 @@ local GetItemInfo = GetItemInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemCount = GetInventoryItemCount
+
 local Label = Language["Ammo"]
+local ThrownSubType = LE_ITEM_WEAPON_THROWN
 
 local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
@@ -37,7 +39,7 @@ local Update = function(self)
 	elseif (GetInventoryItemID("player", 18) > 0) then -- Thrown weapons
 		local ItemSubType = select(7, GetItemInfo(GetInventoryItemID("player", 18)))
 		
-		if (ItemSubType and ItemSubType == LE_ITEM_WEAPON_THROWN) then
+		if (ItemSubType and ItemSubType == ThrownSubType) then
 			Count = GetInventoryItemCount("player", 18)
 		end
 	end

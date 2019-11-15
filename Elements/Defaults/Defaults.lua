@@ -25,17 +25,17 @@ Defaults["ui-widget-texture"] = "vUI 4"
 Defaults["ui-button-texture"] = "vUI 4"
 
 Defaults["ui-header-font-color"] = "FFE6C0"
-Defaults["ui-header-texture-color"] = "616161"
+Defaults["ui-header-texture-color"] = "424242"
 
 Defaults["ui-window-bg-color"] = "424242"
 Defaults["ui-window-main-color"] = "2B2B2B"
 
-Defaults["ui-widget-color"] = "FFCE54"
+Defaults["ui-widget-color"] = "FFC44D"
 Defaults["ui-widget-bright-color"] = "8E8E8E"
 Defaults["ui-widget-bg-color"] = "424242"
 Defaults["ui-widget-font-color"] = "FFFFFF"
 
-Defaults["ui-button-font-color"] = "FFCE54"
+Defaults["ui-button-font-color"] = "FFC44D"
 Defaults["ui-button-texture-color"] = "616161"
 
 Defaults["ui-font-size"] = 12

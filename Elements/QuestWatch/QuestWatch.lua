@@ -7,7 +7,6 @@ local vUI, GUI, Language, Media, Settings, Defaults, Profiles = select(2, ...):g
 local Move = vUI:GetModule("Move")
 local Quest = vUI:NewModule("Quest")
 
-
 function Quest:StyleFrame()
 	local Mover = CreateFrame("Frame", "vUI Quest Watch", UIParent)
 	Mover:SetScaledSize(156, 40)
@@ -68,9 +67,10 @@ function Quest:StyleFrame()
 	Move:Add(Mover)
 end
 
-Quest:RegisterEvent("PLAYER_ENTERING_WORLD")
-Quest:SetScript("OnEvent", function(self, event)
+function Quest:OnEvent()
 	self:StyleFrame()
-	
-	self:UnregisterEvent(event)
-end)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+Quest:RegisterEvent("PLAYER_ENTERING_WORLD")
+Quest:SetScript("OnEvent", Quest.OnEvent)
