@@ -209,7 +209,6 @@ ClientInfo["WTCG"] = function(name, id)
 end
 
 local GetClientInformation = function(client, name, id)
-	
 	if ClientInfo[client] then
 		local Left, Right = ClientInfo[client](name, id)
 		

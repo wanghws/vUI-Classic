@@ -12,98 +12,97 @@ vUI.ClassificationColors = {}
 vUI.ComboPoints = {}
 vUI.Totems = {}
 
+function vUI:AddColorEntry(t, key, hex)
+	R, G, B = self:HexToRGB(hex)
+	
+	if (not t[key]) then
+		t[key] = {}
+	end
+	
+	t[key][1] = R
+	t[key][2] = G
+	t[key][3] = B
+	t[key]["Hex"] = hex
+end
+
 function vUI:UpdateClassColors()
-	self.ClassColors["DEATHKNIGHT"] = {self:HexToRGB(Settings["color-death-knight"])}
-	self.ClassColors["DEMONHUNTER"] = {self:HexToRGB(Settings["color-demon-hunter"])}
-	self.ClassColors["DRUID"] = {self:HexToRGB(Settings["color-druid"])}
-	self.ClassColors["HUNTER"] = {self:HexToRGB(Settings["color-hunter"])}
-	self.ClassColors["MAGE"] = {self:HexToRGB(Settings["color-mage"])}
-	self.ClassColors["MONK"] = {self:HexToRGB(Settings["color-monk"])}
-	self.ClassColors["PALADIN"] = {self:HexToRGB(Settings["color-paladin"])}
-	self.ClassColors["PRIEST"] = {self:HexToRGB(Settings["color-priest"])}
-	self.ClassColors["ROGUE"] = {self:HexToRGB(Settings["color-rogue"])}
-	self.ClassColors["SHAMAN"] = {self:HexToRGB(Settings["color-shaman"])}
-	self.ClassColors["WARLOCK"] = {self:HexToRGB(Settings["color-warlock"])}
-	self.ClassColors["WARRIOR"] = {self:HexToRGB(Settings["color-warrior"])}
+	self:AddColorEntry(self.ClassColors, "DEATHKNIGHT", Settings["color-death-knight"])
+	self:AddColorEntry(self.ClassColors, "DEMONHUNTER", Settings["color-demon-hunter"])
+	self:AddColorEntry(self.ClassColors, "DRUID", Settings["color-druid"])
+	self:AddColorEntry(self.ClassColors, "HUNTER", Settings["color-hunter"])
+	self:AddColorEntry(self.ClassColors, "MAGE", Settings["color-mage"])
+	self:AddColorEntry(self.ClassColors, "MONK", Settings["color-monk"])
+	self:AddColorEntry(self.ClassColors, "PALADIN", Settings["color-paladin"])
+	self:AddColorEntry(self.ClassColors, "PRIEST", Settings["color-priest"])
+	self:AddColorEntry(self.ClassColors, "ROGUE", Settings["color-rogue"])
+	self:AddColorEntry(self.ClassColors, "SHAMAN", Settings["color-shaman"])
+	self:AddColorEntry(self.ClassColors, "WARLOCK", Settings["color-warlock"])
+	self:AddColorEntry(self.ClassColors, "WARRIOR", Settings["color-warrior"])
 end
 
 function vUI:UpdateReactionColors()
-	self.ReactionColors[1] = {self:HexToRGB(Settings["color-reaction-1"])}
-	self.ReactionColors[2] = {self:HexToRGB(Settings["color-reaction-2"])}
-	self.ReactionColors[3] = {self:HexToRGB(Settings["color-reaction-3"])}
-	self.ReactionColors[4] = {self:HexToRGB(Settings["color-reaction-4"])}
-	self.ReactionColors[5] = {self:HexToRGB(Settings["color-reaction-5"])}
-	self.ReactionColors[6] = {self:HexToRGB(Settings["color-reaction-6"])}
-	self.ReactionColors[7] = {self:HexToRGB(Settings["color-reaction-7"])}
-	self.ReactionColors[8] = {self:HexToRGB(Settings["color-reaction-8"])}
+	self:AddColorEntry(self.ReactionColors, 1, Settings["color-reaction-1"])
+	self:AddColorEntry(self.ReactionColors, 2, Settings["color-reaction-2"])
+	self:AddColorEntry(self.ReactionColors, 3, Settings["color-reaction-3"])
+	self:AddColorEntry(self.ReactionColors, 4, Settings["color-reaction-4"])
+	self:AddColorEntry(self.ReactionColors, 5, Settings["color-reaction-5"])
+	self:AddColorEntry(self.ReactionColors, 6, Settings["color-reaction-6"])
+	self:AddColorEntry(self.ReactionColors, 7, Settings["color-reaction-7"])
+	self:AddColorEntry(self.ReactionColors, 8, Settings["color-reaction-8"])
 end
 
 function vUI:UpdateZoneColors()
-	self.ZoneColors["sanctuary"] = {self:HexToRGB(Settings["color-sanctuary"])}
-	self.ZoneColors["arena"] = {self:HexToRGB(Settings["color-arena"])}
-	self.ZoneColors["hostile"] = {self:HexToRGB(Settings["color-hostile"])}
-	self.ZoneColors["combat"] = {self:HexToRGB(Settings["color-combat"])}
-	self.ZoneColors["friendly"] = {self:HexToRGB(Settings["color-friendly"])}
-	self.ZoneColors["contested"] = {self:HexToRGB(Settings["color-contested"])}
-	self.ZoneColors["other"] = {self:HexToRGB(Settings["color-other"])}
+	self:AddColorEntry(self.ZoneColors, "sanctuary", Settings["color-sanctuary"])
+	self:AddColorEntry(self.ZoneColors, "arena", Settings["color-arena"])
+	self:AddColorEntry(self.ZoneColors, "hostile", Settings["color-hostile"])
+	self:AddColorEntry(self.ZoneColors, "combat", Settings["color-combat"])
+	self:AddColorEntry(self.ZoneColors, "friendly", Settings["color-friendly"])
+	self:AddColorEntry(self.ZoneColors, "contested", Settings["color-contested"])
+	self:AddColorEntry(self.ZoneColors, "other", Settings["color-other"])
 end
 
 function vUI:UpdatePowerColors()
-	self.PowerColors["MANA"] = {self:HexToRGB(Settings["color-mana"])}
-	self.PowerColors["RAGE"] = {self:HexToRGB(Settings["color-rage"])}
-	self.PowerColors["ENERGY"] = {self:HexToRGB(Settings["color-energy"])}
-	self.PowerColors["COMBO_POINTS"] = {self:HexToRGB(Settings["color-combo-points"])}
-	self.PowerColors["FOCUS"] = {self:HexToRGB(Settings["color-focus"])}
-	self.PowerColors["SOUL_SHARDS"] = {self:HexToRGB(Settings["color-soul-shards"])}
-	self.PowerColors["INSANITY"] = {self:HexToRGB(Settings["color-insanity"])}
-	self.PowerColors["FURY"] = {self:HexToRGB(Settings["color-fury"])}
-	self.PowerColors["PAIN"] = {self:HexToRGB(Settings["color-pain"])}
-	self.PowerColors["CHI"] = {self:HexToRGB(Settings["color-chi"])}
-	self.PowerColors["MAELSTROM"] = {self:HexToRGB(Settings["color-maelstrom"])}
-	self.PowerColors["ARCANE_CHARGES"] = {self:HexToRGB(Settings["color-arcane-charges"])}
-	self.PowerColors["HOLY_POWER"] = {self:HexToRGB(Settings["color-holy-power"])}
-	self.PowerColors["LUNAR_POWER"] = {self:HexToRGB(Settings["color-lunar-power"])}
-	self.PowerColors["RUNIC_POWER"] = {self:HexToRGB(Settings["color-runic-power"])}
-	self.PowerColors["RUNES"] = {self:HexToRGB(Settings["color-runes"])}
-	self.PowerColors["FUEL"] = {self:HexToRGB(Settings["color-fuel"])}
-	self.PowerColors["AMMO_SLOT"] = {self:HexToRGB(Settings["color-ammo-slot"])}
+	self:AddColorEntry(self.PowerColors, "MANA", Settings["color-mana"])
+	self:AddColorEntry(self.PowerColors, "RAGE", Settings["color-rage"])
+	self:AddColorEntry(self.PowerColors, "ENERGY", Settings["color-energy"])
+	self:AddColorEntry(self.PowerColors, "FOCUS", Settings["color-focus"])
 end
 
 function vUI:UpdateDebuffColors()
-	self.DebuffColors["Curse"] = {self:HexToRGB(Settings["color-curse"])}
-	self.DebuffColors["Disease"] = {self:HexToRGB(Settings["color-disease"])}
-	self.DebuffColors["Magic"] = {self:HexToRGB(Settings["color-magic"])}
-	self.DebuffColors["Poison"] = {self:HexToRGB(Settings["color-poison"])}
-	self.DebuffColors["none"] = {self:HexToRGB(Settings["color-none"])}
+	self:AddColorEntry(self.DebuffColors, "Curse", Settings["color-curse"])
+	self:AddColorEntry(self.DebuffColors, "Disease", Settings["color-disease"])
+	self:AddColorEntry(self.DebuffColors, "Magic", Settings["color-magic"])
+	self:AddColorEntry(self.DebuffColors, "Poison", Settings["color-poison"])
+	self:AddColorEntry(self.DebuffColors, "none", Settings["color-none"])
 end
 
 function vUI:UpdateHappinessColors()
-	self.HappinessColors[1] = {self:HexToRGB(Settings["color-happiness-1"])}
-	self.HappinessColors[2] = {self:HexToRGB(Settings["color-happiness-2"])}
-	self.HappinessColors[3] = {self:HexToRGB(Settings["color-happiness-3"])}
+	self:AddColorEntry(self.HappinessColors, 1, Settings["color-happiness-1"])
+	self:AddColorEntry(self.HappinessColors, 2, Settings["color-happiness-2"])
+	self:AddColorEntry(self.HappinessColors, 3, Settings["color-happiness-3"])
 end
 
 function vUI:UpdateClassificationColors()
-	self.ClassificationColors["trivial"] = {self:HexToRGB(Settings["color-trivial"])}
-	self.ClassificationColors["standard"] = {self:HexToRGB(Settings["color-standard"])}
-	self.ClassificationColors["difficult"] = {self:HexToRGB(Settings["color-difficult"])}
-	self.ClassificationColors["verydifficult"] = {self:HexToRGB(Settings["color-verydifficult"])}
-	self.ClassificationColors["impossible"] = {self:HexToRGB(Settings["color-impossible"])}
+	self:AddColorEntry(self.ClassificationColors, "trivial", Settings["color-trivial"])
+	self:AddColorEntry(self.ClassificationColors, "standard", Settings["color-standard"])
+	self:AddColorEntry(self.ClassificationColors, "difficult", Settings["color-difficult"])
+	self:AddColorEntry(self.ClassificationColors, "verydifficult", Settings["color-verydifficult"])
+	self:AddColorEntry(self.ClassificationColors, "impossible", Settings["color-impossible"])
 end
 
 function vUI:UpdateComboColors()
-	self.ComboPoints[1] = {self:HexToRGB(Settings["color-combo-1"])}
-	self.ComboPoints[2] = {self:HexToRGB(Settings["color-combo-2"])}
-	self.ComboPoints[3] = {self:HexToRGB(Settings["color-combo-3"])}
-	self.ComboPoints[4] = {self:HexToRGB(Settings["color-combo-4"])}
-	self.ComboPoints[5] = {self:HexToRGB(Settings["color-combo-5"])}
+	self:AddColorEntry(self.ComboPoints, 1, Settings["color-combo-1"])
+	self:AddColorEntry(self.ComboPoints, 2, Settings["color-combo-2"])
+	self:AddColorEntry(self.ComboPoints, 3, Settings["color-combo-3"])
+	self:AddColorEntry(self.ComboPoints, 4, Settings["color-combo-4"])
+	self:AddColorEntry(self.ComboPoints, 5, Settings["color-combo-5"])
 end
 
 function vUI:UpdateTotemColors()
-	self.Totems[1] = {self:HexToRGB(Settings["color-totem-fire"])}
-	self.Totems[2] = {self:HexToRGB(Settings["color-totem-earth"])}
-	self.Totems[3] = {self:HexToRGB(Settings["color-totem-water"])}
-	self.Totems[4] = {self:HexToRGB(Settings["color-totem-air"])}
+	self:AddColorEntry(self.Totems, 1, Settings["color-totem-fire"])
+	self:AddColorEntry(self.Totems, 2, Settings["color-totem-earth"])
+	self:AddColorEntry(self.Totems, 3, Settings["color-totem-water"])
+	self:AddColorEntry(self.Totems, 4, Settings["color-totem-air"])
 end
 
 GUI:AddOptions(function(self)
@@ -128,20 +127,6 @@ GUI:AddOptions(function(self)
 	Right:CreateColorSelection("color-rage", Settings["color-rage"], Language["Rage"], "")
 	Right:CreateColorSelection("color-energy", Settings["color-energy"], Language["Energy"], "")
 	Right:CreateColorSelection("color-focus", Settings["color-focus"], Language["Focus"], "")
-	--[[Right:CreateColorSelection("color-combo-points", Settings["color-combo-points"], Language["Combo Points"], "")
-	Right:CreateColorSelection("color-soul-shards", Settings["color-soul-shards"], Language["Soul Shards"], "")
-	Right:CreateColorSelection("color-insanity", Settings["color-insanity"], Language["Insanity"], "")
-	Right:CreateColorSelection("color-fury", Settings["color-fury"], Language["Fury"], "")
-	Right:CreateColorSelection("color-pain", Settings["color-pain"], Language["Pain"], "")
-	Right:CreateColorSelection("color-chi", Settings["color-chi"], Language["Chi"], "")
-	Right:CreateColorSelection("color-maelstrom", Settings["color-maelstrom"], Language["Maelstrom"], "")
-	Right:CreateColorSelection("color-arcane-charges", Settings["color-arcane-charges"], Language["Arcane Charges"], "")
-	Right:CreateColorSelection("color-holy-power", Settings["color-holy-power"], Language["Holy Power"], "")
-	Right:CreateColorSelection("color-lunar-power", Settings["color-lunar-power"], Language["Lunar Power"], "")
-	Right:CreateColorSelection("color-runic-power", Settings["color-runic-power"], Language["Runic Power"], "")
-	Right:CreateColorSelection("color-runes", Settings["color-runes"], Language["Runes"], "")
-	Right:CreateColorSelection("color-fuel", Settings["color-fuel"], Language["Fuel"], "")
-	Right:CreateColorSelection("color-ammo-slot", Settings["color-ammo-slot"], Language["Ammo Slot"], "")]]
 	
 	Left:CreateHeader(Language["Zone Colors"])
 	Left:CreateColorSelection("color-sanctuary", Settings["color-sanctuary"], "Sanctuary", "")
