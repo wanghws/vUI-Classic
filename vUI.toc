@@ -74,6 +74,7 @@ Elements\DataTexts\SpellPower.lua
 Elements\DataTexts\Guild.lua
 Elements\DataTexts\Friends.lua
 Elements\DataTexts\PrimaryStat.lua
+Elements\DataTexts\PVP.lua
 Elements\DataTexts\Quests.lua
 Elements\DataTexts\Coordinates.lua
 Elements\DataTexts\Level.lua
