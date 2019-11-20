@@ -176,7 +176,7 @@ Defaults["action-bars-show-5"] = true
 
 -- Chat
 Defaults["chat-enable"] = true
-Defaults["chat-bg-opacity"] = 70
+Defaults["chat-bg-opacity"] = 100
 Defaults["chat-enable-url-links"] = true
 Defaults["chat-enable-discord-links"] = true
 Defaults["chat-enable-email-links"] = true

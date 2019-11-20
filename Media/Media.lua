@@ -114,7 +114,7 @@ function Media:GetHighlightList()
 	return self.HighlightList
 end
 
--- Templates
+-- Style templates
 function Media:SetStyle(name, info, silent)
 	if self.Styles[name] then
 		return
@@ -138,7 +138,7 @@ function Media:GetStyle(name)
 	if self.Styles[name] then
 		return self.Styles[name]
 	else
-		return self.Styles["|cFFFFD54FvUI|r"]
+		return self.Styles["|cFFFFC44DvUI|r"]
 	end
 end
 

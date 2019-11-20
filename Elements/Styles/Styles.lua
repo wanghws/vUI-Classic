@@ -69,7 +69,7 @@ Media:SetStyle("vUI 2", {
 	["ui-button-texture"] = "Ferous 27",
 	
 	["ui-header-font-color"] = "FFE6C0",
-	["ui-header-texture-color"] = "515151",
+	["ui-header-texture-color"] = "424242",
 	
 	["ui-window-bg-color"] = "424242",
 	["ui-window-main-color"] = "2B2B2B",

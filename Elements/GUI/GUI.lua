@@ -3619,7 +3619,7 @@ end
 
 function GUI:PLAYER_REGEN_ENABLED()
 	if (Settings["gui-hide-in-combat"] and self.WasCombatClosed) then
-		vUI:DisplayPopup(Language["Attention"], Language["The settings window was automatically closed due to combat. Would you like to open it again?"], "Yes", ReopenWindow, "No", nil)
+		vUI:DisplayPopup(Language["Attention"], Language["The settings window was automatically closed due to combat. Would you like to open it again?"], Language["Accept"], ReopenWindow, Language["Decline"])
 	end
 	
 	self.WasCombatClosed = false

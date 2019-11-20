@@ -551,7 +551,6 @@ AddMethodsToObject(Object:CreateFontString())
 
 local HandledCount = 0
 local EnumerateFrames = EnumerateFrames
-local CanAccessObject = CanAccessObject
 Object = EnumerateFrames()
 
 while Object do

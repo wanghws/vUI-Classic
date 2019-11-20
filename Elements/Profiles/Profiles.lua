@@ -353,7 +353,7 @@ function vUI:DeleteEmptyProfiles()
 		end
 	end
 	
-	AddProfile:print(format("Deleted %s empty profiles.", Deleted))
+	self:print(format("Deleted %s empty profiles.", Deleted))
 end
 
 function vUI:CountEmptyProfiles()

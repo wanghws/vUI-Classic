@@ -194,6 +194,10 @@ Popup.Display = function(self, header, body, accept, acceptfunc, cancel, cancelf
 	self:Show()
 end
 
+function vUI:ClearPopup()
+	Popup:Hide()
+end
+
 function vUI:DisplayPopup(...)
 	Popup:Display(...)
 end

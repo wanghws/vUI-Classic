@@ -1663,8 +1663,40 @@ local StyleParty = function(self, unit)
 	Resurrect:SetScaledSize(16, 16)
 	Resurrect:SetScaledPoint("CENTER", Health, 0, 0)
 	
-	-- Tags
+	-- Dispels
+	local Dispel = CreateFrame("Frame", nil, self)
+	Dispel:SetScaledSize(26)
+	Dispel:SetScaledPoint("CENTER", Health)
+	Dispel:SetFrameLevel(Health:GetFrameLevel() + 20)
+	Dispel:SetBackdrop(vUI.BackdropAndBorder)
+	Dispel:SetBackdropColor(0, 0, 0)
 	
+	Dispel.icon = Dispel:CreateTexture(nil, "ARTWORK")
+	Dispel.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	Dispel.icon:SetScaledPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.icon:SetScaledPoint("BOTTOMRIGHT", Dispel, -1, 1)
+	
+	Dispel.cd = CreateFrame("Cooldown", nil, Dispel, "CooldownFrameTemplate")
+	Dispel.cd:SetScaledPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.cd:SetScaledPoint("BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.cd:SetHideCountdownNumbers(true)
+	Dispel.cd:SetDrawEdge(false)
+	
+	Dispel.count = Dispel.cd:CreateFontString(nil, "ARTWORK", 7)
+	Dispel.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Dispel.count:SetScaledPoint("BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
+	Dispel.count:SetTextColor(1, 1, 1)
+	Dispel.count:SetJustifyH("RIGHT")
+	Dispel.count:SetShadowColor(0, 0, 0)
+	Dispel.count:SetShadowOffset(1.25, -1.25)
+	
+	Dispel.bg = Dispel:CreateTexture(nil, "BACKGROUND")
+	Dispel.bg:SetScaledPoint("TOPLEFT", Dispel, -1, 1)
+	Dispel.bg:SetScaledPoint("BOTTOMRIGHT", Dispel, 1, -1)
+	Dispel.bg:SetTexture(Media:GetTexture("Blank"))
+	Dispel.bg:SetVertexColor(0, 0, 0)
+	
+	-- Tags
 	if Settings["unitframes-class-color"] then
 		self:Tag(HealthLeft, "[LevelColor][Level]|r [Name10]")
 	else
@@ -1685,7 +1717,7 @@ local StyleParty = function(self, unit)
 	self.Power.bg = PowerBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
-	self.Leader = Leader
+	self.Dispel = Dispel
 	self.ReadyCheck = ReadyCheck
 	self.LeaderIndicator = Leader
 	self.ReadyCheckIndicator = ReadyCheck
@@ -1852,6 +1884,39 @@ local StyleRaid = function(self, unit)
 	ResurrectIndicator:SetScaledSize(16, 16)
 	ResurrectIndicator:SetScaledPoint("CENTER", Health, 0, 0)
 	
+	-- Dispels
+	local Dispel = CreateFrame("Frame", nil, self)
+	Dispel:SetScaledSize(20)
+	Dispel:SetScaledPoint("CENTER", Health)
+	Dispel:SetFrameLevel(Health:GetFrameLevel() + 20)
+	Dispel:SetBackdrop(vUI.BackdropAndBorder)
+	Dispel:SetBackdropColor(0, 0, 0)
+	
+	Dispel.icon = Dispel:CreateTexture(nil, "ARTWORK")
+	Dispel.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	Dispel.icon:SetScaledPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.icon:SetScaledPoint("BOTTOMRIGHT", Dispel, -1, 1)
+	
+	Dispel.cd = CreateFrame("Cooldown", nil, Dispel, "CooldownFrameTemplate")
+	Dispel.cd:SetScaledPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.cd:SetScaledPoint("BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.cd:SetHideCountdownNumbers(true)
+	Dispel.cd:SetDrawEdge(false)
+	
+	Dispel.count = Dispel.cd:CreateFontString(nil, "ARTWORK", 7)
+	Dispel.count:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
+	Dispel.count:SetScaledPoint("BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
+	Dispel.count:SetTextColor(1, 1, 1)
+	Dispel.count:SetJustifyH("RIGHT")
+	Dispel.count:SetShadowColor(0, 0, 0)
+	Dispel.count:SetShadowOffset(1.25, -1.25)
+	
+	Dispel.bg = Dispel:CreateTexture(nil, "BACKGROUND")
+	Dispel.bg:SetScaledPoint("TOPLEFT", Dispel, -1, 1)
+	Dispel.bg:SetScaledPoint("BOTTOMRIGHT", Dispel, 1, -1)
+	Dispel.bg:SetTexture(Media:GetTexture("Blank"))
+	Dispel.bg:SetVertexColor(0, 0, 0)
+	
 	-- Tags
 	if Settings["unitframes-class-color"] then
 		self:Tag(HealthLeft, "[Name5]")
@@ -1874,6 +1939,7 @@ local StyleRaid = function(self, unit)
 	self.HealthRight = HealthRight
 	self.Power = Power
 	self.Power.bg = PowerBG
+	self.Dispel = Dispel
 	self.ResurrectIndicator = ResurrectIndicator
 end
 

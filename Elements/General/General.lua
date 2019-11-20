@@ -37,14 +37,14 @@ local UpdateUIScale = function(value)
 end
 
 local GetDiscordLink = function()
-	if (not Throttle:Exists("get-discord-link")) then
-		Throttle:Create("get-discord-link", 10)
+	if (not Throttle:Exists("discord-request")) then
+		Throttle:Create("discord-request", 10)
 	end
 	
-	if (not Throttle:IsThrottled("get-discord-link")) then
-		vUI:print("Join our Discord community! https://discord.gg/BKzWPhT")
+	if (not Throttle:IsThrottled("discord-request")) then
+		vUI:print("Join the Discord community for support and feedback https://discord.gg/BKzWPhT")
 		
-		Throttle:Start("get-discord-link")
+		Throttle:Start("discord-request")
 	end
 end
 
