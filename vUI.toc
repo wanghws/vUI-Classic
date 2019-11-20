@@ -44,6 +44,7 @@ Elements\Chat\Bubbles.lua
 Elements\Experience\Experience.lua
 Elements\Reputation\Reputation.lua
 Elements\ActionBars\ActionBars.lua
+Elements\ActionBars\KeyBinding.lua
 Elements\UnitFrames\UnitFrames.lua
 Elements\Tooltips\Tooltips.lua
 Elements\MetersBG\MetersBG.lua

@@ -31,9 +31,7 @@ local Languages = {
 }
 
 local UpdateUIScale = function(value)
-	value = tonumber(value)
-	
-	vUI:SetScale(value)
+	vUI:SetScale(tonumber(value))
 end
 
 local GetDiscordLink = function()
