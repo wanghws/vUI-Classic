@@ -20,7 +20,7 @@ local Classes = {
 	["MONK"] = {["Custom"] = false, ["Magic"] = false, ["Poison"] = true, ["Disease"] = true},
 	["PALADIN"] = {["Custom"] = false, ["Magic"] = true, ["Poison"] = true, ["Disease"] = true},
 	["PRIEST"] = {["Custom"] = false, ["Magic"] = true, ["Disease"] = true},
-	["SHAMAN"] = {["Custom"] = false, ["Curse"] = true, ["Disease"] = true},
+	["SHAMAN"] = {["Custom"] = false, ["Poison"] = true, ["Disease"] = true},
 	["MAGE"] = {["Curse"] = true},
 }
 
