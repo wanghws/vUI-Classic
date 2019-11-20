@@ -176,7 +176,7 @@ Defaults["action-bars-show-5"] = true
 
 -- Chat
 Defaults["chat-enable"] = true
-Defaults["chat-bg-opacity"] = 100
+Defaults["chat-bg-opacity"] = 70
 Defaults["chat-enable-url-links"] = true
 Defaults["chat-enable-discord-links"] = true
 Defaults["chat-enable-email-links"] = true
@@ -195,7 +195,7 @@ Defaults["chat-fade-time"] = 15
 
 -- Chat Bubbles
 Defaults["chat-bubbles-enable"] = true
-Defaults["chat-bubbles-opacity"] = 70
+Defaults["chat-bubbles-opacity"] = 100
 Defaults["chat-bubbles-font"] = "PT Sans"
 Defaults["chat-bubbles-font-size"] = 14
 Defaults["chat-bubbles-font-flags"] = ""
