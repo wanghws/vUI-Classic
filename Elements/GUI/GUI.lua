@@ -334,11 +334,26 @@ local ButtonRequiresReload = function(self, flag)
 	self.ReloadFlag = flag
 end
 
+local ButtonEnable = function(self)
+	self.Button:EnableMouse(true)
+	
+	self.Button.MiddleText:SetTextColorHex("FFFFFF")
+end
+
+local ButtonDisable = function(self)
+	self.Button:EnableMouse(false)
+	
+	self.Button.MiddleText:SetTextColorHex("A5A5A5")
+end
+
 GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.ID = CreateID(value)
 	Anchor.Text = label
 	Anchor.Tooltip = tooltip
+	Anchor.Enable = ButtonEnable
+	Anchor.Disable = ButtonDisable
 	
 	Anchor:SetScript("OnEnter", AnchorOnEnter)
 	Anchor:SetScript("OnLeave", AnchorOnLeave)
@@ -382,6 +397,8 @@ GUI.Widgets.CreateButton = function(self, value, label, tooltip, hook)
 	Button.Text:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
 	Button.Text:SetJustifyH("LEFT")
 	Button.Text:SetText("|cFF"..Settings["ui-widget-font-color"]..label.."|r")
+	
+	Anchor.Button = Button
 	
 	tinsert(self.Widgets, Anchor)
 	
