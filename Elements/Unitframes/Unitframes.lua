@@ -1664,7 +1664,7 @@ local StyleParty = function(self, unit)
 	Resurrect:SetScaledPoint("CENTER", Health, 0, 0)
 	
 	-- Dispels
-	local Dispel = CreateFrame("Frame", nil, self)
+	local Dispel = CreateFrame("Frame", nil, Health)
 	Dispel:SetScaledSize(26)
 	Dispel:SetScaledPoint("CENTER", Health)
 	Dispel:SetFrameLevel(Health:GetFrameLevel() + 20)
