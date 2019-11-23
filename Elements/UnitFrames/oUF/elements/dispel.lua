@@ -125,6 +125,10 @@ end
 
 local Enable = function(self)
 	if (not Valid) then
+		if self.Dispel then
+			self.Dispel:Hide()
+		end
+		
 		return
 	end
 	
