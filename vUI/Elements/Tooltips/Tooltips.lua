@@ -26,6 +26,7 @@ local GetPetHappiness = GetPetHappiness
 local GetMouseFocus = GetMouseFocus
 local GetItemInfo = GetItemInfo
 local GetCoinTextureString = GetCoinTextureString
+local InCombatLockdown = InCombatLockdown
 
 local HealthBar = GameTooltipStatusBar
 
@@ -201,6 +202,12 @@ local GetUnitColor = function(unit)
 end
 
 local OnTooltipSetUnit = function(self)
+	if (Settings["tooltips-hide-on-unit"] == "NO_COMBAT" and InCombatLockdown()) or Settings["tooltips-hide-on-unit"] == "ALWAYS" then
+		self:Hide()
+		
+		return
+	end
+	
 	local Unit, UnitID = self:GetUnit()
 	
 	if UnitID then
@@ -301,6 +308,12 @@ local OnTooltipSetUnit = function(self)
 end
 
 local OnTooltipSetItem = function(self)
+	if (Settings["tooltips-hide-on-item"] == "NO_COMBAT" and InCombatLockdown()) or Settings["tooltips-hide-on-item"] == "ALWAYS" then
+		self:Hide()
+		
+		return
+	end
+	
 	if (MerchantFrame and MerchantFrame:IsShown()) then
 		return
 	end
@@ -374,6 +387,12 @@ local OnItemRefTooltipSetItem = function(self)
 end
 
 local OnTooltipSetSpell = function(self)
+	if (Settings["tooltips-hide-on-action"] == "NO_COMBAT" and InCombatLockdown()) or Settings["tooltips-hide-on-action"] == "ALWAYS" then
+		self:Hide()
+		
+		return
+	end
+	
 	if (not Settings["tooltips-show-id"]) then
 		return
 	end
@@ -638,8 +657,13 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Vendor Price"], "Display the items value if sold to a vendor")
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")
 	
-	Right:CreateHeader(Language["Font"])
-	Right:CreateDropdown("tooltips-font", Settings["tooltips-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the tooltip text"], nil, "Font")
-	Right:CreateSlider("tooltips-font-size", Settings["tooltips-font-size"], 8, 18, 1, Language["Font Size"], Language["Set the font size of the tooltip text"])
-	Right:CreateDropdown("tooltips-font-flags", Settings["tooltips-font-flags"], Media:GetFlagsList(), Language["Font Flags"], Language["Set the font flags of the tooltip text"])
+	Left:CreateHeader(Language["Font"])
+	Left:CreateDropdown("tooltips-font", Settings["tooltips-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the tooltip text"], nil, "Font")
+	Left:CreateSlider("tooltips-font-size", Settings["tooltips-font-size"], 8, 18, 1, Language["Font Size"], Language["Set the font size of the tooltip text"])
+	Left:CreateDropdown("tooltips-font-flags", Settings["tooltips-font-flags"], Media:GetFlagsList(), Language["Font Flags"], Language["Set the font flags of the tooltip text"])
+	
+	Right:CreateHeader(Language["Hide Tooltips"])
+	Right:CreateDropdown("tooltips-hide-on-unit", Settings["tooltips-hide-on-unit"], {[Language["Never"]] = "NEVER", [Language["Always"]] = "ALWAYS", [Language["Combat"]] = "NO_COMBAT"}, Language["Show On Units"], Language["Set when the tooltip should hide units"])
+	Right:CreateDropdown("tooltips-hide-on-item", Settings["tooltips-hide-on-item"], {[Language["Never"]] = "NEVER", [Language["Always"]] = "ALWAYS", [Language["Combat"]] = "NO_COMBAT"}, Language["Show On Items"], Language["Set when the tooltip should display items"])
+	Right:CreateDropdown("tooltips-hide-on-action", Settings["tooltips-hide-on-action"], {[Language["Never"]] = "NEVER", [Language["Always"]] = "ALWAYS", [Language["Combat"]] = "NO_COMBAT"}, Language["Show On Actions"], Language["Set when the tooltip should display actions"])
 end)
