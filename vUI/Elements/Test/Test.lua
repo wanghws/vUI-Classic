@@ -602,11 +602,11 @@ Taxi:SetScript("OnEvent", function(self, event)
 		TaxiFrame:Hide()
     end
 	
-	TaxiFrame.Tex = TaxiFrame:CreateTexture(nil, "ARTWORK")
-	TaxiFrame.Tex:SetPoint("TOPLEFT", TaxiFrame, 1, -1)
-	TaxiFrame.Tex:SetPoint("BOTTOMRIGHT", TaxiFrame, -1, 1)
-	TaxiFrame.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
-	TaxiFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
+	TaxiFrame.Texture = TaxiFrame:CreateTexture(nil, "ARTWORK")
+	TaxiFrame.Texture:SetScaledPoint("TOPLEFT", TaxiFrame, 1, -1)
+	TaxiFrame.Texture:SetScaledPoint("BOTTOMRIGHT", TaxiFrame, -1, 1)
+	TaxiFrame.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	TaxiFrame.Texture:SetVertexColorHex(Settings["ui-header-texture-color"])
 	
 	TaxiFrame.Text = TaxiFrame:CreateFontString(nil, "OVERLAY", 7)
 	TaxiFrame.Text:SetScaledPoint("CENTER", TaxiFrame, 0, -1)
