@@ -1967,6 +1967,7 @@ local UpdateShowPlayerBuffs = function(value)
 	if vUI.UnitFrames["player"] then
 		if value then
 			vUI.UnitFrames["player"]:EnableElement("Auras")
+			vUI.UnitFrames["player"]:UpdateAllElements("ForceUpdate")
 		else
 			vUI.UnitFrames["player"]:DisableElement("Auras")
 		end
