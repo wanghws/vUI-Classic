@@ -140,7 +140,7 @@ local CreateMinimap = function()
 	vUI:GetModule("Move"):Add(Frame)
 	
 	TimeFrame:SetScript("OnEnter", TimeOnEnter)
-	TimeFrame:SetScript("Onleave", TimeOnLeave)
+	TimeFrame:SetScript("OnLeave", TimeOnLeave)
 	
 	ZoneUpdate(ZoneFrame)
 end
