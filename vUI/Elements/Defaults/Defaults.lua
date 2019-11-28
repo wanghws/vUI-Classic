@@ -314,6 +314,7 @@ Defaults["nameplates-target-indicator-size"] = "SMALL"
 Defaults["nameplates-enable-castbar"] = true
 Defaults["nameplates-castbar-height"] = 12
 Defaults["nameplates-castbar-enable-icon"] = true
+
 -- Tooltips
 Defaults["tooltips-enable"] = true
 Defaults["tooltips-show-sell-value"] = true
@@ -335,6 +336,9 @@ Defaults["quest-watch-font-size"] = 12
 Defaults["quest-watch-font-flags"] = ""
 
 -- Data Texts
+Defaults["data-text-font"] = "Roboto"
+Defaults["data-text-font-size"] = 12
+Defaults["data-text-font-flags"] = ""
 Defaults["data-text-chat-left"] = "Gold"
 Defaults["data-text-chat-middle"] = "Crit"
 Defaults["data-text-chat-right"] = "Durability"
