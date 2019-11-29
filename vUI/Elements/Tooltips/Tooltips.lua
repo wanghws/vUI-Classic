@@ -300,7 +300,7 @@ local OnTooltipSetUnit = function(self)
 		--GameTooltipStatusBar.BG:SetVertexColorHex(Color)
 		
 		if self.OuterBG then
-			self.OuterBG:SetScaledPoint("TOPLEFT", GameTooltipStatusBar, -4, 4)
+			self.OuterBG:SetScaledPoint("TOPLEFT", self, -3, 22)
 		end
 	end
 end
@@ -401,44 +401,6 @@ local OnTooltipSetSpell = function(self)
 	self:AddDoubleLine(Language["Spell ID:"], ID, 1, 1, 1, 1, 1, 1)
 end
 
-local SetTooltipDefaultAnchor = function(self, parent)
-	if Settings["tooltips-on-cursor"] then
-		self:SetOwner(parent, "ANCHOR_CURSOR", 0, 8)
-		
-		return
-	end
-	
-	local Unit, UnitID = self:GetUnit()
-	
-	if (not UnitID) then
-		local MouseFocus = GetMouseFocus()
-		
-		if MouseFocus and MouseFocus:GetAttribute("unit") then
-			UnitID = MouseFocus:GetAttribute("unit")
-		end
-	end
-	
-	if (not UnitID and UnitExists("mouseover")) then
-		UnitID = "mouseover"
-	end
-	
-	self:ClearAllPoints()
-	
-	if UnitID then
-		if vUIMetersFrame then
-			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 24)
-		else
-			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 120)
-		end
-	else
-		if vUIMetersFrame then
-			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
-		else
-			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 101)
-		end
-	end
-end
-
 Tooltips.GameTooltip_SetDefaultAnchor = function(self, parent)
 	if Settings["tooltips-on-cursor"] then
 		self:SetOwner(parent, "ANCHOR_CURSOR", 0, 8)
@@ -462,18 +424,10 @@ Tooltips.GameTooltip_SetDefaultAnchor = function(self, parent)
 	
 	self:ClearAllPoints()
 	
-	if UnitID then
-		if vUIMetersFrame then
-			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 24)
-		else
-			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 120)
-		end
+	if vUIMetersFrame then
+		self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
 	else
-		if vUIMetersFrame then
-			self:SetScaledPoint("BOTTOMLEFT", vUIMetersFrame, "TOPLEFT", 3, 5)
-		else
-			self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 101)
-		end
+		self:SetScaledPoint("BOTTOMRIGHT", UIParent, -13, 101)
 	end
 end
 
@@ -488,8 +442,6 @@ function Tooltips:AddHooks()
 	ItemRefTooltip:HookScript("OnTooltipSetItem", OnItemRefTooltipSetItem)
 	
 	self:Hook("GameTooltip_SetDefaultAnchor")
-	
---	hooksecurefunc("GameTooltip_SetDefaultAnchor", SetTooltipDefaultAnchor)
 end
 
 local GetColor = function(p, r1, g1, b1, r2, g2, b2)
