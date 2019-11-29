@@ -36,11 +36,15 @@ local Update = function(self)
 	
 	if (GetInventoryItemID("player", 0) > 0) then -- Ammo slot
 		Count = GetInventoryItemCount("player", 0)
-	elseif (GetInventoryItemID("player", 18) > 0) then -- Thrown weapons
-		local ItemSubType = select(7, GetItemInfo(GetInventoryItemID("player", 18)))
+	else
+		local ThrownSlotID = GetInventoryItemID("player", 18)
 		
-		if (ItemSubType and ItemSubType == ThrownSubType) then
-			Count = GetInventoryItemCount("player", 18)
+		if (ThrownSlotID and ThrownSlotID > 0) then -- Thrown weapons
+			local ItemSubType = select(7, GetItemInfo(GetInventoryItemID("player", 18)))
+			
+			if (ItemSubType and ItemSubType == ThrownSubType) then
+				Count = GetInventoryItemCount("player", 18)
+			end
 		end
 	end
 	
