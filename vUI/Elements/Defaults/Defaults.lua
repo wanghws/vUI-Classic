@@ -308,6 +308,9 @@ Defaults["party-pets-health-height"] = 0 -- NYI
 Defaults["party-pets-power-height"] = 22
 
 Defaults["raid-enable"] = true
+Defaults["raid-width"] = 90
+Defaults["raid-health-height"] = 23
+Defaults["raid-power-height"] = 2
 
 -- Name Plates
 Defaults["nameplates-enable"] = true

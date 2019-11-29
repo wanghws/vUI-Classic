@@ -1802,7 +1802,7 @@ local StyleRaid = function(self, unit)
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
-	Health:SetScaledHeight(23)
+	Health:SetScaledHeight(Settings["raid-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1846,7 +1846,7 @@ local StyleRaid = function(self, unit)
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
-	Power:SetScaledHeight(2)
+	Power:SetScaledHeight(Settings["raid-power-height"])
 	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-color"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
@@ -2078,8 +2078,8 @@ UF:SetScript("OnEvent", function(self, event)
 		
 		if Settings["raid-enable"] then
 			local Raid = oUF:SpawnHeader("vUI Raid", nil, "raid,solo",
-				"initial-width", 90,
-				"initial-height", 28,
+				"initial-width", Settings["raid-width"],
+				"initial-height", (Settings["raid-health-height"] + Settings["raid-power-height"] + 3),
 				"showSolo", false,
 				"showPlayer", true,
 				"showParty", false,
@@ -2102,7 +2102,7 @@ UF:SetScript("OnEvent", function(self, event)
 			)
 			
 			self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
-			self.RaidAnchor:SetScaledSize((4 * 90 + 4 * 2), (28 * 10) + (2 * (10 - 1)))
+			self.RaidAnchor:SetScaledSize((4 * (Settings["raid-health-height"] + Settings["raid-power-height"] + 3) + 4 * 2), ((Settings["raid-health-height"] + Settings["raid-power-height"]) * 10) + (2 * (10 - 1)))
 			self.RaidAnchor:SetScaledPoint("TOPLEFT", UIParent, 10, -10)
 			
 			local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
@@ -2201,6 +2201,11 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Enable"])
 	Left:CreateSwitch("raid-enable", Settings["raid-enable"], Language["Enable Raid Module"], Language["Enable the raid frames module"], ReloadUI):RequiresReload(true)
+	
+	Left:CreateHeader(Language["Raid Size"])
+	Left:CreateSlider("raid-width", Settings["raid-width"], 40, 200, 1, "Width", "Set the width of the raid frames", ReloadUI, nil):RequiresReload(true)
+	Left:CreateSlider("raid-health-height", Settings["raid-health-height"], 10, 60, 1, "Health Height", "Set the height of raid health bars", ReloadUI, nil):RequiresReload(true)
+	Left:CreateSlider("raid-power-height", Settings["raid-power-height"], 2, 30, 1, "Power Height", "Set the height of raid power bars", ReloadUI, nil):RequiresReload(true)
 end)
 
 local NamePlatesUpdateEnableDebuffs = function(self, value)
