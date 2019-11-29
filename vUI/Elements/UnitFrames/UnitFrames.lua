@@ -1938,11 +1938,11 @@ local Style = function(self, unit)
 		StyleTargetTarget(self, unit)
 	elseif (unit == "pet") then
 		StylePet(self, unit)
-	elseif (find(unit, "raid") and Settings["unitframes-enable-raid"]) then
+	elseif (find(unit, "raid") and Settings["raid-enable"]) then
 		StyleRaid(self, unit)
-	elseif (find(unit, "partypet") and Settings["unitframes-enable-party"] and Settings["unitframes-enable-party-pets"]) then
+	elseif (find(unit, "partypet") and Settings["party-enable"] and Settings["party-pets-enable"]) then
 		StylePartyPet(self, unit)
-	elseif (find(unit, "party") and not find(unit, "pet") and Settings["unitframes-enable-party"]) then
+	elseif (find(unit, "party") and not find(unit, "pet") and Settings["party-enable"]) then
 		StyleParty(self, unit)
 	elseif (match(unit, "nameplate") and Settings["nameplates-enable"]) then
 		StyleNamePlate(self, unit)
@@ -2038,7 +2038,7 @@ UF:SetScript("OnEvent", function(self, event)
 			local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
 				"initial-width", Settings["party-width"],
 				"initial-height", (Settings["party-health-height"] + Settings["party-power-height"] + 3),
-				"showSolo", true,
+				"showSolo", false,
 				"showPlayer", true,
 				"showParty", true,
 				"showRaid", false,
@@ -2052,7 +2052,13 @@ UF:SetScript("OnEvent", function(self, event)
 				]]
 			)
 			
+			self.PartyAnchor = CreateFrame("Frame", "vUI Party Anchor", UIParent)
+			self.PartyAnchor:SetScaledSize((4 * (Settings["party-health-height"] + Settings["party-power-height"] + 3) + 4 * 2), ((Settings["party-health-height"] + Settings["party-power-height"]) * 5) + (2 * 5))
+			self.PartyAnchor:SetScaledPoint("LEFT", UIParent, 10, 0)
+			
 			Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+			
+			Move:Add(self.PartyAnchor)
 			
 			if Settings["party-pets-enable"] then
 				local PartyPet = oUF:SpawnHeader("vUI Party Pets", "SecureGroupPetHeaderTemplate", "party,solo",
