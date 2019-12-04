@@ -1542,6 +1542,7 @@ local StylePet = function(self, unit)
 	
 	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
+		
 		self:Tag(HealthLeft, "[Name10]")
 	else
 		Health.colorHealth = true
