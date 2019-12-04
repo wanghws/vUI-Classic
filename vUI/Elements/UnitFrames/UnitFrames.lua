@@ -1060,15 +1060,12 @@ local StylePlayer = function(self, unit)
 		Totems:SetBackdropBorderColor(0, 0, 0)
 		
 		local Width = (Settings["unitframes-player-width"] / 4) - 1
-		local Color
 		
 		for i = 1, 4 do
-			Color = vUI.Totems[i]
-			
 			Totems[i] = CreateFrame("StatusBar", self:GetName() .. "Totems".. i, Totems)
 			Totems[i]:SetScaledSize(Width, 8)
 			Totems[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			Totems[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
+			Totems[i]:SetStatusBarColor(vUI.Totems[i][1], vUI.Totems[i][2], vUI.Totems[i][3])
 			Totems[i]:SetMinMaxValues(0, 1)
 			Totems[i]:SetValue(0)
 			
@@ -1076,8 +1073,8 @@ local StylePlayer = function(self, unit)
 			Totems[i].BG:SetScaledPoint("TOPLEFT", Totems[i], 0, 0)
 			Totems[i].BG:SetScaledPoint("BOTTOMRIGHT", Totems[i], 0, 0)
 			Totems[i].BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			Totems[i].BG:SetVertexColor(Color[1], Color[2], Color[3])
-			Totems[i].BG:SetAlpha(0.2)
+			Totems[i].BG:SetVertexColor(vUI.Totems[i][1], vUI.Totems[i][2], vUI.Totems[i][3])
+			Totems[i].BG:SetAlpha(0.3)
 			
 			if (i == 1) then
 				Totems[i]:SetScaledPoint("LEFT", Totems, 1, 0)
@@ -1108,7 +1105,7 @@ local StylePlayer = function(self, unit)
 			ComboPoints[i]:SetScaledSize(Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
-			ComboPoints[i]:SetAlpha(0.2)
+			ComboPoints[i]:SetAlpha(0.3)
 			
 			if (i == 1) then
 				ComboPoints[i]:SetScaledPoint("LEFT", ComboPoints, 1, 0)
@@ -1197,7 +1194,7 @@ local StyleTarget = function(self, unit)
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
 	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
-	Health:SetScaledHeight(28)
+	Health:SetScaledHeight(Settings["unitframes-target-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetMinMaxValues(0, 1)
 	Health:SetValue(1)
@@ -1253,7 +1250,7 @@ local StyleTarget = function(self, unit)
 	local Power = CreateFrame("StatusBar", nil, self)
 	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
 	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
-	Power:SetScaledHeight(15)
+	Power:SetScaledHeight(Settings["unitframes-target-power-height"])
 	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
@@ -1399,7 +1396,8 @@ local StyleTargetTarget = function(self, unit)
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
-	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
+	Health:SetScaledHeight(Settings["unitframes-targettarget-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1451,6 +1449,31 @@ local StyleTargetTarget = function(self, unit)
 		self:Tag(HealthLeft, "[NameColor][Name10]")
 	end
 	
+	-- Power Bar
+	local Power = CreateFrame("StatusBar", nil, self)
+	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetScaledHeight(Settings["unitframes-targettarget-power-height"])
+	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local PowerBG = Power:CreateTexture(nil, "BORDER")
+	PowerBG:SetScaledPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetScaledPoint("BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	PowerBG:SetAlpha(0.2)
+	
+	
+	-- Attributes
+	Power.frequentUpdates = true
+	Power.colorReaction = true
+	Power.Smooth = true
+	
+	if Settings["unitframes-class-color"] then
+		Power.colorPower = true
+	else
+		Power.colorClass = true
+	end
+	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Range = {
@@ -1463,6 +1486,8 @@ local StyleTargetTarget = function(self, unit)
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
+	self.Power = Power
+	self.Power.bg = PowerBG
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
@@ -1479,7 +1504,8 @@ local StylePet = function(self, unit)
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetScaledPoint("TOPLEFT", self, 1, -1)
-	Health:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Health:SetScaledPoint("TOPRIGHT", self, -1, -1)
+	Health:SetScaledHeight(Settings["unitframes-pet-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -1516,11 +1542,37 @@ local StylePet = function(self, unit)
 	
 	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
+		self:Tag(HealthLeft, "[Name10]")
 	else
 		Health.colorHealth = true
+		
+		self:Tag(HealthLeft, "[PetColor][Name10]")
 	end
 	
-	self:Tag(HealthLeft, "[PetColor][Name10]")
+	-- Power Bar
+	local Power = CreateFrame("StatusBar", nil, self)
+	Power:SetScaledPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetScaledPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetScaledHeight(Settings["unitframes-pet-power-height"])
+	Power:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	
+	local PowerBG = Power:CreateTexture(nil, "BORDER")
+	PowerBG:SetScaledPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetScaledPoint("BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
+	PowerBG:SetAlpha(0.2)
+	
+	-- Attributes
+	Power.frequentUpdates = true
+	Power.colorReaction = true
+	Power.Smooth = true
+	
+	if Settings["unitframes-class-color"] then
+		Power.colorPower = true
+	else
+		Power.colorClass = true
+	end
+	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
 	
 	self.Range = {
@@ -1532,6 +1584,8 @@ local StylePet = function(self, unit)
 	self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
+	self.Power = Power
+	self.Power.bg = PowerBG
 end
 
 local StyleParty = function(self, unit)
@@ -2014,12 +2068,12 @@ UF:SetScript("OnEvent", function(self, event)
 			Target:SetScaledPoint("LEFT", UIParent, "CENTER", 68, -304)
 			
 			local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
-			TargetTarget:SetScaledSize(Settings["unitframes-targettarget-width"], Settings["unitframes-targettarget-health-height"])
-			TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -3)
+			TargetTarget:SetScaledSize(Settings["unitframes-targettarget-width"], Settings["unitframes-targettarget-health-height"] + Settings["unitframes-targettarget-power-height"] + 3)
+			TargetTarget:SetScaledPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -2)
 			
 			local Pet = oUF:Spawn("pet", "vUI Pet")
-			Pet:SetScaledSize(Settings["unitframes-pet-width"], Settings["unitframes-pet-health-height"])
-			Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -3)
+			Pet:SetScaledSize(Settings["unitframes-pet-width"], Settings["unitframes-pet-health-height"] + Settings["unitframes-pet-power-height"] + 3)
+			Pet:SetScaledPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -2)
 			
 			vUI.UnitFrames["player"] = Player
 			vUI.UnitFrames["target"] = Target
@@ -2038,7 +2092,7 @@ UF:SetScript("OnEvent", function(self, event)
 			local Party = oUF:SpawnHeader("vUI Party", nil, "party,solo",
 				"initial-width", Settings["party-width"],
 				"initial-height", (Settings["party-health-height"] + Settings["party-power-height"] + 3),
-				"showSolo", false,
+				"showSolo", true,
 				"showPlayer", true,
 				"showParty", true,
 				"showRaid", false,
@@ -2053,10 +2107,10 @@ UF:SetScript("OnEvent", function(self, event)
 			)
 			
 			self.PartyAnchor = CreateFrame("Frame", "vUI Party Anchor", UIParent)
-			self.PartyAnchor:SetScaledSize((4 * (Settings["party-health-height"] + Settings["party-power-height"] + 3) + 4 * 2), ((Settings["party-health-height"] + Settings["party-power-height"]) * 5) + (2 * 5))
+			self.PartyAnchor:SetScaledSize(Settings["party-width"], ((Settings["party-health-height"] + Settings["party-power-height"]) * 5) + (2 * 5))
 			self.PartyAnchor:SetScaledPoint("LEFT", UIParent, 10, 0)
 			
-			Party:SetScaledPoint("LEFT", UIParent, 10, 0)
+			Party:SetScaledPoint("LEFT", self.PartyAnchor, 0, 0)
 			
 			Move:Add(self.PartyAnchor)
 			
@@ -2162,15 +2216,31 @@ local UpdatePlayerWidth = function(value)
 		Frame.Debuffs:SetScaledWidth(value)
 		
 		-- Combo points
-		Frame.ComboPoints:SetScaledWidth(value)
-	
-		local Width = (value / 5)
-		
-		for i = 1, 5 do
-			Frame.ComboPoints[i]:SetScaledWidth(Width)
+		if Frame.ComboPoints then
+			Frame.ComboPoints:SetScaledWidth(value)
 			
-			if (i ~= 1) then
-				Frame.ComboPoints[i]:SetScaledWidth(Width - 2)
+			local Width = (value / 5)
+			
+			for i = 1, 5 do
+				Frame.ComboPoints[i]:SetScaledWidth(Width)
+				
+				if (i ~= 1) then
+					Frame.ComboPoints[i]:SetScaledWidth(Width - 2)
+				end
+			end
+		end
+		
+		if Frame.Totems then
+			Frame.Totems:SetScaledWidth(value)
+			
+			local Width = (value / 4) - 1
+			
+			for i = 1, 4 do
+				if (i  == 1) then
+					Frame.Totems[i]:SetScaledWidth(Width)
+				else
+					Frame.Totems[i]:SetScaledWidth(Width - 1)
+				end
 			end
 		end
 	end
@@ -2236,7 +2306,18 @@ end
 
 local UpdateTargetTargetHealthHeight = function(value)
 	if vUI.UnitFrames["targettarget"] then
-		vUI.UnitFrames["targettarget"]:SetScaledHeight(value)
+		vUI.UnitFrames["targettarget"].Health:SetScaledHeight(value)
+		vUI.UnitFrames["targettarget"]:SetScaledHeight(value + Settings["unitframes-targettarget-power-height"] + 3)
+	end
+end
+
+local UpdateTargetTargetPowerHeight = function(value)
+	if vUI.UnitFrames["targettarget"] then
+		local Frame = vUI.UnitFrames["targettarget"]
+		
+		Frame.Power:SetScaledHeight(value)
+		
+		Frame:SetScaledHeight(Settings["unitframes-targettarget-health-height"] + value + 3)
 	end
 end
 
@@ -2248,7 +2329,18 @@ end
 
 local UpdatePetHealthHeight = function(value)
 	if vUI.UnitFrames["pet"] then
-		vUI.UnitFrames["pet"]:SetScaledHeight(value)
+		vUI.UnitFrames["pet"].Health:SetScaledHeight(value)
+		vUI.UnitFrames["pet"]:SetScaledHeight(value + Settings["unitframes-pet-power-height"] + 3)
+	end
+end
+
+local UpdatePetPowerHeight = function(value)
+	if vUI.UnitFrames["pet"] then
+		local Frame = vUI.UnitFrames["pet"]
+		
+		Frame.Power:SetScaledHeight(value)
+		
+		Frame:SetScaledHeight(Settings["unitframes-pet-health-height"] + value + 3)
 	end
 end
 
@@ -2267,6 +2359,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSlider("unitframes-player-power-height", Settings["unitframes-player-power-height"], 10, 30, 1, "Power Bar Height", "Set the height of the player power bar", UpdatePlayerPowerHeight)
 	Left:CreateSwitch("unitframes-show-player-buffs", Settings["unitframes-show-player-buffs"], Language["Show Player Buffs"], Language["Show your auras above the player unit frame"], UpdateShowPlayerBuffs)
 	Left:CreateSwitch("unitframes-only-player-debuffs", Settings["unitframes-only-player-debuffs"], Language["Only Display Player Debuffs"], Language["If enabled, only your own debuffs will|nbe displayed on the target"], UpdateOnlyPlayerDebuffs)
+	Left:CreateSwitch("unitframes-show-mana-timer", Settings["unitframes-show-mana-timer"], Language["Enable Mana Regen Timer"], Language["Display the time until your full mana|nregeneration is active"], ReloadUI):RequiresReload(true)
+	Left:CreateSwitch("unitframes-show-energy-timer", Settings["unitframes-show-energy-timer"], Language["Enable Energy Timer"], Language["Display the time until your next energy|ntick on the power bar"], ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Target"])
 	Right:CreateSlider("unitframes-target-width", Settings["unitframes-target-width"], 120, 320, 1, "Width", "Set the width of the target unit frame", UpdateTargetWidth)
@@ -2275,11 +2369,13 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Target Target"])
 	Left:CreateSlider("unitframes-targettarget-width", Settings["unitframes-targettarget-width"], 60, 320, 1, "Width", "Set the width of the target's target unit frame", UpdateTargetTargetWidth)
-	Left:CreateSlider("unitframes-targettarget-health-height", Settings["unitframes-targettarget-health-height"], 10, 60, 1, "Health Bar Height", "Set the height of the player health bar", UpdateTargetTargetHealthHeight)
+	Left:CreateSlider("unitframes-targettarget-health-height", Settings["unitframes-targettarget-health-height"], 6, 60, 1, "Health Bar Height", "Set the height of the player health bar", UpdateTargetTargetHealthHeight)
+	Left:CreateSlider("unitframes-targettarget-power-height", Settings["unitframes-targettarget-power-height"], 1, 30, 1, "Power Bar Height", "Set the height of the player power bar", UpdateTargetTargetPowerHeight)
 	
 	Right:CreateHeader(Language["Pet"])
 	Right:CreateSlider("unitframes-pet-width", Settings["unitframes-pet-width"], 60, 320, 1, "Width", "Set the width of the pet unit frame", UpdatePetWidth)
-	Right:CreateSlider("unitframes-pet-health-height", Settings["unitframes-pet-health-height"], 10, 60, 1, "Health Bar Height", "Set the height of the pet health bar", UpdatePetHealthHeight)
+	Right:CreateSlider("unitframes-pet-health-height", Settings["unitframes-pet-health-height"], 6, 60, 1, "Health Bar Height", "Set the height of the pet health bar", UpdatePetHealthHeight)
+	Right:CreateSlider("unitframes-pet-power-height", Settings["unitframes-pet-power-height"], 1, 30, 1, "Power Bar Height", "Set the height of the pet power bar", UpdatePetPowerHeight)
 end)
 
 GUI:AddOptions(function(self)

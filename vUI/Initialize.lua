@@ -184,7 +184,7 @@ function vUI:UpdateScreenHeight()
 		self.IsFullScreen = 0
 	end
 	
-	ScreenHeight = tonumber(string.match(self.ScreenResolution, "%d+x(%d+)"))
+	ScreenHeight = tonumber(match(self.ScreenResolution, "%d+x(%d+)"))
 end
 
 vUI:UpdateScreenHeight()

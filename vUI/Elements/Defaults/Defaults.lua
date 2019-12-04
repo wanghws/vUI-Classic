@@ -110,9 +110,9 @@ Defaults["color-poison"] = "009900"
 Defaults["color-none"] = "000000"
 
 -- Happiness
-Defaults["color-happiness-1"] = "FF3333" -- "8BC94D"
-Defaults["color-happiness-2"] = "FFFF33" -- "FFC44D"
-Defaults["color-happiness-3"] = "66FF66" -- "EE4D4D"
+Defaults["color-happiness-1"] = "4CAF50" -- "8BC94D"
+Defaults["color-happiness-2"] = "FBC02D" -- "FFC44D"
+Defaults["color-happiness-3"] = "C62828" -- "EE4D4D"
 
 -- Difficulty
 Defaults["color-trivial"] = "9A9A9A"
@@ -290,12 +290,14 @@ Defaults["unitframes-target-health-height"] = 28
 Defaults["unitframes-target-power-height"] = 15
 
 Defaults["unitframes-targettarget-width"] = 110
-Defaults["unitframes-targettarget-health-height"] = 26
---Defaults["unitframes-targettarget-power-height"] = 15
+Defaults["unitframes-targettarget-health-height"] = 26 
+Defaults["unitframes-targettarget-enable-power"] = true
+Defaults["unitframes-targettarget-power-height"] = 3
 
 Defaults["unitframes-pet-width"] = 110
 Defaults["unitframes-pet-health-height"] = 26
---Defaults["unitframes-pet-power-height"] = 15
+Defaults["unitframes-pet-enable-power"] = true
+Defaults["unitframes-pet-power-height"] = 3
 
 Defaults["party-enable"] = true
 Defaults["party-width"] = 160
