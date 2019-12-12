@@ -1,6 +1,6 @@
 ## Interface: 11303
 ## Author: Hydra
-## Version: 1.00455
+## Version: 1.0046
 ## Title: |cFFFFC44DvUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIMove, vUIGold
