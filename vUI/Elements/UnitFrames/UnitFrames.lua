@@ -10,10 +10,10 @@ local sub = string.sub
 local find = string.find
 local UnitName = UnitName
 local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
-local UnitCanAttack = UnitCanAttack
-local UnitIsFriend = UnitIsFriend
 local UnitIsConnected = UnitIsConnected
 local UnitIsPlayer = UnitIsPlayer
 local UnitIsGhost = UnitIsGhost
@@ -21,7 +21,6 @@ local UnitIsDead = UnitIsDead
 local UnitClass = UnitClass
 local UnitLevel = UnitLevel
 local UnitReaction = UnitReaction
-local GetPetHappiness = GetPetHappiness
 local IsResting = IsResting
 local UnitAura = UnitAura
 local GetTime = GetTime
@@ -259,7 +258,13 @@ end
 
 Events["PowerColor"] = "UNIT_POWER_FREQUENT PLAYER_ENTERING_WORLD"
 Methods["PowerColor"] = function(unit)
+	local PowerType, PowerToken = UnitPowerType(unit)
 	
+	if vUI.PowerColors[PowerToken] then
+		return format("|cFF%s", vUI.PowerColors[PowerToken].Hex)
+	else
+		return "|cFFFFFF"
+	end
 end
 
 Events["Name4"] = "UNIT_NAME_UPDATE UNIT_PET PLAYER_ENTERING_WORLD"
@@ -1051,42 +1056,7 @@ local StylePlayer = function(self, unit)
 	swing:SetAllPoints(Castbar)
 	self.Swing = swing]]
 	
-	if (vUI.UserClass == "SHAMAN") then
-		local Totems = CreateFrame("Frame", self:GetName() .. "Totems", self)
-		Totems:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
-		Totems:SetScaledSize(Settings["unitframes-player-width"], 10)
-		Totems:SetBackdrop(vUI.Backdrop)
-		Totems:SetBackdropColor(0, 0, 0)
-		Totems:SetBackdropBorderColor(0, 0, 0)
-		
-		local Width = (Settings["unitframes-player-width"] / 4) - 1
-		
-		for i = 1, 4 do
-			Totems[i] = CreateFrame("StatusBar", self:GetName() .. "Totems".. i, Totems)
-			Totems[i]:SetScaledSize(Width, 8)
-			Totems[i]:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			Totems[i]:SetStatusBarColor(vUI.Totems[i][1], vUI.Totems[i][2], vUI.Totems[i][3])
-			Totems[i]:SetMinMaxValues(0, 1)
-			Totems[i]:SetValue(0)
-			
-			Totems[i].BG = Totems[i]:CreateTexture(nil, "BORDER")
-			Totems[i].BG:SetScaledPoint("TOPLEFT", Totems[i], 0, 0)
-			Totems[i].BG:SetScaledPoint("BOTTOMRIGHT", Totems[i], 0, 0)
-			Totems[i].BG:SetTexture(Media:GetTexture(Settings["ui-widget-texture"]))
-			Totems[i].BG:SetVertexColor(vUI.Totems[i][1], vUI.Totems[i][2], vUI.Totems[i][3])
-			Totems[i].BG:SetAlpha(0.3)
-			
-			if (i == 1) then
-				Totems[i]:SetScaledPoint("LEFT", Totems, 1, 0)
-			else
-				Totems[i]:SetScaledPoint("TOPLEFT", Totems[i-1], "TOPRIGHT", 1, 0)
-				Totems[i]:SetScaledWidth(Width - 1)
-			end
-		end
-		
-		self.Totems = Totems
-		self.AuraParent = Totems
-	elseif (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
+	if (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
 		ComboPoints:SetScaledPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
 		ComboPoints:SetScaledSize(Settings["unitframes-player-width"], 10)
@@ -1542,12 +1512,8 @@ local StylePet = function(self, unit)
 	
 	if Settings["unitframes-class-color"] then
 		Health.colorReaction = true
-		
-		self:Tag(HealthLeft, "[Name10]")
 	else
 		Health.colorHealth = true
-		
-		self:Tag(HealthLeft, "[PetColor][Name10]")
 	end
 	
 	-- Power Bar
@@ -1572,6 +1538,12 @@ local StylePet = function(self, unit)
 		Power.colorPower = true
 	else
 		Power.colorClass = true
+	end
+	
+	if (vUI.UserClass == "HUNTER") then
+		self:Tag(HealthLeft, "[PetColor][Name10]")
+	else
+		self:Tag(HealthLeft, "[Name10]")
 	end
 	
 	self:Tag(HealthRight, "[HealthColor][perhp]")
@@ -2230,20 +2202,6 @@ local UpdatePlayerWidth = function(value)
 				end
 			end
 		end
-		
-		if Frame.Totems then
-			Frame.Totems:SetScaledWidth(value)
-			
-			local Width = (value / 4) - 1
-			
-			for i = 1, 4 do
-				if (i  == 1) then
-					Frame.Totems[i]:SetScaledWidth(Width)
-				else
-					Frame.Totems[i]:SetScaledWidth(Width - 1)
-				end
-			end
-		end
 	end
 end
 
@@ -2368,7 +2326,7 @@ GUI:AddOptions(function(self)
 	Right:CreateSlider("unitframes-target-health-height", Settings["unitframes-target-health-height"], 10, 60, 1, "Health Bar Height", "Set the height of the target health bar", UpdateTargetHealthHeight)
 	Right:CreateSlider("unitframes-target-power-height", Settings["unitframes-target-power-height"], 10, 30, 1, "Power Bar Height", "Set the height of the target power bar", UpdateTargetPowerHeight)
 	
-	Left:CreateHeader(Language["Target Target"])
+	Left:CreateHeader(Language["Target of Target"])
 	Left:CreateSlider("unitframes-targettarget-width", Settings["unitframes-targettarget-width"], 60, 320, 1, "Width", "Set the width of the target's target unit frame", UpdateTargetTargetWidth)
 	Left:CreateSlider("unitframes-targettarget-health-height", Settings["unitframes-targettarget-health-height"], 6, 60, 1, "Health Bar Height", "Set the height of the player health bar", UpdateTargetTargetHealthHeight)
 	Left:CreateSlider("unitframes-targettarget-power-height", Settings["unitframes-targettarget-power-height"], 1, 30, 1, "Power Bar Height", "Set the height of the player power bar", UpdateTargetTargetPowerHeight)
