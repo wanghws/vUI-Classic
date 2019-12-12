@@ -250,7 +250,7 @@ local OnTooltipSetUnit = function(self)
 			Guild = ""
 		end
 		
-		if Realm then
+		if (Realm and find(Realm, "%S+")) then
 			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s-%s %s|r", Flag, Color, (Title or Name), Realm, Guild))
 		else
 			GameTooltipTextLeft1:SetText(format("%s|cFF%s%s %s|r", Flag, Color, (Title or Name), Guild))
