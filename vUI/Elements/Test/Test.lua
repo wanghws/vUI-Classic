@@ -198,6 +198,7 @@ local BagsFrame = vUI:NewModule("Bags Frame")
 local Move = vUI:GetModule("Move")
 
 BagsFrame.Objects = {
+	KeyRingButton,
 	CharacterBag3Slot,
 	CharacterBag2Slot,
 	CharacterBag1Slot,
@@ -246,7 +247,7 @@ end
 
 function BagsFrame:Load()
 	local Panel = CreateFrame("Frame", "vUI Bags Window", UIParent)
-	Panel:SetScaledSize(184, 40)
+	Panel:SetScaledSize(206, 40)
 	Panel:SetScaledPoint("BOTTOMRIGHT", -10, 10)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)
 	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -315,16 +316,19 @@ function BagsFrame:Load()
 		
 		Object:SetHighlightTexture(Highlight)
 		
-		local Pushed = Object:CreateTexture(nil, "ARTWORK", 7)
-		Pushed:SetScaledPoint("TOPLEFT", Object, 0, 0)
-		Pushed:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
-		Pushed:SetColorTexture(0.2, 0.9, 0.2)
-		Pushed:SetAlpha(0.4)
-		
-		Object:SetPushedTexture(Pushed)
+		if (i ~= 1) then
+			local Pushed = Object:CreateTexture(nil, "ARTWORK", 7)
+			Pushed:SetScaledPoint("TOPLEFT", Object, 0, 0)
+			Pushed:SetScaledPoint("BOTTOMRIGHT", Object, 0, 0)
+			Pushed:SetColorTexture(0.2, 0.9, 0.2)
+			Pushed:SetAlpha(0.4)
+			
+			Object:SetPushedTexture(Pushed)
+		end
 		
 		if (i == 1) then
 			Object:SetScaledPoint("LEFT", Panel, 4, 0)
+			Object:SetScaledSize(18, 32)
 		else
 			Object:SetScaledPoint("LEFT", self.Objects[i-1], "RIGHT", 4, 0)
 		end

@@ -78,6 +78,12 @@ function Gold:OnEvent(event)
 	end
 end
 
+function Gold:Reset()
+	vUIGold = nil
+	
+	self:Load()
+end
+
 function Gold:Load()
 	if (not vUIGold) then
 		vUIGold = {}
