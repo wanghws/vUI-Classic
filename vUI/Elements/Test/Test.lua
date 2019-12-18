@@ -133,7 +133,7 @@ local GetQuests = function()
 end
 
 GUI:AddOptions(function(self)
-	local Left, Right = self:CreateWindow(Language["Debug"])
+	local Left, Right = self:CreateWindow(Language["Debug"], nil, "zzzDebug")
 	
 	Left:CreateHeader(Language["UI Information"])
 	Left:CreateDoubleLine(Language["UI Version"], vUI.UIVersion)
@@ -179,6 +179,40 @@ UpdateDebugInfo:SetScript("OnEvent", function(self, event)
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
 	end
+end)
+
+GUI:AddOptions(function(self)
+	self:CreateSpacer("ZZZ")
+	
+	local Left, Right = self:CreateWindow(Language["Credits"], nil, "zzzCredits")
+	
+	Left:CreateHeader(Language["Scripting Help & Mentoring"])
+	Left:CreateDoubleLine("Tukz", "Elv")
+	Left:CreateDoubleLine("nightcracker", "Simpy")
+	Left:CreateDoubleLine("Smelly", "Azilroka")
+	Left:CreateDoubleLine("Foof", "Eclipse")
+	
+	Left:CreateHeader(Language["oUF"])
+	Left:CreateDoubleLine("Haste", "lightspark")
+	Left:CreateDoubleLine("p3lim", "Rainrider")
+	
+	Right:CreateHeader(Language["LibStub"])
+	Right:CreateDoubleLine("Kaelten", "CtlAltDelAmmo")
+	Right:CreateDoubleLine("jnwhiteh", "nevcairiel")
+	Right:CreateLine("mikeclueby4")
+	
+	Right:CreateHeader(Language["LibSharedMedia"])
+	Right:CreateDoubleLine("Elkano", "funkehdude")
+	
+	Right:CreateHeader(Language["LibClassicDurations, LibClassicCasterino"])
+	Right:CreateLine("d87_")
+	
+	Right:CreateHeader(Language["LibClassicMobHealth-1.0"])
+	Right:CreateLine("Pneumatus")
+	
+	Left:CreateHeader(Language["LibHealComm-4.0"])
+	Left:CreateDoubleLine("Shadowed103", "xbeeps")
+	Left:CreateLine("Azilroka")
 end)
 
 local Fonts = vUI:NewModule("Fonts")
