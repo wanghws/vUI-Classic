@@ -17,6 +17,20 @@ local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local vUI = CreateFrame("Frame", nil, UIParent)
 local GUI = CreateFrame("Frame", nil, UIParent)
 
+-- Some Data
+vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
+vUI.GameVersion = GetBuildInfo()
+vUI.TOCVersion = select(4, GetBuildInfo())
+vUI.UserName = UnitName("player")
+vUI.UserClass = select(2, UnitClass("player"))
+vUI.UserClassName = UnitClass("player")
+vUI.UserRace = UnitRace("player")
+vUI.UserRealm = GetRealmName()
+vUI.UserFaction = UnitFactionGroup("player")
+vUI.UserLocale = GetLocale()
+vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
+vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
+
 vUI.Modules = {}
 
 local Core = {
@@ -96,20 +110,6 @@ function vUI:LoadModules()
 		end
 	end
 end
-
--- Some Data
-vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
-vUI.GameVersion = GetBuildInfo()
-vUI.TOCVersion = select(4, GetBuildInfo())
-vUI.UserName = UnitName("player")
-vUI.UserClass = select(2, UnitClass("player"))
-vUI.UserClassName = UnitClass("player")
-vUI.UserRace = UnitRace("player")
-vUI.UserRealm = GetRealmName()
-vUI.UserFaction = UnitFactionGroup("player")
-vUI.UserLocale = GetLocale()
-vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
-vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
 
 if (vUI.UserLocale == "enGB") then
 	vUI.UserLocale = "enUS"

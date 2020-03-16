@@ -1,7 +1,7 @@
 local vUI, GUI, Language, Media, Settings, Defaults = select(2, ...):get()
 
 local Announcements = vUI:NewModule("Announcements")
-local EventType, SourceGUID, DestName, CastID, CastName, SpellID, SpellName
+local EventType, SourceGUID, DestName, SpellID, SpellName
 local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s"
 local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's %s"
 local StolenMessage = ACTION_SPELL_STOLEN .. " %s's %s"

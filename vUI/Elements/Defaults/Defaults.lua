@@ -282,24 +282,29 @@ Defaults["unitframes-class-color"] = true -- temporary
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
 
+-- Unitframes: Player
 Defaults["unitframes-player-width"] = 238
 Defaults["unitframes-player-health-height"] = 28
 Defaults["unitframes-player-power-height"] = 15
 
+-- Unitframes: Target
 Defaults["unitframes-target-width"] = 238
 Defaults["unitframes-target-health-height"] = 28
 Defaults["unitframes-target-power-height"] = 15
 
+-- Unitframes: Target of Target
 Defaults["unitframes-targettarget-width"] = 110
 Defaults["unitframes-targettarget-health-height"] = 26 
 Defaults["unitframes-targettarget-enable-power"] = true
 Defaults["unitframes-targettarget-power-height"] = 3
 
+-- Unitframes: Pet
 Defaults["unitframes-pet-width"] = 110
 Defaults["unitframes-pet-health-height"] = 26
 Defaults["unitframes-pet-enable-power"] = true
 Defaults["unitframes-pet-power-height"] = 3
 
+-- Unitframes: Party
 Defaults["party-enable"] = true
 Defaults["party-width"] = 160
 Defaults["party-health-height"] = 29
@@ -310,6 +315,7 @@ Defaults["party-pets-width"] = 160
 Defaults["party-pets-health-height"] = 22
 Defaults["party-pets-power-height"] = 0 -- NYI
 
+-- Unitframes: Raid
 Defaults["raid-enable"] = true
 Defaults["raid-width"] = 90
 Defaults["raid-health-height"] = 23
