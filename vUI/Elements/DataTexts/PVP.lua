@@ -33,7 +33,7 @@ local OnMouseUp = function()
 end
 
 local Update = function(self)
-	self.Text:SetFormattedText("%s: %s", Label, GetPVPLifetimeStats())
+	self.Text:SetFormattedText("|cff%s%s:|r |cff%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], GetPVPLifetimeStats())
 end
 
 local OnEnable = function(self)

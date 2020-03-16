@@ -25,7 +25,7 @@ local Update = function(self)
 		end
 	end
 	
-	self.Text:SetFormattedText("%s: %s", Label, ShardCount)
+	self.Text:SetFormattedText("|cff%s%s:|r |cff%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], ShardCount)
 end
 
 local OnEnable = function(self)

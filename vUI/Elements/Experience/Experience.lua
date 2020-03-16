@@ -10,10 +10,14 @@ local RestingText
 local UnitXP = UnitXP
 local UnitXPMax = UnitXPMax
 local UnitLevel = UnitLevel
+local GetTime = GetTime
 local GetXPExhaustion = GetXPExhaustion
 local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", UIParent)
+
+ExperienceBar.SessionTotal = 0
+ExperienceBar.SessionStart = 0
 
 local UpdateXP = function(self, first)
 	if (UnitLevel("player") == MAX_PLAYER_LEVEL) then
@@ -33,6 +37,14 @@ local UpdateXP = function(self, first)
 	
 	self.Bar:SetMinMaxValues(0, MaxXP)
 	self.Bar.Rested:SetMinMaxValues(0, MaxXP)
+	
+	if self.LastXP then
+		self.SessionTotal = self.SessionTotal + (self.LastXP - XP)
+	end
+	
+	if (self.SessionStart == 0) then
+		self.SessionStart = GetTime()
+	end
 	
 	if Rested then
 		self.Bar.Rested:SetValue(XP + Rested)
@@ -248,6 +260,15 @@ function ExperienceBar:OnEnter()
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(Language["Rested experience"])
 			GameTooltip:AddDoubleLine(vUI:Comma(Rested), format("%s%%", RestedPercent), 1, 1, 1, 1, 1, 1)
+		end
+		
+		if (self.SessionTotal and self.SessionTotal > 0) then
+			local Duration = GetTime() - self.SessionStart
+			
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(Language["Experience this session"])
+			GameTooltip:AddDoubleLine(Language["Gained:"], vUI:Comma(self.SessionTotal), 1, 1, 1)
+			GameTooltip:AddDoubleLine(Language["Duration:"], vUI:Comma(Duration), 1, 1, 1)
 		end
 		
 		self.TooltipShown = true

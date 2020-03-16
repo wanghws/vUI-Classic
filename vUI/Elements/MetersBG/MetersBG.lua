@@ -5,6 +5,7 @@ local Testing = {
 	["Vexisle:Whitemane"] = 1,
 	["Fruitloops:Whitemane"] = 1,
 	["Hydrazine:Sulfuras"] = 1,
+	["Hydrazine:Deviate Delight"] = 1,
 }
 
 if (not Testing[vUI.UserProfileKey]) then
