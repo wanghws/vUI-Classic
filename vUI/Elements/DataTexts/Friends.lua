@@ -23,6 +23,7 @@ local ClientToName = {
 	["S1"] = Language["StarCraft: Remastered"],
 	["S2"] = Language["StarCraft 2"],
 	["VIPR"] = Language["Call of Duty: Black Ops 4"],
+	["ODIN"] = Language["Call of Duty: Modern Warfare"],
 	["WoW"] = Language["World of Warcraft"],
 	["WTCG"] = Language["Hearthstone"],
 }
@@ -157,6 +158,20 @@ ClientInfo["S2"] = function(name, id)
 end
 
 ClientInfo["VIPR"] = function(name, id)
+	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
+	
+	if IsAFK then
+		name = format("|cFF9E9E9E%s|r", name)
+	elseif IsBusy then
+		name = format("|cFFF44336%s|r", name)
+	else
+		name = format("|cFF00FFF6%s|r", name)
+	end
+	
+	return name, ClientToName[Client]
+end
+
+ClientInfo["ODIN"] = function(name, id)
 	local HasFocus, CharacterName, Client, RealmName, RealmID, Faction, Race, Class, Blank, Area, Level, RichPresence, CustomMessage, CustomMessageTime, IsOnline, GameAccountID, BNetAccountID, IsAFK, IsBusy, GUID, WoWProjectID, IsWoWMobile = BNGetGameAccountInfo(id)
 	
 	if IsAFK then
