@@ -157,7 +157,7 @@ GUI:AddOptions(function(self)
 	Right:CreateDoubleLine(Language["Realm"], vUI.UserRealm)
 	Right:CreateDoubleLine(Language["Zone"], GetZoneText())
 	Right:CreateDoubleLine(Language["Sub Zone"], GetMinimapZoneText())
-	Right:CreateDoubleLine(Language["Quests"], GetQuests())
+	--Right:CreateDoubleLine(Language["Quests"], GetQuests())
 	
 	Right:CreateHeader(Language["AddOns Information"])
 	Right:CreateDoubleLine(Language["Total AddOns"], GetNumAddOns())
@@ -169,12 +169,12 @@ UpdateDebugInfo:RegisterEvent("ZONE_CHANGED")
 UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_INDOORS")
 UpdateDebugInfo:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 UpdateDebugInfo:RegisterEvent("PLAYER_ENTERING_WORLD")
-UpdateDebugInfo:RegisterEvent("QUEST_LOG_UPDATE")
+--UpdateDebugInfo:RegisterEvent("QUEST_LOG_UPDATE")
 UpdateDebugInfo:SetScript("OnEvent", function(self, event)
 	if (event == "ADDON_LOADED") then
 		GUI:GetWidgetByWindow(Language["Debug"], "loaded").Right:SetText(GetLoadedAddOns())
 	elseif (event == "QUEST_LOG_UPDATE") then
-		GUI:GetWidgetByWindow(Language["Debug"], "quests").Right:SetText(GetQuests())
+		--GUI:GetWidgetByWindow(Language["Debug"], "quests").Right:SetText(GetQuests())
 	else
 		GUI:GetWidgetByWindow(Language["Debug"], "zone").Right:SetText(GetZoneText())
 		GUI:GetWidgetByWindow(Language["Debug"], "sub-zone").Right:SetText(GetMinimapZoneText())
