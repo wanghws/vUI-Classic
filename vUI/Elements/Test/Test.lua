@@ -1098,7 +1098,7 @@ if (vUI.UserClass == "DRUID") then
 
 	function DruidMana:PLAYER_ENTERING_WORLD()
 		self:SetScaledSize(Settings["unitframes-player-width"], Settings["unitframes-player-power-height"] + 2)
-		self:SetScaledPoint("CENTER", UIParent, 0, -100)
+		self:SetScaledPoint("CENTER", UIParent, 0, -180)
 		
 		self.Fade = CreateAnimationGroup(self)
 		
