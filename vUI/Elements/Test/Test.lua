@@ -1207,7 +1207,7 @@ function AutoDismount:OnEvent(self, event, ...)
 	end
 end
 
-function AutoDismount:OnEvent(self, event, ...)
+function AutoDismount:Load()
 	self:RegisterEvent("UI_ERROR_MESSAGE")
 	self:RegisterEvent("TAXIMAP_OPENED")
 	self:SetScript("OnEvent", self.OnEvent)
