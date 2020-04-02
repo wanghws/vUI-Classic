@@ -1185,14 +1185,14 @@ end]]
 --[[
 local AutoDismount = vUI:NewModule("Dismount")
 
-local DismountErrors = {
+AutoDismount.Errors = {
 	[50] = SPELL_FAILED_NOT_MOUNTED,
 	[198] = ERR_ATTACK_MOUNTED,
 	[213] = ERR_TAXIPLAYERALREADYMOUNTED,
 }
 
 function AutoDismount:UI_ERROR_MESSAGE(id)
-	if DismountErrors[id] then
+	if self.Errors[id] then
 		Dismount()
 	end
 end
@@ -1201,16 +1201,16 @@ function AutoDismount:TAXIMAP_OPENED()
 	Dismount()
 end
 
-local AutoDismountOnEvent = function(self, event, ...)
+function AutoDismount:OnEvent(self, event, ...)
 	if self[event] then
 		self[event](self, ...)
 	end
 end
 
-function AutoDismount:Load()
+function AutoDismount:OnEvent(self, event, ...)
 	self:RegisterEvent("UI_ERROR_MESSAGE")
 	self:RegisterEvent("TAXIMAP_OPENED")
-	self:SetScript("OnEvent", AutoDismountOnEvent)
+	self:SetScript("OnEvent", self.OnEvent)
 end]]
 
 --[[for k, v in pairs(_G) do
