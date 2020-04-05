@@ -141,6 +141,7 @@ local CreateMinimap = function()
 	
 	TimeFrame:SetScript("OnEnter", TimeOnEnter)
 	TimeFrame:SetScript("OnLeave", TimeOnLeave)
+	TimeFrame:SetScript("OnMouseUp", TimeManager_Toggle)
 	
 	ZoneUpdate(ZoneFrame)
 end

@@ -162,7 +162,7 @@ GUI.Widgets.CreateLine = function(self, text)
 end
 
 local CheckStringLength = UIParent:CreateFontString(nil, "OVERLAY")
-CheckStringLength:SetScaledWidth(GROUP_WIDTH - 6)
+CheckStringLength:SetScaledWidth(GROUP_WIDTH - 12)
 CheckStringLength:SetJustifyH("LEFT")
 CheckStringLength:SetWordWrap(true)
 CheckStringLength:SetIndentedWordWrap(false)
@@ -312,7 +312,7 @@ local ButtonOnMouseUp = function(self)
 	self.Texture:SetVertexColorHex(Settings["ui-widget-bright-color"])
 	
 	if self.ReloadFlag then
-		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], "Accept", self.Hook, "Cancel")
+		vUI:DisplayPopup(Language["Attention"], Language["You have changed a setting that requires a UI reload. Would you like to reload the UI now?"], Language["Accept"], self.Hook, Language["Cancel"])
 	elseif self.Hook then
 		self.Hook()
 	end
