@@ -175,6 +175,7 @@ CheckStringLength:SetIndentedWordWrap(false)
 	return LineHeight
 end]]
 
+-- Message
 GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as needed for the message
 	if (not CheckStringLength.FontSet) then
 		CheckStringLength:SetFontInfo(Settings["ui-widget-font"], Settings["ui-font-size"])
@@ -205,6 +206,7 @@ GUI.Widgets.CreateMessage = function(self, text) -- Create as many lines as need
 	return Text
 end
 
+-- Double Line
 GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -232,6 +234,7 @@ GUI.Widgets.CreateDoubleLine = function(self, left, right)
 	return Anchor.Left
 end
 
+-- Header
 GUI.Widgets.CreateHeader = function(self, text)
 	local Anchor = CreateFrame("Frame", nil, self)
 	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
@@ -303,6 +306,66 @@ GUI.Widgets.CreateFooter = function(self)
 	tinsert(self.Widgets, Anchor)
 	
 	return Header
+end
+
+-- Header
+GUI.Widgets.CreateSupportHeader = function(self, text)
+	local Anchor = CreateFrame("Frame", nil, self)
+	Anchor:SetScaledSize(GROUP_WIDTH, WIDGET_HEIGHT)
+	Anchor.IsHeader = true
+	
+	Anchor.Text = Anchor:CreateFontString(nil, "OVERLAY")
+	Anchor.Text:SetScaledPoint("CENTER", Anchor, 0, 0)
+	Anchor.Text:SetScaledHeight(WIDGET_HEIGHT)
+	Anchor.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"]) -- 14
+	Anchor.Text:SetJustifyH("CENTER")
+	Anchor.Text:SetText("|cFF"..Settings["ui-header-font-color"]..text.."|r")
+	
+	-- Header Left Line
+	local HeaderLeft = CreateFrame("Frame", nil, Anchor)
+	HeaderLeft:SetScaledHeight(4)
+	HeaderLeft:SetScaledPoint("LEFT", Anchor, 0, 0)
+	HeaderLeft:SetScaledPoint("RIGHT", Anchor.Text, "LEFT", -20, 0)
+	HeaderLeft:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderLeft:SetBackdropColorHex("000000")
+	HeaderLeft:SetBackdropBorderColorHex("000000")
+	
+	HeaderLeft.NewTexture = HeaderLeft:CreateTexture(nil, "OVERLAY")
+	HeaderLeft.NewTexture:SetScaledPoint("TOPLEFT", HeaderLeft, 1, -1)
+	HeaderLeft.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderLeft, -1, 1)
+	HeaderLeft.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderLeft.NewTexture:SetVertexColorHex(Settings["ui-button-texture-color"])
+	
+	HeaderLeft.Heart = HeaderLeft:CreateTexture(nil, "OVERLAY")
+	HeaderLeft.Heart:SetScaledPoint("LEFT", HeaderLeft.NewTexture, "RIGHT", 1, -1)
+	HeaderLeft.Heart:SetScaledSize(16, 16)
+	HeaderLeft.Heart:SetTexture(Media:GetTexture("Small Star"))
+	HeaderLeft.Heart:SetVertexColorHex("FFB900")
+	
+	-- Header Right Line
+	local HeaderRight = CreateFrame("Frame", nil, Anchor)
+	HeaderRight:SetScaledHeight(4)
+	HeaderRight:SetScaledPoint("RIGHT", Anchor, 0, 0)
+	HeaderRight:SetScaledPoint("LEFT", Anchor.Text, "RIGHT", 16, 0)
+	HeaderRight:SetBackdrop(vUI.BackdropAndBorder)
+	HeaderRight:SetBackdropColorHex("000000")
+	HeaderRight:SetBackdropBorderColorHex("000000")
+	
+	HeaderRight.NewTexture = HeaderRight:CreateTexture(nil, "OVERLAY")
+	HeaderRight.NewTexture:SetScaledPoint("TOPLEFT", HeaderRight, 1, -1)
+	HeaderRight.NewTexture:SetScaledPoint("BOTTOMRIGHT", HeaderRight, -1, 1)
+	HeaderRight.NewTexture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	HeaderRight.NewTexture:SetVertexColorHex(Settings["ui-button-texture-color"])
+	
+	HeaderRight.Heart = HeaderRight:CreateTexture(nil, "OVERLAY")
+	HeaderRight.Heart:SetScaledPoint("RIGHT", HeaderRight.NewTexture, "LEFT", -1, -1)
+	HeaderRight.Heart:SetScaledSize(16, 16)
+	HeaderRight.Heart:SetTexture(Media:GetTexture("Small Star"))
+	HeaderRight.Heart:SetVertexColorHex("FFB900")
+	
+	tinsert(self.Widgets, Anchor)
+	
+	return Anchor.Text
 end
 
 -- Button

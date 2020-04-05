@@ -186,36 +186,49 @@ GUI:AddOptions(function(self)
 	
 	local Left, Right = self:CreateWindow(Language["Credits"], nil, "zzzCredits")
 	
-	Left:CreateHeader(Language["Scripting Help & Mentoring"])
+	Left:CreateHeader("Scripting Help & Mentoring")
 	Left:CreateDoubleLine("Tukz", "Elv")
 	Left:CreateDoubleLine("nightcracker", "Simpy")
 	Left:CreateDoubleLine("Smelly", "Azilroka")
 	Left:CreateDoubleLine("Foof", "Eclipse")
 	
-	Left:CreateHeader(Language["oUF"])
+	Left:CreateHeader("oUF")
 	Left:CreateDoubleLine("Haste", "lightspark")
 	Left:CreateDoubleLine("p3lim", "Rainrider")
 	
-	Right:CreateHeader(Language["LibStub"])
+	Right:CreateHeader("LibStub")
 	Right:CreateDoubleLine("Kaelten", "CtlAltDelAmmo")
 	Right:CreateDoubleLine("jnwhiteh", "nevcairiel")
 	Right:CreateLine("mikeclueby4")
 	
-	Right:CreateHeader(Language["LibSharedMedia"])
+	Right:CreateHeader("LibSharedMedia")
 	Right:CreateDoubleLine("Elkano", "funkehdude")
 	
-	Right:CreateHeader(Language["LibClassicDurations, LibClassicCasterino"])
+	Right:CreateHeader("LibClassicDurations, LibClassicCasterino")
 	Right:CreateLine("d87_")
 	
-	Right:CreateHeader(Language["LibClassicMobHealth-1.0"])
+	Right:CreateHeader("LibClassicMobHealth-1.0")
 	Right:CreateLine("Pneumatus")
 	
-	Left:CreateHeader(Language["LibHealComm-4.0"])
+	Left:CreateHeader("LibHealComm-4.0")
 	Left:CreateDoubleLine("Shadowed103", "xbeeps")
 	Left:CreateLine("Azilroka")
 	
-	Right:CreateHeader(Language["vUI"])
+	Right:CreateHeader("vUI")
 	Right:CreateLine("Hydra")
+end)
+
+GUI:AddOptions(function(self)
+	local Left, Right = self:CreateWindow(Language["Supporters"], nil, "zzzSupporters")
+	
+	Left:CreateHeader(Language["Acknowledgements"])
+	Left:CreateLine("A very special thank you to the following people")
+	Left:CreateLine("for their support of this project!")
+	--Left:CreateMessage("Thank you to the following people who have supported the development of this project. It has taken immense time and effort, and the support of these people has made it possible!")
+	
+	--Right:CreateHeader(Language["|TInterface\\AddOns\\vUI\\Media\\Textures\\vUISmallStar:16|t Supporters |TInterface\\AddOns\\vUI\\Media\\Textures\\vUISmallStar:16|t"])
+	Right:CreateSupportHeader(Language["Supporters"])
+	Right:CreateLine("Innie")
 end)
 
 local Fonts = vUI:NewModule("Fonts")
