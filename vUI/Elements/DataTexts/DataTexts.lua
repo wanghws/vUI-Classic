@@ -169,13 +169,13 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("data-text-chat-right", Settings["data-text-chat-right"], DT.List, Language["Set Right Text"], Language["Set the information to be displayed in the|nright data text anchor"], UpdateRightText)
 	
 	Right:CreateHeader(Language["Font"])
-	Right:CreateDropdown("data-text-font", Settings["data-text-font"], Media:GetFontList(), Language["Font"], "Set the font of the data texts", UpdateFont, "Font")
-	Right:CreateSlider("data-text-font-size", Settings["data-text-font-size"], 8, 18, 1, "Font Size", "Set the font size of the data texts", UpdateFont)
-	Right:CreateDropdown("data-text-font-flags", Settings["data-text-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the data texts", UpdateFont)
+	Right:CreateDropdown("data-text-font", Settings["data-text-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the data texts"], UpdateFont, "Font")
+	Right:CreateSlider("data-text-font-size", Settings["data-text-font-size"], 8, 18, 1, Language["Font Size"], Language["Set the font size of the data texts"], UpdateFont)
+	Right:CreateDropdown("data-text-font-flags", Settings["data-text-font-flags"], Media:GetFlagsList(), Language["Font Flags"], Language["Set the font flags of the data texts"], UpdateFont)
 	
 	Right:CreateHeader(Language["Tooltips"])
-	Right:CreateSwitch("data-text-enable-tooltips", Settings["data-text-enable-tooltips"], "Enable Tooltips", "Display tooltip information when hovering over data texts", UpdateEnableTooltips)
+	Right:CreateSwitch("data-text-enable-tooltips", Settings["data-text-enable-tooltips"], Language["Enable Tooltips"], Language["Display tooltip information when hovering over data texts"], UpdateEnableTooltips)
 	
 	Left:CreateHeader(Language["Gold"])
-	Left:CreateButton(Language["Reset"], Language["Reset Gold"], "", ResetGold)
+	Left:CreateButton(Language["Reset"], Language["Reset Gold"], Language["Reset stored information for each characters gold"], ResetGold)
 end)
