@@ -19,7 +19,7 @@ Usage example 1:
 --]================]
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-local MAJOR, MINOR = "LibClassicDurations", 39
+local MAJOR, MINOR = "LibClassicDurations", 52
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -44,8 +44,7 @@ local DRInfo = lib.DRInfo
 lib.buffCache = lib.buffCache or {}
 local buffCache = lib.buffCache
 
-lib.buffCacheValid = lib.buffCacheValid or {}
-local buffCacheValid = lib.buffCacheValid
+local buffCacheValid = {}
 
 lib.nameplateUnitMap = lib.nameplateUnitMap or {}
 local nameplateUnitMap = lib.nameplateUnitMap
@@ -67,6 +66,7 @@ local INFINITY = math.huge
 local PURGE_INTERVAL = 900
 local PURGE_THRESHOLD = 1800
 local UNKNOWN_AURA_DURATION = 3600 -- 60m
+local BUFF_CACHE_EXPIRATION_TIME = 40
 
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local UnitGUID = UnitGUID
@@ -214,18 +214,18 @@ local function addDRLevel(dstGUID, category)
 
     local catTable = guidTable[category]
     if not catTable then
-        guidTable[category] = {}
+        guidTable[category] = { level = 0, expires = 0}
         catTable = guidTable[category]
     end
 
     local now = GetTime()
     local isExpired = (catTable.expires or 0) <= now
-    if isExpired then
-        catTable.level = 1
-        catTable.expires = now + DRResetTime
-    else
-        catTable.level = catTable.level + 1
+    local oldDRLevel = catTable.level
+    if isExpired or oldDRLevel >= 3 then
+        catTable.level = 0
     end
+    catTable.level = catTable.level + 1
+    catTable.expires = now + DRResetTime
 end
 local function clearDRs(dstGUID)
     DRInfo[dstGUID] = nil
@@ -311,7 +311,7 @@ local function cleanDuration(duration, spellID, srcGUID, comboPoints)
     return duration
 end
 
-local function RefreshTimer(srcGUID, dstGUID, spellID)
+local function RefreshTimer(srcGUID, dstGUID, spellID, overrideTime)
     local guidTable = guids[dstGUID]
     if not guidTable then return end
 
@@ -326,8 +326,9 @@ local function RefreshTimer(srcGUID, dstGUID, spellID)
     end
     if not applicationTable then return end
 
-    applicationTable[2] = GetTime() -- set start time to now
-    return true
+    local oldStartTime = applicationTable[2]
+    applicationTable[2] = overrideTime or GetTime() -- set start time to now
+    return true, oldStartTime
 end
 
 local function SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType, doRemove)
@@ -450,6 +451,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     return self:CombatLogHandler(CombatLogGetCurrentEventInfo())
 end
 
+local rollbackTable = setmetatable({}, { __mode="v" })
 local function ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
     if indirectRefreshSpells[spellName] then
         local refreshTable = indirectRefreshSpells[spellName]
@@ -477,7 +479,14 @@ local function ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstG
                     SetTimer(srcGUID, dstGUID, dstName, dstFlags, targetSpellID, targetSpellName, opts, targetAuraType)
                 end
             else
-                RefreshTimer(srcGUID, dstGUID, targetSpellID)
+                local _, oldStartTime = RefreshTimer(srcGUID, dstGUID, targetSpellID)
+
+                if refreshTable.rollbackMisses and oldStartTime then
+                    rollbackTable[srcGUID] = rollbackTable[srcGUID] or {}
+                    rollbackTable[srcGUID][dstGUID] = rollbackTable[srcGUID][dstGUID] or {}
+                    local now = GetTime()
+                    rollbackTable[srcGUID][dstGUID][targetSpellID] = {now, oldStartTime}
+                end
             end
         end
     end
@@ -489,14 +498,35 @@ function f:CombatLogHandler(...)
     dstGUID, dstName, dstFlags, dstFlags2,
     spellID, spellName, spellSchool, auraType = ...
 
-
     ProcIndirectRefresh(eventType, spellName, srcGUID, srcFlags, dstGUID, dstFlags, dstName)
 
     if  eventType == "SPELL_MISSED" and
         bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE
     then
         local missType = auraType
-        if missType == "RESIST" then
+        -- ABSORB BLOCK DEFLECT DODGE EVADE IMMUNE MISS PARRY REFLECT RESIST
+        if not (missType == "ABSORB" or missType == "BLOCK") then -- not sure about those two
+
+            local refreshTable = indirectRefreshSpells[spellName]
+            -- This is just for Sunder Armor misses
+            if refreshTable and refreshTable.rollbackMisses then
+                local rollbacksFromSource = rollbackTable[srcGUID]
+                if rollbacksFromSource then
+                    local rollbacks = rollbacksFromSource[dstGUID]
+                    if rollbacks then
+                        local targetSpellID = refreshTable.targetSpellID
+                        local snapshot = rollbacks[targetSpellID]
+                        if snapshot then
+                            local timestamp, oldStartTime = unpack(snapshot)
+                            local now = GetTime()
+                            if now - timestamp < 0.5 then
+                                RefreshTimer(srcGUID, dstGUID, targetSpellID, oldStartTime)
+                            end
+                        end
+                    end
+                end
+            end
+
             spellID = GetLastRankSpellID(spellName)
             if not spellID then
                 return
@@ -524,9 +554,9 @@ function f:CombatLogHandler(...)
         local opts = spells[spellID]
 
         if not opts then
-            local npc_aura_duration = npc_spells[spellID]
-            if npc_aura_duration then
-                opts = { duration = npc_aura_duration }
+            local npcDurationForSpellName = npc_spells[spellID]
+            if npcDurationForSpellName then
+                opts = { duration = npcDurationForSpellName }
             -- elseif enableEnemyBuffTracking and not isDstFriendly and auraType == "BUFF" then
                 -- opts = { duration = 0 } -- it'll be accepted but as an indefinite aura
             end
@@ -633,7 +663,8 @@ local makeBuffInfo = function(spellID, applicationTable, dstGUID, srcGUID)
     end
     local now = GetTime()
     if expirationTime > now then
-        return { name, icon, 0, nil, duration, expirationTime, nil, nil, nil, spellID }
+        local buffType = spells[spellID] and spells[spellID].buffType
+        return { name, icon, 0, buffType, duration, expirationTime, nil, nil, nil, spellID, false, false, false, false, 1 }
     end
 end
 
@@ -674,7 +705,7 @@ local function RegenerateBuffList(dstGUID)
     end
 
     buffCache[dstGUID] = buffs
-    buffCacheValid[dstGUID] = true
+    buffCacheValid[dstGUID] = GetTime() + BUFF_CACHE_EXPIRATION_TIME -- Expiration timestamp
 end
 
 local FillInDuration = function(unit, buffName, icon, count, debuffType, duration, expirationTime, caster, canStealOrPurge, nps, spellId, ...)
@@ -692,7 +723,8 @@ function lib.UnitAuraDirect(unit, index, filter)
     if enableEnemyBuffTracking and filter == "HELPFUL" and not UnitIsFriend("player", unit) and not UnitAura(unit, 1, filter) then
         local unitGUID = UnitGUID(unit)
         if not unitGUID then return end
-        if not buffCacheValid[unitGUID] then
+        local isValid = buffCacheValid[unitGUID]
+        if not isValid or isValid < GetTime() then
             RegenerateBuffList(unitGUID)
         end
 
@@ -748,15 +780,20 @@ end
 ---------------------------
 -- PUBLIC FUNCTIONS
 ---------------------------
-local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
+local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking, forcedNPCDuration)
     local guidTable = guids[dstGUID]
     if guidTable then
 
-        local lastRankID = spellNameToID[spellName]
+        local lastRankID = GetLastRankSpellID(spellName)
 
         local spellTable = guidTable[lastRankID]
         if spellTable then
             local applicationTable
+
+            -- Return when player spell and npc spell have the same name and the player spell is stacking
+            -- NPC spells are always assumed to not stack, so it won't find startTime
+            if forcedNPCDuration and spellTable.applications then return nil end
+
             if isStacking then
                 if srcGUID and spellTable.applications then
                     applicationTable = spellTable.applications[srcGUID]
@@ -768,9 +805,10 @@ local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
             end
             if not applicationTable then return end
             local durationFunc, startTime, auraType, comboPoints = unpack(applicationTable)
-            local duration = cleanDuration(durationFunc, spellID, srcGUID, comboPoints)
+            local duration = forcedNPCDuration or cleanDuration(durationFunc, spellID, srcGUID, comboPoints)
             if duration == INFINITY then return nil end
             if not duration then return nil end
+            if not startTime then return nil end
             local mul = getDRMul(dstGUID, spellID)
             -- local mul = getDRMul(dstGUID, lastRankID)
             duration = duration * mul
@@ -800,11 +838,18 @@ end
 function lib.GetAuraDurationByUnitDirect(unit, spellID, casterUnit, spellName)
     assert(spellID, "spellID is nil")
     local opts = spells[spellID]
-    if not opts then return end
+    local isStacking
+    local npcDurationById
+    if opts then
+        isStacking = opts.stacking
+    else
+        npcDurationById = npc_spells[spellID]
+        if not npcDurationById then return end
+    end
     local dstGUID = UnitGUID(unit)
     local srcGUID = casterUnit and UnitGUID(casterUnit)
     if not spellName then spellName = GetSpellInfo(spellID) end
-    return GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, opts.stacking)
+    return GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking, npcDurationById)
 end
 GetAuraDurationByUnitDirect = lib.GetAuraDurationByUnitDirect
 
@@ -832,7 +877,8 @@ function lib:GetDurationForRank(spellName, spellID, srcGUID)
     end
 end
 
-local activeFrames = {}
+lib.activeFrames = lib.activeFrames or {}
+local activeFrames = lib.activeFrames
 function lib:RegisterFrame(frame)
     activeFrames[frame] = true
     if next(activeFrames) then
