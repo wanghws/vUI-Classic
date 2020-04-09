@@ -34,7 +34,7 @@ local OnEnter = function(self)
 	
 	if (TotalCost > 0) then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(Language["Repair cost"], GetCoinTextureString(TotalCost), 1, 1, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(REPAIR_COST, GetCoinTextureString(TotalCost), 1, 1, 1, 1, 1, 1)
 	end
 	
 	GameTooltip:Show()
