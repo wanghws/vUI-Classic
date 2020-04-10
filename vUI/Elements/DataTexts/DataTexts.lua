@@ -156,6 +156,14 @@ local UpdateRightText = function(value)
 	DT:SetDataText("Chat-Right", value)
 end
 
+local UpdateMinimapTopText = function(value)
+	DT:SetDataText("Minimap-Top", value)
+end
+
+local UpdateMinimapBottomText = function(value)
+	DT:SetDataText("Minimap-Bottom", value)
+end
+
 local UpdateFont = function()
 	for Name, Anchor in pairs(DT.Anchors) do
 		Anchor.Text:SetFontInfo(Settings["data-text-font"], Settings["data-text-font-size"], Settings["data-text-font-flags"])
@@ -177,6 +185,10 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("data-text-chat-left", Settings["data-text-chat-left"], DT.List, Language["Set Left Text"], Language["Set the information to be displayed in the|nleft data text anchor"], UpdateLeftText)
 	Left:CreateDropdown("data-text-chat-middle", Settings["data-text-chat-middle"], DT.List, Language["Set Middle Text"], Language["Set the information to be displayed in the|nmiddle data text anchor"], UpdateMiddleText)
 	Left:CreateDropdown("data-text-chat-right", Settings["data-text-chat-right"], DT.List, Language["Set Right Text"], Language["Set the information to be displayed in the|nright data text anchor"], UpdateRightText)
+	
+	Left:CreateHeader(Language["Minimap Texts"])
+	Left:CreateDropdown("data-text-minimap-top", Settings["data-text-minimap-top"], DT.List, Language["Set Top Text"], Language["Set the information to be displayed in the|ntop minimap data text anchor"], UpdateMinimapTopText)
+	Left:CreateDropdown("data-text-minimap-bottom", Settings["data-text-minimap-bottom"], DT.List, Language["Set Bottom Text"], Language["Set the information to be displayed in the|nbottom minimap data text anchor"], UpdateMinimapBottomText)
 	
 	Right:CreateHeader(Language["Font"])
 	Right:CreateDropdown("data-text-font", Settings["data-text-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the data texts"], UpdateFont, "Font")
