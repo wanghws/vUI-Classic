@@ -451,7 +451,7 @@ end
 local OnValueChanged = function(self)
 	local Unit = select(2, self:GetParent():GetUnit())
 	
-	if (not Unit) then
+	if (not Unit) or (not Settings["tooltips-show-health-text"]) then
 		return
 	end
 	
@@ -494,7 +494,7 @@ end
 
 function Tooltips:StyleStatusBar()
 	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetScaledHeight(15)
+	GameTooltipStatusBar:SetScaledHeight(Settings["tooltips-health-bar-height"])
 	GameTooltipStatusBar:SetScaledPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, 3)
 	GameTooltipStatusBar:SetScaledPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, 3)
 	GameTooltipStatusBar:SetStatusBarTexture(Media:GetTexture(Settings["ui-widget-texture"]))
@@ -601,6 +601,17 @@ function Tooltips:Load()
 	end
 end
 
+local UpdateHealthBarHeight = function(value)
+	GameTooltipStatusBar:SetScaledHeight(value)
+end
+
+local UpdateShowHealthText = function(value)
+	if (value ~= true) then
+		GameTooltipStatusBar.HealthValue:SetText(" ")
+		GameTooltipStatusBar.HealthPercent:SetText(" ")
+	end
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Tooltips"])
 	
@@ -608,6 +619,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-enable", Settings["tooltips-enable"], Language["Enable Tooltips Module"], ""):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
+	Left:CreateSlider("tooltips-health-bar-height", Settings["tooltips-health-bar-height"], 2, 30, 1, Language["Health Bar Height"], Language["Set the height of the tooltip health bar"], UpdateHealthBarHeight)
+	Left:CreateSwitch("tooltips-show-health-text", Settings["tooltips-show-health-text"], Language["Display Health Text"], Language["Dislay health information on the tooltip health bar"], UpdateShowHealthText)
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], "Anchor the tooltip to the mouse cursor")
 	Left:CreateSwitch("tooltips-show-sell-value", Settings["tooltips-show-sell-value"], Language["Display Item Vendor Price"], "Display the items value if sold to a vendor")
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], "Dislay item and spell ID's in the tooltip")

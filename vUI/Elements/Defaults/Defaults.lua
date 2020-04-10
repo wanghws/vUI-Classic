@@ -356,6 +356,8 @@ Defaults["tooltips-font-flags"] = ""
 Defaults["tooltips-hide-on-unit"] = "NEVER"
 Defaults["tooltips-hide-on-item"] = "NEVER"
 Defaults["tooltips-hide-on-action"] = "NEVER"
+Defaults["tooltips-health-bar-height"] = 15
+Defaults["tooltips-show-health-text"] = true
 
 -- Bags
 Defaults["bags-loot-from-left"] = false
