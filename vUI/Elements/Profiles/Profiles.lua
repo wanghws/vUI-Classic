@@ -622,8 +622,7 @@ GUI:AddOptions(function(self)
 	Left:CreateButton("Export", "Export Current Profile", "", ShowExportWindow)]]
 	
 	Right:CreateHeader("What is a profile?")
-	Right:CreateLine("Profiles store your settings so that you can easily")
-	Right:CreateLine("and quickly change between configurations.")
+	Right:CreateMessage(Language["Profiles store your settings so that you can quickly and easily change between configurations."])
 	
 	local Name = vUI:GetActiveProfileName()
 	local Profile = vUI:GetProfile(Name)
