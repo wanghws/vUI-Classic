@@ -111,25 +111,46 @@ function DT:SetTooltipsEnabled(value)
 	end
 end
 
+function DT:UpdateAllAnchors()
+	for Name, Anchor in pairs(self.Anchors) do
+		Anchor:Update(999)
+	end
+end
+
 function DT:Load()
-	local Width = vUIChatFrameBottom:GetWidth() / 3
-	local Height = vUIChatFrameBottom:GetWidth()
+	if Settings["chat-enable"] then
+		local Width = vUIChatFrameBottom:GetWidth() / 3
+		local Height = vUIChatFrameBottom:GetHeight()
+		
+		local ChatLeft = self:NewAnchor("Chat-Left", vUIChatFrameBottom)
+		ChatLeft:SetScaledSize(Width, Height)
+		ChatLeft:SetScaledPoint("LEFT", vUIChatFrameBottom, 0, 0)
+		
+		local ChatMiddle = self:NewAnchor("Chat-Middle", vUIChatFrameBottom)
+		ChatMiddle:SetScaledSize(Width, Height)
+		ChatMiddle:SetScaledPoint("LEFT", ChatLeft, "RIGHT", 0, 0)
+		
+		local ChatRight = self:NewAnchor("Chat-Right", vUIChatFrameBottom)
+		ChatRight:SetScaledSize(Width, Height)
+		ChatRight:SetScaledPoint("LEFT", ChatMiddle, "RIGHT", 0, 0)
+		
+		self:SetDataText("Chat-Left", Settings["data-text-chat-left"])
+		self:SetDataText("Chat-Middle", Settings["data-text-chat-middle"])
+		self:SetDataText("Chat-Right", Settings["data-text-chat-right"])
+	end
 	
-	local ChatLeft = self:NewAnchor("Chat-Left", vUIChatFrameBottom)
-	ChatLeft:SetScaledWidth(Width, Height)
-	ChatLeft:SetScaledPoint("LEFT", vUIChatFrameBottom, 0, 0)
-	
-	local ChatMiddle = self:NewAnchor("Chat-Middle", vUIChatFrameBottom)
-	ChatMiddle:SetScaledWidth(Width, Height)
-	ChatMiddle:SetScaledPoint("LEFT", ChatLeft, "RIGHT", 0, 0)
-	
-	local ChatRight = self:NewAnchor("Chat-Right", vUIChatFrameBottom)
-	ChatRight:SetScaledWidth(Width, Height)
-	ChatRight:SetScaledPoint("LEFT", ChatMiddle, "RIGHT", 0, 0)
-	
-	self:SetDataText("Chat-Left", Settings["data-text-chat-left"])
-	self:SetDataText("Chat-Middle", Settings["data-text-chat-middle"])
-	self:SetDataText("Chat-Right", Settings["data-text-chat-right"])
+	if Settings["minimap-enable"] then
+		local MinimapTop = self:NewAnchor("Minimap-Top", vUIMinimapTop)
+		MinimapTop:SetScaledSize(vUIMinimapTop:GetSize())
+		MinimapTop:SetScaledPoint("CENTER", vUIMinimapTop, 0, 0)
+		
+		local MinimapBottom = self:NewAnchor("Minimap-Bottom", vUIMinimapBottom)
+		MinimapBottom:SetScaledSize(vUIMinimapBottom:GetSize())
+		MinimapBottom:SetScaledPoint("CENTER", vUIMinimapBottom, 0, 0)
+		
+		self:SetDataText("Minimap-Top", Settings["data-text-minimap-top"])
+		self:SetDataText("Minimap-Bottom", Settings["data-text-minimap-bottom"])
+	end
 	
 	self:SetTooltipsEnabled(Settings["data-text-enable-tooltips"])
 end
@@ -146,6 +167,18 @@ local UpdateRightText = function(value)
 	DT:SetDataText("Chat-Right", value)
 end
 
+local UpdateMinimapTopText = function(value)
+	if Settings["minimap-enable"] then
+		DT:SetDataText("Minimap-Top", value)
+	end
+end
+
+local UpdateMinimapBottomText = function(value)
+	if Settings["minimap-enable"] then
+		DT:SetDataText("Minimap-Bottom", value)
+	end
+end
+
 local UpdateFont = function()
 	for Name, Anchor in pairs(DT.Anchors) do
 		Anchor.Text:SetFontInfo(Settings["data-text-font"], Settings["data-text-font-size"], Settings["data-text-font-flags"])
@@ -156,8 +189,12 @@ local UpdateEnableTooltips = function(value)
 	DT:SetTooltipsEnabled(value)
 end
 
-local ResetGold = function()
+local ResetOnAccept = function()
 	vUI:GetModule("Gold"):Reset()
+end
+
+local ResetGold = function()
+	vUI:DisplayPopup(Language["Attention"], Language["Are you sure you would like to reset all stored gold information?"], Language["Accept"], ResetOnAccept, Language["Cancel"])
 end
 
 GUI:AddOptions(function(self)
@@ -168,14 +205,25 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("data-text-chat-middle", Settings["data-text-chat-middle"], DT.List, Language["Set Middle Text"], Language["Set the information to be displayed in the|nmiddle data text anchor"], UpdateMiddleText)
 	Left:CreateDropdown("data-text-chat-right", Settings["data-text-chat-right"], DT.List, Language["Set Right Text"], Language["Set the information to be displayed in the|nright data text anchor"], UpdateRightText)
 	
+	Left:CreateHeader(Language["Minimap Texts"])
+	Left:CreateDropdown("data-text-minimap-top", Settings["data-text-minimap-top"], DT.List, Language["Set Top Text"], Language["Set the information to be displayed in the|ntop minimap data text anchor"], UpdateMinimapTopText)
+	Left:CreateDropdown("data-text-minimap-bottom", Settings["data-text-minimap-bottom"], DT.List, Language["Set Bottom Text"], Language["Set the information to be displayed in the|nbottom minimap data text anchor"], UpdateMinimapBottomText)
+	
 	Right:CreateHeader(Language["Font"])
 	Right:CreateDropdown("data-text-font", Settings["data-text-font"], Media:GetFontList(), Language["Font"], Language["Set the font of the data texts"], UpdateFont, "Font")
 	Right:CreateSlider("data-text-font-size", Settings["data-text-font-size"], 8, 18, 1, Language["Font Size"], Language["Set the font size of the data texts"], UpdateFont)
 	Right:CreateDropdown("data-text-font-flags", Settings["data-text-font-flags"], Media:GetFlagsList(), Language["Font Flags"], Language["Set the font flags of the data texts"], UpdateFont)
+	
+	Right:CreateHeader(Language["Colors"])
+	Right:CreateColorSelection("data-text-label-color", Settings["data-text-label-color"], "Label Color", "Set the text color of data text labels", function() DT:UpdateAllAnchors() end)
+	Right:CreateColorSelection("data-text-value-color", Settings["data-text-value-color"], "Value Color", "Set the text color of data text values", function() DT:UpdateAllAnchors() end)
 	
 	Right:CreateHeader(Language["Tooltips"])
 	Right:CreateSwitch("data-text-enable-tooltips", Settings["data-text-enable-tooltips"], Language["Enable Tooltips"], Language["Display tooltip information when hovering over data texts"], UpdateEnableTooltips)
 	
 	Left:CreateHeader(Language["Gold"])
 	Left:CreateButton(Language["Reset"], Language["Reset Gold"], Language["Reset stored information for each characters gold"], ResetGold)
+	
+	--Left:CreateHeader(Language["Misc."])
+	--Left:CreateSlider("data-text-max-lines", Settings["data-text-max-lines"], 5, 50, 1, "Max Lines", "Set the maximum number of players shown in the guild or friends data text tooltips")
 end)
