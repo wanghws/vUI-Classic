@@ -88,10 +88,10 @@ local CreateMinimap = function()
 	ZoneFrame:SetBackdrop(vUI.BackdropAndBorder)
 	ZoneFrame:SetBackdropColor(0, 0, 0, 0)
 	ZoneFrame:SetBackdropBorderColor(0, 0, 0)
-	--[[ZoneFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	ZoneFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	ZoneFrame:RegisterEvent("ZONE_CHANGED")
 	ZoneFrame:RegisterEvent("ZONE_CHANGED_INDOORS")
-	ZoneFrame:SetScript("OnEvent", ZoneUpdate)]]
+	ZoneFrame:SetScript("OnEvent", ZoneUpdate)
 	
 	ZoneFrame.Tex = ZoneFrame:CreateTexture(nil, "ARTWORK")
 	ZoneFrame.Tex:SetPoint("TOPLEFT", ZoneFrame, 1, -1)
@@ -99,12 +99,12 @@ local CreateMinimap = function()
 	ZoneFrame.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	ZoneFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
 	
-	--[[ZoneFrame.Text = ZoneFrame:CreateFontString(nil, "OVERLAY", 7)
+	ZoneFrame.Text = ZoneFrame:CreateFontString(nil, "OVERLAY", 7)
 	ZoneFrame.Text:SetScaledHeight(20)
 	ZoneFrame.Text:SetScaledPoint("LEFT", ZoneFrame, 6, 0)
 	ZoneFrame.Text:SetScaledPoint("RIGHT", ZoneFrame, -6, 0)
 	ZoneFrame.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
-	ZoneFrame.Text:SetJustifyH("CENTER")]]
+	ZoneFrame.Text:SetJustifyH("CENTER")
 	
 	local TimeFrame = CreateFrame("Frame", "vUITimeFrame", Frame)
 	TimeFrame:SetScaledHeight(20)
@@ -113,7 +113,7 @@ local CreateMinimap = function()
 	TimeFrame:SetBackdrop(vUI.BackdropAndBorder)
 	TimeFrame:SetBackdropColor(0, 0, 0, 0)
 	TimeFrame:SetBackdropBorderColor(0, 0, 0)
-	--TimeFrame.Ela = 0
+	TimeFrame.Ela = 0
 	
 	TimeFrame.Tex = TimeFrame:CreateTexture(nil, "ARTWORK")
 	TimeFrame.Tex:SetPoint("TOPLEFT", TimeFrame, 1, -1)
@@ -121,17 +121,17 @@ local CreateMinimap = function()
 	TimeFrame.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
 	TimeFrame.Tex:SetVertexColorHex(Settings["ui-header-texture-color"])
 	
-	--[[TimeFrame.Text = TimeFrame:CreateFontString(nil, "OVERLAY", 7)
+	TimeFrame.Text = TimeFrame:CreateFontString(nil, "OVERLAY", 7)
 	TimeFrame.Text:SetScaledHeight(20)
 	TimeFrame.Text:SetScaledPoint("LEFT", TimeFrame, 6, 0)
 	TimeFrame.Text:SetScaledPoint("RIGHT", TimeFrame, -6, 0)
 	TimeFrame.Text:SetFontInfo(Settings["ui-header-font"], Settings["ui-font-size"])
 	TimeFrame.Text:SetJustifyH("CENTER")
-	TimeFrame.Text:SetText(GameTime_GetLocalTime(true))]]
+	TimeFrame.Text:SetText(GameTime_GetLocalTime(true))
 	
 	if Settings["minimap-show-time"] then
 		Frame:SetScaledSize((Settings["minimap-size"] + 8), (44 + 8 + Settings["minimap-size"]))
-		--TimeFrame:SetScript("OnUpdate", TimeOnUpdate)
+		TimeFrame:SetScript("OnUpdate", TimeOnUpdate)
 	else
 		Frame:SetScaledSize((Settings["minimap-size"] + 8), (22 + 8 + Settings["minimap-size"]))
 		TimeFrame:SetAlpha(0)
@@ -139,11 +139,11 @@ local CreateMinimap = function()
 	
 	vUI:GetModule("Move"):Add(Frame)
 	
-	--TimeFrame:SetScript("OnEnter", TimeOnEnter)
-	--TimeFrame:SetScript("OnLeave", TimeOnLeave)
-	--TimeFrame:SetScript("OnMouseUp", TimeManager_Toggle)
+	TimeFrame:SetScript("OnEnter", TimeOnEnter)
+	TimeFrame:SetScript("OnLeave", TimeOnLeave)
+	TimeFrame:SetScript("OnMouseUp", TimeManager_Toggle)
 	
-	--ZoneUpdate(ZoneFrame)
+	ZoneUpdate(ZoneFrame)
 end
 
 local OnMouseWheel = function(self, delta)
@@ -204,12 +204,9 @@ local UpdateShowMinimapTime = function(value)
 	end
 end
 
-local M = vUI:NewModule("Minimap")
-
---local OnEvent = function(self, event)
-function M:Load()
+local OnEvent = function(self, event)
 	if (not Settings["minimap-enable"]) then
-		--self:UnregisterEvent(event)
+		self:UnregisterEvent(event)
 		
 		return
 	end
@@ -217,7 +214,7 @@ function M:Load()
 	CreateMinimap()
 	Minimap:SetMaskTexture(Media:GetTexture("Blank"))
 	
-	Minimap:SetParent(Frame)
+	Minimap:SetParent(self)
 	Minimap:ClearAllPoints()
 	Minimap:SetScaledPoint("TOP", vUIZoneFrame, "BOTTOM", 0, -3)
 	Minimap:SetScaledSize(Settings["minimap-size"], Settings["minimap-size"])
@@ -270,11 +267,11 @@ function M:Load()
 	Kill(GameTimeFrame)
 	Kill(TimeManagerClockButton)
 	
-	--self:UnregisterEvent(event)
+	self:UnregisterEvent(event)
 end
 
---Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
---Frame:SetScript("OnEvent", OnEvent)
+Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+Frame:SetScript("OnEvent", OnEvent)
 
 GUI:AddOptions(function(self)
 	local Left = self:CreateWindow(Language["Minimap"])
