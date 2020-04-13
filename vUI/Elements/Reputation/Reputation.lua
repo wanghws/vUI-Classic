@@ -303,8 +303,8 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("reputation-enable", true, Language["Enable Reputation Module"], "Enable the vUI reputation module", ReloadUI):RequiresReload(true)
 	
 	Left:CreateHeader(Language["Styling"])
-	Left:CreateSwitch("reputation-display-progress", Settings["reputation-display-progress"], Language["Display Progress Value"], "Display your current progress|ninformation in the reputation bar", UpdateDisplayProgress)
-	Left:CreateSwitch("reputation-display-percent", Settings["reputation-display-percent"], Language["Display Percent Value"], "Display your current percent|ninformation in the reputation bar", UpdateDisplayPercent)
+	Left:CreateSwitch("reputation-display-progress", Settings["reputation-display-progress"], Language["Display Progress Value"], "Display your current progress information in the reputation bar", UpdateDisplayProgress)
+	Left:CreateSwitch("reputation-display-percent", Settings["reputation-display-percent"], Language["Display Percent Value"], "Display your current percent information in the reputation bar", UpdateDisplayPercent)
 	
 	Right:CreateHeader(Language["Size"])
 	Right:CreateSlider("reputation-width", Settings["reputation-width"], 240, 400, 10, Language["Bar Width"], "Set the width of the reputation bar", UpdateBarWidth)

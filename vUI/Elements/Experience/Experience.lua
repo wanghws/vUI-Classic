@@ -487,9 +487,9 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Styling"])
 	Left:CreateSwitch("experience-display-level", Settings["experience-display-level"], Language["Display Level"], "Display your current level in the experience bar", UpdateDisplayLevel)
-	Left:CreateSwitch("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Value"], "Display your current progress|ninformation in the experience bar", UpdateDisplayProgress)
-	Left:CreateSwitch("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Value"], "Display your current percent|ninformation in the experience bar", UpdateDisplayPercent)
-	Left:CreateSwitch("experience-display-rested-value", Settings["experience-display-rested-value"], Language["Display Rested Value"], "Display your current rested|nvalue on the experience bar", UpdateShowRestedValue)
+	Left:CreateSwitch("experience-display-progress", Settings["experience-display-progress"], Language["Display Progress Value"], "Display your current progress information in the experience bar", UpdateDisplayProgress)
+	Left:CreateSwitch("experience-display-percent", Settings["experience-display-percent"], Language["Display Percent Value"], "Display your current percent information in the experience bar", UpdateDisplayPercent)
+	Left:CreateSwitch("experience-display-rested-value", Settings["experience-display-rested-value"], Language["Display Rested Value"], "Display your current rested value on the experience bar", UpdateShowRestedValue)
 	Left:CreateSwitch("experience-show-tooltip", Settings["experience-show-tooltip"], Language["Enable Tooltip"], "Display a tooltip when mousing over the experience bar")
 	Left:CreateSwitch("experience-animate", Settings["experience-animate"], Language["Animate Experience Changes"], "Smoothly animate changes to the experience bar")
 	
