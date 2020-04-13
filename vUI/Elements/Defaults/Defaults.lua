@@ -280,6 +280,7 @@ Defaults["announcements-channel"] = "GROUP"
 
 -- Unitframes -- Add option to color health backdrops by reaction/class color, or use health color, or set a color
 Defaults["unitframes-enable"] = true
+Defaults["unitframes-show-druid-mana"] = true
 Defaults["unitframes-class-color"] = true -- temporary
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
