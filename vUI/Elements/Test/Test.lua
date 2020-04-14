@@ -793,9 +793,9 @@ function Delete:PrintCheapestItem()
 	
 	if (Item and Value) then
 		if (Count > 1) then
-			vUI:print(format(Language["The cheapest vendorable item in your inventory is currently %sx%s worth %s"], Item, Count, GetCoinTextureString(Value)))
+			vUI:print(format(Language["The cheapest sellable item in your inventory is currently %sx%s worth %s"], Item, Count, GetCoinTextureString(Value)))
 		else
-			vUI:print(format(Language["The cheapest vendorable item in your inventory is currently %s worth %s"], Item, GetCoinTextureString(Value)))
+			vUI:print(format(Language["The cheapest sellable item in your inventory is currently %s worth %s"], Item, GetCoinTextureString(Value)))
 		end
 	else
 		vUI:print(Language["No valid items were found"])
@@ -951,8 +951,8 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Merchant"])
 	Right:CreateSwitch("auto-repair-enable", Settings["auto-repair-enable"], Language["Auto Repair Equipment"], "Automatically repair damaged items when visiting a repair merchant", UpdateAutoRepair)
 	Right:CreateSwitch("auto-repair-report", Settings["auto-repair-report"], Language["Auto Repair Report"], "Report the cost of automatic repairs into the chat")
-	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Vendor Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
-	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Vendor Report"], "Report the profit of automatic vendoring into the chat")
+	Right:CreateSwitch("auto-vendor-enable", Settings["auto-vendor-enable"], Language["Auto Sell Greys"], "Automatically sell all |cFF9D9D9D[Poor]|r quality items", UpdateAutoVendor)
+	Right:CreateSwitch("auto-vendor-report", Settings["auto-vendor-report"], Language["Auto Sell Report"], "Report the profit of automatic sales into the chat")
 	
 	Right:CreateHeader(Language["Interrupt Announcements"])
 	Right:CreateSwitch("announcements-enable", Settings["announcements-enable"], Language["Enable Announcements"], "Announce to the selected channel when you successfully perform an interrupt spell", ReloadUI):RequiresReload(true)
