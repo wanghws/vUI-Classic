@@ -191,6 +191,7 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("nightcracker", "Simpy")
 	Left:CreateDoubleLine("Smelly", "Azilroka")
 	Left:CreateDoubleLine("Foof", "Eclipse")
+	Left:CreateDoubleLine("AlleyKat", "Zork")
 	
 	Left:CreateHeader("oUF")
 	Left:CreateDoubleLine("Haste", "lightspark")
