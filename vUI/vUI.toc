@@ -58,6 +58,7 @@ Elements\Update.lua
 Elements\Auras.lua
 Elements\Bags.lua
 Elements\DataTexts\DataTexts.lua
+Elements\DataTexts\Ammo.lua
 Elements\DataTexts\Gold.lua
 Elements\DataTexts\TimeLocal.lua
 Elements\DataTexts\TimeRealm.lua
@@ -74,8 +75,10 @@ Elements\DataTexts\SpellPower.lua
 Elements\DataTexts\Guild.lua
 Elements\DataTexts\Friends.lua
 Elements\DataTexts\PrimaryStat.lua
+Elements\DataTexts\PVP.lua
 Elements\DataTexts\Quests.lua
 Elements\DataTexts\Coordinates.lua
+Elements\DataTexts\SoulShards.lua
 Elements\DataTexts\Level.lua
 Elements\DataTexts\Location.lua
 Elements\DataTexts\System.lua
