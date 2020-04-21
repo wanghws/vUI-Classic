@@ -68,20 +68,6 @@ Defaults["color-mana"] = "477CB2" -- 0000FF for the default mana color
 Defaults["color-rage"] = "E53935" -- FF0000 ^
 Defaults["color-energy"] = "FFEB3B" -- FFFF00 ^
 Defaults["color-focus"] = "FF7F3F"
-Defaults["color-fuel"] = "008C7F"
-Defaults["color-insanity"] = "6600CC"
-Defaults["color-holy-power"] = "F2E599"
-Defaults["color-fury"] = "C842FC"
-Defaults["color-pain"] = "FF9C00"
-Defaults["color-runic-power"] = "00D1FF"
-Defaults["color-chi"] = "B5FFEA"
-Defaults["color-maelstrom"] = "007FFF"
-Defaults["color-lunar-power"] = "4C84E5"
-Defaults["color-arcane-charges"] = "1919F9"
-Defaults["color-ammo-slot"] = "CC9900"
-Defaults["color-soul-shards"] = "D35832" -- 7F518C for the default soul shards color
-Defaults["color-runes"] = "9905CC" -- 7F7F7F ^
-Defaults["color-combo-points"] = "FFF468"
 
 -- Reactions
 Defaults["color-reaction-1"] = "BF4400" -- Hated
@@ -109,13 +95,17 @@ Defaults["color-magic"] = "3399FF"
 Defaults["color-poison"] = "009900"
 Defaults["color-none"] = "000000"
 
+-- Happiness
+Defaults["color-happiness-1"] = "4CAF50" -- "8BC94D"
+Defaults["color-happiness-2"] = "FBC02D" -- "FFC44D"
+Defaults["color-happiness-3"] = "C62828" -- "EE4D4D"
+
 -- Combo Points
 Defaults["color-combo-1"] = "FF6666"
 Defaults["color-combo-2"] = "FFB266"
 Defaults["color-combo-3"] = "FFFF66"
 Defaults["color-combo-4"] = "B2FF66"
 Defaults["color-combo-5"] = "66FF66"
-Defaults["color-combo-6"] = "66FF66"
 
 -- Casting
 Defaults["color-casting-start"] = "4C9900"

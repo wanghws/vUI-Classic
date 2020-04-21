@@ -5,7 +5,7 @@ local BagsFrame = vUI:GetModule("Bags Frame")
 
 MicroButtons.Buttons = {
 	CharacterMicroButton,
-	--SpellbookMicroButton,
+	SpellbookMicroButton,
 	--TalentMicroButton,
 	--AchievementMicroButton,
 	--QuestLogMicroButton,

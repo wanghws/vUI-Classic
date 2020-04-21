@@ -703,25 +703,6 @@ local StyleNamePlate = function(self, unit)
 	
 	SetHealthAttributes(Health, Settings["nameplates-health-color"])
 	
-	local Threat = CreateFrame("Frame", nil, Health)
-	Threat:SetAllPoints(Health)
-	Threat:SetFrameLevel(Health:GetFrameLevel() - 1)
-	Threat.feedbackUnit = "player"
-	
-	Threat.Top = Threat:CreateTexture(nil, "BORDER")
-	vUI:SetHeight(Threat.Top, 6)
-	vUI:SetPoint(Threat.Top, "BOTTOMLEFT", Threat, "TOPLEFT", 8, 1)
-	vUI:SetPoint(Threat.Top, "BOTTOMRIGHT", Threat, "TOPRIGHT", -8, 1)
-	Threat.Top:SetTexture(Assets:GetHighlight("RenHorizonUp"))
-	Threat.Top:SetAlpha(0.8)
-	
-	Threat.Bottom = Threat:CreateTexture(nil, "BORDER")
-	vUI:SetHeight(Threat.Bottom, 6)
-	vUI:SetPoint(Threat.Bottom, "TOPLEFT", Threat, "BOTTOMLEFT", 8, -1)
-	vUI:SetPoint(Threat.Bottom, "TOPRIGHT", Threat, "BOTTOMRIGHT", -8, -1)
-	Threat.Bottom:SetTexture(Assets:GetHighlight("RenHorizonDown"))
-	Threat.Bottom:SetAlpha(0.8)
-	
 	-- Buffs
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
 	vUI:SetSize(Buffs, 30, 30)
@@ -859,7 +840,6 @@ local StyleNamePlate = function(self, unit)
 	self.Castbar = Castbar
 	--self.EliteIndicator = EliteIndicator
 	self.TargetIndicator = TargetIndicator
-	self.ThreatIndicator = Threat
 	self.RaidTargetIndicator = RaidTargetIndicator
 end
 
