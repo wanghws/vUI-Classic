@@ -914,7 +914,7 @@ function lib:ToggleDebug()
             spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
             local isSrcPlayer = (bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE)
             if isSrcPlayer then
-                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cff00ff00==>|r", dstGUID, dstFlags, auraType, amount)
+                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cFF00ff00==>|r", dstGUID, dstFlags, auraType, amount)
             end
         end)
     end
@@ -939,7 +939,7 @@ function lib:MonitorUnit(unit)
             dstGUID, dstName, dstFlags, dstFlags2,
             spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
             if srcGUID == debugGUID or dstGUID == debugGUID then
-                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cff00ff00==>|r", dstGUID, dstFlags, auraType, amount)
+                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cFF00ff00==>|r", dstGUID, dstFlags, auraType, amount)
             end
         end)
     end

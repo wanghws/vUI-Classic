@@ -46,7 +46,7 @@ local Update = function(self)
 		end
 	end
 	
-	self.Text:SetFormattedText("|cff%s%s:|r |cff%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], Count)
+	self.Text:SetFormattedText("|cFF%s%s:|r |cFF%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], Count)
 end
 
 local OnEnable = function(self)

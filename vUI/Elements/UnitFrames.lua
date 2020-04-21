@@ -395,7 +395,7 @@ Methods["NameColor"] = function(unit)
 			local Color = vUI.ClassColors[Class]
 			
 			if Color then
-				return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
 			end
 		end
 	else
@@ -405,7 +405,7 @@ Methods["NameColor"] = function(unit)
 			local Color = vUI.ReactionColors[Reaction]
 			
 			if Color then
-				return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
 			end
 		end
 	end
@@ -419,7 +419,7 @@ Methods["Reaction"] = function(unit)
 		local Color = vUI.ReactionColors[Reaction]
 		
 		if Color then
-			return "|cff"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
 		end
 	end
 end

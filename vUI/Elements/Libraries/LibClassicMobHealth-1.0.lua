@@ -126,24 +126,24 @@ function frame:ADDON_LOADED(name)
 				alpha = text
 			end
 			if alpha == "" or alpha == "help" then
-				DEFAULT_CHAT_FRAME:AddMessage(("|cffffff7f%s|r"):format(MAJOR_VERSION))
-				DEFAULT_CHAT_FRAME:AddMessage((" - |cffffff7f%s|r [%s] - %s"):format("save", options.save and "|cff00ff00On|r" or "|cffff0000Off|r", "whether to save mob health data"))
-				DEFAULT_CHAT_FRAME:AddMessage((" - |cffffff7f%s|r [%s] - %s"):format("prune", options.prune == 0 and "|cffff0000Off|r" or "|cff00ff00" .. options.prune .. "|r", "how many data points until data is pruned, 0 means no pruning"))
+				DEFAULT_CHAT_FRAME:AddMessage(("|cFFffff7f%s|r"):format(MAJOR_VERSION))
+				DEFAULT_CHAT_FRAME:AddMessage((" - |cFFffff7f%s|r [%s] - %s"):format("save", options.save and "|cFF00ff00On|r" or "|cFFff0000Off|r", "whether to save mob health data"))
+				DEFAULT_CHAT_FRAME:AddMessage((" - |cFFffff7f%s|r [%s] - %s"):format("prune", options.prune == 0 and "|cFFff0000Off|r" or "|cFF00ff00" .. options.prune .. "|r", "how many data points until data is pruned, 0 means no pruning"))
 			elseif alpha == "save" then
 				options.save = not options.save
-				DEFAULT_CHAT_FRAME:AddMessage(("|cffffff7f%s|r"):format(MAJOR_VERSION))
-				DEFAULT_CHAT_FRAME:AddMessage((" - |cffffff7f%s|r [%s]"):format("save", options.save and "|cff00ff00On|r" or "|cffff0000Off|r"))
+				DEFAULT_CHAT_FRAME:AddMessage(("|cFFffff7f%s|r"):format(MAJOR_VERSION))
+				DEFAULT_CHAT_FRAME:AddMessage((" - |cFFffff7f%s|r [%s]"):format("save", options.save and "|cFF00ff00On|r" or "|cFFff0000Off|r"))
 			elseif alpha == "prune" then
 				local bravo_num = tonumber(bravo)
 				if bravo_num then
 					options.prune = math.floor(bravo_num+0.5)
-					DEFAULT_CHAT_FRAME:AddMessage(("|cffffff7f%s|r"):format(MAJOR_VERSION))
-					DEFAULT_CHAT_FRAME:AddMessage((" - |cffffff7f%s|r [%s]"):format("prune", options.prune == 0 and "|cffff0000Off|r" or "|cff00ff00" .. options.prune .. "|r"))
+					DEFAULT_CHAT_FRAME:AddMessage(("|cFFffff7f%s|r"):format(MAJOR_VERSION))
+					DEFAULT_CHAT_FRAME:AddMessage((" - |cFFffff7f%s|r [%s]"):format("prune", options.prune == 0 and "|cFFff0000Off|r" or "|cFF00ff00" .. options.prune .. "|r"))
 				else
-					DEFAULT_CHAT_FRAME:AddMessage(("|cffffff7f%s|r - prune must take a number, %q is not a number"):format(MAJOR_VERSION, bravo or ""))
+					DEFAULT_CHAT_FRAME:AddMessage(("|cFFffff7f%s|r - prune must take a number, %q is not a number"):format(MAJOR_VERSION, bravo or ""))
 				end
 			else
-				DEFAULT_CHAT_FRAME:AddMessage(("|cffffff7f%s|r - unknown command %q"):format(MAJOR_VERSION, alpha))
+				DEFAULT_CHAT_FRAME:AddMessage(("|cFFffff7f%s|r - unknown command %q"):format(MAJOR_VERSION, alpha))
 			end
 		end
 		
