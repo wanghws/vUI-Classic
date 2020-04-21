@@ -9,7 +9,6 @@ vUI.ZoneColors = {}
 vUI.PowerColors = {}
 vUI.DebuffColors = {}
 vUI.HappinessColors = {}
-vUI.ClassificationColors = {}
 vUI.ComboPoints = {}
 vUI.TotemColors = {}
 
