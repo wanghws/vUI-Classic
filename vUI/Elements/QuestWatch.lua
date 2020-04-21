@@ -1,7 +1,5 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
---if 1 == 1 then return end
-
 -- QUESTS_LABEL = "Quests"
 -- QUEST_OBJECTIVES = "Quest Objectives"
 -- TRACKER_HEADER_QUESTS = "Quests"
@@ -16,7 +14,6 @@ function Quest:StyleFrame()
 	vUI:SetPoint(Title, "BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, 0)
 	vUI:SetFontInfo(Title, Settings["ui-header-font"], 12)
 	Title:SetJustifyH("LEFT")
-	Title:SetTextColor(vUI:HexToRGB(Settings["ui-header-font-color"]))
 	Title:SetText(QUESTS_LABEL)
 	
 	local TitleDiv = CreateFrame("Frame", nil, QuestWatchFrame)
@@ -34,6 +31,7 @@ function Quest:StyleFrame()
 	
 	QuestWatchFrame:ClearAllPoints()
 	vUI:SetPoint(QuestWatchFrame, "TOPLEFT", self, "TOPLEFT", 0, 0)
+	QuestWatchFrame:Show()
 	
 	local Region
 	local Child
