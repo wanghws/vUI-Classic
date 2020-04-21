@@ -6,6 +6,14 @@ local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 	To be fully implemented when I write my own bags module
 --]]
 
+local select = select
+local match = string.match
+local GetItemInfo = GetItemInfo
+local GetContainerNumSlots = GetContainerNumSlots
+local GetContainerItemLink = GetContainerItemLink
+local GetContainerItemID = GetContainerItemID
+local GetContainerItemInfo = GetContainerItemInfo
+
 local Delete = vUI:NewModule("Delete")
 
 Delete.FilterIDs = {}

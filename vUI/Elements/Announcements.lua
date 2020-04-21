@@ -2,10 +2,10 @@ local vUI, GUI, Language, Assets, Settings, Defaults = select(2, ...):get()
 
 local Announcements = vUI:NewModule("Announcements")
 local EventType, SourceGUID, DestName, SpellID, SpellName
-local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's \124cff71d5ff\124Hspell:%d:0\124h[%s]\124h\124r."
-local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's \124cff71d5ff\124Hspell:%d:0\124h[%s]\124h\124r."
-local StolenMessage = ACTION_SPELL_STOLEN .. " %s's \124cff71d5ff\124Hspell:%d:0\124h[%s]\124h\124r."
-local CastMessage = "casts \124cff71d5ff\124Hspell:%d:0\124h[%s]\124h\124r on %s."
+local InterruptMessage = ACTION_SPELL_INTERRUPT .. " %s's %s"
+local DispelledMessage = ACTION_SPELL_DISPEL .. " %s's %s"
+local StolenMessage = ACTION_SPELL_STOLEN .. " %s's %s"
+local CastMessage = Language["casts %s on %s."]
 local CastingMessage = Language["casting %s on %s."]
 local UNKNOWN = UNKNOWN
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
@@ -48,7 +48,7 @@ function Announcements:GetChannelToSend()
 end
 
 Announcements.Events = {
-	["SPELL_INTERRUPT"] = function(target, id, spell)
+	["SPELL_INTERRUPT"] = function(target, spell)
 		if UnitIsFriend("player", target) then -- Quaking filter
 			return
 		end
@@ -56,38 +56,38 @@ Announcements.Events = {
 		Channel = Announcements:GetChannelToSend()
 		
 		if Channel then
-			SendChatMessage(format(InterruptMessage, target, id, spell), Channel)
+			SendChatMessage(format(InterruptMessage, target, spell), Channel)
 		else
-			print(format(InterruptMessage, target, id, spell))
+			print(format(InterruptMessage, target, spell))
 		end
 	end,
 	
-	--[[["SPELL_DISPEL"] = function(target, id, spell)
+	--[[["SPELL_DISPEL"] = function(target, spell)
 		if (not UnitIsFriend("player", target)) then
-			SendChatMessage(format(DispelledMessage, target, id, spell), "EMOTE")
+			SendChatMessage(format(DispelledMessage, target, spell), "EMOTE")
 		end
 	end,]]
 	
-	["SPELL_STOLEN"] = function(target, id, spell)
+	["SPELL_STOLEN"] = function(target, spell)
 		Channel = Announcements:GetChannelToSend()
 		
 		if Channel then
-			SendChatMessage(format(StolenMessage, target, id, spell), Channel)
+			SendChatMessage(format(StolenMessage, target, spell), Channel)
 		else
-			print(format(StolenMessage, target, id, spell))
+			print(format(StolenMessage, target, spell))
 		end
 	end,
 }
 
 function Announcements:COMBAT_LOG_EVENT_UNFILTERED()
-	_, EventType, _, SourceGUID, _, _, _, _, DestName, _, _, _, _, _, SpellID, SpellName = CombatLogGetCurrentEventInfo()
+	_, EventType, _, SourceGUID, _, _, _, _, DestName, _, _, _, _, _, _, SpellName = CombatLogGetCurrentEventInfo()
 	
 	if (not self.Events[EventType]) then
 		return
 	end
 	
 	if (SourceGUID == MyGUID or SourceGUID == PetGUID) then
-		self.Events[EventType](DestName, SpellID, SpellName)
+		self.Events[EventType](DestName, SpellName)
 	end
 end
 
