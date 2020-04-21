@@ -82,8 +82,7 @@ local function UpdateColor(element, powerType)
 end
 
 local function Update(self, event, unit, powerType)
-	if(not (unit and (UnitIsUnit(unit, 'player') and powerType == ClassPowerType
-		or unit == 'vehicle' and powerType == 'COMBO_POINTS'))) then
+	if(not (unit and (UnitIsUnit(unit, 'player') and powerType == ClassPowerType))) then
 		return
 	end
 
@@ -100,10 +99,9 @@ local function Update(self, event, unit, powerType)
 
 	local cur, max, mod, oldMax
 	if(event ~= 'ClassPowerDisable') then
-		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
-		cur = UnitPower(unit, powerID, true)
-		max = UnitPowerMax(unit, powerID)
-		mod = UnitPowerDisplayMod(powerID)
+		cur = UnitPower(unit, ClassPowerID, true)
+		max = UnitPowerMax(unit, ClassPowerID)
+		mod = UnitPowerDisplayMod(ClassPowerID)
 
 		-- mod should never be 0, but according to Blizz code it can actually happen
 		cur = mod == 0 and 0 or cur / mod
@@ -167,10 +165,7 @@ local function Visibility(self, event, unit)
 	local element = self.ClassPower
 	local shouldEnable
 
-	if(UnitHasVehicleUI('player')) then
-		shouldEnable = PlayerVehicleHasComboPoints()
-		unit = 'vehicle'
-	elseif(ClassPowerID) then
+	if(ClassPowerID) then
 		if(not RequireSpec or RequireSpec == GetSpecialization()) then
 			-- use 'player' instead of unit because 'SPELLS_CHANGED' is a unitless event
 			if(not RequirePower or RequirePower == UnitPowerType('player')) then
@@ -186,7 +181,6 @@ local function Visibility(self, event, unit)
 	end
 
 	local isEnabled = element.isEnabled
-	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
 
 	--if(shouldEnable) then
 		--[[ Override: ClassPower:UpdateColor(powerType)
@@ -203,7 +197,7 @@ local function Visibility(self, event, unit)
 	elseif(not shouldEnable and (isEnabled or isEnabled == nil)) then
 		ClassPowerDisable(self)
 	elseif(shouldEnable and isEnabled) then
-		Path(self, event, unit, powerType)
+		Path(self, event, unit, ClassPowerType)
 	end
 end
 
@@ -231,11 +225,7 @@ do
 
 		self.ClassPower:Show()
 
-		if(UnitHasVehicleUI('player')) then
-			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
-		else
-			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
-		end
+		Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
 	end
 
 	function ClassPowerDisable(self)

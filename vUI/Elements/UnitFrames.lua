@@ -1085,10 +1085,9 @@ local StylePlayer = function(self, unit)
 		ComboPoints:SetBackdropColor(0, 0, 0)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
 		
-		local Max = (vUI.UserClass == "ROGUE" and 6 or 5)
-		local Width = (Settings["unitframes-player-width"] / Max)
+		local Width = (Settings["unitframes-player-width"] / 5)
 		
-		for i = 1, Max do
+		for i = 1, 5 do
 			ComboPoints[i] = CreateFrame("StatusBar", self:GetName() .. "ComboPoint" .. i, ComboPoints)
 			vUI:SetSize(ComboPoints[i], Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
