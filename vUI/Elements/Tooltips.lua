@@ -23,6 +23,7 @@ local UnitIsDND = UnitIsDND
 local UnitIsGhost = UnitIsGhost
 local UnitIsDead = UnitIsDead
 local UnitClassification = UnitClassification
+local GetPetHappiness = GetPetHappiness
 local GetMouseFocus = GetMouseFocus
 local GetItemInfo = GetItemInfo
 local InCombatLockdown = InCombatLockdown

@@ -639,12 +639,6 @@ local StyleNamePlate = function(self, unit)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:EnableMouse(false)
 	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
-	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
 	HealBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
@@ -826,7 +820,6 @@ local StyleNamePlate = function(self, unit)
 	self:Tag(BottomLeft, Settings["nameplates-bottomleft-text"])
 	
 	self.Health = Health
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.Top = Top
 	self.TopLeft = TopLeft
@@ -905,12 +898,6 @@ local StylePlayer = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-player-health-reverse"])
-	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
 	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
@@ -1322,7 +1309,6 @@ local StylePlayer = function(self, unit)
 	self.Power = Power
 	self.Power.bg = PowerBG
 	self.PowerValue = PowerValue
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
@@ -1358,12 +1344,6 @@ local StyleTarget = function(self, unit)
 	Health:SetValue(1)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-target-health-reverse"])
-	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
 	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
@@ -1528,7 +1508,6 @@ local StyleTarget = function(self, unit)
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.HealthLeft = HealthLeft
 	self.HealthRight = HealthRight
@@ -1560,12 +1539,6 @@ local StyleTargetTarget = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-targettarget-health-reverse"])
-	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
 	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
@@ -1635,7 +1608,6 @@ local StyleTargetTarget = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.Power = Power
@@ -1663,12 +1635,6 @@ local StylePet = function(self, unit)
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-pet-health-reverse"])
-	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
 	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
@@ -1733,7 +1699,6 @@ local StylePet = function(self, unit)
 	}
 	
 	self.Health = Health
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.Health.bg = HealthBG
 	self.HealthLeft = HealthLeft
@@ -1834,12 +1799,6 @@ local StyleParty = function(self, unit)
 	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
-	
-	local AbsorbsBar = CreateFrame("StatusBar", nil, self)
-	AbsorbsBar:SetAllPoints(Health)
-	AbsorbsBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-	AbsorbsBar:SetStatusBarColor(0, 0.66, 1)
-	AbsorbsBar:SetFrameLevel(Health:GetFrameLevel() - 2)
 	
 	local HealBar = CreateFrame("StatusBar", nil, self)
 	HealBar:SetAllPoints(Health)
@@ -2057,7 +2016,6 @@ local StyleParty = function(self, unit)
 	
 	self.Health = Health
 	self.Health.bg = HealthBG
-	self.AbsorbsBar = AbsorbsBar
 	self.HealBar = HealBar
 	self.Power = Power
 	self.Power.bg = PowerBG
@@ -3145,15 +3103,15 @@ GUI:AddOptions(function(self)
 	
 	Left:CreateHeader(Language["Party Size"])
 	Left:CreateSlider("party-width", Settings["party-width"], 40, 200, 1, Language["Width"], Language["Set the width of the party unit frame"], UpdatePartyWidth)
-	Left:CreateSlider("party-health-height", Settings["party-health-height"], 12, 60, 1, Language["Health Height"], Language["Set the height of party health bars"], UpdatePartyHealthHeight)
-	Left:CreateSlider("party-power-height", Settings["party-power-height"], 2, 30, 1, Language["Power Height"], Language["Set the height of party power bars"], UpdatePartyPowerHeight)
 	
 	Left:CreateHeader(Language["Health"])
+	Left:CreateSlider("party-health-height", Settings["party-health-height"], 12, 60, 1, Language["Health Height"], Language["Set the height of party health bars"], UpdatePartyHealthHeight)
 	Left:CreateDropdown("party-health-color", Settings["party-health-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Custom"]] = "CUSTOM"}, Language["Health Bar Color"], Language["Set the color of the health bar"], UpdatePartyHealthColor)
 	Left:CreateDropdown("party-health-orientation", Settings["party-health-orientation"], {[Language["Horizontal"]] = "HORIZONTAL", [Language["Vertical"]] = "VERTICAL"}, Language["Fill Orientation"], Language["Set the fill orientation of the health bar"], UpdatePartyHealthOrientation)
 	Left:CreateSwitch("party-health-reverse", Settings["party-health-reverse"], Language["Reverse Health Fill"], Language["Reverse the fill of the health bar"], UpdatePartyHealthReverseFill)
 	
 	Left:CreateHeader(Language["Power"])
+	Left:CreateSlider("party-power-height", Settings["party-power-height"], 2, 30, 1, Language["Power Height"], Language["Set the height of party power bars"], UpdatePartyPowerHeight)
 	Left:CreateDropdown("party-power-color", Settings["party-power-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Power Type"]] = "POWER"}, Language["Power Bar Color"], Language["Set the color of the power bar"], UpdatePartyPowerColor)
 	Left:CreateSwitch("party-power-reverse", Settings["party-power-reverse"], Language["Reverse Power Fill"], Language["Reverse the fill of the power bar"], UpdatePartyPowerReverseFill)
 	
