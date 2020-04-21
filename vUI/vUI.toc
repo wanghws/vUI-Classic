@@ -89,6 +89,7 @@ Elements\Taxi.lua
 Elements\Merchant.lua
 Elements\Announcements.lua
 Elements\Cooldowns.lua
+Elements\QuestWatch.lua
 Elements\Scale.lua
 Elements\Commands.lua
 Elements\DeleteCheapest.lua
