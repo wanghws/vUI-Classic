@@ -6,15 +6,12 @@ local BagsFrame = vUI:GetModule("Bags Frame")
 MicroButtons.Buttons = {
 	CharacterMicroButton,
 	SpellbookMicroButton,
-	--TalentMicroButton,
-	--AchievementMicroButton,
-	--QuestLogMicroButton,
-	--GuildMicroButton,
-	--LFDMicroButton,
-	--CollectionsMicroButton,
-	--EJMicroButton,
-	--StoreMicroButton,
-	--MainMenuMicroButton,
+	TalentMicroButton,
+	QuestLogMicroButton,
+	SocialsMicroButton,
+	WorldMapMicroButton,
+	MainMenuMicroButton,
+	HelpMicroButton,
 }
 
 local MicroButtonsButtonOnEnter = function(self)
@@ -54,7 +51,7 @@ function MicroButtons:Load()
 	end
 	
 	local Panel = CreateFrame("Frame", "vUI Micro Buttons", UIParent)
-	vUI:SetSize(Panel, 308, 38)
+	vUI:SetSize(Panel, 232, 38)
 	vUI:SetPoint(Panel, "BOTTOMRIGHT", BagsFrame.Panel, "BOTTOMLEFT", -2, 0)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)
 	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
@@ -76,7 +73,7 @@ function MicroButtons:Load()
 		Button:HookScript("OnLeave", MicroButtonsButtonOnLeave)
 		
 		if (i == 1) then
-			vUI:SetPoint(Button, "TOPLEFT", Panel, 0, 0)
+			vUI:SetPoint(Button, "TOPLEFT", Panel, 0, 20)
 		else
 			vUI:SetPoint(Button, "LEFT", self.Buttons[i-1], "RIGHT", 0, 0)
 		end
