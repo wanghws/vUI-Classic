@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local GetBestMapForUnit = C_Map.GetBestMapForUnit
 local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
@@ -55,6 +53,11 @@ local Update = function(self, elapsed)
 		
 		self.Text:SetFormattedText("|cff%s%.2f|r, |cff%s%.2f|r", Settings["data-text-value-color"], X, Settings["data-text-value-color"], Y)
 		
+		if self.TooltipShown then
+			GameTooltip:ClearLines()
+			OnEnter(self)
+		end
+		
 		self.Elapsed = 0
 	end
 end
@@ -76,4 +79,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Coordinates", OnEnable, OnDisable, Update)
+vUI:AddDataText("Coordinates", OnEnable, OnDisable, Update)

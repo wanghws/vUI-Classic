@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local UnitArmor = UnitArmor
 local UnitLevel = UnitLevel
@@ -40,4 +38,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Armor", OnEnable, OnDisable, Update)
+vUI:AddDataText("Armor", OnEnable, OnDisable, Update)

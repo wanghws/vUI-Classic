@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local UnitAttackPower = UnitAttackPower
 local UnitRangedAttackPower = UnitRangedAttackPower
@@ -54,4 +52,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Attack Power", OnEnable, OnDisable, Update)
+vUI:AddDataText("Attack Power", OnEnable, OnDisable, Update)

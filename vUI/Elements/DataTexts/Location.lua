@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local GetMinimapZoneText = GetMinimapZoneText
 local GetZonePVPInfo = GetZonePVPInfo
@@ -77,4 +75,4 @@ local OnDisable = function(self)
 	self.Text:SetTextColor(1, 1, 1)
 end
 
-DT:SetType("Location", OnEnable, OnDisable, Update)
+vUI:AddDataText("Location", OnEnable, OnDisable, Update)

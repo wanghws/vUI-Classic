@@ -1,4 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local select = select
 local tostring = tostring
@@ -195,85 +195,85 @@ local CreateChatFramePanels = function()
 	local Width = Settings["chat-frame-width"]
 	
 	local LeftChatFrameBottom = CreateFrame("Frame", "vUIChatFrameBottom", UIParent)
-	LeftChatFrameBottom:SetScaledSize(Width, BAR_HEIGHT)
-	LeftChatFrameBottom:SetScaledPoint("BOTTOMLEFT", UIParent, 13, 13)
+	vUI:SetSize(LeftChatFrameBottom, Width, BAR_HEIGHT)
+	vUI:SetPoint(LeftChatFrameBottom, "BOTTOMLEFT", UIParent, 13, 13)
 	LeftChatFrameBottom:SetBackdrop(vUI.BackdropAndBorder)
 	LeftChatFrameBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	LeftChatFrameBottom:SetBackdropBorderColor(0, 0, 0)
 	LeftChatFrameBottom:SetFrameStrata("MEDIUM")
 	
 	LeftChatFrameBottom.Texture = LeftChatFrameBottom:CreateTexture(nil, "OVERLAY")
-	LeftChatFrameBottom.Texture:SetScaledPoint("TOPLEFT", LeftChatFrameBottom, 1, -1)
-	LeftChatFrameBottom.Texture:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameBottom, -1, 1)
-	LeftChatFrameBottom.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	vUI:SetPoint(LeftChatFrameBottom.Texture, "TOPLEFT", LeftChatFrameBottom, 1, -1)
+	vUI:SetPoint(LeftChatFrameBottom.Texture, "BOTTOMRIGHT", LeftChatFrameBottom, -1, 1)
+	LeftChatFrameBottom.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	LeftChatFrameBottom.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
 	local ChatFrameBG = CreateFrame("Frame", "vUIChatFrame", UIParent)
-	ChatFrameBG:SetScaledSize(Width, Settings["chat-frame-height"])
-	ChatFrameBG:SetScaledPoint("BOTTOMLEFT", LeftChatFrameBottom, "TOPLEFT", 0, 2)
+	vUI:SetSize(ChatFrameBG, Width, Settings["chat-frame-height"])
+	vUI:SetPoint(ChatFrameBG, "BOTTOMLEFT", LeftChatFrameBottom, "TOPLEFT", 0, 2)
 	ChatFrameBG:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBG:SetBackdropColor(R, G, B, (Settings["chat-bg-opacity"] / 100))
 	ChatFrameBG:SetBackdropBorderColor(0, 0, 0)
 	ChatFrameBG:SetFrameStrata("LOW")
 	
 	local LeftChatFrameTop = CreateFrame("Frame", "vUIChatFrameTop", UIParent)
-	LeftChatFrameTop:SetScaledSize(Width, BAR_HEIGHT)
-	LeftChatFrameTop:SetScaledPoint("BOTTOM", ChatFrameBG, "TOP", 0, 2)
+	vUI:SetSize(LeftChatFrameTop, Width, BAR_HEIGHT)
+	vUI:SetPoint(LeftChatFrameTop, "BOTTOM", ChatFrameBG, "TOP", 0, 2)
 	LeftChatFrameTop:SetBackdrop(vUI.BackdropAndBorder)
 	LeftChatFrameTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	LeftChatFrameTop:SetBackdropBorderColor(0, 0, 0)
 	LeftChatFrameTop:SetFrameStrata("MEDIUM")
 	
 	LeftChatFrameTop.Texture = LeftChatFrameTop:CreateTexture(nil, "OVERLAY")
-	LeftChatFrameTop.Texture:SetScaledPoint("TOPLEFT", LeftChatFrameTop, 1, -1)
-	LeftChatFrameTop.Texture:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameTop, -1, 1)
-	LeftChatFrameTop.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	vUI:SetPoint(LeftChatFrameTop.Texture, "TOPLEFT", LeftChatFrameTop, 1, -1)
+	vUI:SetPoint(LeftChatFrameTop.Texture, "BOTTOMRIGHT", LeftChatFrameTop, -1, 1)
+	LeftChatFrameTop.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	LeftChatFrameTop.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	-- All this just to achieve an empty center :P
 	local ChatFrameBGTop = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGTop:SetScaledPoint("TOPLEFT", LeftChatFrameTop, -3, 3)
-	ChatFrameBGTop:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameTop, 3, -3)
+	vUI:SetPoint(ChatFrameBGTop, "TOPLEFT", LeftChatFrameTop, -3, 3)
+	vUI:SetPoint(ChatFrameBGTop, "BOTTOMRIGHT", LeftChatFrameTop, 3, -3)
 	ChatFrameBGTop:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBGTop:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	ChatFrameBGTop:SetBackdropBorderColor(0, 0, 0, 0)
 	ChatFrameBGTop:SetFrameStrata("LOW")
 	
 	local ChatFrameBGBottom = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGBottom:SetScaledPoint("TOPLEFT", LeftChatFrameBottom, -3, 3)
-	ChatFrameBGBottom:SetScaledPoint("BOTTOMRIGHT", LeftChatFrameBottom, 3, -3)
+	vUI:SetPoint(ChatFrameBGBottom, "TOPLEFT", LeftChatFrameBottom, -3, 3)
+	vUI:SetPoint(ChatFrameBGBottom, "BOTTOMRIGHT", LeftChatFrameBottom, 3, -3)
 	ChatFrameBGBottom:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBGBottom:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	ChatFrameBGBottom:SetBackdropBorderColor(0, 0, 0, 0)
 	ChatFrameBGBottom:SetFrameStrata("LOW")
 	
 	local ChatFrameBGLeft = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGLeft:SetScaledWidth(4)
-	ChatFrameBGLeft:SetScaledPoint("TOPLEFT", ChatFrameBGTop, 0, 0)
-	ChatFrameBGLeft:SetScaledPoint("BOTTOMLEFT", ChatFrameBGBottom, "TOPLEFT", 0, 0)
+	vUI:SetWidth(ChatFrameBGLeft, 4)
+	vUI:SetPoint(ChatFrameBGLeft, "TOPLEFT", ChatFrameBGTop, 0, 0)
+	vUI:SetPoint(ChatFrameBGLeft, "BOTTOMLEFT", ChatFrameBGBottom, "TOPLEFT", 0, 0)
 	ChatFrameBGLeft:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBGLeft:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	ChatFrameBGLeft:SetBackdropBorderColor(0, 0, 0, 0)
 	ChatFrameBGLeft:SetFrameStrata("LOW")
 	
 	local ChatFrameBGRight = CreateFrame("Frame", nil, ChatFrameBG)
-	ChatFrameBGRight:SetScaledWidth(4)
-	ChatFrameBGRight:SetScaledPoint("TOPRIGHT", ChatFrameBGTop, 0, 0)
-	ChatFrameBGRight:SetScaledPoint("BOTTOMRIGHT", ChatFrameBGBottom, 0, 0)
+	vUI:SetWidth(ChatFrameBGRight, 4)
+	vUI:SetPoint(ChatFrameBGRight, "TOPRIGHT", ChatFrameBGTop, 0, 0)
+	vUI:SetPoint(ChatFrameBGRight, "BOTTOMRIGHT", ChatFrameBGBottom, 0, 0)
 	ChatFrameBGRight:SetBackdrop(vUI.BackdropAndBorder)
 	ChatFrameBGRight:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	ChatFrameBGRight:SetBackdropBorderColor(0, 0, 0, 0)
 	ChatFrameBGRight:SetFrameStrata("LOW")
 	
 	local OuterOutline = CreateFrame("Frame", nil, ChatFrameBG)
-	OuterOutline:SetScaledPoint("TOPLEFT", ChatFrameBGTop, 0, 0)
-	OuterOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBGBottom, 0, 0)
+	vUI:SetPoint(OuterOutline, "TOPLEFT", ChatFrameBGTop, 0, 0)
+	vUI:SetPoint(OuterOutline, "BOTTOMRIGHT", ChatFrameBGBottom, 0, 0)
 	OuterOutline:SetBackdrop(vUI.Outline)
 	OuterOutline:SetBackdropBorderColor(0, 0, 0)
 	
 	local InnerOutline = CreateFrame("Frame", nil, ChatFrameBG)
-	InnerOutline:SetScaledPoint("TOPLEFT", ChatFrameBG, 0, 0)
-	InnerOutline:SetScaledPoint("BOTTOMRIGHT", ChatFrameBG, 0, 0)
+	vUI:SetPoint(InnerOutline, "TOPLEFT", ChatFrameBG, 0, 0)
+	vUI:SetPoint(InnerOutline, "BOTTOMRIGHT", ChatFrameBG, 0, 0)
 	InnerOutline:SetBackdrop(vUI.Outline)
 	InnerOutline:SetBackdropBorderColor(0, 0, 0)
 end
@@ -281,10 +281,16 @@ end
 local UpdateChatFrameSize = function()
 	local Width = Settings["chat-frame-width"]
 	
-	vUIChatFrame:SetScaledSize(Width, Settings["chat-frame-height"])
+	vUI:SetSize(vUIChatFrame, Width, Settings["chat-frame-height"])
+	vUI:SetSize(vUIChatFrameTop, Width, BAR_HEIGHT)
+	vUI:SetSize(vUIChatFrameBottom, Width, BAR_HEIGHT)
 	
-	vUIChatFrameTop:SetScaledSize(Width, BAR_HEIGHT)
-	vUIChatFrameBottom:SetScaledSize(Width, BAR_HEIGHT)
+	-- Update data text width
+	local DT = vUI:GetModule("DataText")
+	
+	vUI:SetWidth(DT:GetAnchor("Chat-Left"), Width / 3)
+	vUI:SetWidth(DT:GetAnchor("Chat-Middle"), Width / 3)
+	vUI:SetWidth(DT:GetAnchor("Chat-Right"), Width / 3)
 end
 
 local Kill = function(object)
@@ -357,7 +363,7 @@ local UpdateEditBoxColor = function(editbox)
 		editbox.header:SetText(HeaderText)
 	end
 	
-	editbox.HeaderBackdrop:SetScaledWidth(editbox.header:GetWidth() + 14)
+	vUI:SetWidth(editbox.HeaderBackdrop, editbox.header:GetWidth() + 14)
 end
 
 local KillTextures = {
@@ -384,32 +390,12 @@ local KillTextures = {
 }
 
 local OnEditFocusLost = function(self)
-	if (Settings["experience-position"] == "CHATFRAME") then
-		vUIExperienceBar:Show()
-		vUIChatFrameBottom:Hide()
-	end
-	
-	if (Settings["reputation-position"] == "CHATFRAME") then
-		vUI:GetModule("Reputation"):Show()
-		vUIChatFrameBottom:Hide()
-	end
-	
-	if (Settings["experience-position"] ~= "CHATFRAME" or Settings["reputation-position"] ~= "CHATFRAME") then
-		vUIChatFrameBottom:Show()
-	end
+	vUIChatFrameBottom:Show()
 	
 	self:Hide()
 end
 
 local OnEditFocusGained = function(self)
-	if (Settings["experience-position"] == "CHATFRAME") then
-		vUIExperienceBar:Hide()
-	end
-	
-	if (Settings["reputation-position"] == "CHATFRAME") then
-		vUI:GetModule("Reputation"):Hide()
-	end
-	
 	vUIChatFrameBottom:Hide()
 end
 
@@ -431,11 +417,11 @@ local JumpButtonOnMouseUp = function(self)
 end
 
 local JumpButtonOnEnter = function(self)
-	self.Arrow:SetVertexColorHex("FFFFFF")
+	self.Arrow:SetVertexColor(1, 1, 1)
 end
 
 local JumpButtonOnLeave = function(self)
-	self.Arrow:SetVertexColorHex("00CC66")
+	self.Arrow:SetVertexColor(vUI:HexToRGB("00CC66"))
 end
 
 local JumpButtonOnFinished = function(self)
@@ -485,16 +471,16 @@ local StyleChatFrame = function(frame)
 	Tab:HookScript("OnEnter", TabOnEnter)
 	Tab:HookScript("OnLeave", TabOnLeave)
 	
-	TabText:SetFontInfo(Settings["chat-tab-font"], Settings["chat-tab-font-size"], Settings["chat-tab-font-flags"])
+	vUI:SetFontInfo(TabText, Settings["chat-tab-font"], Settings["chat-tab-font-size"], Settings["chat-tab-font-flags"])
 	--TabText.SetFont = function() end
 	
-	TabText:SetTextColorHex(Settings["chat-tab-font-color"])
+	TabText:SetTextColor(vUI:HexToRGB(Settings["chat-tab-font-color"]))
 	TabText._SetTextColor = TabText.SetTextColor
 	TabText.SetTextColor = function() end
 	
 	if Tab.glow then
-		Tab.glow:SetScaledPoint("CENTER", Tab, 0, 1)
-		Tab.glow:SetScaledWidth(TabText:GetWidth() + 6)
+		vUI:SetPoint(Tab.glow, "CENTER", Tab, 0, 1)
+		vUI:SetWidth(Tab.glow, TabText:GetWidth() + 6)
 	end
 	
 	frame:SetFrameStrata("MEDIUM")
@@ -502,7 +488,7 @@ local StyleChatFrame = function(frame)
 	frame:SetClampedToScreen(false)
 	frame:SetFading(false)
 	frame:SetScript("OnMouseWheel", OnMouseWheel)
-	frame:SetScaledSize(vUIChatFrame:GetWidth() - 8, vUIChatFrame:GetHeight() - 8)
+	vUI:SetSize(frame, vUIChatFrame:GetWidth() - 8, vUIChatFrame:GetHeight() - 8)
 	frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 	frame:SetFrameStrata("MEDIUM")
 	frame:SetJustifyH("LEFT")
@@ -517,9 +503,9 @@ local StyleChatFrame = function(frame)
 	end
 	
 	EditBox:ClearAllPoints()
-	EditBox:SetScaledPoint("TOPLEFT", vUIChatFrameBottom, 5, -2)
-	EditBox:SetScaledPoint("BOTTOMRIGHT", vUIChatFrameBottom, -1, 2)
-	EditBox:SetFontInfo(Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
+	vUI:SetPoint(EditBox, "TOPLEFT", vUIChatFrameBottom, 5, -2)
+	vUI:SetPoint(EditBox, "BOTTOMRIGHT", vUIChatFrameBottom, -1, 2)
+	vUI:SetFontInfo(EditBox, Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
 	EditBox:SetAltArrowKeyMode(false)
 	EditBox:Hide()
 	EditBox:HookScript("OnEditFocusLost", OnEditFocusLost)
@@ -529,30 +515,30 @@ local StyleChatFrame = function(frame)
 	EditBox.HeaderBackdrop:SetBackdrop(vUI.BackdropAndBorder)
 	EditBox.HeaderBackdrop:SetBackdropColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	EditBox.HeaderBackdrop:SetBackdropBorderColor(0, 0, 0)
-	EditBox.HeaderBackdrop:SetScaledSize(60, 22)
-	EditBox.HeaderBackdrop:SetScaledPoint("LEFT", vUIChatFrameBottom, 0, 0)
+	vUI:SetSize(EditBox.HeaderBackdrop, 60, 22)
+	vUI:SetPoint(EditBox.HeaderBackdrop, "LEFT", vUIChatFrameBottom, 0, 0)
 	EditBox.HeaderBackdrop:SetFrameStrata("HIGH")
 	EditBox.HeaderBackdrop:SetFrameLevel(1)
 	
 	EditBox.HeaderBackdrop.Tex = EditBox.HeaderBackdrop:CreateTexture(nil, "BORDER")
-	EditBox.HeaderBackdrop.Tex:SetScaledPoint("TOPLEFT", EditBox.HeaderBackdrop, 1, -1)
-	EditBox.HeaderBackdrop.Tex:SetScaledPoint("BOTTOMRIGHT", EditBox.HeaderBackdrop, -1, 1)
-	EditBox.HeaderBackdrop.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	vUI:SetPoint(EditBox.HeaderBackdrop.Tex, "TOPLEFT", EditBox.HeaderBackdrop, 1, -1)
+	vUI:SetPoint(EditBox.HeaderBackdrop.Tex, "BOTTOMRIGHT", EditBox.HeaderBackdrop, -1, 1)
+	EditBox.HeaderBackdrop.Tex:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	EditBox.HeaderBackdrop.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	EditBox.Backdrop = CreateFrame("Frame", nil, EditBox)
 	EditBox.Backdrop:SetBackdrop(vUI.BackdropAndBorder)
 	EditBox.Backdrop:SetBackdropColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	EditBox.Backdrop:SetBackdropBorderColor(0, 0, 0)
-	EditBox.Backdrop:SetScaledPoint("TOPLEFT", EditBox.HeaderBackdrop, "TOPRIGHT", 2, 0)
-	EditBox.Backdrop:SetScaledPoint("BOTTOMRIGHT", vUIChatFrameBottom, 0, 0)
+	vUI:SetPoint(EditBox.Backdrop, "TOPLEFT", EditBox.HeaderBackdrop, "TOPRIGHT", 2, 0)
+	vUI:SetPoint(EditBox.Backdrop, "BOTTOMRIGHT", vUIChatFrameBottom, 0, 0)
 	EditBox.Backdrop:SetFrameStrata("HIGH")
 	EditBox.Backdrop:SetFrameLevel(1)
 	
 	EditBox.Backdrop.Tex = EditBox.Backdrop:CreateTexture(nil, "BORDER")
-	EditBox.Backdrop.Tex:SetScaledPoint("TOPLEFT", EditBox.Backdrop, 1, -1)
-	EditBox.Backdrop.Tex:SetScaledPoint("BOTTOMRIGHT", EditBox.Backdrop, -1, 1)
-	EditBox.Backdrop.Tex:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	vUI:SetPoint(EditBox.Backdrop.Tex, "TOPLEFT", EditBox.Backdrop, 1, -1)
+	vUI:SetPoint(EditBox.Backdrop.Tex, "BOTTOMRIGHT", EditBox.Backdrop, -1, 1)
+	EditBox.Backdrop.Tex:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	EditBox.Backdrop.Tex:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
 	local AnimGroup = CreateAnimationGroup(EditBox.Backdrop.Tex)
@@ -563,14 +549,14 @@ local StyleChatFrame = function(frame)
 	EditBox.Backdrop.Change:SetDuration(0.2)
 	
 	EditBox.header:ClearAllPoints()
-	EditBox.header:SetScaledPoint("CENTER", EditBox.HeaderBackdrop, 0, 0)
-	EditBox.header:SetFontInfo(Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
+	vUI:SetPoint(EditBox.header, "CENTER", EditBox.HeaderBackdrop, 0, 0)
+	vUI:SetFontInfo(EditBox.header, Settings["chat-font"], Settings["chat-font-size"], Settings["chat-font-flags"])
 	EditBox.header:SetJustifyH("CENTER")
 	
 	-- Scroll to bottom
 	local JumpButton = CreateFrame("Frame", nil, frame)
-	JumpButton:SetScaledSize(20, 20)
-	JumpButton:SetScaledPoint("BOTTOMRIGHT", frame, 0, 0)
+	vUI:SetSize(JumpButton, 20, 20)
+	vUI:SetPoint(JumpButton, "BOTTOMRIGHT", frame, 0, 0)
 	JumpButton:SetBackdrop(vUI.BackdropAndBorder)
 	JumpButton:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	JumpButton:SetBackdropBorderColor(0, 0, 0)
@@ -582,16 +568,16 @@ local StyleChatFrame = function(frame)
 	JumpButton:Hide()
 	
 	JumpButton.Texture = JumpButton:CreateTexture(nil, "ARTWORK")
-	JumpButton.Texture:SetScaledPoint("TOPLEFT", JumpButton, 1, -1)
-	JumpButton.Texture:SetScaledPoint("BOTTOMRIGHT", JumpButton, -1, 1)
-	JumpButton.Texture:SetTexture(Media:GetTexture(Settings["ui-header-texture"]))
+	vUI:SetPoint(JumpButton.Texture, "TOPLEFT", JumpButton, 1, -1)
+	vUI:SetPoint(JumpButton.Texture, "BOTTOMRIGHT", JumpButton, -1, 1)
+	JumpButton.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	JumpButton.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	JumpButton.Arrow = JumpButton:CreateTexture(nil, "OVERLAY")
-	JumpButton.Arrow:SetScaledPoint("CENTER", JumpButton, 0, 0)
-	JumpButton.Arrow:SetScaledSize(16, 16)
-	JumpButton.Arrow:SetTexture(Media:GetTexture("Arrow Down"))
-	JumpButton.Arrow:SetVertexColorHex("00CC66")
+	vUI:SetPoint(JumpButton.Arrow, "CENTER", JumpButton, 0, 0)
+	vUI:SetSize(JumpButton.Arrow, 16, 16)
+	JumpButton.Arrow:SetTexture(Assets:GetTexture("Arrow Down"))
+	JumpButton.Arrow:SetVertexColor(vUI:HexToRGB("00CC66"))
 	
 	JumpButton.Fade = CreateAnimationGroup(JumpButton)
 	
@@ -634,15 +620,15 @@ local MoveChatFrames = function()
 	for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
 		
-		Frame:SetScaledSize(vUIChatFrame:GetWidth() - 8, vUIChatFrame:GetHeight() - 8)
+		vUI:SetSize(Frame, vUIChatFrame:GetWidth() - 8, vUIChatFrame:GetHeight() - 8)
 		Frame:SetFrameLevel(vUIChatFrame:GetFrameLevel() + 1)
 		Frame:SetFrameStrata("MEDIUM")
 		Frame:SetJustifyH("LEFT")
 		
 		if (Frame:GetID() == 1) then
 			Frame:ClearAllPoints()
-			Frame:SetScaledPoint("TOPLEFT", vUIChatFrame, 4, -4)
-			Frame:SetScaledPoint("BOTTOMRIGHT", vUIChatFrame, -4, 4)
+			vUI:SetPoint(Frame, "TOPLEFT", vUIChatFrame, 4, -4)
+			vUI:SetPoint(Frame, "BOTTOMRIGHT", vUIChatFrame, -4, 4)
 		end
 		
 		if (not Frame.isLocked) then
@@ -651,7 +637,7 @@ local MoveChatFrames = function()
 		
 		FCF_SetChatWindowFontSize(nil, Frame, Settings["chat-font-size"])
 		
-		local Font, IsPixel = Media:GetFont(Settings["chat-font"])
+		local Font, IsPixel = Assets:GetFont(Settings["chat-font"])
 		
 		if IsPixel then
 			Frame:SetFont(Font, Settings["chat-font-size"], "MONOCHROME, OUTLINE")
@@ -664,9 +650,9 @@ local MoveChatFrames = function()
 	end
 	
 	GeneralDockManager:ClearAllPoints()
-	GeneralDockManager:SetScaledWidth(FRAME_WIDTH + 16)
-	--GeneralDockManager:SetScaledPoint("CENTER", vUIChatFrameTop, 0, 6)
-	GeneralDockManager:SetScaledPoint("LEFT", vUIChatFrameTop, 0, 6)
+	vUI:SetWidth(GeneralDockManager, FRAME_WIDTH + 16)
+	--vUI:SetPoint(GeneralDockManager, "CENTER", vUIChatFrameTop, 0, 6)
+	vUI:SetPoint(GeneralDockManager, "LEFT", vUIChatFrameTop, 0, 6)
 	GeneralDockManager:SetFrameStrata("MEDIUM")
 	
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
@@ -796,11 +782,6 @@ local Install = function()
 	FCF_SelectDockFrame(ChatFrame1)
 end
 
-RAID_CLASS_COLORS["SHAMAN"].r = 0
-RAID_CLASS_COLORS["SHAMAN"].g = 0.44
-RAID_CLASS_COLORS["SHAMAN"].b = 0.87
-RAID_CLASS_COLORS["SHAMAN"].colorStr = "ff0070DE"
-
 local EventFrame = CreateFrame("Frame")
 EventFrame:RegisterEvent("PLAYER_LOGIN")
 EventFrame:SetScript("OnEvent", function(self, event)
@@ -903,7 +884,7 @@ local UpdateChatFont = function()
 
 		FCF_SetChatWindowFontSize(nil, Frame, Settings["chat-font-size"])
 		
-		local Font, IsPixel = Media:GetFont(Settings["chat-font"])
+		local Font, IsPixel = Assets:GetFont(Settings["chat-font"])
 		
 		if IsPixel then
 			Frame:SetFont(Font, Settings["chat-font-size"], "MONOCHROME, OUTLINE")
@@ -921,7 +902,7 @@ local UpdateChatTabFont = function()
 
 	for i = 1, NUM_CHAT_WINDOWS do
 		local TabText = _G["ChatFrame" .. i .. "TabText"]
-		local Font, IsPixel = Media:GetFont(Settings["chat-tab-font"])
+		local Font, IsPixel = Assets:GetFont(Settings["chat-tab-font"])
 		
 		TabText:_SetTextColor(R, G, B)
 		
@@ -976,14 +957,14 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("chat-enable-friend-links", Settings["chat-enable-friend-links"], Language["Enable Friend Tag Links"], "Enable friend tag links in the chat frame")
 	
 	Right:CreateHeader(Language["Chat Frame Font"])
-	Right:CreateDropdown("chat-font", Settings["chat-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame", UpdateChatFont, "Font")
+	Right:CreateDropdown("chat-font", Settings["chat-font"], Assets:GetFontList(), Language["Font"], "Set the font of the chat frame", UpdateChatFont, "Font")
 	Right:CreateSlider("chat-font-size", Settings["chat-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame", UpdateChatFont)
-	Right:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame", UpdateChatFont)
+	Right:CreateDropdown("chat-font-flags", Settings["chat-font-flags"], Assets:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame", UpdateChatFont)
 	
 	Right:CreateHeader(Language["Tab Font"])
-	Right:CreateDropdown("chat-tab-font", Settings["chat-tab-font"], Media:GetFontList(), Language["Font"], "Set the font of the chat frame tabs", UpdateChatTabFont, "Font")
+	Right:CreateDropdown("chat-tab-font", Settings["chat-tab-font"], Assets:GetFontList(), Language["Font"], "Set the font of the chat frame tabs", UpdateChatTabFont, "Font")
 	Right:CreateSlider("chat-tab-font-size", Settings["chat-tab-font-size"], 8, 18, 1, "Font Size", "Set the font size of the chat frame tabs", UpdateChatTabFont)
-	Right:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Media:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
+	Right:CreateDropdown("chat-tab-font-flags", Settings["chat-tab-font-flags"], Assets:GetFlagsList(), Language["Font Flags"], "Set the font flags of the chat frame tabs", UpdateChatTabFont)
 	Right:CreateColorSelection("chat-tab-font-color", Settings["chat-tab-font-color"], Language["Font Color"], "Set the color of the chat frame tabs", UpdateChatTabFont)
 	Right:CreateColorSelection("chat-tab-font-color-mouseover", Settings["chat-tab-font-color-mouseover"], Language["Font Color Mouseover"], "Set the color of the chat frame tab while mousing over it")
 end)

@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local Slots = {1, 3, 5, 9, 10, 6, 7, 8, 16, 17, 18}
 local GetRepairAllCost = GetRepairAllCost
@@ -21,14 +19,14 @@ local OnEnter = function(self)
 	for i = 1, #Slots do
 		Current, Max = GetInventoryItemDurability(Slots[i])
 		
-		HasItem, HasCooldown, RepairCost = ScanTooltip:SetInventoryItem("player", Slots[i])
-		
-		if (HasItem and RepairCost) then
-			TotalCost = TotalCost + RepairCost
-		end
-		
 		if Current then
 			GameTooltip:AddDoubleLine(GetInventoryItemLink("player", Slots[i]), format("%s%%", floor(Current / Max * 100)))
+			
+			HasItem, HasCooldown, RepairCost = ScanTooltip:SetInventoryItem("player", Slots[i], true)
+			
+			if (HasItem and RepairCost) then
+				TotalCost = TotalCost + RepairCost
+			end
 		end
 	end
 	
@@ -90,4 +88,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Durability", OnEnable, OnDisable, Update)
+vUI:AddDataText("Durability", OnEnable, OnDisable, Update)

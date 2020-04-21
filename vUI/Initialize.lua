@@ -2,8 +2,8 @@ local AddOn, Namespace = ...
 local tonumber = tonumber
 local tostring = tostring
 local select = select
+local date = date
 local sub = string.sub
-local len = string.len
 local format = string.format
 local floor = math.floor
 local match = string.match
@@ -12,10 +12,24 @@ local min = math.min
 local max = math.max
 local gsub = gsub
 local type = type
-local UnitLevel = UnitLevel
-local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local vUI = CreateFrame("Frame", nil, UIParent)
+
+-- Data storage
+local Assets = {}
+local Settings = {}
+local Defaults = {}
+
+-- GUI
 local GUI = CreateFrame("Frame", nil, UIParent)
+
+GUI.Queue = {}
+
+function GUI:AddOptions(func)
+	if (type(func) == "function") then
+		tinsert(self.Queue, func)
+	end
+end
+
+-- Language
 local Language = {}
 
 local Index = function(self, key)
@@ -24,31 +38,26 @@ end
 
 setmetatable(Language, {__index = Index})
 
--- Some Data
-vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
-vUI.GameVersion = GetBuildInfo()
-vUI.TOCVersion = select(4, GetBuildInfo())
-vUI.UserName = UnitName("player")
-vUI.UserClass = select(2, UnitClass("player"))
-vUI.UserClassName = UnitClass("player")
-vUI.UserRace = UnitRace("player")
-vUI.UserRealm = GetRealmName()
-vUI.UserFaction = UnitFactionGroup("player")
-vUI.UserLocale = GetLocale()
-vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
-vUI.UserGoldKey = format("%s:%s:%s", vUI.UserName, vUI.UserRealm, vUI.UserFaction)
+-- Core functions and data
+local vUI = CreateFrame("Frame", nil, UIParent)
 
 vUI.Modules = {}
+vUI.Plugins = {}
 
-local Core = {
-	[1] = vUI, -- Functions/Constants
-	[2] = GUI, -- Settings GUI
-	[3] = Language, -- Language
-	[4] = {}, -- Media
-	[5] = {}, -- Settings
-	[6] = {}, -- Defaults
-}
+-- Some constants
+vUI.UIVersion = GetAddOnMetadata("vUI", "Version")
+vUI.UserName = UnitName("player")
+vUI.UserClass = select(2, UnitClass("player"))
+vUI.UserRace = UnitRace("player")
+vUI.UserRealm = GetRealmName()
+vUI.UserLocale = GetLocale()
+vUI.UserProfileKey = format("%s:%s", vUI.UserName, vUI.UserRealm)
 
+if (vUI.UserLocale == "enGB") then
+	vUI.UserLocale = "enUS"
+end
+
+-- Modules and plugins
 local Hook = function(self, global, hook)
 	if _G[global] then
 		local Func
@@ -65,14 +74,6 @@ local Hook = function(self, global, hook)
 	end
 end
 
-local ModuleAddOptions = function(self, func)
-	local Left, Right = GUI:CreateWindow(self.Name)
-	
-	if func then
-		func(self, Left, Right)
-	end
-end
-
 function vUI:NewModule(name)
 	if self.Modules[name] then
 		return self.Modules[name]
@@ -83,7 +84,6 @@ function vUI:NewModule(name)
 	Module.Name = name
 	Module.Loaded = false
 	Module.Hook = Hook
-	Module.AddOptions = ModuleAddOptions
 	
 	self.Modules[name] = Module
 	self.Modules[#self.Modules + 1] = Module
@@ -104,7 +104,7 @@ function vUI:LoadModule(name)
 	
 	local Module = self.Modules[name]
 	
-	if (not Module.Loaded) and Module.Load then
+	if ((not Module.Loaded) and Module.Load) then
 		Module:Load()
 		Module.Loaded = true
 	end
@@ -118,55 +118,87 @@ function vUI:LoadModules()
 	end
 end
 
-if (vUI.UserLocale == "enGB") then
-	vUI.UserLocale = "enUS"
-end
-
-function vUI:VARIABLES_LOADED(event)
-	if (not GetCVar("useUIScale")) then
-		SetCVar("useUIScale", 1)
+function vUI:NewPlugin(name)
+	if self.Plugins[name] then
+		return self.Plugins[name]
 	end
 	
-	Core[6]["ui-scale"] = self:GetSuggestedScale()
+	local Plugin = CreateFrame("Frame", name, UIParent)
+	local Name, Title, Notes = GetAddOnInfo(name)
+	local Author = GetAddOnMetadata(name, "Author")
+	local Version = GetAddOnMetadata(name, "Version")
 	
-	self:CreateProfileData()
-	self:UpdateProfileList()
-	self:ApplyProfile(self:GetActiveProfileName())
+	Plugin.Name = Name
+	Plugin.Title = Title
+	Plugin.Notes = Notes
+	Plugin.Author = Author
+	Plugin.Version = Version
+	Plugin.Loaded = false
+	Plugin.Hook = Hook
 	
-	self:SetScale(Core[5]["ui-scale"])
-	self:UpdateoUFColors()
+	self.Plugins[name] = Plugin
+	self.Plugins[#self.Plugins + 1] = Plugin
 	
-	-- Load the GUI
-	GUI:Create()
-	GUI:RunQueue()
-	
-	-- Show the default window, if one was found
-	if GUI.DefaultWindow then
-		GUI:ShowWindow(GUI.DefaultWindow)
+	return Plugin
+end
+
+function vUI:GetPlugin(name)
+	if self.Plugins[name] then
+		return self.Plugins[name]
+	end
+end
+
+function vUI:LoadPlugin(name)
+	if (not self.Plugins[name]) then
+		return
 	end
 	
-	self:UnregisterEvent(event)
-end
-
-function vUI:PLAYER_ENTERING_WORLD(event)
-	self:LoadModules()
-	self:UnregisterEvent(event)
-end
-
-GUI.Queue = {}
-
-function GUI:CreateWindow(name, func)
-	-- add to a table by name where the function is run when the window is selected. After this and AddToWindow are run, flag for a sort
-end
-
-function GUI:AddToWindow(name, func)
+	local Plugin = self.Plugins[name]
 	
+	if ((not Plugin.Loaded) and Plugin.Load) then
+		Plugin:Load()
+		Plugin.Loaded = true
+	end
 end
 
-function GUI:AddOptions(func)
-	if (type(func) == "function") then
-		tinsert(self.Queue, func)
+function vUI:LoadPlugins()
+	for i = 1, #self.Plugins do
+		if self.Plugins[i].Load then
+			self.Plugins[i]:Load()
+		end
 	end
+end
+
+function vUI:AddPluginInfo()
+	if (#self.Plugins == 0) then
+		return
+	end
+	
+	local Left, Right = GUI:CreateWindow("Plugins")
+	local Anchor
+	
+	for i = 1, #self.Plugins do
+		if ((i % 2) == 0) then
+			Anchor = Right
+		else
+			Anchor = Left
+		end
+		
+		Anchor:CreateHeader(self.Plugins[i].Title)
+		
+		Anchor:CreateDoubleLine(Language["Author"], self.Plugins[i].Author)
+		Anchor:CreateDoubleLine(Language["Version"], self.Plugins[i].Version)
+		Anchor:CreateLine(" ")
+		Anchor:CreateMessage(self.Plugins[i].Notes)
+	end
+	
+	Left:CreateFooter()
+	Right:CreateFooter()
+end
+
+-- NYI, Concept list for my preferred CVars, and those important to the UI
+function vUI:SetCVars()
+	SetCVar("countdownForCooldowns", 1)
 end
 
 --[[
@@ -176,17 +208,14 @@ end
 	https://www.wowinterface.com/forums/showthread.php?t=31813
 --]]
 
-local Resolution = GetCurrentResolution()
 local ScreenHeight
 local Scale = 1
 
 function vUI:UpdateScreenHeight()
 	if (GetCVar("gxMaximize") == "1") then -- A fullscreen resolution
 		self.ScreenResolution = GetCVar("gxFullscreenResolution")
-		self.IsFullScreen = 1
 	else -- Windowed
 		self.ScreenResolution = GetCVar("gxWindowedResolution")
-		self.IsFullScreen = 0
 	end
 	
 	ScreenHeight = tonumber(match(self.ScreenResolution, "%d+x(%d+)"))
@@ -198,11 +227,12 @@ local GetScale = function(x)
 	return floor(Scale * x + 0.5)
 end
 
-vUI.GetScale = GetScale
+function vUI:GetScale(x)
+	return GetScale(x)
+end
 
 function vUI:SetScale(x)
-	x = max(0.4, x)
-	x = min(1.2, x)
+	x = min(1.2, max(0.4, x))
 	
 	SetCVar("uiScale", x)
 	
@@ -222,81 +252,26 @@ function vUI:GetSuggestedScale()
 	return (768 / ScreenHeight)
 end
 
-function vUI:IsClassic()
-	return self.TOCVersion <= 20000 and true or false
-end
-
-function vUI:ShortValue(num)
-	if (num >= 1000000) then
-		return format("%.2fm", num / 1000000)
-	elseif (num >= 10000) then
-		return format("%dk", num / 1000)
-	else
-		return num
-	end
-end
-
-function vUI:Comma(number)
-	if (not number) then
-		return
-	end
-	
-	local Number = format("%.0f", floor(number + 0.5))
-   	local Left, Number, Right = match(Number, "^([^%d]*%d)(%d+)(.-)$")
-	
-	return Left and Left .. reverse(gsub(reverse(Number), "(%d%d%d)", "%1,")) or number
-end
-
-function vUI:UnitDifficultyColor(unit)
-	local T = 5
-	
-	if (not Core[T]) then
-		T = 6
-	end
-	
-	if (not Core[T]["color-standard"]) then
-		return
-	end
-	
-	local Level = UnitLevel("player")
-	
-	if (Level == -1) then
-		return "|cFF" .. Core[T]["color-impossible"]
-	end
-	
-	local Difference = UnitLevel(unit) - Level
-	
-	if (Difference >= 5) then
-		return "|cFF" .. Core[T]["color-impossible"]
-	elseif (Difference >= 3) then
-		return "|cFF" .. Core[T]["color-verydifficult"]
-	elseif (Difference >= -2) then
-		return "|cFF" .. Core[T]["color-difficult"]
-	elseif (-Difference <= GetQuestGreenRange()) then
-		return "|cFF" .. Core[T]["color-standard"]
-	else
-		return "|cFF" .. Core[T]["color-trivial"]
-	end
-end
-
+-- Backdrops
 vUI.Backdrop = {
-	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
+	bgFile = "Interface\\AddOns\\vUI\\Assets\\Textures\\Blank.tga",
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 
 vUI.BackdropAndBorder = {
-	bgFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
-	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
+	bgFile = "Interface\\AddOns\\vUI\\Assets\\Textures\\Blank.tga",
+	edgeFile = "Interface\\AddOns\\vUI\\Assets\\Textures\\Blank.tga",
 	edgeSize = 1,
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 
 vUI.Outline = {
-	edgeFile = "Interface\\AddOns\\vUI\\Media\\Textures\\Blank.tga",
+	edgeFile = "Interface\\AddOns\\vUI\\Assets\\Textures\\Blank.tga",
 	edgeSize = 1,
 	insets = {left = 0, right = 0, top = 0, bottom = 0},
 }
 
+-- Tools
 vUI.TimerPool = {}
 
 local TimerOnFinished = function(self)
@@ -329,11 +304,7 @@ function vUI:HexToRGB(hex)
 		return
 	end
 	
-	if (len(hex) == 8) then
-		return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255, tonumber("0x"..sub(hex, 7, 8)) / 255
-	else
-		return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
-	end
+	return tonumber("0x"..sub(hex, 1, 2)) / 255, tonumber("0x"..sub(hex, 3, 4)) / 255, tonumber("0x"..sub(hex, 5, 6)) / 255
 end
 
 function vUI:RGBToHex(r, g, b)
@@ -354,6 +325,46 @@ function vUI:FormatTime(seconds)
 	return format("%.1fs", seconds)
 end
 
+function vUI:ShortValue(num)
+	if (num >= 1000000) then
+		return format("%.2fm", num / 1000000)
+	elseif (num >= 1000) then
+		return format("%dk", num / 1000)
+	else
+		return num
+	end
+end
+
+function vUI:Comma(number)
+	if (not number) then
+		return
+	end
+	
+	local Number = format("%.0f", floor(number + 0.5))
+   	local Left, Number, Right = match(Number, "^([^%d]*%d)(%d+)(.-)$")
+	
+	return Left and Left .. reverse(gsub(reverse(Number), "(%d%d%d)", "%1,")) or number
+end
+
+function vUI:GetCurrentDate()
+	return date("%Y-%m-%d %I:%M %p")
+end
+
+-- If the date given is today, change "2019-07-24 2:06 PM" to "Today 2:06 PM"
+function vUI:IsToday(s)
+	local Date, Time = match(s, "(%d+%-%d+%-%d+)%s(.+)")
+	
+	if (not Date or not Time) then
+		return s
+	end
+	
+	if (Date == date("%Y-%m-%d")) then
+		s = format("%s %s", Language["Today"], Time)
+	end
+	
+	return s
+end
+
 function vUI:Reset()
 	-- Create a prompt
 	--vUIData = nil
@@ -362,6 +373,8 @@ function vUI:Reset()
 	
 	ReloadUI()
 end
+
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 
 local NewPrint = function(...)
 	local NumArgs = select("#", ...)
@@ -397,34 +410,26 @@ end
 setprinthandler(NewPrint)
 
 function vUI:print(...)
-	if Core[5]["ui-widget-color"] then
-		print("|cFF" .. Core[5]["ui-widget-color"] .. "vUI|r:", ...)
+	if Settings["ui-widget-color"] then
+		print("|cFF" .. Settings["ui-widget-color"] .. "vUI|r:", ...)
 	else
-		print("|cFF" .. Core[6]["ui-widget-color"] .. "vUI|r:", ...)
+		print("|cFF" .. Defaults["ui-widget-color"] .. "vUI|r:", ...)
 	end
 end
 
-function Namespace:get(key)
-	if (not key) then
-		return Core[1], Core[2], Core[3], Core[4], Core[5], Core[6]
-	else
-		return Core[key]
-	end
+function vUI:SetHeight(object, height)
+	object:SetHeight(GetScale(height))
 end
 
-local SetScaledHeight = function(self, height)
-	self:SetHeight(GetScale(height))
+function vUI:SetWidth(object, width)
+	object:SetWidth(GetScale(width))
 end
 
-local SetScaledWidth = function(self, width)
-	self:SetWidth(GetScale(width))
+function vUI:SetSize(object, width, height)
+	object:SetSize(GetScale(width), GetScale(height or width))
 end
 
-local SetScaledSize = function(self, width, height)
-	self:SetSize(GetScale(width), GetScale(height or width))
-end
-
-local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
+function vUI:SetPoint(object, anchor1, parent, anchor2, x, y)
 	if (type(parent) == "number") then
 		parent = GetScale(parent)
 	end
@@ -441,137 +446,58 @@ local SetScaledPoint = function(self, anchor1, parent, anchor2, x, y)
 		y = GetScale(y)
 	end
 	
-	self:SetPoint(anchor1, parent, anchor2, x, y)
+	object:SetPoint(anchor1, parent, anchor2, x, y)
 end
 
-local SetBackdropColorHex = function(self, hex)
-	if hex then
-		self:SetBackdropColor(vUI:HexToRGB(hex))
-	end
-end
-
-local SetBackdropBorderColorHex = function(self, hex)
-	if hex then
-		self:SetBackdropBorderColor(vUI:HexToRGB(hex))
-	end
-end
-
-local SetTextColorHex = function(self, hex)
-	if hex then
-		self:SetTextColor(vUI:HexToRGB(hex))
-	end
-end
-
-local SetVertexColorHex = function(self, hex)
-	if hex then
-		self:SetVertexColor(vUI:HexToRGB(hex))
-	end
-end
-
-local SetStatusBarColorHex = function(self, hex)
-	if hex then
-		self:SetStatusBarColor(vUI:HexToRGB(hex))
-	end
-end
-
-local SetFontInfo = function(self, font, size, flags)
-	local Font, IsPixel = Core[4]:GetFont(font)
+function vUI:SetFontInfo(object, font, size, flags)
+	local Font, IsPixel = Assets:GetFont(font)
 	
 	if IsPixel then
-		self:SetFont(Font, size, "MONOCHROME, OUTLINE")
-		self:SetShadowColor(0, 0, 0, 0)
+		object:SetFont(Font, size, "MONOCHROME, OUTLINE")
+		object:SetShadowColor(0, 0, 0, 0)
 	else
-		self:SetFont(Font, size, flags)
-		self:SetShadowColor(0, 0, 0)
-		self:SetShadowOffset(1, -1)
+		object:SetFont(Font, size, flags)
+		object:SetShadowColor(0, 0, 0)
+		object:SetShadowOffset(1, -1)
 	end
 end
 
-local SetShadowed = function(self, flag)
-	if (flag and not self.Shadow) then
-		local Shadow = CreateFrame("Frame", nil, self)
-		Shadow:SetScaledPoint("TOPLEFT", self, -1, 1)
-		Shadow:SetScaledPoint("BOTTOMRIGHT", self, 1, -1)
-		Shadow:SetBackdrop(vUI.Outline)
-		Shadow:SetBackdropBorderColor(0, 0, 0)
-		Shadow:SetAlpha(0.4)
-		
-		Shadow.Outer1 = CreateFrame("Frame", nil, Shadow)
-		Shadow.Outer1:SetScaledPoint("TOPLEFT", self, -2, 2)
-		Shadow.Outer1:SetScaledPoint("BOTTOMRIGHT", self, 2, -2)
-		Shadow.Outer1:SetBackdrop(vUI.Outline)
-		Shadow.Outer1:SetBackdropBorderColor(0, 0, 0)
-		Shadow.Outer1:SetAlpha(0.2)
-		
-		Shadow.Outer2 = CreateFrame("Frame", nil, Shadow)
-		Shadow.Outer2:SetScaledPoint("TOPLEFT", self, -3, 3)
-		Shadow.Outer2:SetScaledPoint("BOTTOMRIGHT", self, 3, -3)
-		Shadow.Outer2:SetBackdrop(vUI.Outline)
-		Shadow.Outer2:SetBackdropBorderColor(0, 0, 0)
-		Shadow.Outer2:SetAlpha(0.1)
-		
-		self.Shadow = Shadow
-	elseif (not flag and self.Shadow) then
-		self.Shadow:Hide()
-	end
-end
-
-local AddMethodByReference = function(self, key, newkey, value)
-	if (self[key] and not self[newkey]) then
-		rawset(self, newkey, value)
-	end
-end
-
-local Handled = {
-	["Frame"] = true, 
-	["Texture"] = true,
-	["FontString"] = true
-}
-
-local Object = vUI
-local HandledCount = 0
-
--- Thank you Tukz for letting me use this script!
-local AddMethodsToObject = function(object)
-	local Metatable = getmetatable(object).__index
-	
-	AddMethodByReference(Metatable, "SetHeight", "SetScaledHeight", SetScaledHeight)
-	AddMethodByReference(Metatable, "SetWidth", "SetScaledWidth", SetScaledWidth)
-	AddMethodByReference(Metatable, "SetSize", "SetScaledSize", SetScaledSize)
-	AddMethodByReference(Metatable, "SetPoint", "SetScaledPoint", SetScaledPoint)
-	AddMethodByReference(Metatable, "SetBackdropColor", "SetBackdropColorHex", SetBackdropColorHex)
-	AddMethodByReference(Metatable, "SetBackdropBorderColor", "SetBackdropBorderColorHex", SetBackdropBorderColorHex)
-	AddMethodByReference(Metatable, "SetTextColor", "SetTextColorHex", SetTextColorHex)
-	AddMethodByReference(Metatable, "SetVertexColor", "SetVertexColorHex", SetVertexColorHex)
-	AddMethodByReference(Metatable, "SetStatusBarColor", "SetStatusBarColorHex", SetStatusBarColorHex)
-	AddMethodByReference(Metatable, "SetFont", "SetFontInfo", SetFontInfo)
-	AddMethodByReference(Metatable, "SetBackdrop", "SetShadowed", SetShadowed)
-	
-	Handled[object:GetObjectType()] = true
-end
-
-AddMethodsToObject(Object)
-AddMethodsToObject(Object:CreateTexture())
-AddMethodsToObject(Object:CreateFontString())
-
-local HandledCount = 0
-local EnumerateFrames = EnumerateFrames
-Object = EnumerateFrames()
-
-while Object do
-	if (not Object:IsForbidden() and not Handled[Object:GetObjectType()]) then
-		AddMethodsToObject(Object)
-		HandledCount = HandledCount + 1
-		
-		if (HandledCount == 23) then -- We found everything we need
-			break
-		end
+function vUI:VARIABLES_LOADED(event)
+	if (not GetCVar("useUIScale")) then
+		SetCVar("useUIScale", 1)
 	end
 	
-	Object = EnumerateFrames(Object)
+	Defaults["ui-scale"] = self:GetSuggestedScale()
+	
+	-- Import profile data and load a profile
+	self:CreateProfileData()
+	self:UpdateProfileList()
+	self:ApplyProfile(self:GetActiveProfileName())
+	
+	self:SetScale(Settings["ui-scale"])
+	self:UpdateoUFColors()
+	
+	-- Load the GUI
+	GUI:Create()
+	GUI:RunQueue()
+	
+	-- Show the default window
+	if GUI.DefaultWindow then
+		GUI:ShowWindow(GUI.DefaultWindow)
+	end
+	
+	self:UnregisterEvent(event)
 end
 
-local OnEvent = function(self, event, ...)
+function vUI:PLAYER_ENTERING_WORLD(event)
+	self:LoadModules()
+	self:LoadPlugins()
+	self:AddPluginInfo()
+	
+	self:UnregisterEvent(event)
+end
+
+function vUI:OnEvent(event, ...)
 	if self[event] then
 		self[event](self, event, ...)
 	end
@@ -579,6 +505,49 @@ end
 
 vUI:RegisterEvent("VARIABLES_LOADED")
 vUI:RegisterEvent("PLAYER_ENTERING_WORLD")
-vUI:SetScript("OnEvent", OnEvent)
+vUI:SetScript("OnEvent", vUI.OnEvent)
 
-_G["vUI"] = Namespace
+-- Aura wrappers for lookup by name
+local UnitAura = UnitAura
+local UnitBuff = UnitBuff
+local UnitDebuff = UnitDebuff
+
+local Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3
+
+UnitAuraByName = function(unit, name, filter)
+	for i = 1, 40 do
+		Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3 = UnitAura(unit, i, filter)
+		
+		if (Name == name) then
+			return Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3
+		end
+	end
+end
+
+UnitBuffByName = function(unit, name, filter)
+	for i = 1, 40 do
+		Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3 = UnitBuff(unit, i, filter)
+		
+		if (Name == name) then
+			return Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3
+		end
+	end
+end
+
+UnitDebuffByName = function(unit, name, filter)
+	for i = 1, 40 do
+		Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3 = UnitDebuff(unit, i, filter)
+		
+		if (Name == name) then
+			return Name, Texture, Count, DebuffType, Duration, Expiration, Caster, IsStealable, NameplateShowSelf, SpellID, CanApply, IsBossDebuff, CasterIsPlayer, NameplateShowAll, TimeMod, Effect1, Effect2, Effect3
+		end
+	end
+end
+
+-- Access data tables
+function Namespace:get()
+	return vUI, GUI, Language, Assets, Settings, Defaults
+end
+
+-- Global access
+_G["vUIGlobal"] = Namespace

@@ -1,6 +1,6 @@
 ## Interface: 11304
 ## Author: Hydra
-## Version: 1.00572
+## Version: 1.00573
 ## Title: |cFFFFC44DvUI|r
 ## Notes: An interface replacement for World of Warcraft: Classic
 ## SavedVariables: vUIProfileData, vUIProfiles, vUIData, vUIMove, vUIGold
@@ -9,16 +9,16 @@ Initialize.lua
 Elements\Libraries\LibStub.lua
 Elements\Libraries\CallbackHandler-1.0.lua
 Elements\Libraries\ChatThrottleLib.lua
-Elements\Libraries\LibSharedMedia-3.0.lua
-Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibClassicMobHealth-1.0.lua
 Elements\Libraries\LibClassicCasterino.lua
 Elements\Libraries\LibHealComm-4.0.lua
+Elements\Libraries\LibSharedMedia-3.0.lua
+Elements\Libraries\AceSerializer-3.0.lua
 Elements\Libraries\LibCompress.lua
 Elements\Libraries\LibAnim.lua
-Elements\UnitFrames\oUF\oUF.xml
+Elements\Libraries\oUF\oUF.xml
 Elements\Libraries\LibClassicDurations\LibClassicDurations.xml
-Media\Media.lua
+Elements\Assets.lua
 Languages\deDE.lua
 Languages\esES.lua
 Languages\esMX.lua
@@ -29,34 +29,33 @@ Languages\ptBR.lua
 Languages\ruRU.lua
 Languages\zhCN.lua
 Languages\zhTW.lua
-Elements\Styles\Styles.lua
-Elements\Defaults\Defaults.lua
-Elements\Profiles\Profiles.lua
-Elements\GUI\GUI.lua
-Elements\Colors\Colors.lua
-Elements\Throttle\Throttle.lua
-Elements\Move\Move.lua
-Elements\General\General.lua
-Elements\Gold\Gold.lua
+Elements\Styles.lua
+Elements\Defaults.lua
+Elements\Profiles.lua
+Elements\GUI.lua
+Elements\Colors.lua
+Elements\Throttle.lua
+Elements\Move.lua
+Elements\Alerts.lua
+Elements\Popup.lua
+Elements\General.lua
+Elements\Gold.lua
 Elements\Chat\Chat.lua
 Elements\Chat\Bubbles.lua
-Elements\Experience\Experience.lua
-Elements\Reputation\Reputation.lua
+Elements\Experience.lua
+Elements\Reputation.lua
 Elements\ActionBars\ActionBars.lua
 Elements\ActionBars\KeyBinding.lua
-Elements\UnitFrames\UnitFrames.lua
-Elements\Tooltips\Tooltips.lua
-Elements\MetersBG\MetersBG.lua
+Elements\ActionBars\BagSlots.lua
+Elements\ActionBars\MicroMenu.lua
+Elements\UnitFrames.lua
+Elements\Tooltips.lua
+Elements\MetersBG.lua
 Elements\Minimap\Minimap.lua
-Elements\ZoneText\ZoneText.lua
-Elements\Alerts\Alerts.lua
-Elements\Popup\Popup.lua
-Elements\Update\Update.lua
-Elements\Cooldowns\Cooldowns.lua
-Elements\Auras\Auras.lua
-Elements\QuestWatch\QuestWatch.lua
-Elements\Announcements\Announcements.lua
-Elements\Bags\Bags.lua
+Elements\ZoneText.lua
+Elements\Update.lua
+Elements\Auras.lua
+Elements\Bags.lua
 Elements\DataTexts\DataTexts.lua
 Elements\DataTexts\Gold.lua
 Elements\DataTexts\TimeLocal.lua
@@ -74,14 +73,18 @@ Elements\DataTexts\SpellPower.lua
 Elements\DataTexts\Guild.lua
 Elements\DataTexts\Friends.lua
 Elements\DataTexts\PrimaryStat.lua
-Elements\DataTexts\PVP.lua
 Elements\DataTexts\Quests.lua
 Elements\DataTexts\Coordinates.lua
 Elements\DataTexts\Level.lua
 Elements\DataTexts\Location.lua
-Elements\DataTexts\Ammo.lua
 Elements\DataTexts\System.lua
-Elements\DataTexts\SoulShards.lua
-Elements\Loot\Loot.lua
-Elements\Test\Test.lua
-Elements\Commands\Commands.lua
+Elements\Loot.lua
+Elements\DruidMana.lua
+Elements\MirrorTimers.lua
+Elements\Taxi.lua
+Elements\Merchant.lua
+Elements\Announcements.lua
+Elements\Cooldowns.lua
+Elements\Scale.lua
+Elements\Commands.lua
+Elements\Test.lua

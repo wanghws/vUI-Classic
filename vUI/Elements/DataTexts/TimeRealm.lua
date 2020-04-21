@@ -1,10 +1,16 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local gsub = gsub
 local format = format
 local GameTime_GetGameTime = GameTime_GetGameTime
+
+local OnMouseUp = function(self, button)
+	if (button == "LeftButton") then
+		TimeManager_Toggle()
+	else
+		ToggleCalendar()
+	end
+end
 
 local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
@@ -48,7 +54,7 @@ local OnEnable = function(self)
 	self:SetScript("OnUpdate", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
-	self:SetScript("OnMouseUp", TimeManager_Toggle)
+	self:SetScript("OnMouseUp", OnMouseUp)
 	
 	self.Elapsed = 0
 	
@@ -66,4 +72,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Time - Realm", OnEnable, OnDisable, Update)
+vUI:AddDataText("Time - Realm", OnEnable, OnDisable, Update)

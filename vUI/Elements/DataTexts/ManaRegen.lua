@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local GetManaRegen = GetManaRegen
 local InCombatLockdown = InCombatLockdown
@@ -45,4 +43,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-DT:SetType("Regen", OnEnable, OnDisable, Update)
+vUI:AddDataText("Regen", OnEnable, OnDisable, Update)

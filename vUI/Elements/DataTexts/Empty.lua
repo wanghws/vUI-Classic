@@ -1,6 +1,4 @@
-local vUI, GUI, Language, Media, Settings = select(2, ...):get()
-
-local DT = vUI:GetModule("DataText")
+local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local Update = function()
 
@@ -14,4 +12,4 @@ local OnDisable = function()
 
 end
 
-DT:SetType("Empty", OnEnable, OnDisable, Update)
+vUI:AddDataText("Empty", OnEnable, OnDisable, Update)
