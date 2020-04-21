@@ -255,6 +255,8 @@ Defaults["unitframes-enable"] = true
 Defaults["unitframes-only-player-debuffs"] = false
 Defaults["unitframes-show-player-buffs"] = true
 Defaults["unitframes-show-druid-mana"] = true
+Defaults["unitframes-show-mana-timer"] = true
+Defaults["unitframes-show-energy-timer"] = true
 
 -- Unitframes: Player
 Defaults["unitframes-player-width"] = 238
