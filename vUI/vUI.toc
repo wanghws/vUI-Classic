@@ -88,6 +88,8 @@ Elements\Announcements.lua
 Elements\Cooldowns.lua
 Elements\Scale.lua
 Elements\Commands.lua
+Elements\DeleteCheapest.lua
+Elements\BagSearch.lua
 Elements\Credit.lua
 Elements\Debug.lua
 Elements\Test.lua
