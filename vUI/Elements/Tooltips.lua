@@ -50,6 +50,12 @@ Tooltips.Classifications = {
 	["worldboss"] = Language["Boss"],
 }
 
+Tooltips.HappinessLevels = {
+	[1] = Language["Unhappy"],
+	[2] = Language["Content"],
+	[3] = Language["Happy"]
+}
+
 function Tooltips:UpdateFonts(tooltip)
 	for i = 1, tooltip:GetNumRegions() do
 		local Region = select(i, tooltip:GetRegions())
