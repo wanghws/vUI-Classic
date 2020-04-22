@@ -328,8 +328,8 @@ end
 function vUI:ShortValue(num)
 	if (num >= 1000000) then
 		return format("%.2fm", num / 1000000)
-	elseif (num >= 1000) then
-		return format("%dk", num / 1000)
+	elseif (num >= 10000) then
+		return format("%dk", num / 10000)
 	else
 		return num
 	end

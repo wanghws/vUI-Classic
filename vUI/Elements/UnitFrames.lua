@@ -38,6 +38,12 @@ local Methods = oUF.Tags.Methods
 
 vUI.UnitFrames = {}
 
+local HappinessLevels = {
+	[1] = Language["Unhappy"],
+	[2] = Language["Content"],
+	[3] = Language["Happy"]
+}
+
 local Classes = {
 	["rare"] = Language["Rare"],
 	["elite"] = Language["Elite"],
@@ -432,6 +438,41 @@ Methods["LevelColor"] = function(unit)
 	
 	return "|cFF" .. vUI:RGBToHex(Color.r, Color.g, Color.b)
 	--return vUI:UnitDifficultyColor(unit)
+end
+
+Events["PetColor"] = "UNIT_HAPPINESS UNIT_LEVEL PLAYER_LEVEL_UP PLAYER_ENTERING_WORLD UNIT_PET"
+Methods["PetColor"] = function(unit)
+	if (vUI.UserClass == "HUNTER") then
+		return Methods["HappinessColor"](unit)
+	else
+		return Methods["Reaction"](unit)
+	end
+end
+
+Events["PetHappiness"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD UNIT_PET"
+Methods["PetHappiness"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			return HappinessLevels[Happiness]
+		end
+	end
+end
+
+Events["HappinessColor"] = "UNIT_HAPPINESS PLAYER_ENTERING_WORLD"
+Methods["HappinessColor"] = function(unit)
+	if (unit == "pet") then
+		local Happiness = GetPetHappiness()
+		
+		if Happiness then
+			local Color = vUI.HappinessColors[Happiness]
+			
+			if Color then
+				return "|cFF"..vUI:RGBToHex(Color[1], Color[2], Color[3])
+			end
+		end
+	end
 end
 
 local ComboPointsUpdateShapeshiftForm = function(self, form)
@@ -1541,7 +1582,12 @@ local StylePet = function(self, unit)
 	
 	SetPowerAttributes(Power, Settings["unitframes-pet-power-color"])
 	
-	self:Tag(HealthLeft, "[Name10]")
+	if (vUI.UserClass == "HUNTER") then
+		self:Tag(HealthLeft, "[PetColor][Name10]")
+	else
+		self:Tag(HealthLeft, "[Name10]")
+	end
+	
 	self:Tag(HealthRight, "[HealthPercent]")
 	
 	self.Range = {
@@ -1821,11 +1867,6 @@ local StyleParty = function(self, unit)
 	vUI:SetSize(Resurrect, 16, 16)
 	vUI:SetPoint(Resurrect, "CENTER", Health, 0, 0)
 	
-	-- Role
-	local RoleIndicator = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(RoleIndicator, 16, 16)
-	vUI:SetPoint(RoleIndicator, "TOP", self, 0, -2)
-	
 	-- Dispels
 	local Dispel = CreateFrame("Frame", nil, Health)
 	vUI:SetSize(Dispel, 20)
@@ -1882,7 +1923,6 @@ local StyleParty = function(self, unit)
 	self.ReadyCheckIndicator = ReadyCheck
 	self.ResurrectIndicator = Resurrect
 	self.RaidTargetIndicator = RaidTarget
-	self.GroupRoleIndicator = RoleIndicator
 end
 
 local StylePartyPet = function(self, unit)
@@ -2930,24 +2970,6 @@ local UpdatePartyShowDebuffs = function(value)
 	end
 end
 
-local UpdatePartyShowRole = function(value)
-	if vUI.UnitFrames["party"] then
-		local Unit
-		
-		for i = 1, vUI.UnitFrames["party"]:GetNumChildren() do
-			Unit = select(i, vUI.UnitFrames["party"]:GetChildren())
-			
-			if Unit then
-				if value then
-					Unit:EnableElement("GroupRoleIndicator")
-				else
-					Unit:DisableElement("GroupRoleIndicator")
-				end
-			end
-		end
-	end
-end
-
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Party"])
 	
@@ -2971,7 +2993,6 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader(Language["Styling"])
 	Right:CreateSwitch("party-show-debuffs", Settings["party-show-debuffs"], Language["Enable Debuffs"], Language["Display debuffs on party members"], UpdatePartyShowDebuffs)
-	Right:CreateSwitch("party-show-role", Settings["party-show-role"], Language["Enable Role Icons"], Language["Display role icons on party members"], UpdatePartyShowRole)
 	
 	Right:CreateHeader(Language["Range Opacity"])
 	Right:CreateSlider("party-in-range", Settings["party-in-range"], 0, 100, 5, Language["In Range"], Language["Set the opacity of party members within range of you"])

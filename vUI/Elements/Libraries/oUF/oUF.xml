@@ -21,7 +21,6 @@
 	<Script file="elements\eliteindicator.lua"/>
 	<Script file="elements\energytick.lua"/>
 	<Script file="elements\fade.lua"/>
-	<Script file="elements\grouproleindicator.lua"/>
 	<Script file="elements\happiness.lua"/>
 	<Script file="elements\health.lua"/>
 	<Script file="elements\healcomm.lua"/>

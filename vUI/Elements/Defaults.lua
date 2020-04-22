@@ -320,7 +320,6 @@ Defaults["unitframes-boss-power-smooth"] = true
 Defaults["party-enable"] = true
 Defaults["party-width"] = 78
 Defaults["party-show-debuffs"] = true
-Defaults["party-show-role"] = true
 Defaults["party-in-range"] = 100
 Defaults["party-out-of-range"] = 50
 Defaults["party-health-height"] = 40
