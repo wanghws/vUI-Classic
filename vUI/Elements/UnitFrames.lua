@@ -1130,20 +1130,19 @@ local StylePlayer = function(self, unit)
 		ComboPoints:SetBackdrop(vUI.Backdrop)
 		ComboPoints:SetBackdropColor(0, 0, 0)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
+		ComboPoints.UpdateShapeshiftForm = ComboPointsUpdateShapeshiftForm
 		
 		local Width = (Settings["unitframes-player-width"] / 5)
+		local Color
 		
 		for i = 1, 5 do
+			Color = vUI.ComboPoints[i]
+			
 			ComboPoints[i] = CreateFrame("StatusBar", self:GetName() .. "ComboPoint" .. i, ComboPoints)
 			vUI:SetSize(ComboPoints[i], Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-			ComboPoints[i]:SetStatusBarColor(vUI.ComboPoints[i][1], vUI.ComboPoints[i][2], vUI.ComboPoints[i][3])
-			
-			ComboPoints[i].bg = ComboPoints:CreateTexture(nil, "BORDER")
-			ComboPoints[i].bg:SetAllPoints(ComboPoints[i])
-			ComboPoints[i].bg:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
-			ComboPoints[i].bg:SetVertexColor(vUI.ComboPoints[i][1], vUI.ComboPoints[i][2], vUI.ComboPoints[i][3])
-			ComboPoints[i].bg:SetAlpha(0.3)
+			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
+			ComboPoints[i]:SetAlpha(0.3)
 			
 			if (i == 1) then
 				vUI:SetPoint(ComboPoints[i], "LEFT", ComboPoints, 1, 0)
@@ -1153,7 +1152,7 @@ local StylePlayer = function(self, unit)
 			end
 		end
 		
-		self.ClassPower = ComboPoints
+		self.ComboPoints = ComboPoints
 		self.AuraParent = ComboPoints
 	end
 	

@@ -277,10 +277,6 @@ local function Enable(self, unit)
 		element.__max = #element
 		element.ForceUpdate = ForceUpdate
 
-		if(RequireSpec or RequireSpell) then
-			self:RegisterEvent('PLAYER_TALENT_UPDATE', VisibilityPath, true)
-		end
-
 		if(RequirePower) then
 			self:RegisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
 		end
@@ -307,7 +303,6 @@ local function Disable(self)
 	if(self.ClassPower) then
 		ClassPowerDisable(self)
 
-		self:UnregisterEvent('PLAYER_TALENT_UPDATE', VisibilityPath)
 		self:UnregisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
 		self:UnregisterEvent('SPELLS_CHANGED', Visibility)
 	end
