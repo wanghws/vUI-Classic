@@ -4,14 +4,6 @@ local gsub = gsub
 local format = format
 local GameTime_GetGameTime = GameTime_GetGameTime
 
-local OnMouseUp = function(self, button)
-	if (button == "LeftButton") then
-		TimeManager_Toggle()
-	else
-		ToggleCalendar()
-	end
-end
-
 local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
 	
@@ -54,7 +46,7 @@ local OnEnable = function(self)
 	self:SetScript("OnUpdate", Update)
 	self:SetScript("OnEnter", OnEnter)
 	self:SetScript("OnLeave", OnLeave)
-	self:SetScript("OnMouseUp", OnMouseUp)
+	self:SetScript("OnMouseUp", TimeManager_Toggle)
 	
 	self.Elapsed = 0
 	
