@@ -245,12 +245,12 @@ local OnTooltipSetUnit = function(self)
 					Line:SetText(format("%s |cFF%s%s|r %s %s", LEVEL, LevelColor, Level, Race, Class))
 				elseif CreatureType then
 					if Classification then
-						Line:SetText(format("%s %s%s|r %s %s", LEVEL, LevelColor, Level, Classification, CreatureType))
+						Line:SetText(format("%s |cFF%s%s|r %s %s", LEVEL, LevelColor, Level, Classification, CreatureType))
 					else
-						Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, CreatureType))
+						Line:SetText(format("%s |cFF%s%s|r %s", LEVEL, LevelColor, Level, CreatureType))
 					end
 				else
-					Line:SetText(format("%s %s%s|r %s", LEVEL, LevelColor, Level, Class))
+					Line:SetText(format("%s |cFF%s%s|r %s", LEVEL, LevelColor, Level, Class))
 				end
 			elseif (Line and find(Line:GetText(), PVP)) then
 				Line:SetText(format("|cFFEE4D4D%s|r", PVP))
