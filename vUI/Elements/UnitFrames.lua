@@ -35,7 +35,6 @@ LCD:Register("vUI")
 local oUF = ns.oUF or oUF
 local Events = oUF.Tags.Events
 local Methods = oUF.Tags.Methods
-local Name, Duration, Expiration, Caster, SpellID, _
 
 vUI.UnitFrames = {}
 
@@ -471,6 +470,12 @@ end
 
 local PostUpdateIcon = function(self, unit, button, index, position, duration, expiration, debuffType, isStealable)
 	local Name, _, _, _, Duration, Expiration, Caster, _, _, SpellID = UnitAura(unit, index, button.filter)
+	local DurationNew, ExpirationNew = LCD:GetAuraDurationByUnit(unit, SpellID, Caster, Name)
+	
+	if (Duration == 0 and DurationNew) then
+		Duration = DurationNew
+		Expiration = ExpirationNew
+	end
 	
 	button.Duration = Duration
 	button.Expiration = Expiration

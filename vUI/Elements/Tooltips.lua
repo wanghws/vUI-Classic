@@ -208,10 +208,6 @@ local OnTooltipSetUnit = function(self)
 			Class = ""
 		end
 		
-		if (Level == -1) then
-			Level = "??"
-		end
-		
 		if UnitIsAFK(UnitID) then
 			Flag = "|cFFFDD835" .. CHAT_FLAG_AFK .. "|r "
 		elseif UnitIsDND(UnitID) then 
@@ -240,6 +236,10 @@ local OnTooltipSetUnit = function(self)
 			if (Line and Line.GetText and find(Line:GetText(), "^" .. LEVEL)) then
 				local LevelColor = GetQuestDifficultyColor(Level)
 				LevelColor = vUI:RGBToHex(LevelColor.r, LevelColor.g, LevelColor.b)
+				
+				if (Level == -1) then
+					Level = "??"
+				end
 				
 				if Race then
 					Line:SetText(format("%s |cFF%s%s|r %s %s", LEVEL, LevelColor, Level, Race, Class))
