@@ -65,7 +65,7 @@ local Ignore = {
 }
 
 local CustomFilter = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster)
-	if (not Ignore[name]) then
+	if ((self.onlyShowPlayer and icon.isPlayer) or (not self.onlyShowPlayer and name)) and (not Ignore[name]) then
 		return true
 	end
 end
