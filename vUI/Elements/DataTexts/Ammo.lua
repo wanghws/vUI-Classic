@@ -10,7 +10,7 @@ local Label = Language["Ammo"]
 local ThrownSubType = LE_ITEM_WEAPON_THROWN
 
 local OnEnter = function(self)
-	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	self:SetTooltip()
 	
 	if GetInventoryItemID("player", 0) then
 		GameTooltip:SetInventoryItem("player", 0)

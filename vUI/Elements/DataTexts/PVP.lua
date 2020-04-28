@@ -4,7 +4,7 @@ local GetPVPLifetimeStats = GetPVPLifetimeStats
 local Label = Language["Kills"]
 
 local OnEnter = function(self)
-	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	self:SetTooltip()
 	
 	local Honorable, Dishonorable = GetPVPLifetimeStats()
 	local Rank = UnitPVPRank("player")

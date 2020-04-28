@@ -5,7 +5,7 @@ local format = format
 local GameTime_GetGameTime = GameTime_GetGameTime
 
 local OnEnter = function(self)
-	GameTooltip_SetDefaultAnchor(GameTooltip, self)
+	self:SetTooltip()
 	
 	local HomeLatency, WorldLatency = select(3, GetNetStats())
 	local Framerate = floor(GetFramerate())
