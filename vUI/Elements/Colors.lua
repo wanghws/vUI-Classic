@@ -12,6 +12,11 @@ vUI.HappinessColors = {}
 vUI.ComboPoints = {}
 vUI.TotemColors = {}
 
+RAID_CLASS_COLORS["SHAMAN"].r = 0
+RAID_CLASS_COLORS["SHAMAN"].g = 0.44
+RAID_CLASS_COLORS["SHAMAN"].b = 0.87
+RAID_CLASS_COLORS["SHAMAN"].colorStr = "ff0070DE"
+
 function vUI:SetColorEntry(t, key, hex)
 	R, G, B = self:HexToRGB(hex)
 	
