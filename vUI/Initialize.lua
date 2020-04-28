@@ -324,7 +324,7 @@ end
 function vUI:ShortValue(num)
 	if (num > 999999) then
 		return format("%.2fm", num / 1000000)
-	elseif (num > 999) then
+	elseif (num > 9999) then
 		return format("%dk", num / 1000)
 	else
 		return num
