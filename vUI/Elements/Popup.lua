@@ -1,6 +1,6 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
-local Popup = CreateFrame("Frame", "vUIPopupFrame", UIParent)
+local Popup = CreateFrame("Frame", "vUIPopupFrame", vUI.UIParent)
 
 local POPUP_WIDTH = 320
 local POPUP_HEIGHT = 100
@@ -44,7 +44,7 @@ end
 
 Popup.CreatePopupFrame = function(self)
 	self:SetSize(POPUP_WIDTH, POPUP_HEIGHT)
-	self:SetPoint("TOP", UIParent, 0, -180)
+	self:SetPoint("TOP", vUI.UIParent, 0, -180)
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self:SetBackdropBorderColor(0, 0, 0)

@@ -8,7 +8,7 @@ local Quest = vUI:NewModule("Quest Watch")
 
 function Quest:StyleFrame()
 	self:SetSize(156, 40)
-	self:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -300, -400)
+	self:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -300, -400)
 	
 	local Title = QuestWatchFrame:CreateFontString(nil, "OVERLAY")
 	Title:SetPoint("BOTTOMLEFT", QuestWatchFrame, "TOPLEFT", 0, 0)

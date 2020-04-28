@@ -233,11 +233,11 @@ function Auras:Load()
 	local BuffRows = ceil(BUFF_MAX_DISPLAY / Settings["auras-per-row"])
 	local DebuffRows = ceil(DEBUFF_MAX_DISPLAY / Settings["auras-per-row"])
 	
-	self.Buffs = CreateFrame("Frame", "vUI Buffs", UIParent)
+	self.Buffs = CreateFrame("Frame", "vUI Buffs", vUI.UIParent)
 	self.Buffs:SetSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * BuffRows) + (Settings["auras-row-spacing"] * (BuffRows - 1))))
-	self.Buffs:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -(Settings["minimap-size"] + 22), -12)
+	self.Buffs:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -(Settings["minimap-size"] + 22), -12)
 	
-	self.Debuffs = CreateFrame("Frame", "vUI Debuffs", UIParent)
+	self.Debuffs = CreateFrame("Frame", "vUI Debuffs", vUI.UIParent)
 	self.Debuffs:SetSize((Settings["auras-per-row"] * Settings["auras-size"] + Settings["auras-per-row"] * Settings["auras-spacing"]), ((Settings["auras-size"] * DebuffRows) + Settings["auras-row-spacing"]))
 	self.Debuffs:SetPoint("TOPRIGHT", self.Buffs, "BOTTOMRIGHT", 0, -2)
 	

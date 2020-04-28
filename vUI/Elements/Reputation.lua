@@ -33,7 +33,7 @@ function Reputation:CreateBar()
 	if (Settings["experience-enable"] and UnitLevel("player") ~= MAX_PLAYER_LEVEL) then
 		self:SetPoint("TOP", vUIExperienceBar, "BOTTOM", 0, -8)
 	else
-		self:SetPoint("TOP", UIParent, 0, -13)
+		self:SetPoint("TOP", vUI.UIParent, 0, -13)
 	end
 	
 	self.Fade = CreateAnimationGroup(self)

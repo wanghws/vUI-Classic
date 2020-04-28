@@ -55,7 +55,7 @@ function BagsFrame:Load()
 		return
 	end
 	
-	local Panel = CreateFrame("Frame", "vUI Bags Window", UIParent)
+	local Panel = CreateFrame("Frame", "vUI Bags Window", vUI.UIParent)
 	Panel:SetSize(206, 40)
 	Panel:SetPoint("BOTTOMRIGHT", -10, 10)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)

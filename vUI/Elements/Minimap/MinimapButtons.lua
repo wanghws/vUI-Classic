@@ -205,7 +205,7 @@ function MinimapButtons:SkinButtons()
 end
 
 function MinimapButtons:CreatePanel()
-  local Frame = CreateFrame("Frame", "vUI Minimap Buttons", UIParent)
+  local Frame = CreateFrame("Frame", "vUI Minimap Buttons", vUI.UIParent)
 	Frame:SetBackdrop(vUI.BackdropAndBorder)
 	Frame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Frame:SetBackdropBorderColor(0, 0, 0)
@@ -216,9 +216,9 @@ function MinimapButtons:CreatePanel()
 	
 	if (Settings["minimap-show-time"]) then
 		-- NOTE: here be unicorn numbers
-		Frame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -12, -(minimapHeight + 26 + 13))
+		Frame:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -12, -(minimapHeight + 26 + 13))
 	else
-		Frame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -12, -(minimapHeight + 6))
+		Frame:SetPoint("TOPRIGHT", vUI.UIParent, "TOPRIGHT", -12, -(minimapHeight + 6))
 	end
 
   self.Panel = Frame

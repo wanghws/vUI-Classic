@@ -19,7 +19,7 @@ local OnDragStop = function(self)
 	local A1, Parent, A2, X, Y = self:GetPoint()
 	
 	if (not Parent) then
-		Parent = UIParent
+		Parent = vUI.UIParent
 	end
 	
 	vUIMove[self.Name] = {A1, Parent:GetName(), A2, X, Y}
@@ -142,7 +142,7 @@ function vUI:CreateMover(frame, padding)
 	end
 	
 	if (not Parent) then
-		Parent = UIParent
+		Parent = vUI.UIParent
 	end
 	
 	local ParentName = Parent:GetName()
@@ -150,7 +150,7 @@ function vUI:CreateMover(frame, padding)
 	local Padding = padding or 0
 	local Width, Height = frame:GetSize()
 	
-	local Mover = CreateFrame("Frame", nil, UIParent)
+	local Mover = CreateFrame("Frame", nil, vUI.UIParent)
 	Mover:SetSize(Width + Padding, Height + Padding)
 	Mover:SetBackdrop(vUI.BackdropAndBorder)
 	Mover:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))

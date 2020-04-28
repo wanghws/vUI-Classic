@@ -57,9 +57,9 @@ local GetTexture = function(cd, id)
 	end
 end
 
-local Frame = CreateFrame("Frame", nil, UIParent)
+local Frame = CreateFrame("Frame", nil, vUI.UIParent)
 Frame:SetSize(60, 60)
-Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 100) -- -300
+Frame:SetPoint("CENTER", vUI.UIParent, "CENTER", 0, 100) -- -300
 Frame:SetBackdrop(vUI.Backdrop)
 Frame:SetBackdropColor(0, 0, 0)
 Frame:SetAlpha(0)
@@ -209,9 +209,9 @@ function Cooldowns:Load()
 		return
 	end
 	
-	local Anchor = CreateFrame("Frame", "vUI Cooldown Flash", UIParent)
+	local Anchor = CreateFrame("Frame", "vUI Cooldown Flash", vUI.UIParent)
 	Anchor:SetSize(60, 60)
-	Anchor:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
+	Anchor:SetPoint("CENTER", vUI.UIParent, "CENTER", 0, 100)
 	
 	Frame:SetSize(60, 60)
 	Frame:SetPoint("CENTER", Anchor, "CENTER", 0, 0)

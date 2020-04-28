@@ -13,7 +13,7 @@ local HasAction = HasAction
 
 local ActionBars = CreateFrame("Frame")
 
-local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+local Hider = CreateFrame("Frame", nil, vUI.UIParent, "SecureHandlerStateTemplate")
 Hider:Hide()
 
 local Kill = function(object)
@@ -296,7 +296,7 @@ local UpdateBar1 = function()
 end
 
 local CreateBar1 = function()
-	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", UIParent, "SecureHandlerStateTemplate")
+	local ActionBar1 = CreateFrame("Frame", "vUIActionBar1", vUI.UIParent, "SecureHandlerStateTemplate")
 	ActionBar1:SetSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
 	ActionBar1:SetPoint("BOTTOMLEFT", vUIBottomActionBarsPanel, (SPACING + 1), (SPACING + 1))
 	ActionBar1:SetFrameStrata("MEDIUM")
@@ -347,7 +347,7 @@ local CreateBar1 = function()
 end
 
 local CreateBar2 = function()
-	local ActionBar2 = CreateFrame("Frame", "vUIActionBar2", UIParent, "SecureHandlerStateTemplate")
+	local ActionBar2 = CreateFrame("Frame", "vUIActionBar2", vUI.UIParent, "SecureHandlerStateTemplate")
 	ActionBar2:SetSize(((BUTTON_SIZE * 12) + (SPACING * 11)), BUTTON_SIZE)
 	ActionBar2:SetFrameStrata("MEDIUM")
 	
@@ -373,7 +373,7 @@ local CreateBar2 = function()
 end
 
 local CreateBar3 = function()
-	local ActionBar3 = CreateFrame("Frame", "vUIActionBar3", UIParent, "SecureHandlerStateTemplate")
+	local ActionBar3 = CreateFrame("Frame", "vUIActionBar3", vUI.UIParent, "SecureHandlerStateTemplate")
 	ActionBar3:SetSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	ActionBar3:SetPoint("RIGHT", vUISideActionBarsPanel, -(SPACING + 1), 0)
 	ActionBar3:SetFrameStrata("MEDIUM")
@@ -400,7 +400,7 @@ local CreateBar3 = function()
 end
 
 local CreateBar4 = function()
-	local ActionBar4 = CreateFrame("Frame", "vUIActionBar4", UIParent, "SecureHandlerStateTemplate")
+	local ActionBar4 = CreateFrame("Frame", "vUIActionBar4", vUI.UIParent, "SecureHandlerStateTemplate")
 	ActionBar4:SetSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	ActionBar4:SetFrameStrata("MEDIUM")
 	
@@ -426,7 +426,7 @@ local CreateBar4 = function()
 end
 
 local CreateBar5 = function()
-	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", UIParent, "SecureHandlerStateTemplate")
+	local ActionBar5 = CreateFrame("Frame", "vUIActionBar5", vUI.UIParent, "SecureHandlerStateTemplate")
 	ActionBar5:SetSize(BUTTON_SIZE, ((BUTTON_SIZE * 12) + (SPACING * 11)))
 	ActionBar5:SetFrameStrata("MEDIUM")
 	
@@ -625,8 +625,8 @@ end
 local CreateStanceBar = function()
 	local NumForms = GetNumShapeshiftForms()
 	
-	local StancePanel = CreateFrame("Frame", "vUI Stance", UIParent, "SecureHandlerStateTemplate")
-	StancePanel:SetPoint("TOPLEFT", UIParent, 10, -10)
+	local StancePanel = CreateFrame("Frame", "vUI Stance", vUI.UIParent, "SecureHandlerStateTemplate")
+	StancePanel:SetPoint("TOPLEFT", vUI.UIParent, 10, -10)
 	StancePanel:SetWidth((STANCE_SIZE * NumForms) + (SPACING * (NumForms + 2)))
 	StancePanel:SetHeight(((STANCE_SIZE * 1) + (SPACING * 3)))
 	StancePanel:SetBackdrop(vUI.BackdropAndBorder)
@@ -648,7 +648,7 @@ local CreateStanceBar = function()
 			
 			SkinButton(Button)
 			Button:SetSize(STANCE_SIZE, STANCE_SIZE)
-			Button:SetParent(UIParent)
+			Button:SetParent(vUI.UIParent)
 			Button:SetFrameStrata("MEDIUM")
 			Button:ClearAllPoints()
 			
@@ -672,9 +672,9 @@ local CreateStanceBar = function()
 end
 
 local CreateBarPanels = function()
-	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", UIParent)
+	local BottomPanel = CreateFrame("Frame", "vUIBottomActionBarsPanel", vUI.UIParent)
 	BottomPanel:SetSize(((BUTTON_SIZE * 12) + (SPACING * 14)), ((BUTTON_SIZE * 2) + (SPACING * 4)))
-	BottomPanel:SetPoint("BOTTOM", UIParent, 0, 10)
+	BottomPanel:SetPoint("BOTTOM", vUI.UIParent, 0, 10)
 	BottomPanel:SetBackdrop(vUI.BackdropAndBorder)
 	BottomPanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	BottomPanel:SetBackdropBorderColor(0, 0, 0)
@@ -686,9 +686,9 @@ local CreateBarPanels = function()
 		BottomPanel:SetAlpha(0)
 	end
 	
-	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", UIParent)
+	local SidePanel = CreateFrame("Frame", "vUISideActionBarsPanel", vUI.UIParent)
 	SidePanel:SetSize(((BUTTON_SIZE * 3) + (SPACING * 5)), ((BUTTON_SIZE * 12) + (SPACING * 14)))
-	SidePanel:SetPoint("RIGHT", UIParent, -10, 0)
+	SidePanel:SetPoint("RIGHT", vUI.UIParent, -10, 0)
 	SidePanel:SetBackdrop(vUI.BackdropAndBorder)
 	SidePanel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	SidePanel:SetBackdropBorderColor(0, 0, 0)
@@ -696,7 +696,7 @@ local CreateBarPanels = function()
 	
 	--RegisterStateDriver(SidePanel, "visibility", "[nopetbattle] show; hide")
 	
-	local PetPanel = CreateFrame("Frame", "vUIPetActionBarsPanel", UIParent)
+	local PetPanel = CreateFrame("Frame", "vUIPetActionBarsPanel", vUI.UIParent)
 	PetPanel:SetSize(((BUTTON_SIZE * 1) + (SPACING * 3)), ((BUTTON_SIZE * 10) + (SPACING * 12)))
 	PetPanel:SetPoint("RIGHT", SidePanel, "LEFT", -SPACING, 0)
 	PetPanel:SetBackdrop(vUI.BackdropAndBorder)

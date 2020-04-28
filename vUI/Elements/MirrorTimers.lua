@@ -55,8 +55,8 @@ MirrorTimers.MirrorTimer_Show = function(timer, value, maxvalue, scale, paused, 
 end
 
 function MirrorTimers:Load()
-	self.Bar = CreateFrame("StatusBar", "vUI Timers Bar", UIParent)
-	self.Bar:SetPoint("TOP", UIParent, 0, -120)
+	self.Bar = CreateFrame("StatusBar", "vUI Timers Bar", vUI.UIParent)
+	self.Bar:SetPoint("TOP", vUI.UIParent, 0, -120)
 	self.Bar:SetSize(210, 20)
 	self.Bar:SetFrameLevel(5)
 	self.Bar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
@@ -94,7 +94,7 @@ function MirrorTimers:Load()
 	self:RegisterEvent("MIRROR_TIMER_PAUSE")
 	self:RegisterEvent("MIRROR_TIMER_STOP")
 	
-	self.Hider = CreateFrame("Frame", nil, UIParent)
+	self.Hider = CreateFrame("Frame", nil, vUI.UIParent)
 	self.Hider:Hide()
 	
 	vUI:CreateMover(self.Bar, 6)

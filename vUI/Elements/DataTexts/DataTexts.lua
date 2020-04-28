@@ -29,7 +29,7 @@ function DT:NewAnchor(name, parent)
 	end
 	
 	if (not parent) then
-		parent = UIParent
+		parent = vUI.UIParent
 	end
 	
 	local Anchor = CreateFrame("Frame", nil, parent)

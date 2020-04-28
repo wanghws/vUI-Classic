@@ -8,7 +8,7 @@ local floor = math.floor
 local format = format
 local Label = Language["Durability"]
 
-local ScanTooltip = CreateFrame("GameTooltip", nil, UIParent, "GameTooltipTemplate")
+local ScanTooltip = CreateFrame("GameTooltip", nil, vUI.UIParent, "GameTooltipTemplate")
 
 local OnEnter = function(self)
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)

@@ -31,7 +31,7 @@ end
 
 Taxi:RegisterEvent("PLAYER_ENTERING_WORLD")
 Taxi:SetScript("OnEvent", function(self, event)
-	local TaxiFrame = CreateFrame("Frame", "vUI Taxi", UIParent)
+	local TaxiFrame = CreateFrame("Frame", "vUI Taxi", vUI.UIParent)
 	TaxiFrame:SetSize(Settings["minimap-size"] + 8, 22)
 	TaxiFrame:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
 	TaxiFrame:SetBackdrop(vUI.BackdropAndBorder)

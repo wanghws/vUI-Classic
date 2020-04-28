@@ -14,9 +14,9 @@ local HOLD_TIME = 1.6
 
 local CustomZoneText = CreateFrame("Frame")
 
-local CustomZoneTextFrame = CreateFrame("Frame", nil, UIParent)
+local CustomZoneTextFrame = CreateFrame("Frame", nil, vUI.UIParent)
 CustomZoneTextFrame:SetSize(200, ZoneTextSize)
-CustomZoneTextFrame:SetPoint("TOP", UIParent, 0, -220)
+CustomZoneTextFrame:SetPoint("TOP", vUI.UIParent, 0, -220)
 CustomZoneTextFrame:SetAlpha(0)
 
 CustomZoneTextFrame.Group = CreateAnimationGroup(CustomZoneTextFrame)
@@ -38,7 +38,7 @@ CustomZoneTextFrame.FadeOut:SetChange(0)
 CustomZoneTextFrame.FadeOut:SetOrder(3)
 CustomZoneTextFrame.FadeOut:SetScript("OnFinished", function(self) self.Parent:Hide() end)
 
-local CustomSubZoneTextFrame = CreateFrame("Frame", nil, UIParent)
+local CustomSubZoneTextFrame = CreateFrame("Frame", nil, vUI.UIParent)
 CustomSubZoneTextFrame:SetSize(200, SubZoneTextSize)
 CustomSubZoneTextFrame:SetPoint("TOP", CustomZoneTextFrame, "BOTTOM", 0, 0)
 CustomSubZoneTextFrame:SetAlpha(0)

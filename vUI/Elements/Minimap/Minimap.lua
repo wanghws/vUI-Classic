@@ -25,7 +25,7 @@ end
 
 function Map:Style()
 	-- Backdrop
-	self:SetPoint("TOPRIGHT", UIParent, -12, -12)
+	self:SetPoint("TOPRIGHT", vUI.UIParent, -12, -12)
 	self:SetSize((Settings["minimap-size"] + 8), (44 + 8 + Settings["minimap-size"]))
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))

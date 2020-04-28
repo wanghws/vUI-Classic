@@ -536,7 +536,7 @@ function Tooltips:Load()
 	end
 	
 	self:SetSize(200, 26)
-	self:SetPoint("BOTTOMRIGHT", UIParent, -13, 101)
+	self:SetPoint("BOTTOMRIGHT", vUI.UIParent, -13, 101)
 	
 	self:AddHooks()
 	self:StyleStatusBar()

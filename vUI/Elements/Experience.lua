@@ -13,7 +13,7 @@ local UnitLevel = UnitLevel
 local GetXPExhaustion = GetXPExhaustion
 local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
-local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", UIParent)
+local ExperienceBar = CreateFrame("StatusBar", "vUIExperienceBar", vUI.UIParent)
 
 ExperienceBar.Elapsed = 0
 
@@ -253,7 +253,7 @@ ExperienceBar["PLAYER_ENTERING_WORLD"] = function(self)
 	end
 	
 	self:SetSize(Settings["experience-width"], Settings["experience-height"])
-	self:SetPoint("TOP", UIParent, 0, -13)
+	self:SetPoint("TOP", vUI.UIParent, 0, -13)
 	self:SetFrameStrata("HIGH")
 	self:SetScript("OnEnter", self.OnEnter)
 	self:SetScript("OnLeave", self.OnLeave)

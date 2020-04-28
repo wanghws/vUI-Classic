@@ -44,7 +44,7 @@ end
 
 function DruidMana:CreateBar()
 	self:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-power-height"] + 2)
-	self:SetPoint("CENTER", UIParent, 0, -180)
+	self:SetPoint("CENTER", vUI.UIParent, 0, -180)
 	
 	self.Fade = CreateAnimationGroup(self)
 	

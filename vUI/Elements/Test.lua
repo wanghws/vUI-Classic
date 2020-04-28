@@ -5,7 +5,7 @@ local IconSize = 40
 local IconHeight = floor(IconSize * 0.6)
 local IconRatio = (1 - (IconHeight / IconSize)) / 2
 
-local Icon = CreateFrame("Frame", nil, UIParent)
+local Icon = CreateFrame("Frame", nil, vUI.UIParent)
 Icon:SetScaledPoint("CENTER")
 Icon:SetScaledSize(IconSize, IconHeight)
 Icon:SetBackdrop(vUI.Backdrop)

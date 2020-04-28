@@ -89,7 +89,7 @@ local CloseOnMouseUp = function(self)
 end
 
 local CreateAlertFrame = function()
-	local AlertFrame = CreateFrame("Frame", nil, UIParent)
+	local AlertFrame = CreateFrame("Frame", nil, vUI.UIParent)
 	AlertFrame:SetSize(ALERT_WIDTH, (HEADER_HEIGHT + (LINE_HEIGHT * 2)))
 	AlertFrame:SetBackdrop(vUI.BackdropAndBorder)
 	AlertFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-main-color"]))

@@ -2395,12 +2395,12 @@ UF:SetScript("OnEvent", function(self, event)
 		if Settings["unitframes-enable"] then
 			local Player = oUF:Spawn("player", "vUI Player")
 			Player:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + Settings["unitframes-player-power-height"] + 3)
-			Player:SetPoint("RIGHT", UIParent, "CENTER", -68, -304)
+			Player:SetPoint("RIGHT", vUI.UIParent, "CENTER", -68, -304)
 			Player:SetParent(vUI.UIParent)
 			
 			local Target = oUF:Spawn("target", "vUI Target")
 			Target:SetSize(Settings["unitframes-target-width"], Settings["unitframes-target-health-height"] + Settings["unitframes-target-power-height"] + 3)
-			Target:SetPoint("LEFT", UIParent, "CENTER", 68, -304)
+			Target:SetPoint("LEFT", vUI.UIParent, "CENTER", 68, -304)
 			Target:SetParent(vUI.UIParent)
 			
 			local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
@@ -2425,8 +2425,8 @@ UF:SetScript("OnEvent", function(self, event)
 			vUI:CreateMover(TargetTarget)
 			vUI:CreateMover(Pet)
 			
-			Player.Castbar:SetPoint("BOTTOM", UIParent, 0, 118)
-			Target.Castbar:SetPoint("BOTTOM", UIParent, 0, 146)
+			Player.Castbar:SetPoint("BOTTOM", vUI.UIParent, 0, 118)
+			Target.Castbar:SetPoint("BOTTOM", vUI.UIParent, 0, 146)
 			
 			vUI:CreateMover(Player.Castbar, 2)
 			vUI:CreateMover(Target.Castbar, 2)
@@ -2439,7 +2439,7 @@ UF:SetScript("OnEvent", function(self, event)
 				Boss:SetParent(vUI.UIParent)
 				
 				if (i == 1) then
-					Boss:SetPoint("LEFT", UIParent, 300, 200)
+					Boss:SetPoint("LEFT", vUI.UIParent, 300, 200)
 				else
 					Boss:SetPoint("TOP", vUI.UnitFrames["boss" .. (i-1)], "BOTTOM", 0, -2)
 				end
@@ -2469,7 +2469,7 @@ UF:SetScript("OnEvent", function(self, event)
 				]]
 			)
 			
-			self.PartyAnchor = CreateFrame("Frame", "vUI Party Anchor", UIParent)
+			self.PartyAnchor = CreateFrame("Frame", "vUI Party Anchor", vUI.UIParent)
 			self.PartyAnchor:SetSize((5 * Settings["party-width"] + (4 * 2)), (Settings["party-health-height"] + Settings["party-power-height"]) + 3)
 			self.PartyAnchor:SetPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
 			
@@ -2526,12 +2526,12 @@ UF:SetScript("OnEvent", function(self, event)
 				]]
 			)
 			
-			self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
+			self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", vUI.UIParent)
 			self.RaidAnchor:SetSize((4 * (Settings["raid-health-height"] + Settings["raid-power-height"] + 3) + 4 * 2), ((Settings["raid-health-height"] + Settings["raid-power-height"]) * 10) + (2 * (10 - 1)))
-			--self.RaidAnchor:SetPoint("TOPLEFT", UIParent, 10, -10)
+			--self.RaidAnchor:SetPoint("TOPLEFT", vUI.UIParent, 10, -10)
 			self.RaidAnchor:SetPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
 			
-			local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+			local Hider = CreateFrame("Frame", nil, vUI.UIParent, "SecureHandlerStateTemplate")
 			Hider:Hide()
 			
 			if CompactRaidFrameContainer then
@@ -2882,8 +2882,8 @@ local UpdatePartyHealthHeight = function(value)
 			Unit = select(i, vUI.UnitFrames["party"]:GetChildren())
 			
 			if Unit then
-				vUI:SetHeight(Unit, value + Settings["party-power-height"] + 3)
-				vUI:SetHeight(Unit.Health, value)
+				Unit:SetHeight(value + Settings["party-power-height"] + 3)
+				Unit.Health:SetHeight(value)
 			end
 		end
 	end
@@ -2897,8 +2897,8 @@ local UpdatePartyPowerHeight = function(value)
 			Unit = select(i, vUI.UnitFrames["party"]:GetChildren())
 			
 			if Unit then
-				vUI:SetHeight(Unit, value + Settings["party-health-height"] + 3)
-				vUI:SetHeight(Unit.Power, value)
+				Unit:SetHeight(value + Settings["party-health-height"] + 3)
+				Unit.Power:SetHeight(value)
 			end
 		end
 	end
@@ -3182,7 +3182,7 @@ local UpdateNamePlatesEnableCastBars = function(value)
 end
 
 local NamePlateSetCastBarsHeight = function(self, value)
-	vUI:SetHeight(self.Castbar, value)
+	self.Castbar:SetHeight(value)
 end
 
 local UpdateNamePlatesCastBarsHeight = function(value)

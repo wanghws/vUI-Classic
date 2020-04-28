@@ -50,7 +50,7 @@ function MicroButtons:Load()
 		return
 	end
 	
-	local Panel = CreateFrame("Frame", "vUI Micro Buttons", UIParent)
+	local Panel = CreateFrame("Frame", "vUI Micro Buttons", vUI.UIParent)
 	Panel:SetSize(232, 38)
 	Panel:SetPoint("BOTTOMRIGHT", BagsFrame.Panel, "BOTTOMLEFT", -2, 0)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)
