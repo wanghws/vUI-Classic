@@ -32,8 +32,8 @@ end
 Taxi:RegisterEvent("PLAYER_ENTERING_WORLD")
 Taxi:SetScript("OnEvent", function(self, event)
 	local TaxiFrame = CreateFrame("Frame", "vUI Taxi", UIParent)
-	vUI:SetSize(TaxiFrame, Settings["minimap-size"] + 8, 22)
-	vUI:SetPoint(TaxiFrame, "TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
+	TaxiFrame:SetSize(Settings["minimap-size"] + 8, 22)
+	TaxiFrame:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
 	TaxiFrame:SetBackdrop(vUI.BackdropAndBorder)
 	TaxiFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	TaxiFrame:SetBackdropBorderColor(0, 0, 0)
@@ -52,15 +52,15 @@ Taxi:SetScript("OnEvent", function(self, event)
     end
 	
 	TaxiFrame.Texture = TaxiFrame:CreateTexture(nil, "ARTWORK")
-	vUI:SetPoint(TaxiFrame.Texture, "TOPLEFT", TaxiFrame, 1, -1)
-	vUI:SetPoint(TaxiFrame.Texture, "BOTTOMRIGHT", TaxiFrame, -1, 1)
+	TaxiFrame.Texture:SetPoint("TOPLEFT", TaxiFrame, 1, -1)
+	TaxiFrame.Texture:SetPoint("BOTTOMRIGHT", TaxiFrame, -1, 1)
 	TaxiFrame.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	TaxiFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
 	TaxiFrame.Text = TaxiFrame:CreateFontString(nil, "OVERLAY", 7)
-	vUI:SetPoint(TaxiFrame.Text, "CENTER", TaxiFrame, 0, -1)
+	TaxiFrame.Text:SetPoint("CENTER", TaxiFrame, 0, -1)
 	vUI:SetFontInfo(TaxiFrame.Text, Settings["ui-header-font"], Settings["ui-font-size"])
-	vUI:SetSize(TaxiFrame.Text, TaxiFrame:GetWidth() - 12, 20)
+	TaxiFrame.Text:SetSize(TaxiFrame:GetWidth() - 12, 20)
 	TaxiFrame.Text:SetText(Language["Land Early"])
 	
 	self.Frame = TaxiFrame

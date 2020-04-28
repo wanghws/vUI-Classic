@@ -481,9 +481,9 @@ local ComboPointsUpdateShapeshiftForm = function(self, form)
 	Parent.Buffs:ClearAllPoints()
 	
 	if (form == 3) then
-		vUI:SetPoint(Parent.Buffs, "BOTTOMLEFT", Parent.ComboPoints, "TOPLEFT", 0, 2)
+		Parent.Buffs:SetPoint("BOTTOMLEFT", Parent.ComboPoints, "TOPLEFT", 0, 2)
 	else
-		vUI:SetPoint(Parent.Buffs, "BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
+		Parent.Buffs:SetPoint("BOTTOMLEFT", Parent, "TOPLEFT", 0, 2)
 	end
 end
 
@@ -553,16 +553,16 @@ local PostCreateIcon = function(unit, button)
 	button.cd.noCooldownCount = true
 	button.cd:SetFrameLevel(button:GetFrameLevel() + 1)
 	button.cd:ClearAllPoints()
-	vUI:SetPoint(button.cd, "TOPLEFT", button, 1, -1)
-	vUI:SetPoint(button.cd, "BOTTOMRIGHT", button, -1, 1)
+	button.cd:SetPoint("TOPLEFT", button, 1, -1)
+	button.cd:SetPoint("BOTTOMRIGHT", button, -1, 1)
 	button.cd:SetHideCountdownNumbers(true)
 	
-	vUI:SetPoint(button.icon, "TOPLEFT", 1, -1)
-	vUI:SetPoint(button.icon, "BOTTOMRIGHT", -1, 1)
+	button.icon:SetPoint("TOPLEFT", 1, -1)
+	button.icon:SetPoint("BOTTOMRIGHT", -1, 1)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon:SetDrawLayer("ARTWORK")
 	
-	vUI:SetPoint(button.count, "BOTTOMRIGHT", 1, 2)
+	button.count:SetPoint("BOTTOMRIGHT", 1, 2)
 	button.count:SetJustifyH("RIGHT")
 	vUI:SetFontInfo(button.count, Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
 	
@@ -571,7 +571,7 @@ local PostCreateIcon = function(unit, button)
 	
 	button.Time = button:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(button.Time, Settings["ui-widget-font"], Settings["ui-font-size"], "OUTLINE")
-	vUI:SetPoint(button.Time, "TOPLEFT", 2, -2)
+	button.Time:SetPoint("TOPLEFT", 2, -2)
 	button.Time:SetJustifyH("LEFT")
 	
 	button.count:SetParent(button.overlayFrame)
@@ -601,13 +601,13 @@ local BuffsSetPosition = function(element, from, to)
 		local Row = floor((i - 1) / Columns)
 		
 		Button:ClearAllPoints()
-		vUI:SetPoint(Button, Anchor, element, Anchor, Column * SizeX * GrowthX, Row * SizeY * GrowthY)
+		Button:SetPoint(Anchor, element, Anchor, Column * SizeX * GrowthX, Row * SizeY * GrowthY)
 	end
 	
 	if (Rows > 0) then
-		vUI:SetHeight(element, element.size * Rows + ((Rows - 1) * element.spacing))
+		element:SetHeight(element.size * Rows + ((Rows - 1) * element.spacing))
 	else
-		vUI:SetHeight(element, element.size)
+		element:SetHeight(element.size)
 	end
 end
 
@@ -654,8 +654,8 @@ local NamePlateCallback = function(self)
 		self.Debuffs.onlyShowPlayer = Settings["nameplates-only-player-debuffs"]
 	end
 	
-	vUI:SetSize(self, Settings["nameplates-width"], Settings["nameplates-height"])
-	vUI:SetHeight(self.Castbar, Settings["nameplates-castbar-height"])
+	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	self.Castbar:SetHeight(Settings["nameplates-castbar-height"])
 	
 	vUI:SetFontInfo(self.Top, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
 	vUI:SetFontInfo(self.TopLeft, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
@@ -669,8 +669,8 @@ end
 
 local StyleNamePlate = function(self, unit)
 	self:SetScale(Settings["ui-scale"])
-	vUI:SetSize(self, Settings["nameplates-width"], Settings["nameplates-height"])
-	vUI:SetPoint(self, "CENTER", 0, 0)
+	self:SetSize(Settings["nameplates-width"], Settings["nameplates-height"])
+	self:SetPoint("CENTER", 0, 0)
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(0, 0, 0)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -692,8 +692,8 @@ local StyleNamePlate = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = Health:CreateTexture(nil, "BACKGROUND")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
@@ -704,37 +704,37 @@ local StyleNamePlate = function(self, unit)
 	
 	local Top = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Top, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(Top, "CENTER", Health, "TOP", 0, 3)
+	Top:SetPoint("CENTER", Health, "TOP", 0, 3)
 	Top:SetJustifyH("CENTER")
 	
 	local TopLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(TopLeft, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(TopLeft, "LEFT", Health, "TOPLEFT", 4, 3)
+	TopLeft:SetPoint("LEFT", Health, "TOPLEFT", 4, 3)
 	TopLeft:SetJustifyH("LEFT")
 	
 	local TopRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(TopRight, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(TopRight, "RIGHT", Health, "TOPRIGHT", -4, 3)
+	TopRight:SetPoint("RIGHT", Health, "TOPRIGHT", -4, 3)
 	TopRight:SetJustifyH("RIGHT")
 	
 	local Bottom = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Bottom, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(Bottom, "CENTER", Health, "BOTTOM", 0, -3)
+	Bottom:SetPoint("CENTER", Health, "BOTTOM", 0, -3)
 	Bottom:SetJustifyH("CENTER")
 	
 	local BottomRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(BottomRight, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(BottomRight, "RIGHT", Health, "BOTTOMRIGHT", -4, -3)
+	BottomRight:SetPoint("RIGHT", Health, "BOTTOMRIGHT", -4, -3)
 	BottomRight:SetJustifyH("RIGHT")
 	
 	local BottomLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(BottomLeft, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(BottomLeft, "LEFT", Health, "BOTTOMLEFT", 4, -3)
+	BottomLeft:SetPoint("LEFT", Health, "BOTTOMLEFT", 4, -3)
 	BottomLeft:SetJustifyH("LEFT")
 	
 	--[[local InsideCenter = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(InsideCenter, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(InsideCenter, "CENTER", Health, 0, 0)
+	InsideCenter:SetPoint("CENTER", Health, 0, 0)
 	InsideCenter:SetJustifyH("CENTER")]]
 	
 	Health.Smooth = Settings["nameplates-health-smooth"]
@@ -745,8 +745,8 @@ local StyleNamePlate = function(self, unit)
 	
 	-- Buffs
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	vUI:SetSize(Buffs, 30, 30)
-	vUI:SetPoint(Buffs, "BOTTOM", self, "TOP", 0, 36)
+	Buffs:SetSize(30, 30)
+	Buffs:SetPoint("BOTTOM", self, "TOP", 0, 36)
 	Buffs.size = 30
 	Buffs.spacing = 0
 	Buffs.num = 1
@@ -759,8 +759,8 @@ local StyleNamePlate = function(self, unit)
 	
 	-- Debuffs
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	vUI:SetSize(Debuffs, Settings["nameplates-width"], 26)
-	vUI:SetPoint(Debuffs, "BOTTOM", Health, "TOP", 0, 14)
+	Debuffs:SetSize(Settings["nameplates-width"], 26)
+	Debuffs:SetPoint("BOTTOM", Health, "TOP", 0, 14)
 	Debuffs.size = 26
 	Debuffs.spacing = 2
 	Debuffs.num = 5
@@ -776,45 +776,45 @@ local StyleNamePlate = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", nil, self)
-    vUI:SetSize(Castbar, Settings["nameplates-width"] - 2, Settings["nameplates-castbar-height"])
-	vUI:SetPoint(Castbar, "TOP", Health, "BOTTOM", 0, -4)
+    Castbar:SetSize(Settings["nameplates-width"] - 2, Settings["nameplates-castbar-height"])
+	Castbar:SetPoint("TOP", Health, "BOTTOM", 0, -4)
     Castbar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
-	vUI:SetPoint(CastbarBG, "TOPLEFT", Castbar, 0, 0)
-	vUI:SetPoint(CastbarBG, "BOTTOMRIGHT", Castbar, 0, 0)
+	CastbarBG:SetPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
     local Background = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(Background, "TOPLEFT", Castbar, -1, 1)
-    vUI:SetPoint(Background, "BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetPoint("BOTTOMRIGHT", Castbar, 1, -1)
     Background:SetTexture(Assets:GetTexture("Blank"))
     Background:SetVertexColor(0, 0, 0)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Time, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(Time, "RIGHT", Castbar, "BOTTOMRIGHT", -4, -3)
+	Time:SetPoint("RIGHT", Castbar, "BOTTOMRIGHT", -4, -3)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Text, Settings["nameplates-font"], Settings["nameplates-font-size"], Settings["nameplates-font-flags"])
-	vUI:SetPoint(Text, "LEFT", Castbar, "BOTTOMLEFT", 4, -3)
-	vUI:SetWidth(Text, Settings["nameplates-width"] / 2 + 4)
+	Text:SetPoint("LEFT", Castbar, "BOTTOMLEFT", 4, -3)
+	Text:SetWidth(Settings["nameplates-width"] / 2 + 4)
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    vUI:SetSize(Icon, Settings["nameplates-height"] + 12 + 2, Settings["nameplates-height"] + 12 + 2)
-    vUI:SetPoint(Icon, "BOTTOMRIGHT", Castbar, "BOTTOMLEFT", -4, 0)
+	Icon:SetSize(Settings["nameplates-height"] + 12 + 2, Settings["nameplates-height"] + 12 + 2)
+	Icon:SetPoint("BOTTOMRIGHT", Castbar, "BOTTOMLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
     local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(IconBG, "TOPLEFT", Icon, -1, 1)
-    vUI:SetPoint(IconBG, "BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetPoint("BOTTOMRIGHT", Icon, 1, -1)
     IconBG:SetTexture(Assets:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
@@ -836,18 +836,18 @@ local StyleNamePlate = function(self, unit)
 	
 	-- Target
 	local TargetIndicator = CreateFrame("Frame", nil, self)
-	vUI:SetPoint(TargetIndicator, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(TargetIndicator, "BOTTOMRIGHT", Health, 0, 0)
+	TargetIndicator:SetPoint("TOPLEFT", Health, 0, 0)
+	TargetIndicator:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	TargetIndicator:Hide()
 	
 	TargetIndicator.Left = TargetIndicator:CreateTexture(nil, "ARTWORK")
-	vUI:SetSize(TargetIndicator.Left, 16, 16)
-	vUI:SetPoint(TargetIndicator.Left, "RIGHT", TargetIndicator, "LEFT", 2, 0)
+	TargetIndicator.Left:SetSize(16, 16)
+	TargetIndicator.Left:SetPoint("RIGHT", TargetIndicator, "LEFT", 2, 0)
 	TargetIndicator.Left:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	TargetIndicator.Right = TargetIndicator:CreateTexture(nil, "ARTWORK")
-	vUI:SetSize(TargetIndicator.Right, 16, 16)
-	vUI:SetPoint(TargetIndicator.Right, "LEFT", TargetIndicator, "RIGHT", -3, 0)
+	TargetIndicator.Right:SetSize(16, 16)
+	TargetIndicator.Right:SetPoint("LEFT", TargetIndicator, "RIGHT", -3, 0)
 	TargetIndicator.Right:SetVertexColor(vUI:HexToRGB(Settings["ui-widget-color"]))
 	
 	if (Settings["nameplates-target-indicator-size"] == "SMALL") then
@@ -905,9 +905,9 @@ local CreateMouseover = function(self)
 	self.Hover:SetAlpha(0)
 	
 	self.HoverTop = self.Hover:CreateTexture(nil, "OVERLAY")
-	vUI:SetPoint(self.HoverTop, "TOPLEFT", self.Hover, 10, -1)
-	vUI:SetPoint(self.HoverTop, "TOPRIGHT", self.Hover, -10, -1)
-	vUI:SetHeight(self.HoverTop, 12)
+	self.HoverTop:SetPoint("TOPLEFT", self.Hover, 10, -1)
+	self.HoverTop:SetPoint("TOPRIGHT", self.Hover, -10, -1)
+	self.HoverTop:SetHeight(12)
 	self.HoverTop:SetTexture(Assets:GetHighlight("RenHorizonDown"))
 	self.HoverTop:SetVertexColor(1, 1, 1)
 	
@@ -938,9 +938,9 @@ local StylePlayer = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["unitframes-player-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["unitframes-player-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-player-health-reverse"])
@@ -952,24 +952,24 @@ local StylePlayer = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	local Combat = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(Combat, 20, 20)
-	vUI:SetPoint(Combat, "CENTER", Health)
+	Combat:SetSize(20, 20)
+	Combat:SetPoint("CENTER", Health)
 	
     local Leader = Health:CreateTexture(nil, "OVERLAY")
     Leader:SetSize(16, 16)
@@ -979,8 +979,8 @@ local StylePlayer = function(self, unit)
     Leader:Hide()
 	
 	local RaidTarget = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(RaidTarget, 16, 16)
-	vUI:SetPoint(RaidTarget, "CENTER", Health, "TOP")
+	RaidTarget:SetSize(16, 16)
+	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
 	
@@ -992,26 +992,26 @@ local StylePlayer = function(self, unit)
 	SetHealthAttributes(Health, Settings["unitframes-player-health-color"])
 	
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["unitframes-player-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["unitframes-player-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Power:SetReverseFill(Settings["unitframes-player-power-reverse"])
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerRight, "RIGHT", Power, -3, 0)
+	PowerRight:SetPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerLeft, "LEFT", Power, 3, 0)
+	PowerLeft:SetPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	
 	-- Attributes
@@ -1029,14 +1029,14 @@ local StylePlayer = function(self, unit)
 		ManaTimer:Hide()
 		
 		ManaTimer.Spark = ManaTimer:CreateTexture(nil, "ARTWORK")
-		vUI:SetSize(ManaTimer.Spark, 3, Settings["unitframes-player-power-height"])
-		vUI:SetPoint(ManaTimer.Spark, "LEFT", ManaTimer:GetStatusBarTexture(), "RIGHT", -1, 0)
+		ManaTimer.Spark:SetSize(3, Settings["unitframes-player-power-height"])
+		ManaTimer.Spark:SetPoint("LEFT", ManaTimer:GetStatusBarTexture(), "RIGHT", -1, 0)
 		ManaTimer.Spark:SetTexture(Assets:GetTexture("Blank"))
 		ManaTimer.Spark:SetVertexColor(1, 1, 1, 0.2)
 		
 		ManaTimer.Spark2 = ManaTimer:CreateTexture(nil, "ARTWORK")
-		vUI:SetSize(ManaTimer.Spark2, 1, Settings["unitframes-player-power-height"])
-		vUI:SetPoint(ManaTimer.Spark2, "CENTER", ManaTimer.Spark, 0, 0)
+		ManaTimer.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
+		ManaTimer.Spark2:SetPoint("CENTER", ManaTimer.Spark, 0, 0)
 		ManaTimer.Spark2:SetTexture(Assets:GetTexture("Blank"))
 		ManaTimer.Spark2:SetVertexColor(1, 1, 1, 0.8)
 		
@@ -1052,14 +1052,14 @@ local StylePlayer = function(self, unit)
 		EnergyTick:Hide()
 		
 		EnergyTick.Spark = EnergyTick:CreateTexture(nil, "ARTWORK")
-		vUI:SetSize(EnergyTick.Spark, 3, Settings["unitframes-player-power-height"])
-		vUI:SetPoint(EnergyTick.Spark, "LEFT", EnergyTick:GetStatusBarTexture(), "RIGHT", -1, 0)
+		EnergyTick.Spark:SetSize(3, Settings["unitframes-player-power-height"])
+		EnergyTick.Spark:SetPoint("LEFT", EnergyTick:GetStatusBarTexture(), "RIGHT", -1, 0)
 		EnergyTick.Spark:SetTexture(Assets:GetTexture("Blank"))
 		EnergyTick.Spark:SetVertexColor(1, 1, 1, 0.2)
 		
 		EnergyTick.Spark2 = EnergyTick:CreateTexture(nil, "ARTWORK")
-		vUI:SetSize(EnergyTick.Spark2, 1, Settings["unitframes-player-power-height"])
-		vUI:SetPoint(EnergyTick.Spark2, "CENTER", EnergyTick.Spark, 0, 0)
+		EnergyTick.Spark2:SetSize(1, Settings["unitframes-player-power-height"])
+		EnergyTick.Spark2:SetPoint("CENTER", EnergyTick.Spark, 0, 0)
 		EnergyTick.Spark2:SetTexture(Assets:GetTexture("Blank"))
 		EnergyTick.Spark2:SetVertexColor(1, 1, 1, 0.8)
 		
@@ -1068,44 +1068,44 @@ local StylePlayer = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Casting Bar", self)
-    vUI:SetSize(Castbar, 250, 24)
+    Castbar:SetSize(250, 24)
     Castbar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
-	vUI:SetPoint(CastbarBG, "TOPLEFT", Castbar, 0, 0)
-	vUI:SetPoint(CastbarBG, "BOTTOMRIGHT", Castbar, 0, 0)
+	CastbarBG:SetPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
     local Background = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(Background, "TOPLEFT", Castbar, -1, 1)
-    vUI:SetPoint(Background, "BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetPoint("BOTTOMRIGHT", Castbar, 1, -1)
     Background:SetTexture(Assets:GetTexture("Blank"))
     Background:SetVertexColor(0, 0, 0)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Time, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Time, "RIGHT", Castbar, -3, 0)
+	Time:SetPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Text, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Text, "LEFT", Castbar, 3, 0)
-	vUI:SetSize(Text, 250 * 0.7, Settings["ui-font-size"])
+	Text:SetPoint("LEFT", Castbar, 3, 0)
+	Text:SetSize(250 * 0.7, Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    vUI:SetSize(Icon, 24, 24)
-    vUI:SetPoint(Icon, "TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
+    Icon:SetSize(24, 24)
+    Icon:SetPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
 	local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(IconBG, "TOPLEFT", Icon, -1, 1)
-    vUI:SetPoint(IconBG, "BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetPoint("BOTTOMRIGHT", Icon, 1, -1)
     IconBG:SetTexture(Assets:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
@@ -1125,8 +1125,8 @@ local StylePlayer = function(self, unit)
 	
 	if (vUI.UserClass == "ROGUE" or vUI.UserClass == "DRUID") then
 		local ComboPoints = CreateFrame("Frame", self:GetName() .. "ComboPoints", self)
-		vUI:SetPoint(ComboPoints, "BOTTOMLEFT", self, "TOPLEFT", 0, -1)
-		vUI:SetSize(ComboPoints, Settings["unitframes-player-width"], 10)
+		ComboPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -1)
+		ComboPoints:SetSize(Settings["unitframes-player-width"], 10)
 		ComboPoints:SetBackdrop(vUI.Backdrop)
 		ComboPoints:SetBackdropColor(0, 0, 0)
 		ComboPoints:SetBackdropBorderColor(0, 0, 0)
@@ -1139,16 +1139,16 @@ local StylePlayer = function(self, unit)
 			Color = vUI.ComboPoints[i]
 			
 			ComboPoints[i] = CreateFrame("StatusBar", self:GetName() .. "ComboPoint" .. i, ComboPoints)
-			vUI:SetSize(ComboPoints[i], Width, 8)
+			ComboPoints[i]:SetSize(Width, 8)
 			ComboPoints[i]:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 			ComboPoints[i]:SetStatusBarColor(Color[1], Color[2], Color[3])
 			ComboPoints[i]:SetAlpha(0.3)
 			
 			if (i == 1) then
-				vUI:SetPoint(ComboPoints[i], "LEFT", ComboPoints, 1, 0)
+				ComboPoints[i]:SetPoint("LEFT", ComboPoints, 1, 0)
 			else
-				vUI:SetPoint(ComboPoints[i], "TOPLEFT", ComboPoints[i-1], "TOPRIGHT", 1, 0)
-				vUI:SetWidth(ComboPoints[i], Width - 2)
+				ComboPoints[i]:SetPoint("TOPLEFT", ComboPoints[i-1], "TOPRIGHT", 1, 0)
+				ComboPoints[i]:SetWidth(Width - 2)
 			end
 		end
 		
@@ -1158,8 +1158,8 @@ local StylePlayer = function(self, unit)
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	vUI:SetSize(Buffs, Settings["unitframes-player-width"], 28)
-	vUI:SetPoint(Buffs, "BOTTOMLEFT", self.AuraParent, "TOPLEFT", 0, 2)
+	Buffs:SetSize(Settings["unitframes-player-width"], 28)
+	Buffs:SetPoint("BOTTOMLEFT", self.AuraParent, "TOPLEFT", 0, 2)
 	Buffs.size = 28
 	Buffs.spacing = 2
 	Buffs.num = 40
@@ -1172,8 +1172,8 @@ local StylePlayer = function(self, unit)
 	Buffs.showType = true
 	
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	vUI:SetSize(Debuffs, Settings["unitframes-player-width"], 28)
-	vUI:SetPoint(Debuffs, "BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs:SetSize(Settings["unitframes-player-width"], 28)
+	Debuffs:SetPoint("BOTTOM", Buffs, "TOP", 0, 2)
 	Debuffs.size = 28
 	Debuffs.spacing = 2
 	Debuffs.num = 16
@@ -1187,8 +1187,8 @@ local StylePlayer = function(self, unit)
 	
 	-- Resurrect
 	local Resurrect = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(Resurrect, 16, 16)
-	vUI:SetPoint(Resurrect, "CENTER", Health, 0, 0)
+	Resurrect:SetSize(16, 16)
+	Resurrect:SetPoint("CENTER", Health, 0, 0)
 	
 	-- Tags
 	self:Tag(HealthRight, "[HealthPercent]")
@@ -1227,9 +1227,9 @@ local StyleTarget = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["unitframes-target-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["unitframes-target-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetMinMaxValues(0, 1)
 	Health:SetValue(1)
@@ -1243,24 +1243,24 @@ local StyleTarget = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
-	vUI:SetSize(RaidTarget, 16, 16)
+	RaidTarget:SetSize(16, 16)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
@@ -1275,26 +1275,26 @@ local StyleTarget = function(self, unit)
 	SetHealthAttributes(Health, Settings["unitframes-target-health-color"])
 	
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["unitframes-target-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["unitframes-target-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Power:SetReverseFill(Settings["unitframes-target-power-reverse"])
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerLeft, "LEFT", Power, 3, 0)
+	PowerLeft:SetPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerRight, "RIGHT", Power, -3, 0)
+	PowerRight:SetPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	
 	-- Attributes
@@ -1306,8 +1306,8 @@ local StyleTarget = function(self, unit)
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	vUI:SetSize(Buffs, Settings["unitframes-player-width"], 28)
-	vUI:SetPoint(Buffs, "BOTTOMLEFT", self, "TOPLEFT", 0, 2)
+	Buffs:SetSize(Settings["unitframes-player-width"], 28)
+	Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 	Buffs.size = 28
 	Buffs.spacing = 2
 	Buffs.num = 16
@@ -1319,10 +1319,9 @@ local StyleTarget = function(self, unit)
 	Buffs.showType = true
 	
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	vUI:SetSize(Debuffs, Settings["unitframes-player-width"], 28)
-	vUI:SetWidth(Debuffs, Settings["unitframes-player-width"])
-	--vUI:SetPoint(Debuffs, "BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
-	vUI:SetPoint(Debuffs, "BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs:SetSize(Settings["unitframes-player-width"], 28)
+	--Debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 31)
+	Debuffs:SetPoint("BOTTOM", Buffs, "TOP", 0, 2)
 	Debuffs.size = 28
 	Debuffs.spacing = 2
 	Debuffs.num = 16
@@ -1336,44 +1335,44 @@ local StyleTarget = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", "vUI Target Casting Bar", self)
-    vUI:SetSize(Castbar, 250, 22)
+    Castbar:SetSize(250, 22)
     Castbar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
-	vUI:SetPoint(CastbarBG, "TOPLEFT", Castbar, 0, 0)
-	vUI:SetPoint(CastbarBG, "BOTTOMRIGHT", Castbar, 0, 0)
+	CastbarBG:SetPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
     local Background = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(Background, "TOPLEFT", Castbar, -1, 1)
-    vUI:SetPoint(Background, "BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetPoint("BOTTOMRIGHT", Castbar, 1, -1)
     Background:SetTexture(Assets:GetTexture("Blank"))
     Background:SetVertexColor(0, 0, 0)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Time, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Time, "RIGHT", Castbar, -3, 0)
+	Time:SetPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Text, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Text, "LEFT", Castbar, 3, 0)
-	vUI:SetSize(Text, 250 * 0.7, Settings["ui-font-size"])
+	Text:SetPoint("LEFT", Castbar, 3, 0)
+	Text:SetSize(250 * 0.7, Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    vUI:SetSize(Icon, 22, 22)
-    vUI:SetPoint(Icon, "TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
+    Icon:SetSize(22, 22)
+	Icon:SetPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
     local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(IconBG, "TOPLEFT", Icon, -1, 1)
-    vUI:SetPoint(IconBG, "BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetPoint("TOPLEFT", Icon, -1, 1)
+    IconBG:SetPoint("BOTTOMRIGHT", Icon, 1, -1)
     IconBG:SetTexture(Assets:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
@@ -1424,9 +1423,9 @@ local StyleTargetTarget = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["unitframes-targettarget-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["unitframes-targettarget-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-targettarget-health-reverse"])
@@ -1438,19 +1437,19 @@ local StyleTargetTarget = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	-- Target Icon
@@ -1471,15 +1470,15 @@ local StyleTargetTarget = function(self, unit)
 	
 	-- Power Bar
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["unitframes-targettarget-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["unitframes-targettarget-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Power:SetReverseFill(Settings["unitframes-targettarget-power-reverse"])
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
@@ -1520,9 +1519,9 @@ local StylePet = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["unitframes-pet-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["unitframes-pet-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["unitframes-pet-health-reverse"])
@@ -1534,19 +1533,19 @@ local StylePet = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
@@ -1562,15 +1561,15 @@ local StylePet = function(self, unit)
 	
 	-- Power Bar
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["unitframes-pet-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["unitframes-pet-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Power:SetReverseFill(Settings["unitframes-pet-power-reverse"])
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
@@ -1658,14 +1657,14 @@ local BuffIDs = {
 }
 
 local PostCreateAuraWatchIcon = function(auras, icon)
-	vUI:SetPoint(icon.icon, "TOPLEFT", 1, -1)
-	vUI:SetPoint(icon.icon, "BOTTOMRIGHT", -1, 1)
+	icon.icon:SetPoint("TOPLEFT", 1, -1)
+	icon.icon:SetPoint("BOTTOMRIGHT", -1, 1)
 	icon.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	icon.icon:SetDrawLayer("ARTWORK")
 	
 	icon.bg = icon:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(icon.bg, "TOPLEFT", icon, -1, 1)
-	vUI:SetPoint(icon.bg, "BOTTOMRIGHT", icon, 1, -1)
+	icon.bg:SetPoint("TOPLEFT", icon, -1, 1)
+	icon.bg:SetPoint("BOTTOMRIGHT", icon, 1, -1)
 	icon.bg:SetTexture(0, 0, 0)
 	
 	icon.overlay:SetTexture()
@@ -1682,17 +1681,17 @@ local StyleParty = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["party-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["party-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["party-health-reverse"])
 	Health:SetOrientation(Settings["party-health-orientation"])
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
@@ -1725,22 +1724,22 @@ local StyleParty = function(self, unit)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	local HealthMiddle = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthMiddle, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthMiddle, "CENTER", Health, 0, -1)
+	HealthMiddle:SetPoint("CENTER", Health, 0, -1)
 	HealthMiddle:SetJustifyH("CENTER")
 	
 	local HealthBottom = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthBottom, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthBottom, "BOTTOM", Health, 0, 1)
+	HealthBottom:SetPoint("BOTTOM", Health, 0, 1)
 	HealthBottom:SetJustifyH("CENTER")
 	
 	-- Attributes
@@ -1751,15 +1750,15 @@ local StyleParty = function(self, unit)
 	SetHealthAttributes(Health, Settings["party-health-color"])
 	
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["party-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["party-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Power:SetReverseFill(Settings["party-power-reverse"])
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
@@ -1770,8 +1769,8 @@ local StyleParty = function(self, unit)
 	
 	-- Debuffs
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	vUI:SetSize(Debuffs, 76, 19)
-	vUI:SetPoint(Debuffs, "BOTTOMLEFT", self, "TOPLEFT", 0, 2)
+	Debuffs:SetSize(76, 19)
+	Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 	Debuffs.size = 19
 	Debuffs.num = 4
 	Debuffs.spacing = 2
@@ -1784,8 +1783,8 @@ local StyleParty = function(self, unit)
 	
 	if BuffIDs[vUI.UserClass] then
 		local Auras = CreateFrame("Frame", nil, Health)
-		vUI:SetPoint(Auras, "TOPLEFT", Health, 2, -2)
-		vUI:SetPoint(Auras, "BOTTOMRIGHT", Health, -2, 2)
+		Auras:SetPoint("TOPLEFT", Health, 2, -2)
+		Auras:SetPoint("BOTTOMRIGHT", Health, -2, 2)
 		Auras:SetFrameLevel(10)
 		Auras:SetFrameStrata("HIGH")
 		Auras.presentAlpha = 1
@@ -1805,7 +1804,7 @@ local StyleParty = function(self, unit)
 			Icon.spellID = spell[1]
 			Icon.anyUnit = spell[4]
 			Icon.strictMatching = true
-			vUI:SetSize(Icon, 8, 8)
+			Icon:SetSize(8, 8)
 			Icon:SetPoint(spell[2], 0, 0)
 			
 			local Texture = Icon:CreateTexture(nil, "OVERLAY")
@@ -1813,8 +1812,8 @@ local StyleParty = function(self, unit)
 			Texture:SetTexture(Assets:GetTexture("Blank"))
 			
 			local BG = Icon:CreateTexture(nil, "BORDER")
-			vUI:SetPoint(BG, "TOPLEFT", Icon, -1, 1)
-			vUI:SetPoint(BG, "BOTTOMRIGHT", Icon, 1, -1)
+			BG:SetPoint("TOPLEFT", Icon, -1, 1)
+			BG:SetPoint("BOTTOMRIGHT", Icon, 1, -1)
 			BG:SetTexture(Assets:GetTexture("Blank"))
 			BG:SetVertexColor(0, 0, 0)
 			
@@ -1826,7 +1825,7 @@ local StyleParty = function(self, unit)
 			
 			local Count = Icon:CreateFontString(nil, "OVERLAY")
 			vUI:SetFontInfo(Count, Settings["ui-widget-font"], 10)
-			vUI:SetPoint(Count, "CENTER", unpack(Offsets[spell[2]]))
+			Count:SetPoint("CENTER", unpack(Offsets[spell[2]]))
 			Icon.count = Count
 			
 			Auras.icons[spell[1]] = Icon
@@ -1838,7 +1837,7 @@ local StyleParty = function(self, unit)
 	-- Leader
     local Leader = Health:CreateTexture(nil, "OVERLAY")
     Leader:SetSize(16, 16)
-    vUI:SetPoint(Leader, "LEFT", Health, "TOPLEFT", 3, 0)
+    Leader:SetPoint("LEFT", Health, "TOPLEFT", 3, 0)
     Leader:SetTexture(Assets:GetTexture("Leader"))
     Leader:SetVertexColor(vUI:HexToRGB("FFEB3B"))
     Leader:Hide()
@@ -1846,54 +1845,54 @@ local StyleParty = function(self, unit)
 	-- Assist
     local Assist = Health:CreateTexture(nil, "OVERLAY")
     Assist:SetSize(16, 16)
-    vUI:SetPoint(Assist, "LEFT", Health, "TOPLEFT", 3, 0)
+    Assist:SetPoint("LEFT", Health, "TOPLEFT", 3, 0)
     Assist:SetTexture(Assets:GetTexture("Assist"))
     Assist:SetVertexColor(vUI:HexToRGB("FFEB3B"))
     Assist:Hide()
 	
 	-- Ready Check
     local ReadyCheck = Health:CreateTexture(nil, 'OVERLAY')
-    vUI:SetSize(ReadyCheck, 16, 16)
-    vUI:SetPoint(ReadyCheck, "CENTER", Health, 0, 0)
+    ReadyCheck:SetSize(16, 16)
+    ReadyCheck:SetPoint("CENTER", Health, 0, 0)
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(RaidTarget, 16, 16)
+	RaidTarget:SetSize(16, 16)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
     -- Resurrect
 	local Resurrect = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(Resurrect, 16, 16)
-	vUI:SetPoint(Resurrect, "CENTER", Health, 0, 0)
+	Resurrect:SetSize(16, 16)
+	Resurrect:SetPoint("CENTER", Health, 0, 0)
 	
 	-- Dispels
 	local Dispel = CreateFrame("Frame", nil, Health)
-	vUI:SetSize(Dispel, 20)
-	vUI:SetPoint(Dispel, "CENTER", Health, 0, 0)
+	Dispel:SetSize(20, 20)
+	Dispel:SetPoint("CENTER", Health, 0, 0)
 	Dispel:SetFrameLevel(Health:GetFrameLevel() + 20)
 	Dispel:SetBackdrop(vUI.BackdropAndBorder)
 	Dispel:SetBackdropColor(0, 0, 0)
 	
 	Dispel.icon = Dispel:CreateTexture(nil, "ARTWORK")
 	Dispel.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	vUI:SetPoint(Dispel.icon, "TOPLEFT", Dispel, 1, -1)
-	vUI:SetPoint(Dispel.icon, "BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.icon:SetPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.icon:SetPoint("BOTTOMRIGHT", Dispel, -1, 1)
 	
 	Dispel.cd = CreateFrame("Cooldown", nil, Dispel, "CooldownFrameTemplate")
-	vUI:SetPoint(Dispel.cd, "TOPLEFT", Dispel, 1, -1)
-	vUI:SetPoint(Dispel.cd, "BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.cd:SetPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.cd:SetPoint("BOTTOMRIGHT", Dispel, -1, 1)
 	Dispel.cd:SetHideCountdownNumbers(true)
 	Dispel.cd:SetDrawEdge(false)
 	
 	Dispel.count = Dispel.cd:CreateFontString(nil, "ARTWORK", 7)
 	vUI:SetFontInfo(Dispel.count, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Dispel.count, "BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
+	Dispel.count:SetPoint("BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
 	Dispel.count:SetTextColor(1, 1, 1)
 	Dispel.count:SetJustifyH("RIGHT")
 	
 	Dispel.bg = Dispel:CreateTexture(nil, "BACKGROUND")
-	vUI:SetPoint(Dispel.bg, "TOPLEFT", Dispel, -1, 1)
-	vUI:SetPoint(Dispel.bg, "BOTTOMRIGHT", Dispel, 1, -1)
+	Dispel.bg:SetPoint("TOPLEFT", Dispel, -1, 1)
+	Dispel.bg:SetPoint("BOTTOMRIGHT", Dispel, 1, -1)
 	Dispel.bg:SetTexture(Assets:GetTexture("Blank"))
 	Dispel.bg:SetVertexColor(0, 0, 0)
 	
@@ -1935,9 +1934,9 @@ local StylePartyPet = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["party-pets-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["party-pets-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	Health:SetReverseFill(Settings["party-pets-health-reverse"])
@@ -1950,24 +1949,24 @@ local StylePartyPet = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	local HealthMiddle = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthMiddle, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthMiddle, "CENTER", Health, 0, -1)
+	HealthMiddle:SetPoint("CENTER", Health, 0, -1)
 	HealthMiddle:SetJustifyH("CENTER")
 	
 	-- Attributes
@@ -1979,7 +1978,7 @@ local StylePartyPet = function(self, unit)
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
-	vUI:SetSize(RaidTarget, 16, 16)
+	RaidTarget:SetSize(16, 16)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	-- Tags
@@ -2011,9 +2010,9 @@ local StyleRaid = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["raid-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["raid-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
@@ -2024,19 +2023,19 @@ local StyleRaid = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
@@ -2050,14 +2049,14 @@ local StyleRaid = function(self, unit)
 	SetHealthAttributes(Health, Settings["raid-health-color"])
 	
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["raid-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["raid-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-color"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-color"]))
 	PowerBG:SetAlpha(0.2)
 	
@@ -2068,39 +2067,39 @@ local StyleRaid = function(self, unit)
 	
 	-- Resurrect
 	local ResurrectIndicator = Health:CreateTexture(nil, "OVERLAY")
-	vUI:SetSize(ResurrectIndicator, 16, 16)
-	vUI:SetPoint(ResurrectIndicator, "CENTER", Health, 0, 0)
+	ResurrectIndicator:SetSize(16, 16)
+	ResurrectIndicator:SetPoint("CENTER", Health, 0, 0)
 	
 	-- Dispels
 	local Dispel = CreateFrame("Frame", nil, self)
-	vUI:SetSize(Dispel, 20)
-	vUI:SetPoint(Dispel, "CENTER", Health)
+	Dispel:SetSize(20, 20)
+	Dispel:SetPoint("CENTER", Health)
 	Dispel:SetFrameLevel(Health:GetFrameLevel() + 20)
 	Dispel:SetBackdrop(vUI.BackdropAndBorder)
 	Dispel:SetBackdropColor(0, 0, 0)
 	
 	Dispel.icon = Dispel:CreateTexture(nil, "ARTWORK")
 	Dispel.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	vUI:SetPoint(Dispel.icon, "TOPLEFT", Dispel, 1, -1)
-	vUI:SetPoint(Dispel.icon, "BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.icon:SetPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.icon:SetPoint("BOTTOMRIGHT", Dispel, -1, 1)
 	
 	Dispel.cd = CreateFrame("Cooldown", nil, Dispel, "CooldownFrameTemplate")
-	vUI:SetPoint(Dispel.cd, "TOPLEFT", Dispel, 1, -1)
-	vUI:SetPoint(Dispel.cd, "BOTTOMRIGHT", Dispel, -1, 1)
+	Dispel.cd:SetPoint("TOPLEFT", Dispel, 1, -1)
+	Dispel.cd:SetPoint("BOTTOMRIGHT", Dispel, -1, 1)
 	Dispel.cd:SetHideCountdownNumbers(true)
 	Dispel.cd:SetDrawEdge(false)
 	
 	Dispel.count = Dispel.cd:CreateFontString(nil, "ARTWORK", 7)
 	vUI:SetFontInfo(Dispel.count, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Dispel.count, "BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
+	Dispel.count:SetPoint("BOTTOMRIGHT", Dispel, "BOTTOMRIGHT", -3, 3)
 	Dispel.count:SetTextColor(1, 1, 1)
 	Dispel.count:SetJustifyH("RIGHT")
 	Dispel.count:SetShadowColor(0, 0, 0)
 	Dispel.count:SetShadowOffset(1.25, -1.25)
 	
 	Dispel.bg = Dispel:CreateTexture(nil, "BACKGROUND")
-	vUI:SetPoint(Dispel.bg, "TOPLEFT", Dispel, -1, 1)
-	vUI:SetPoint(Dispel.bg, "BOTTOMRIGHT", Dispel, 1, -1)
+	Dispel.bg:SetPoint("TOPLEFT", Dispel, -1, 1)
+	Dispel.bg:SetPoint("BOTTOMRIGHT", Dispel, 1, -1)
 	Dispel.bg:SetTexture(Assets:GetTexture("Blank"))
 	Dispel.bg:SetVertexColor(0, 0, 0)
 	
@@ -2136,9 +2135,9 @@ local StyleBoss = function(self, unit)
 	
 	-- Health Bar
 	local Health = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Health, "TOPLEFT", self, 1, -1)
-	vUI:SetPoint(Health, "TOPRIGHT", self, -1, -1)
-	vUI:SetHeight(Health, Settings["unitframes-boss-health-height"])
+	Health:SetPoint("TOPLEFT", self, 1, -1)
+	Health:SetPoint("TOPRIGHT", self, -1, -1)
+	Health:SetHeight(Settings["unitframes-boss-health-height"])
 	Health:SetFrameLevel(5)
 	Health:SetMinMaxValues(0, 1)
 	Health:SetValue(1)
@@ -2151,24 +2150,24 @@ local StyleBoss = function(self, unit)
 	HealBar:SetFrameLevel(Health:GetFrameLevel() - 1)
 	
 	local HealthBG = self:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(HealthBG, "TOPLEFT", Health, 0, 0)
-	vUI:SetPoint(HealthBG, "BOTTOMRIGHT", Health, 0, 0)
+	HealthBG:SetPoint("TOPLEFT", Health, 0, 0)
+	HealthBG:SetPoint("BOTTOMRIGHT", Health, 0, 0)
 	HealthBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	HealthBG:SetAlpha(0.2)
 	
 	local HealthLeft = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthLeft, "LEFT", Health, 3, 0)
+	HealthLeft:SetPoint("LEFT", Health, 3, 0)
 	HealthLeft:SetJustifyH("LEFT")
 	
 	local HealthRight = Health:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(HealthRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(HealthRight, "RIGHT", Health, -3, 0)
+	HealthRight:SetPoint("RIGHT", Health, -3, 0)
 	HealthRight:SetJustifyH("RIGHT")
 	
 	-- Target Icon
 	local RaidTarget = Health:CreateTexture(nil, 'OVERLAY')
-	vUI:SetSize(RaidTarget, 16, 16)
+	RaidTarget:SetSize(16, 16)
 	RaidTarget:SetPoint("CENTER", Health, "TOP")
 	
 	local R, G, B = vUI:HexToRGB(Settings["ui-header-texture-color"])
@@ -2183,25 +2182,25 @@ local StyleBoss = function(self, unit)
 	SetHealthAttributes(Health, Settings["unitframes-boss-health-color"])
 	
 	local Power = CreateFrame("StatusBar", nil, self)
-	vUI:SetPoint(Power, "BOTTOMLEFT", self, 1, 1)
-	vUI:SetPoint(Power, "BOTTOMRIGHT", self, -1, 1)
-	vUI:SetHeight(Power, Settings["unitframes-boss-power-height"])
+	Power:SetPoint("BOTTOMLEFT", self, 1, 1)
+	Power:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	Power:SetHeight(Settings["unitframes-boss-power-height"])
 	Power:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
 	local PowerBG = Power:CreateTexture(nil, "BORDER")
-	vUI:SetPoint(PowerBG, "TOPLEFT", Power, 0, 0)
-	vUI:SetPoint(PowerBG, "BOTTOMRIGHT", Power, 0, 0)
+	PowerBG:SetPoint("TOPLEFT", Power, 0, 0)
+	PowerBG:SetPoint("BOTTOMRIGHT", Power, 0, 0)
 	PowerBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	PowerBG:SetAlpha(0.2)
 	
 	local PowerLeft = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerLeft, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerLeft, "LEFT", Power, 3, 0)
+	PowerLeft:SetPoint("LEFT", Power, 3, 0)
 	PowerLeft:SetJustifyH("LEFT")
 	
 	local PowerRight = Power:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(PowerRight, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(PowerRight, "RIGHT", Power, -3, 0)
+	PowerRight:SetPoint("RIGHT", Power, -3, 0)
 	PowerRight:SetJustifyH("RIGHT")
 	
 	-- Attributes
@@ -2213,8 +2212,8 @@ local StyleBoss = function(self, unit)
 	
 	-- Auras
 	local Buffs = CreateFrame("Frame", self:GetName() .. "Buffs", self)
-	vUI:SetSize(Buffs, Settings["unitframes-player-width"], 28)
-	vUI:SetPoint(Buffs, "BOTTOMLEFT", self, "TOPLEFT", 0, 2)
+	Buffs:SetSize(Settings["unitframes-player-width"], 28)
+	Buffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 	Buffs.size = 28
 	Buffs.spacing = 2
 	Buffs.num = 8
@@ -2226,9 +2225,8 @@ local StyleBoss = function(self, unit)
 	Buffs.showType = true
 	
 	local Debuffs = CreateFrame("Frame", self:GetName() .. "Debuffs", self)
-	vUI:SetSize(Debuffs, Settings["unitframes-player-width"], 28)
-	vUI:SetWidth(Debuffs, Settings["unitframes-player-width"])
-	vUI:SetPoint(Debuffs, "BOTTOM", Buffs, "TOP", 0, 2)
+	Debuffs:SetSize(Settings["unitframes-player-width"], 28)
+	Debuffs:SetPoint("BOTTOM", Buffs, "TOP", 0, 2)
 	Debuffs.size = 28
 	Debuffs.spacing = 2
 	Debuffs.num = 8
@@ -2242,44 +2240,44 @@ local StyleBoss = function(self, unit)
 	
     -- Castbar
     local Castbar = CreateFrame("StatusBar", self:GetName() .. " Casting Bar", self)
-    vUI:SetSize(Castbar, 250, 22)
+    Castbar:SetSize(250, 22)
     Castbar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	
 	local CastbarBG = Castbar:CreateTexture(nil, "ARTWORK")
-	vUI:SetPoint(CastbarBG, "TOPLEFT", Castbar, 0, 0)
-	vUI:SetPoint(CastbarBG, "BOTTOMRIGHT", Castbar, 0, 0)
+	CastbarBG:SetPoint("TOPLEFT", Castbar, 0, 0)
+	CastbarBG:SetPoint("BOTTOMRIGHT", Castbar, 0, 0)
     CastbarBG:SetTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
 	CastbarBG:SetAlpha(0.2)
 	
     -- Add a background
     local Background = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(Background, "TOPLEFT", Castbar, -1, 1)
-    vUI:SetPoint(Background, "BOTTOMRIGHT", Castbar, 1, -1)
+    Background:SetPoint("TOPLEFT", Castbar, -1, 1)
+    Background:SetPoint("BOTTOMRIGHT", Castbar, 1, -1)
     Background:SetTexture(Assets:GetTexture("Blank"))
     Background:SetVertexColor(0, 0, 0)
 	
     -- Add a timer
     local Time = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Time, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Time, "RIGHT", Castbar, -3, 0)
+	Time:SetPoint("RIGHT", Castbar, -3, 0)
 	Time:SetJustifyH("RIGHT")
 	
     -- Add spell text
     local Text = Castbar:CreateFontString(nil, "OVERLAY")
 	vUI:SetFontInfo(Text, Settings["ui-widget-font"], Settings["ui-font-size"])
-	vUI:SetPoint(Text, "LEFT", Castbar, 3, 0)
-	vUI:SetSize(Text, 250 * 0.7, Settings["ui-font-size"])
+	Text:SetPoint("LEFT", Castbar, 3, 0)
+	Text:SetSize(250 * 0.7, Settings["ui-font-size"])
 	Text:SetJustifyH("LEFT")
 	
     -- Add spell icon
     local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-    vUI:SetSize(Icon, 22, 22)
-    vUI:SetPoint(Icon, "TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
+    Icon:SetSize(22, 22)
+    Icon:SetPoint("TOPRIGHT", Castbar, "TOPLEFT", -4, 0)
     Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
     local IconBG = Castbar:CreateTexture(nil, "BACKGROUND")
-    vUI:SetPoint(IconBG, "TOPLEFT", Icon, -1, 1)
-    vUI:SetPoint(IconBG, "BOTTOMRIGHT", Icon, 1, -1)
+    IconBG:SetPoint("TOPLEFT", Icon, -1, 1)
+	IconBG:SetPoint("BOTTOMRIGHT", Icon, 1, -1)
     IconBG:SetTexture(Assets:GetTexture("Blank"))
     IconBG:SetVertexColor(0, 0, 0)
 	
@@ -2396,20 +2394,24 @@ UF:SetScript("OnEvent", function(self, event)
 	if (event == "PLAYER_LOGIN") then
 		if Settings["unitframes-enable"] then
 			local Player = oUF:Spawn("player", "vUI Player")
-			vUI:SetSize(Player, Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + Settings["unitframes-player-power-height"] + 3)
-			vUI:SetPoint(Player, "RIGHT", UIParent, "CENTER", -68, -304)
+			Player:SetSize(Settings["unitframes-player-width"], Settings["unitframes-player-health-height"] + Settings["unitframes-player-power-height"] + 3)
+			Player:SetPoint("RIGHT", UIParent, "CENTER", -68, -304)
+			Player:SetParent(vUI.UIParent)
 			
 			local Target = oUF:Spawn("target", "vUI Target")
-			vUI:SetSize(Target, Settings["unitframes-target-width"], Settings["unitframes-target-health-height"] + Settings["unitframes-target-power-height"] + 3)
-			vUI:SetPoint(Target, "LEFT", UIParent, "CENTER", 68, -304)
+			Target:SetSize(Settings["unitframes-target-width"], Settings["unitframes-target-health-height"] + Settings["unitframes-target-power-height"] + 3)
+			Target:SetPoint("LEFT", UIParent, "CENTER", 68, -304)
+			Target:SetParent(vUI.UIParent)
 			
 			local TargetTarget = oUF:Spawn("targettarget", "vUI Target Target")
-			vUI:SetSize(TargetTarget, Settings["unitframes-targettarget-width"], Settings["unitframes-targettarget-health-height"] + Settings["unitframes-targettarget-power-height"] + 3)
-			vUI:SetPoint(TargetTarget, "TOPRIGHT", Target, "BOTTOMRIGHT", 0, -2)
+			TargetTarget:SetSize(Settings["unitframes-targettarget-width"], Settings["unitframes-targettarget-health-height"] + Settings["unitframes-targettarget-power-height"] + 3)
+			TargetTarget:SetPoint("TOPRIGHT", Target, "BOTTOMRIGHT", 0, -2)
+			TargetTarget:SetParent(vUI.UIParent)
 			
 			local Pet = oUF:Spawn("pet", "vUI Pet")
-			vUI:SetSize(Pet, Settings["unitframes-pet-width"], Settings["unitframes-pet-health-height"] + Settings["unitframes-pet-power-height"] + 3)
-			vUI:SetPoint(Pet, "TOPLEFT", Player, "BOTTOMLEFT", 0, -2)
+			Pet:SetSize(Settings["unitframes-pet-width"], Settings["unitframes-pet-health-height"] + Settings["unitframes-pet-power-height"] + 3)
+			Pet:SetPoint("TOPLEFT", Player, "BOTTOMLEFT", 0, -2)
+			Pet:SetParent(vUI.UIParent)
 			
 			vUI.UnitFrames["player"] = Player
 			vUI.UnitFrames["target"] = Target
@@ -2423,8 +2425,8 @@ UF:SetScript("OnEvent", function(self, event)
 			vUI:CreateMover(TargetTarget)
 			vUI:CreateMover(Pet)
 			
-			vUI:SetPoint(Player.Castbar, "BOTTOM", UIParent, 0, 118)
-			vUI:SetPoint(Target.Castbar, "BOTTOM", UIParent, 0, 146)
+			Player.Castbar:SetPoint("BOTTOM", UIParent, 0, 118)
+			Target.Castbar:SetPoint("BOTTOM", UIParent, 0, 146)
 			
 			vUI:CreateMover(Player.Castbar, 2)
 			vUI:CreateMover(Target.Castbar, 2)
@@ -2433,12 +2435,13 @@ UF:SetScript("OnEvent", function(self, event)
 		if Settings["unitframes-boss-enable"] then
 			for i = 1, 5 do
 				local Boss = oUF:Spawn("boss" .. i, "vUI Boss " .. i)
-				vUI:SetSize(Boss, Settings["unitframes-boss-width"], Settings["unitframes-boss-health-height"] + Settings["unitframes-boss-power-height"] + 3)
+				Boss:SetSize(Settings["unitframes-boss-width"], Settings["unitframes-boss-health-height"] + Settings["unitframes-boss-power-height"] + 3)
+				Boss:SetParent(vUI.UIParent)
 				
 				if (i == 1) then
-					vUI:SetPoint(Boss, "LEFT", UIParent, 300, 200)
+					Boss:SetPoint("LEFT", UIParent, 300, 200)
 				else
-					vUI:SetPoint(Boss, "TOP", vUI.UnitFrames["boss" .. (i-1)], "BOTTOM", 0, -2)
+					Boss:SetPoint("TOP", vUI.UnitFrames["boss" .. (i-1)], "BOTTOM", 0, -2)
 				end
 				
 				vUI:CreateMover(Boss)
@@ -2467,10 +2470,11 @@ UF:SetScript("OnEvent", function(self, event)
 			)
 			
 			self.PartyAnchor = CreateFrame("Frame", "vUI Party Anchor", UIParent)
-			vUI:SetSize(self.PartyAnchor, (5 * Settings["party-width"] + (4 * 2)), (Settings["party-health-height"] + Settings["party-power-height"]) + 3)
-			vUI:SetPoint(self.PartyAnchor, "BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
+			self.PartyAnchor:SetSize((5 * Settings["party-width"] + (4 * 2)), (Settings["party-health-height"] + Settings["party-power-height"]) + 3)
+			self.PartyAnchor:SetPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
 			
-			vUI:SetPoint(Party, "BOTTOMLEFT", self.PartyAnchor, 0, 0)
+			Party:SetPoint("BOTTOMLEFT", self.PartyAnchor, 0, 0)
+			Party:SetParent(vUI.UIParent)
 			
 			vUI.UnitFrames["party"] = Party
 			
@@ -2495,7 +2499,8 @@ UF:SetScript("OnEvent", function(self, event)
 					]]
 				)
 				
-				vUI:SetPoint(PartyPet, "BOTTOMLEFT", Party, "TOPLEFT", 0, 2)
+				PartyPet:SetPoint("BOTTOMLEFT", Party, "TOPLEFT", 0, 2)
+				PartyPet:SetParent(vUI.UIParent)
 			end
 		end
 		
@@ -2522,9 +2527,9 @@ UF:SetScript("OnEvent", function(self, event)
 			)
 			
 			self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", UIParent)
-			vUI:SetSize(self.RaidAnchor, (4 * (Settings["raid-health-height"] + Settings["raid-power-height"] + 3) + 4 * 2), ((Settings["raid-health-height"] + Settings["raid-power-height"]) * 10) + (2 * (10 - 1)))
-			--vUI:SetPoint(self.RaidAnchor, "TOPLEFT", UIParent, 10, -10)
-			vUI:SetPoint(self.RaidAnchor, "BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
+			self.RaidAnchor:SetSize((4 * (Settings["raid-health-height"] + Settings["raid-power-height"] + 3) + 4 * 2), ((Settings["raid-health-height"] + Settings["raid-power-height"]) * 10) + (2 * (10 - 1)))
+			--self.RaidAnchor:SetPoint("TOPLEFT", UIParent, 10, -10)
+			self.RaidAnchor:SetPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
 			
 			local Hider = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
 			Hider:Hide()
@@ -2537,7 +2542,8 @@ UF:SetScript("OnEvent", function(self, event)
 				CompactRaidFrameManager:SetParent(Hider)
 			end
 			
-			vUI:SetPoint(Raid, "TOPLEFT", self.RaidAnchor, 0, 0)
+			Raid:SetPoint("TOPLEFT", self.RaidAnchor, 0, 0)
+			Raid:SetParent(vUI.UIParent)
 			
 			vUI.UnitFrames["raid"] = Raid
 			
@@ -2564,23 +2570,23 @@ local UpdatePlayerWidth = function(value)
 	if vUI.UnitFrames["player"] then
 		local Frame = vUI.UnitFrames["player"]
 		
-		vUI:SetWidth(Frame, value)
+		Frame:SetWidth(value)
 		
 		-- Auras
-		vUI:SetWidth(Frame.Buffs, value)
-		vUI:SetWidth(Frame.Debuffs, value)
+		Frame.Buffs:SetWidth(value)
+		Frame.Debuffs:SetWidth(value)
 		
 		-- Combo points
 		if Frame.ComboPoints then
-			vUI:SetWidth(Frame.ComboPoints, value)
+			Frame.ComboPoints:SetWidth(value)
 			
 			local Width = (value / 5)
 			
 			for i = 1, 5 do
-				vUI:SetWidth(Frame.ComboPoints[i], Width)
+				Frame.ComboPoints[i]:SetWidth(Width)
 				
 				if (i ~= 1) then
-					vUI:SetWidth(Frame.ComboPoints[i], Width - 2)
+					Frame.ComboPoints[i]:SetWidth(Width - 2)
 				end
 			end
 		end
@@ -2591,8 +2597,8 @@ local UpdatePlayerHealthHeight = function(value)
 	if vUI.UnitFrames["player"] then
 		local Frame = vUI.UnitFrames["player"]
 		
-		vUI:SetHeight(Frame.Health, value)
-		vUI:SetHeight(Frame, value + Settings["unitframes-player-power-height"] + 3)
+		Frame.Health:SetHeight(value)
+		Frame:SetHeight(value + Settings["unitframes-player-power-height"] + 3)
 	end
 end
 
@@ -2600,8 +2606,8 @@ local UpdatePlayerPowerHeight = function(value)
 	if vUI.UnitFrames["player"] then
 		local Frame = vUI.UnitFrames["player"]
 		
-		vUI:SetHeight(Frame.Power, value)
-		vUI:SetHeight(Frame, Settings["unitframes-player-health-height"] + value + 3)
+		Frame.Power:SetHeight(value)
+		Frame:SetHeight(Settings["unitframes-player-health-height"] + value + 3)
 	end
 end
 
@@ -2609,11 +2615,11 @@ local UpdateTargetWidth = function(value)
 	if vUI.UnitFrames["target"] then
 		local Frame = vUI.UnitFrames["target"]
 		
-		vUI:SetWidth(Frame, value)
+		Frame:SetWidth(value)
 		
 		-- Auras
-		vUI:SetWidth(Frame.Buffs, value)
-		vUI:SetWidth(Frame.Debuffs, value)
+		Frame.Buffs:SetWidth(value)
+		Frame.Debuffs:SetWidth(value)
 	end
 end
 
@@ -2621,8 +2627,8 @@ local UpdateTargetHealthHeight = function(value)
 	if vUI.UnitFrames["target"] then
 		local Frame = vUI.UnitFrames["target"]
 		
-		vUI:SetHeight(Frame.Health, value)
-		vUI:SetHeight(Frame, value + Settings["unitframes-target-power-height"] + 3)
+		Frame.Health:SetHeight(value)
+		vFrame:SetHeight(value + Settings["unitframes-target-power-height"] + 3)
 	end
 end
 
@@ -2630,21 +2636,21 @@ local UpdateTargetPowerHeight = function(value)
 	if vUI.UnitFrames["target"] then
 		local Frame = vUI.UnitFrames["target"]
 		
-		vUI:SetHeight(Frame.Power, value)
-		vUI:SetHeight(Frame, Settings["unitframes-target-health-height"] + value + 3)
+		Frame.Power:SetHeight(value)
+		Frame:SetHeight(Settings["unitframes-target-health-height"] + value + 3)
 	end
 end
 
 local UpdateTargetTargetWidth = function(value)
 	if vUI.UnitFrames["target"] then
-		vUI:SetWidth(vUI.UnitFrames["targettarget"], value)
+		vUI.UnitFrames["targettarget"]:SetWidth(value)
 	end
 end
 
 local UpdateTargetTargetHealthHeight = function(value)
 	if vUI.UnitFrames["targettarget"] then
-		vUI:SetHeight(vUI.UnitFrames["targettarget"].Health, value)
-		vUI:SetHeight(vUI.UnitFrames["targettarget"], value + Settings["unitframes-targettarget-power-height"] + 3)
+		vUI.UnitFrames["targettarget"].Health:SetHeight(value)
+		vUI.UnitFrames["targettarget"]:SetHeight(value + Settings["unitframes-targettarget-power-height"] + 3)
 	end
 end
 
@@ -2652,22 +2658,21 @@ local UpdateTargetTargetPowerHeight = function(value)
 	if vUI.UnitFrames["targettarget"] then
 		local Frame = vUI.UnitFrames["targettarget"]
 		
-		vUI:SetHeight(Frame.Power, value)
-		
-		vUI:SetHeight(Frame, Settings["unitframes-targettarget-health-height"] + value + 3)
+		Frame.Power:SetHeight(value)
+		Frame:SetHeight(Settings["unitframes-targettarget-health-height"] + value + 3)
 	end
 end
 
 local UpdatePetWidth = function(value)
 	if vUI.UnitFrames["pet"] then
-		vUI:SetWidth(vUI.UnitFrames["pet"], value)
+		vUI.UnitFrames["pet"]:SetWidth(value)
 	end
 end
 
 local UpdatePetHealthHeight = function(value)
 	if vUI.UnitFrames["pet"] then
-		vUI:SetHeight(vUI.UnitFrames["pet"].Health, value)
-		vUI:SetHeight(vUI.UnitFrames["pet"], value + Settings["unitframes-pet-power-height"] + 3)
+		vUI.UnitFrames["pet"].Health:SetHeight(value)
+		vUI.UnitFrames["pet"]:SetHeight(value + Settings["unitframes-pet-power-height"] + 3)
 	end
 end
 
@@ -2675,9 +2680,8 @@ local UpdatePetPowerHeight = function(value)
 	if vUI.UnitFrames["pet"] then
 		local Frame = vUI.UnitFrames["pet"]
 		
-		vUI:SetHeight(Frame.Power, value)
-		
-		vUI:SetHeight(Frame, Settings["unitframes-pet-health-height"] + value + 3)
+		Frame.Power:SetHeight(value)
+		Frame:SetHeight(Settings["unitframes-pet-health-height"] + value + 3)
 	end
 end
 
@@ -2864,7 +2868,7 @@ local UpdatePartyWidth = function(value)
 			Unit = select(i, vUI.UnitFrames["party"]:GetChildren())
 			
 			if Unit then
-				vUI:SetWidth(Unit, value)
+				Unit:SetWidth(value)
 			end
 		end
 	end

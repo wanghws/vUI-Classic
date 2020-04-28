@@ -51,8 +51,8 @@ function MicroButtons:Load()
 	end
 	
 	local Panel = CreateFrame("Frame", "vUI Micro Buttons", UIParent)
-	vUI:SetSize(Panel, 232, 38)
-	vUI:SetPoint(Panel, "BOTTOMRIGHT", BagsFrame.Panel, "BOTTOMLEFT", -2, 0)
+	Panel:SetSize(232, 38)
+	Panel:SetPoint("BOTTOMRIGHT", BagsFrame.Panel, "BOTTOMLEFT", -2, 0)
 	Panel:SetBackdrop(vUI.BackdropAndBorder)
 	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	Panel:SetBackdropBorderColor(0, 0, 0)
@@ -73,9 +73,9 @@ function MicroButtons:Load()
 		Button:HookScript("OnLeave", MicroButtonsButtonOnLeave)
 		
 		if (i == 1) then
-			vUI:SetPoint(Button, "TOPLEFT", Panel, 0, 20)
+			Button:SetPoint("TOPLEFT", Panel, 0, 20)
 		else
-			vUI:SetPoint(Button, "LEFT", self.Buttons[i-1], "RIGHT", 0, 0)
+			Button:SetPoint("LEFT", self.Buttons[i-1], "RIGHT", 0, 0)
 		end
 	end
 	

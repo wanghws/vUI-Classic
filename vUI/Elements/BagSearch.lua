@@ -21,8 +21,8 @@ end
 
 function BagSearch:Load()
 	local Search = CreateFrame("EditBox", nil, ContainerFrame1, "InputBoxTemplate")
-	vUI:SetPoint(Search, "TOPRIGHT", ContainerFrame1, -10, -24)
-	vUI:SetSize(Search, 120, 30)
+	Search:SetPoint("TOPRIGHT", ContainerFrame1, -10, -24)
+	Search:SetSize(120, 30)
 	Search:SetFrameLevel(ContainerFrame1:GetFrameLevel() + 10)
 	Search:SetAutoFocus(false)
 	Search:SetScript("OnTextChanged", SearchOnTextChanged)

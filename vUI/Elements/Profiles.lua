@@ -7,12 +7,6 @@ local match = string.match
 
 vUI.ProfileList = {}
 
---[[
-	To do:
-	
-	vUI:CopyProfile(from, to)
---]]
-
 vUI.ProfileMetadata = {
 	["profile-name"] = true,
 	["profile-created"] = true,
@@ -24,34 +18,6 @@ vUI.ProfileMetadata = {
 vUI.PreserveSettings = {
 	["ui-scale"] = true,
 }
-
-function vUI:UpdateProfileInfo()
-	local Name = self:GetActiveProfileName()
-	local Profile = self:GetProfile(Name)
-	local MostUsed = self:GetMostUsedProfile()
-	local NumServed, IsAll = self:GetNumServedByProfile(Name)
-	local MostUsedServed = NumServed
-	
-	if IsAll then
-		NumServed = format("%d (%s)", NumServed, Language["All"])
-	end
-	
-	if (Profile ~= MostUsed) then
-		MostUsedServed = self:GetNumServedByProfile(MostUsed)
-	end
-	
-	GUI:GetWidgetByWindow(Language["Profiles"], "current-profile").Right:SetText(Name)
-	GUI:GetWidgetByWindow(Language["Profiles"], "created-by").Right:SetText(Profile["profile-created-by"])
-	GUI:GetWidgetByWindow(Language["Profiles"], "created-on").Right:SetText(vUI:IsToday(Profile["profile-created"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "last-modified").Right:SetText(vUI:IsToday(Profile["profile-last-modified"]))
-	GUI:GetWidgetByWindow(Language["Profiles"], "modifications").Right:SetText(self:CountChangedValues(Name))
-	GUI:GetWidgetByWindow(Language["Profiles"], "serving-characters").Right:SetText(NumServed)
-	
-	GUI:GetWidgetByWindow(Language["Profiles"], "popular-profile").Right:SetText(format("%s (%d)", MostUsed, MostUsedServed))
-	GUI:GetWidgetByWindow(Language["Profiles"], "stored-profiles").Right:SetText(self:GetProfileCount())
-	GUI:GetWidgetByWindow(Language["Profiles"], "empty-profiles").Right:SetText(self:CountEmptyProfiles())
-	GUI:GetWidgetByWindow(Language["Profiles"], "unused-profiles").Right:SetText(self:CountUnusedProfiles())
-end
 
 function vUI:UpdateProfileList()
 	if vUIProfiles then
@@ -462,7 +428,7 @@ function vUI:CopyProfile(from, to)
 	self:print(format('Profile "%s" has been copied from "%s".', to, from))
 end
 
-function vUI:SetProfileMetadata(name, meta, value) -- /run vUI:get(7):SetProfileMetadata("ProfileName", "profile-created-by", "Hydra")
+function vUI:SetProfileMetadata(name, meta, value) -- /run vUI:get(1):SetProfileMetadata("ProfileName", "profile-created-by", "Hydra")
 	if (vUIProfiles[name] and self.ProfileMetadata[meta]) then
 		vUIProfiles[name][meta] = value
 	end
