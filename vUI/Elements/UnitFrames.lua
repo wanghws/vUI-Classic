@@ -59,9 +59,7 @@ local ShortClasses = {
 }
 
 local Ignore = {
-	["Sated"] = true,
-	["Temporal Displacement"] = true,
-	["Challenger's Burden"] = true,
+
 }
 
 local CustomFilter = function(self, unit, icon, name, texture, count, dtype, duration, timeLeft, caster)
