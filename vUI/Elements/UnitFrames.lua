@@ -64,7 +64,7 @@ local Ignore = {
 	["Challenger's Burden"] = true,
 }
 
-local CustomFilter = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster)
+local CustomFilter = function(self, unit, icon, name, texture, count, dtype, duration, timeLeft, caster)
 	if ((self.onlyShowPlayer and icon.isPlayer) or (not self.onlyShowPlayer and name)) and (not Ignore[name]) then
 		return true
 	end
