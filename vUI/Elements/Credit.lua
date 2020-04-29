@@ -20,6 +20,9 @@ GUI:AddOptions(function(self)
 	Left:CreateDoubleLine("Shadowed103", "xbeeps")
 	Left:CreateLine("Azilroka")
 	
+	Left:CreateHeader("AceSerializer")
+	Left:CreateLine("Nevcairiel")
+	
 	Right:CreateHeader("LibStub")
 	Right:CreateDoubleLine("Kaelten", "Cladhaire")
 	Right:CreateDoubleLine("ckknight", "Mikk")
@@ -34,6 +37,9 @@ GUI:AddOptions(function(self)
 	
 	Right:CreateHeader("LibClassicMobHealth-1.0")
 	Right:CreateLine("Pneumatus")
+	
+	Right:CreateHeader("LibDeflate")
+	Right:CreateLine("yoursafety")
 	
 	Right:CreateHeader("vUI")
 	Right:CreateLine("Hydra")
