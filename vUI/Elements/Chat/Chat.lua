@@ -274,9 +274,9 @@ function Chat:CreateChatWindow()
 	self.BottomBar.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
 	self.BottomBar.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-window-main-color"]))
 	
-	selfAnchor = CreateFrame("Frame", nil, self)
-	selfAnchor:SetPoint("TOPLEFT", self.TopBar, "BOTTOMLEFT", 0, -2)
-	selfAnchor:SetPoint("BOTTOMRIGHT", self.BottomBar, "TOPRIGHT", 0, 2)
+	self.Anchor = CreateFrame("Frame", nil, self)
+	self.Anchor:SetPoint("TOPLEFT", self.TopBar, "BOTTOMLEFT", 0, -2)
+	self.Anchor:SetPoint("BOTTOMRIGHT", self.BottomBar, "TOPRIGHT", 0, 2)
 	
 	self.OuterOutline = CreateFrame("Frame", nil, self)
 	self.OuterOutline:SetPoint("TOPLEFT", self.TopBar, -3, 3)
@@ -597,15 +597,15 @@ function Chat:MoveChatFrames()
 	for i = 1, NUM_CHAT_WINDOWS do
 		local Frame = _G["ChatFrame"..i]
 		
-		Frame:SetSize(selfAnchor:GetWidth() - 8, selfAnchor:GetHeight() - 8)
-		Frame:SetFrameLevel(selfAnchor:GetFrameLevel() + 1)
+		Frame:SetSize(self.Anchor:GetWidth() - 8, self.Anchor:GetHeight() - 8)
+		Frame:SetFrameLevel(self.Anchor:GetFrameLevel() + 1)
 		Frame:SetFrameStrata("MEDIUM")
 		Frame:SetJustifyH("LEFT")
 		
 		if (Frame:GetID() == 1) then
 			Frame:ClearAllPoints()
-			Frame:SetPoint("TOPLEFT", selfAnchor, 4, -3)
-			Frame:SetPoint("BOTTOMRIGHT", selfAnchor, -4, 3)
+			Frame:SetPoint("TOPLEFT", self.Anchor, 4, -3)
+			Frame:SetPoint("BOTTOMRIGHT", self.Anchor, -4, 3)
 		end
 		
 		if (not Frame.isLocked) then
@@ -652,6 +652,30 @@ function Chat:StyleChatFrames()
 	Disable(ChatFrameChannelButton)
 	Disable(ChatFrameToggleVoiceDeafenButton)
 	Disable(ChatFrameToggleVoiceMuteButton)
+	
+	-- Restyle Combat Log objects
+	CombatLogQuickButtonFrame_Custom:ClearAllPoints()
+	CombatLogQuickButtonFrame_Custom:SetHeight(26)
+	CombatLogQuickButtonFrame_Custom:SetPoint("TOPLEFT", Chat.TopBar, "BOTTOMLEFT", 0, -2)
+	CombatLogQuickButtonFrame_Custom:SetPoint("TOPRIGHT", Chat.TopBar, "BOTTOMRIGHT", 0, -2)
+	
+	CombatLogQuickButtonFrame_CustomProgressBar:ClearAllPoints()
+	CombatLogQuickButtonFrame_CustomProgressBar:SetPoint("BOTTOMLEFT", CombatLogQuickButtonFrame_Custom, 1, 1)
+	CombatLogQuickButtonFrame_CustomProgressBar:SetPoint("BOTTOMRIGHT", CombatLogQuickButtonFrame_Custom, -1, 1)
+	CombatLogQuickButtonFrame_CustomProgressBar:SetHeight(3)
+	CombatLogQuickButtonFrame_CustomProgressBar:SetStatusBarTexture(Assets:GetTexture(Settings["ui-widget-texture"]))
+	
+	for i = 1, CombatLogQuickButtonFrame_Custom:GetNumChildren() do
+		local Child = select(i, CombatLogQuickButtonFrame_Custom:GetChildren())
+		
+		for i = 1, Child:GetNumRegions() do
+			local Region = select(i, Child:GetRegions())
+			
+			if (Region:GetObjectType() == "FontString") then
+				vUI:SetFontInfo(Region, Settings["chat-tab-font"], Settings["chat-tab-font-size"], Settings["chat-tab-font-flags"])
+			end
+		end
+	end
 end
 
 function Chat:Install()
@@ -744,12 +768,12 @@ function Chat:Install()
 	
 	DEFAULT_CHAT_FRAME:SetUserPlaced(true)
 	
-	C_CVar.SetCVar("chatMouseScroll", 1)
-	C_CVar.SetCVar("chatStyle", "im")
-	C_CVar.SetCVar("WholeChatWindowClickable", 0)
-	C_CVar.SetCVar("WhisperMode", "inline")
-	--C_CVar.SetCVar("BnWhisperMode", "inline")
-	C_CVar.SetCVar("removeChatDelay", 1)
+	SetCVar("chatMouseScroll", 1)
+	SetCVar("chatStyle", "im")
+	SetCVar("WholeChatWindowClickable", 0)
+	SetCVar("WhisperMode", "inline")
+	--SetCVar("BnWhisperMode", "inline")
+	SetCVar("removeChatDelay", 1)
 	
 	--Chat:MoveChatFrames()
 	FCF_SelectDockFrame(ChatFrame1)
@@ -827,8 +851,8 @@ function Chat:SetChatTypeInfo()
 	ChatTypeInfo["CHANNEL19"].colorNameByClass = true
 	ChatTypeInfo["CHANNEL20"].colorNameByClass = true
 	
-	if (C_CVar.GetCVar("colorChatNamesByClass") == 0) then
-		C_CVar.SetCVar("colorChatNamesByClass", 1)
+	if (GetCVar("colorChatNamesByClass") == 0) then
+		SetCVar("colorChatNamesByClass", 1)
 	end
 end
 
