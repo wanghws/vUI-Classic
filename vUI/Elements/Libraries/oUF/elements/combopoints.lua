@@ -2,9 +2,10 @@ local _, ns = ...
 local oUF = ns.oUF
 local vUI = ns:get()
 
-local GetShapeshiftForm = GetShapeshiftForm
+local GetShapeshiftFormID = GetShapeshiftFormID
 local GetComboPoints = GetComboPoints
-local ShapeshiftForm
+local CAT_FORM = CAT_FORM
+local FormID
 
 local Update = function(self, event, unit, power)
 	if ((unit ~= self.unit) or (unit == "player" and power ~= "COMBO_POINTS")) then
@@ -45,16 +46,16 @@ local ForceUpdate = function(element)
 end
 
 local UpdateScratchyBoi = function(self)
-	ShapeshiftForm = GetShapeshiftForm()
+	FormID = GetShapeshiftFormID()
 	
-	if (ShapeshiftForm == 2) then
+	if (FormID == CAT_FORM) then
 		self.ComboPoints:Show()
 	else
 		self.ComboPoints:Hide()
 	end
 	
 	if self.ComboPoints.UpdateShapeshiftForm then
-		self.ComboPoints:UpdateShapeshiftForm(ShapeshiftForm)
+		self.ComboPoints:UpdateShapeshiftForm(FormID)
 	end
 end
 
