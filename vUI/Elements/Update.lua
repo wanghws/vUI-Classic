@@ -8,9 +8,6 @@ local IsInGuild = IsInGuild
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 
--- Use a button in GUI to request newer versions? -- Put a pretty hard throttle on the button too so it can't be smashed.
--- vUI:print("If any version data is recieved, you will be prompted.")
-
 local AddOnVersion = tonumber(vUI.UIVersion)
 
 local Update = vUI:NewModule("Update")
@@ -50,6 +47,11 @@ function Update:PLAYER_ENTERING_WORLD(event)
 		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
 	end
 	
+	if UnitInBattleground("player") then
+		print('in bg')
+		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
+	end
+	
 	SendAddonMessage("vUI-Version", AddOnVersion, "CHANNEL", 1)
 	SendAddonMessage("vUI-Version", AddOnVersion, "CHANNEL", 2)
 end
@@ -57,6 +59,19 @@ end
 function Update:GUILD_ROSTER_UPDATE()
 	if IsInGuild() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
+	end
+end
+
+function Update:GROUP_ROSTER_UPDATE()
+	if IsInRaid() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
+	elseif IsInGroup() then
+		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
+	end
+	
+	if UnitInBattleground("player") then
+		print('in bg')
+		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
 	end
 end
 
@@ -127,6 +142,7 @@ end
 Update:RegisterEvent("VARIABLES_LOADED")
 Update:RegisterEvent("PLAYER_ENTERING_WORLD")
 Update:RegisterEvent("GUILD_ROSTER_UPDATE")
+Update:RegisterEvent("GROUP_ROSTER_UPDATE")
 Update:RegisterEvent("CHAT_MSG_ADDON")
 Update:SetScript("OnEvent", Update.OnEvent)
 
