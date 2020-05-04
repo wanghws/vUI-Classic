@@ -2,7 +2,7 @@ local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local Map = vUI:NewModule("Minimap")
 
-local Kill = function(object)
+local Disable = function(object)
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
 	end
@@ -101,16 +101,16 @@ function Map:Style()
 		MiniMapTrackingBorder.Show = function() end
 	end
 	
-	Kill(MinimapCluster)
-	Kill(MinimapBorder)
-	Kill(MinimapBorderTop)
-	Kill(MinimapZoomIn)
-	Kill(MinimapZoomOut)
-	Kill(MinimapNorthTag)
-	Kill(MiniMapWorldMapButton)
-	Kill(MiniMapMailBorder)
-	Kill(GameTimeFrame)
-	Kill(TimeManagerClockButton)
+	Disable(MinimapCluster)
+	Disable(MinimapBorder)
+	Disable(MinimapBorderTop)
+	Disable(MinimapZoomIn)
+	Disable(MinimapZoomOut)
+	Disable(MinimapNorthTag)
+	Disable(MiniMapWorldMapButton)
+	Disable(MiniMapMailBorder)
+	Disable(GameTimeFrame)
+	Disable(TimeManagerClockButton)
 	
 	vUI:CreateMover(self)
 end

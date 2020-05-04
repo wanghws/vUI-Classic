@@ -1492,8 +1492,8 @@ local StyleTargetTarget = function(self, unit)
 	
 	SetPowerAttributes(Power, Settings["unitframes-targettarget-power-color"])
 	
-	self:Tag(HealthLeft, "[Name10]")
-	self:Tag(HealthRight, "[HealthPercent]")
+	self:Tag(HealthLeft, Settings["unitframes-targettarget-health-left"])
+	self:Tag(HealthRight, Settings["unitframes-targettarget-health-right"])
 	
 	self.Range = {
 		insideAlpha = 1,
@@ -1583,13 +1583,8 @@ local StylePet = function(self, unit)
 	
 	SetPowerAttributes(Power, Settings["unitframes-pet-power-color"])
 	
-	if (vUI.UserClass == "HUNTER") then
-		self:Tag(HealthLeft, "[PetColor][Name10]")
-	else
-		self:Tag(HealthLeft, "[Name10]")
-	end
-	
-	self:Tag(HealthRight, "[HealthPercent]")
+	self:Tag(HealthLeft, Settings["unitframes-pet-health-left"])
+	self:Tag(HealthRight, Settings["unitframes-pet-health-right"])
 	
 	self.Range = {
 		insideAlpha = 1,
@@ -2866,6 +2861,8 @@ GUI:AddOptions(function(self)
 	Left:CreateDropdown("unitframes-targettarget-power-color", Settings["unitframes-targettarget-power-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Power Type"]] = "POWER"}, Language["Power Bar Color"], Language["Set the color of the power bar"], UpdateTargetTargetPowerColor)
 	Left:CreateSwitch("unitframes-targettarget-health-reverse", Settings["unitframes-targettarget-health-reverse"], Language["Reverse Health Fill"], Language["Reverse the fill of the health bar"], UpdateTargetTargetHealthFill)
 	Left:CreateSwitch("unitframes-targettarget-power-reverse", Settings["unitframes-targettarget-power-reverse"], Language["Reverse Power Fill"], Language["Reverse the fill of the power bar"], UpdateTargetTargetPowerFill)
+	Left:CreateInput("unitframes-targettarget-health-left", Settings["unitframes-targettarget-health-left"], Language["Left Health Text"], Language["Set the text on the left of the target of target health bar"], ReloadUI):RequiresReload(true)
+	Left:CreateInput("unitframes-targettarget-health-right", Settings["unitframes-targettarget-health-right"], Language["Right Health Text"], Language["Set the text on the right of the target of target health bar"], ReloadUI):RequiresReload(true)
 	
 	Right:CreateHeader(Language["Pet"])
 	Right:CreateSlider("unitframes-pet-width", Settings["unitframes-pet-width"], 60, 320, 1, "Width", "Set the width of the pet unit frame", UpdatePetWidth)
@@ -2875,6 +2872,8 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("unitframes-pet-power-color", Settings["unitframes-pet-power-color"], {[Language["Class"]] = "CLASS", [Language["Reaction"]] = "REACTION", [Language["Power Type"]] = "POWER"}, Language["Power Bar Color"], Language["Set the color of the power bar"], UpdatePetPowerColor)
 	Right:CreateSwitch("unitframes-pet-health-reverse", Settings["unitframes-pet-health-reverse"], Language["Reverse Health Fill"], Language["Reverse the fill of the health bar"], UpdatePetHealthFill)
 	Right:CreateSwitch("unitframes-pet-power-reverse", Settings["unitframes-pet-power-reverse"], Language["Reverse Power Fill"], Language["Reverse the fill of the power bar"], UpdatePetPowerFill)
+	Right:CreateInput("unitframes-pet-health-left", Settings["unitframes-pet-health-left"], Language["Left Health Text"], Language["Set the text on the left of the pet health bar"], ReloadUI):RequiresReload(true)
+	Right:CreateInput("unitframes-pet-health-right", Settings["unitframes-pet-health-right"], Language["Right Health Text"], Language["Set the text on the right of the pet health bar"], ReloadUI):RequiresReload(true)
 end)
 
 local UpdatePartyWidth = function(value)
