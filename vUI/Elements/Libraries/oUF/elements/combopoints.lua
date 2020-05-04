@@ -47,7 +47,7 @@ end
 local UpdateScratchyBoi = function(self)
 	ShapeshiftForm = GetShapeshiftForm()
 	
-	if (ShapeshiftForm == 3) then
+	if (ShapeshiftForm == 2) then
 		self.ComboPoints:Show()
 	else
 		self.ComboPoints:Hide()
