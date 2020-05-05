@@ -41,15 +41,12 @@ function Update:PLAYER_ENTERING_WORLD(event)
 		SendAddonMessage("vUI-Version", AddOnVersion, "GUILD")
 	end
 	
-	if IsInRaid() then
+	if UnitInBattleground("player") then
+		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
+	elseif IsInRaid() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
 	elseif IsInGroup() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
-	end
-	
-	if UnitInBattleground("player") then
-		print('in bg')
-		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
 	end
 	
 	SendAddonMessage("vUI-Version", AddOnVersion, "CHANNEL", 1)
@@ -63,15 +60,12 @@ function Update:GUILD_ROSTER_UPDATE()
 end
 
 function Update:GROUP_ROSTER_UPDATE()
-	if IsInRaid() then
+	if UnitInBattleground("player") then
+		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
+	elseif IsInRaid() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "RAID")
 	elseif IsInGroup() then
 		SendAddonMessage("vUI-Version", AddOnVersion, "PARTY")
-	end
-	
-	if UnitInBattleground("player") then
-		print('in bg')
-		SendAddonMessage("vUI-Version", AddOnVersion, "BATTLEGROUND")
 	end
 end
 
