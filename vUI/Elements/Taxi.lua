@@ -5,7 +5,7 @@ local Taxi = vUI:NewModule("Taxi")
 function Taxi:OnEnter()
 	local R, G, B = vUI:HexToRGB(Settings["ui-widget-font-color"])
 	
-	GameTooltip:SetOwner(Taxi.Frame, "ANCHOR_PRESERVE")
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, -6)
 	GameTooltip:AddLine(TAXI_CANCEL_DESCRIPTION, R, G, B)
 	GameTooltip:Show()
 end
@@ -14,14 +14,14 @@ function Taxi:OnLeave()
 	GameTooltip:Hide()
 end
 
-function Taxi:OnMouseUp(self)
+function Taxi:OnMouseUp()
     if UnitOnTaxi("player") then
         TaxiRequestEarlyLanding()
 		self:Hide()
     end
 end
 
-function Taxi:OnEvent(self)
+function Taxi:OnEvent()
     if UnitOnTaxi("player") then
         self:Show()
     else
