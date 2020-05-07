@@ -103,6 +103,17 @@ function vUI:UpdateTotemColors()
 	self:SetColorEntry(self.TotemColors, 4, Settings["color-totem-air"])
 end
 
+function vUI:UpdateColors()
+	self:UpdateClassColors()
+	self:UpdateReactionColors()
+	self:UpdateZoneColors()
+	self:UpdatePowerColors()
+	self:UpdateDebuffColors()
+	self:UpdateHappinessColors()
+	self:UpdateComboColors()
+	self:UpdateTotemColors()
+end
+
 GUI:AddOptions(function(self)
 	local Left, Right = self:CreateWindow(Language["Colors"])
 	
@@ -172,13 +183,4 @@ GUI:AddOptions(function(self)
 	Left:CreateColorSelection("color-casting-start", Settings["color-casting-start"], Language["Casting"], "")
 	Left:CreateColorSelection("color-casting-stopped", Settings["color-casting-stopped"], Language["Stopped"], "")
 	Left:CreateColorSelection("color-casting-interrupted", Settings["color-casting-interrupted"], Language["Interrupted"], "")
-	
-	vUI:UpdateClassColors()
-	vUI:UpdateReactionColors()
-	vUI:UpdateZoneColors()
-	vUI:UpdatePowerColors()
-	vUI:UpdateDebuffColors()
-	vUI:UpdateHappinessColors()
-	vUI:UpdateComboColors()
-	vUI:UpdateTotemColors()
 end)
