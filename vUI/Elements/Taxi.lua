@@ -2,22 +2,7 @@ local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local Taxi = vUI:NewModule("Taxi")
 
-local TaxiOnEvent = function(self)
-    if UnitOnTaxi("player") then
-        self:Show()
-    else
-		self:Hide()
-    end
-end
-
-local RequestLanding = function(self)
-    if UnitOnTaxi("player") then
-        TaxiRequestEarlyLanding()
-		self:Hide()
-    end
-end
-
-local OnEnter = function()
+function Taxi:OnEnter()
 	local R, G, B = vUI:HexToRGB(Settings["ui-widget-font-color"])
 	
 	GameTooltip:SetOwner(Taxi.Frame, "ANCHOR_PRESERVE")
@@ -25,43 +10,56 @@ local OnEnter = function()
 	GameTooltip:Show()
 end
 
-local OnLeave = function()
+function Taxi:OnLeave()
 	GameTooltip:Hide()
 end
 
-Taxi:RegisterEvent("PLAYER_ENTERING_WORLD")
-Taxi:SetScript("OnEvent", function(self, event)
-	local TaxiFrame = CreateFrame("Frame", "vUI Taxi", vUI.UIParent)
-	TaxiFrame:SetSize(Settings["minimap-size"] + 8, 22)
-	TaxiFrame:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
-	TaxiFrame:SetBackdrop(vUI.BackdropAndBorder)
-	TaxiFrame:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	TaxiFrame:SetBackdropBorderColor(0, 0, 0)
-	TaxiFrame:SetFrameStrata("HIGH")
-	TaxiFrame:SetFrameLevel(10)
-	TaxiFrame:SetScript("OnMouseUp", RequestLanding)
-	TaxiFrame:SetScript("OnEnter", OnEnter)
-	TaxiFrame:SetScript("OnLeave", OnLeave)
-	TaxiFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
-	TaxiFrame:SetScript("OnEvent", TaxiOnEvent)
+function Taxi:OnMouseUp(self)
+    if UnitOnTaxi("player") then
+        TaxiRequestEarlyLanding()
+		self:Hide()
+    end
+end
+
+function Taxi:OnEvent(self)
+    if UnitOnTaxi("player") then
+        self:Show()
+    else
+		self:Hide()
+    end
+end
+
+function Taxi:Load()
+	self:SetSize(Settings["minimap-size"] + 8, 22)
+	self:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
+	self:SetBackdrop(vUI.BackdropAndBorder)
+	self:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self:SetBackdropBorderColor(0, 0, 0)
+	self:SetFrameStrata("HIGH")
+	self:SetFrameLevel(10)
+	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
+	self:SetScript("OnMouseUp", self.OnMouseUp)
+	self:SetScript("OnEnter", self.OnEnter)
+	self:SetScript("OnLeave", self.OnLeave)
+	self:SetScript("OnEvent", self.OnEvent)
 	
     if UnitOnTaxi("player") then
-        TaxiFrame:Show()
+        self:Show()
     else
-		TaxiFrame:Hide()
+		self:Hide()
     end
 	
-	TaxiFrame.Texture = TaxiFrame:CreateTexture(nil, "ARTWORK")
-	TaxiFrame.Texture:SetPoint("TOPLEFT", TaxiFrame, 1, -1)
-	TaxiFrame.Texture:SetPoint("BOTTOMRIGHT", TaxiFrame, -1, 1)
-	TaxiFrame.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
-	TaxiFrame.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
+	self.Texture = self:CreateTexture(nil, "ARTWORK")
+	self.Texture:SetPoint("TOPLEFT", self, 1, -1)
+	self.Texture:SetPoint("BOTTOMRIGHT", self, -1, 1)
+	self.Texture:SetTexture(Assets:GetTexture(Settings["ui-header-texture"]))
+	self.Texture:SetVertexColor(vUI:HexToRGB(Settings["ui-header-texture-color"]))
 	
-	TaxiFrame.Text = TaxiFrame:CreateFontString(nil, "OVERLAY", 7)
-	TaxiFrame.Text:SetPoint("CENTER", TaxiFrame, 0, -1)
-	vUI:SetFontInfo(TaxiFrame.Text, Settings["ui-header-font"], Settings["ui-font-size"])
-	TaxiFrame.Text:SetSize(TaxiFrame:GetWidth() - 12, 20)
-	TaxiFrame.Text:SetText(Language["Land Early"])
+	self.Text = self:CreateFontString(nil, "OVERLAY", 7)
+	self.Text:SetPoint("CENTER", self, 0, -1)
+	vUI:SetFontInfo(self.Text, Settings["ui-header-font"], Settings["ui-font-size"])
+	self.Text:SetSize(self:GetWidth() - 12, 20)
+	self.Text:SetText(Language["Land Early"])
 	
-	self.Frame = TaxiFrame
-end)
+	vUI:CreateMover(self)
+end
