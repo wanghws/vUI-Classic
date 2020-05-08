@@ -2532,8 +2532,8 @@ UF:SetScript("OnEvent", function(self, event)
 			)
 			
 			self.RaidAnchor = CreateFrame("Frame", "vUI Raid Anchor", vUI.UIParent)
-			self.RaidAnchor:SetSize((5 * Settings["raid-width"] + (5 * Settings["raid-x-offset"] - 2)), ((Settings["raid-health-height"] + Settings["raid-power-height"]) * Settings["raid-units-per-column"]) + (2 * (Settings["raid-units-per-column"] - 1)))
-			--self.RaidAnchor:SetPoint("TOPLEFT", vUI.UIParent, 10, -10)
+			self.RaidAnchor:SetWidth((floor(40 / Settings["raid-max-columns"]) * Settings["raid-width"] + (floor(40 / Settings["raid-max-columns"]) * Settings["raid-x-offset"] - 2)))
+			self.RaidAnchor:SetHeight((Settings["raid-health-height"] + Settings["raid-power-height"]) * (Settings["raid-max-columns"] + (Settings["raid-y-offset"])) - 1)
 			self.RaidAnchor:SetPoint("BOTTOMLEFT", vUIChatFrameTop, "TOPLEFT", -3, 5)
 			
 			local Hider = CreateFrame("Frame", nil, vUI.UIParent, "SecureHandlerStateTemplate")
@@ -3064,6 +3064,11 @@ GUI:AddOptions(function(self)
 	--Defaults["party-pets-power-height"] = 22
 end)
 
+local UpdateRaidAnchorSize = function()
+	UF.RaidAnchor:SetWidth((floor(40 / Settings["raid-max-columns"]) * Settings["raid-width"] + (floor(40 / Settings["raid-max-columns"]) * Settings["raid-x-offset"] - 2)))
+	UF.RaidAnchor:SetHeight((Settings["raid-health-height"] + Settings["raid-power-height"]) * (Settings["raid-max-columns"] + (Settings["raid-y-offset"])) - 1)
+end
+
 local UpdateRaidWidth = function(value)
 	if vUI.UnitFrames["raid"] then
 		local Unit
@@ -3075,6 +3080,8 @@ local UpdateRaidWidth = function(value)
 				Unit:SetWidth(value)
 			end
 		end
+		
+		UpdateRaidAnchorSize()
 	end
 end
 
@@ -3090,6 +3097,8 @@ local UpdateRaidHealthHeight = function(value)
 				Unit.Health:SetHeight(value)
 			end
 		end
+		
+		UpdateRaidAnchorSize()
 	end
 end
 
@@ -3149,6 +3158,8 @@ local UpdateRaidPowerHeight = function(value)
 				Unit.Power:SetHeight(value)
 			end
 		end
+		
+		UpdateRaidAnchorSize()
 	end
 end
 
@@ -3184,30 +3195,44 @@ end
 
 local UpdateRaidXOffset = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("xoffset", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 local UpdateRaidYOffset = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("yoffset", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 local UpdateRaidUnitsPerColumn = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("unitsPerColumn", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 local UpdateRaidMaxColumns = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("maxColumns", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 local UpdateRaidColumnSpacing = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("columnSpacing", value)
 end
 
+UpdateRaidAnchorSize()
+
 local UpdateRaidColumnAnchor = function(value)
-	vUI.UnitFrames["raid"]:SetAttribute("columnSpacing", value)
+	vUI.UnitFrames["raid"]:SetAttribute("columnAnchorPoint", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 local UpdateRaidPoint = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("point", value)
+	
+	UpdateRaidAnchorSize()
 end
 
 GUI:AddOptions(function(self)
