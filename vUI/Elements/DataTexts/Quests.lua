@@ -29,4 +29,4 @@ local OnDisable = function(self)
 	self.Text:SetText("")
 end
 
-vUI:AddDataText(Label, OnEnable, OnDisable, Update)
+vUI:AddDataText("Quests", OnEnable, OnDisable, Update)
