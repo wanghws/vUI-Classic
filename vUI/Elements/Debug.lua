@@ -57,7 +57,7 @@ local GetSpecInfo = function()
 		end
 	end
 	
-	return format("%s (%s)", MainSpec, PointsTotal)
+	return MainSpec and format("%s (%s)", MainSpec, PointsTotal) or NOT_APPLICABLE
 end
 
 GUI:AddOptions(function(self)
