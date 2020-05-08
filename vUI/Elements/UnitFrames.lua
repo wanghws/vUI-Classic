@@ -3219,9 +3219,9 @@ end
 
 local UpdateRaidColumnSpacing = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("columnSpacing", value)
+	
+	UpdateRaidAnchorSize()
 end
-
-UpdateRaidAnchorSize()
 
 local UpdateRaidColumnAnchor = function(value)
 	vUI.UnitFrames["raid"]:SetAttribute("columnAnchorPoint", value)
