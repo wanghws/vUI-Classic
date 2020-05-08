@@ -1,8 +1,25 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local UnitArmor = UnitArmor
-local UnitLevel = UnitLevel
-local Label = Language["Armor"]
+local Label = ARMOR
+
+local OnEnter = function(self)
+	self:SetTooltip()
+	
+	local Base, EffectiveArmor = UnitArmor("player")
+	local Level = UnitLevel("player")
+    local ArmorReduction = EffectiveArmor / ((85 * Level) + 400)
+	ArmorReduction = 100 * (ArmorReduction / (ArmorReduction + 1))
+	
+	GameTooltip:AddLine(format(PAPERDOLLFRAME_TOOLTIP_FORMAT, Label) .. " " .. vUI:Comma(EffectiveArmor), 1, 1, 1, true)
+	GameTooltip:AddLine(format(ARMOR_TOOLTIP, Level, ArmorReduction), nil, nil, nil, true)
+	
+	GameTooltip:Show()
+end
+
+local OnLeave = function()
+	GameTooltip:Hide()
+end
 
 local OnMouseUp = function()
 	ToggleCharacter("PaperDollFrame")
@@ -13,19 +30,17 @@ local Update = function(self, event, unit)
 		return
 	end
 	
-	local Base, EffectiveArmor, Armor, PosBuff, NegBuff = UnitArmor("player")
-	local Level = UnitLevel("player")
-	local Reduction = EffectiveArmor / ((85 * Level) + 400)
+	local Base, EffectiveArmor = UnitArmor("player")
 	
-	Reduction = 100 * (Reduction / (Reduction + 1))
-	
-	self.Text:SetFormattedText("|cFF%s%s:|r |cFF%s%.1f%%|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], Reduction)
+	self.Text:SetFormattedText("|cFF%s%s:|r |cFF%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], vUI:Comma(EffectiveArmor))
 end
 
 local OnEnable = function(self)
 	self:RegisterEvent("UNIT_STATS")
 	self:SetScript("OnEvent", Update)
 	self:SetScript("OnMouseUp", OnMouseUp)
+	self:SetScript("OnEnter", OnEnter)
+	self:SetScript("OnLeave", OnLeave)
 	
 	self:Update(nil, "player")
 end
@@ -34,6 +49,8 @@ local OnDisable = function(self)
 	self:UnregisterEvent("UNIT_STATS")
 	self:SetScript("OnEvent", nil)
 	self:SetScript("OnMouseUp", nil)
+	self:SetScript("OnEnter", nil)
+	self:SetScript("OnLeave", nil)
 	
 	self.Text:SetText("")
 end
