@@ -28,6 +28,9 @@ local GetMouseFocus = GetMouseFocus
 local GetItemInfo = GetItemInfo
 local InCombatLockdown = InCombatLockdown
 local GetQuestDifficultyColor = GetQuestDifficultyColor
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitCanAttack = UnitCanAttack
+local UnitIsPVP = UnitIsPVP
 
 local GameTooltipStatusBar = GameTooltipStatusBar
 
@@ -183,6 +186,44 @@ local GetUnitColor = function(unit)
 	end
 end
 
+local FilterUnit = function(unit)
+	local State
+	
+	if UnitPlayerControlled(unit) then
+		if UnitCanAttack(unit, "player") then
+			if (not UnitCanAttack("player", unit)) then
+				State = "FRIENDLY"
+			else
+				State = "HOSTILE"
+			end
+		elseif UnitCanAttack("player", unit) then
+			State = "FRIENDLY" -- NEUTRAL?
+		elseif UnitIsPVP(unit) then
+			State = "FRIENDLY"
+		else
+			State = "FRIENDLY" -- NEUTRAL?
+		end
+	else
+		local Reaction = UnitReaction(unit, "player")
+		
+		if Reaction then
+			if (Reaction >= 4) then
+				State = "FRIENDLY"
+			else
+				State = "HOSTILE"
+			end
+		else
+			State = "FRIENDLY" -- NEUTRAL?
+		end
+	end
+	
+	if (State == "HOSTILE" and Settings["tooltips-hide-on-unit"] == "HOSTILE") then
+		return true
+	elseif (State == "FRIENDLY" and Settings["tooltips-hide-on-unit"] == "FRIENDLY") then
+		return true
+	end
+end
+
 local OnTooltipSetUnit = function(self)
 	if (Settings["tooltips-hide-on-unit"] == "NO_COMBAT" and InCombatLockdown()) or Settings["tooltips-hide-on-unit"] == "ALWAYS" then
 		self:Hide()
@@ -196,6 +237,11 @@ local OnTooltipSetUnit = function(self)
 		local Class = UnitClass(UnitID)
 		
 		if (not Class) then
+			return
+		end
+		
+		if FilterUnit(UnitID) then
+			self:Hide()
 			return
 		end
 		
