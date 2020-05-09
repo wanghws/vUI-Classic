@@ -192,34 +192,34 @@ local FilterUnit = function(unit)
 	if UnitPlayerControlled(unit) then
 		if UnitCanAttack(unit, "player") then
 			if (not UnitCanAttack("player", unit)) then
-				State = "FRIENDLY"
+				State = 1
 			else
-				State = "HOSTILE"
+				State = 2
 			end
 		elseif UnitCanAttack("player", unit) then
-			State = "FRIENDLY" -- NEUTRAL?
+			State = 1
 		elseif UnitIsPVP(unit) then
-			State = "FRIENDLY"
+			State = 1
 		else
-			State = "FRIENDLY" -- NEUTRAL?
+			State = 1
 		end
 	else
 		local Reaction = UnitReaction(unit, "player")
 		
 		if Reaction then
 			if (Reaction >= 4) then
-				State = "FRIENDLY"
+				State = 1
 			else
-				State = "HOSTILE"
+				State = 2
 			end
 		else
-			State = "FRIENDLY" -- NEUTRAL?
+			State = 1
 		end
 	end
 	
-	if (State == "HOSTILE" and Settings["tooltips-hide-on-unit"] == "HOSTILE") then
+	if (Settings["tooltips-hide-on-unit"] == "FRIENDLY" and State == 1) then
 		return true
-	elseif (State == "FRIENDLY" and Settings["tooltips-hide-on-unit"] == "FRIENDLY") then
+	elseif (Settings["tooltips-hide-on-unit"] == "HOSTILE" and State == 2) then
 		return true
 	end
 end
