@@ -327,9 +327,6 @@ local OnTooltipSetUnit = function(self)
 			end
 		end
 		
-		--GameTooltipStatusBar:OldSetStatusBarColor(vUI:HexToRGB(Color))
-		--GameTooltipStatusBar.BG:SetVertexColorHex(Color)
-		
 		if self.OuterBG then
 			self.OuterBG:SetPoint("TOPLEFT", self, -3, 22)
 		end
