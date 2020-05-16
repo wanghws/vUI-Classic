@@ -275,6 +275,7 @@ Defaults["unitframes-player-power-left"] = "[HealthValues]"
 Defaults["unitframes-player-power-right"] = "[PowerValues]"
 Defaults["unitframes-player-cast-width"] = 250
 Defaults["unitframes-player-cast-height"] = 24
+Defaults["unitframes-player-enable-castbar"] = true
 
 -- Unitframes: Target
 Defaults["unitframes-target-width"] = 238
@@ -292,6 +293,7 @@ Defaults["unitframes-target-power-left"] = "[HealthValues]"
 Defaults["unitframes-target-power-right"] = "[PowerValues]"
 Defaults["unitframes-target-cast-width"] = 250
 Defaults["unitframes-target-cast-height"] = 22
+Defaults["unitframes-target-enable-castbar"] = true
 
 -- Unitframes: Target of Target
 Defaults["unitframes-targettarget-width"] = 110
@@ -320,6 +322,19 @@ Defaults["unitframes-pet-power-color"] = "POWER"
 Defaults["unitframes-pet-power-smooth"] = true
 Defaults["unitframes-pet-health-left"] = "[Name10]" -- [PetColor][Name10]
 Defaults["unitframes-pet-health-right"] = "[HealthPercent]"
+
+-- Focus
+Defaults["unitframes-focus-width"] = 200
+Defaults["unitframes-focus-health-height"] = 26
+Defaults["unitframes-focus-health-reverse"] = false
+Defaults["unitframes-focus-health-color"] = "CLASS"
+Defaults["unitframes-focus-health-smooth"] = true
+Defaults["unitframes-focus-power-height"] = 6
+Defaults["unitframes-focus-power-reverse"] = false
+Defaults["unitframes-focus-power-color"] = "POWER"
+Defaults["unitframes-focus-power-smooth"] = true
+Defaults["unitframes-focus-health-left"] = "[Name10]"
+Defaults["unitframes-focus-health-right"] = "[HealthPercent]"
 
 -- Unitframes: Bosses
 Defaults["unitframes-boss-enable"] = true
