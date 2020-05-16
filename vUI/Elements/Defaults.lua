@@ -323,19 +323,6 @@ Defaults["unitframes-pet-power-smooth"] = true
 Defaults["unitframes-pet-health-left"] = "[Name10]" -- [PetColor][Name10]
 Defaults["unitframes-pet-health-right"] = "[HealthPercent]"
 
--- Focus
-Defaults["unitframes-focus-width"] = 200
-Defaults["unitframes-focus-health-height"] = 26
-Defaults["unitframes-focus-health-reverse"] = false
-Defaults["unitframes-focus-health-color"] = "CLASS"
-Defaults["unitframes-focus-health-smooth"] = true
-Defaults["unitframes-focus-power-height"] = 6
-Defaults["unitframes-focus-power-reverse"] = false
-Defaults["unitframes-focus-power-color"] = "POWER"
-Defaults["unitframes-focus-power-smooth"] = true
-Defaults["unitframes-focus-health-left"] = "[Name10]"
-Defaults["unitframes-focus-health-right"] = "[HealthPercent]"
-
 -- Unitframes: Bosses
 Defaults["unitframes-boss-enable"] = true
 Defaults["unitframes-boss-width"] = 238
