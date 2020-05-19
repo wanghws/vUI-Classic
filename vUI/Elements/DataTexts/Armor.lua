@@ -11,8 +11,8 @@ local OnEnter = function(self)
     local ArmorReduction = EffectiveArmor / ((85 * Level) + 400)
 	ArmorReduction = 100 * (ArmorReduction / (ArmorReduction + 1))
 	
-	GameTooltip:AddLine(format(PAPERDOLLFRAME_TOOLTIP_FORMAT, Label) .. " " .. vUI:Comma(EffectiveArmor), 1, 1, 1, true)
-	GameTooltip:AddLine(format(ARMOR_TOOLTIP, Level, ArmorReduction), nil, nil, nil, true)
+	GameTooltip:AddLine(format("%s %s", Label, vUI:Comma(EffectiveArmor)), 1, 1, 1)
+	GameTooltip:AddLine(format(STAT_ARMOR_TOOLTIP, ArmorReduction), nil, nil, nil, true)
 	
 	GameTooltip:Show()
 end
