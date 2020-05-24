@@ -1,7 +1,7 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local GetPVPLifetimeStats = GetPVPLifetimeStats
-local Label = Language["Kills"]
+local Label = KILLS
 
 local OnEnter = function(self)
 	self:SetTooltip()
@@ -12,12 +12,12 @@ local OnEnter = function(self)
 	if (Rank > 0) then
 		local Name, Number = GetPVPRankInfo(Rank, "player")
 		
-		GameTooltip:AddDoubleLine(Name, format(Language["Rank %s"], Number))
+		GameTooltip:AddDoubleLine(Name, format("%s %s", RANK, Number))
 		GameTooltip:AddLine(" ")
 	end
 	
-	GameTooltip:AddDoubleLine(Language["Honorable Kills"], Honorable)
-	GameTooltip:AddDoubleLine(Language["Disonorable Kills"], Dishonorable)
+	GameTooltip:AddDoubleLine(HONORABLE_KILLS, Honorable)
+	GameTooltip:AddDoubleLine(DISHONORABLE_KILLS, Dishonorable)
 	
 	GameTooltip:Show()
 end
