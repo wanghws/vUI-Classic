@@ -16,8 +16,8 @@ local OnEnter = function(self)
 		GameTooltip:AddLine(" ")
 	end
 	
-	GameTooltip:AddDoubleLine(HONORABLE_KILLS, Honorable)
-	GameTooltip:AddDoubleLine(DISHONORABLE_KILLS, Dishonorable)
+	GameTooltip:AddDoubleLine(HONORABLE_KILLS, vUI:Comma(Honorable))
+	GameTooltip:AddDoubleLine(DISHONORABLE_KILLS, vUI:Comma(Dishonorable))
 	
 	GameTooltip:Show()
 end
@@ -31,7 +31,7 @@ local OnMouseUp = function()
 end
 
 local Update = function(self)
-	self.Text:SetFormattedText("|cFF%s%s:|r |cFF%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], GetPVPLifetimeStats())
+	self.Text:SetFormattedText("|cFF%s%s:|r |cFF%s%s|r", Settings["data-text-label-color"], Label, Settings["data-text-value-color"], vUI:Comma(GetPVPLifetimeStats()))
 end
 
 local OnEnable = function(self)
