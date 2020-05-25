@@ -2,7 +2,7 @@ local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
 local Map = vUI:NewModule("Minimap")
 
-local Disable = function(object)
+function Map:Disable(object)
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
 	end
@@ -103,16 +103,16 @@ function Map:Style()
 		MiniMapTrackingBorder.Show = function() end
 	end
 	
-	Disable(MinimapCluster)
-	Disable(MinimapBorder)
-	Disable(MinimapBorderTop)
-	Disable(MinimapZoomIn)
-	Disable(MinimapZoomOut)
-	Disable(MinimapNorthTag)
-	Disable(MiniMapWorldMapButton)
-	Disable(MiniMapMailBorder)
-	Disable(GameTimeFrame)
-	Disable(TimeManagerClockButton)
+	self:Disable(MinimapCluster)
+	self:Disable(MinimapBorder)
+	self:Disable(MinimapBorderTop)
+	self:Disable(MinimapZoomIn)
+	self:Disable(MinimapZoomOut)
+	self:Disable(MinimapNorthTag)
+	self:Disable(MiniMapWorldMapButton)
+	self:Disable(MiniMapMailBorder)
+	self:Disable(GameTimeFrame)
+	self:Disable(TimeManagerClockButton)
 	
 	if Settings["minimap-show-top"] and not Settings["minimap-show-bottom"] then
 		Minimap:SetPoint("BOTTOM", Map, 0, 4)
