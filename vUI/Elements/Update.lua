@@ -30,7 +30,7 @@ local UpdateOnMouseUp = function()
 	vUI:print(Language["You can get an updated version of vUI here at https://www.curseforge.com/wow/addons/vui or by using the Twitch desktop app"])
 end
 
-function Update:PLAYER_ENTERING_WORLD(event)
+function Update:PLAYER_ENTERING_WORLD()
 	--[[if self.NewVersion then
 		vUI:SendAlert("What's new?", "Click here to learn more", nil, WhatsNewOnMouseUp, true)
 		
