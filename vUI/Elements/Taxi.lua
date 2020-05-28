@@ -1,6 +1,6 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
-local Taxi = vUI:NewModule("Taxi")
+local Taxi = vUI:NewModule("Vehicle")
 
 function Taxi:OnEnter()
 	local R, G, B = vUI:HexToRGB(Settings["ui-widget-font-color"])
@@ -31,7 +31,6 @@ end
 
 function Taxi:Load()
 	self:SetSize(Settings["minimap-size"] + 8, 22)
-	self:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
 	self:SetBackdrop(vUI.BackdropAndBorder)
 	self:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -60,6 +59,12 @@ function Taxi:Load()
 	vUI:SetFontInfo(self.Text, Settings["ui-header-font"], Settings["ui-font-size"])
 	self.Text:SetSize(self:GetWidth() - 12, 20)
 	self.Text:SetText(Language["Land Early"])
+	
+	if Settings["minimap-enable"] then
+		self:SetPoint("TOP", _G["vUI Minimap"], "BOTTOM", 0, -2)
+	else
+		self:SetPoint("TOP", vUI.UIParent, 0, -120)
+	end
 	
 	vUI:CreateMover(self)
 end
