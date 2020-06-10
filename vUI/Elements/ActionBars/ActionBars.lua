@@ -782,10 +782,6 @@ function AB:CreateMovers()
 	self.Bar1Mover.PostMove = Bar1PostMove
 end
 
-function AB:HideMainMenuBar()
-	self:Disable(MainMenuBar)
-end
-
 function AB:Load()
 	if (not Settings["ab-enable"]) then
 		return
@@ -794,7 +790,7 @@ function AB:Load()
 	self.Hide = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
 	self.Hide:Hide()
 	
-	self:HideMainMenuBar()
+	self:Disable(MainMenuBar)
 	self:CreateBars()
 	self:CreateMovers()
 
