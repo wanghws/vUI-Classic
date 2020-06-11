@@ -669,7 +669,7 @@ function AB:CreatePetBar()
 	
 	PetActionBarFrame:SetParent(self.PetBar)
 	
-	for i = 1, 10 do
+	for i = 1, NUM_PET_ACTION_SLOTS do
 		local Button = _G["PetActionButton" .. i]
 		
 		self:StylePetActionButton(Button)
@@ -682,7 +682,7 @@ function AB:CreatePetBar()
 		self.PetBar[i] = Button
 	end
 	
-	self:PositionButtons(self.PetBar, 10, Settings["ab-pet-per-row"], Settings["ab-pet-button-size"], Settings["ab-pet-button-gap"])
+	self:PositionButtons(self.PetBar, NUM_PET_ACTION_SLOTS, Settings["ab-pet-per-row"], Settings["ab-pet-button-size"], Settings["ab-pet-button-gap"])
 	
 	self:Hook("PetActionBar_Update")
 	
@@ -822,7 +822,7 @@ local UpdateBar5 = function()
 end
 
 local UpdatePetBar = function()
-	AB:PositionButtons(AB.PetBar, Settings["ab-pet-button-max"], Settings["ab-pet-per-row"], Settings["ab-pet-button-size"], Settings["ab-pet-button-gap"])
+	AB:PositionButtons(AB.PetBar, NUM_PET_ACTION_SLOTS, Settings["ab-pet-per-row"], Settings["ab-pet-button-size"], Settings["ab-pet-button-gap"])
 end
 
 local UpdateStanceBar = function()
