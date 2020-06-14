@@ -4,6 +4,7 @@ local AB = vUI:NewModule("Action Bars")
 
 local IsUsableAction = IsUsableAction
 local IsActionInRange = IsActionInRange
+local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
 function AB:Disable(object)
 	if object.UnregisterAllEvents then
@@ -36,7 +37,7 @@ function AB:PositionButtons(bar, numbuttons, perrow, size, spacing)
 	
 	-- Bar sizing
 	bar:SetWidth((size * perrow) + (spacing * (perrow - 1)))
-	bar:SetHeight((size * Columns) + ((spacing * (Columns - 1))))
+	bar:SetHeight((size * Columns) + (spacing * (Columns - 1)))
 	
 	-- Actual moving
 	for i = 1, #bar do
@@ -54,18 +55,6 @@ function AB:PositionButtons(bar, numbuttons, perrow, size, spacing)
 		end
 		
 		if (i > numbuttons) then
-			Button:SetParent(self.Hide)
-		else
-			Button:SetParent(bar.ButtonParent or bar)
-		end
-	end
-end
-
-function AB:SetNumButtons(bar, num)
-	for i = 1, #bar do
-		local Button = bar[i]
-		
-		if (i > num) then
 			Button:SetParent(self.Hide)
 		else
 			Button:SetParent(bar.ButtonParent or bar)
@@ -336,8 +325,8 @@ function AB:StylePetActionButton(button)
 end
 
 function AB:PetActionBar_Update()
-	for i = 1, 10 do
-		_G["PetActionButton" .. i]:SetNormalTexture("")
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		AB.PetBar[i]:SetNormalTexture("")
 	end
 end
 
@@ -1153,7 +1142,7 @@ GUI:AddOptions(function(self)
 	Right:CreateHeader(Language["Pet Bar"])
 	Right:CreateSwitch("ab-pet-enable", Settings["ab-pet-enable"], Language["Enable Bar"], Language["Enable the pet action bar"], UpdateEnablePetBar)
 	Right:CreateSwitch("ab-pet-hover", Settings["ab-pet-hover"], Language["Set Mouseover"], Language["Only display the bar while hovering over it"], UpdatePetHover)
-	Right:CreateSlider("ab-pet-per-row", Settings["ab-pet-per-row"], 1, 10, 1, Language["Buttons Per Row"], Language["Set the number of buttons per row"], UpdatePetBar)
+	Right:CreateSlider("ab-pet-per-row", Settings["ab-pet-per-row"], 1, NUM_PET_ACTION_SLOTS, 1, Language["Buttons Per Row"], Language["Set the number of buttons per row"], UpdatePetBar)
 	Right:CreateSlider("ab-pet-button-size", Settings["ab-pet-button-size"], 20, 50, 1, Language["Button Size"], Language["Set the action button size"], UpdatePetBar)
 	Right:CreateSlider("ab-pet-button-gap", Settings["ab-pet-button-gap"], -1, 8, 1, Language["Button Spacing"], Language["Set the spacing between action buttons"], UpdatePetBar)
 	
