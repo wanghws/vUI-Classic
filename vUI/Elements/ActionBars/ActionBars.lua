@@ -206,6 +206,8 @@ function AB:StyleActionButton(button)
 	button:SetFrameLevel(15)
 	button:SetFrameStrata("MEDIUM")
 	
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	
 	button.Styled = true
 end
 
