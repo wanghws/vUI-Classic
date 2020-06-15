@@ -452,11 +452,7 @@ function AB:CreateBar1()
 	
 	self.Bar1:SetAttribute("_onstate-page", [[
 		if HasTempShapeshiftActionBar() then
-			newstate = GetTempShapeshiftBarIndex()
-		elseif GetBonusBarOffset() > 0 then
-			newstate = GetBonusBarOffset() + 6
-		else
-			newstate = GetActionBarPage()
+			newstate = GetTempShapeshiftBarIndex() or newstate
 		end
 		
 		for i = 1, 12 do
