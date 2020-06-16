@@ -55,24 +55,22 @@ function BagsFrame:Load()
 		return
 	end
 	
-	local Panel = CreateFrame("Frame", "vUI Bags Window", vUI.UIParent)
-	Panel:SetSize(206, 40)
-	Panel:SetPoint("BOTTOMRIGHT", -10, 10)
-	Panel:SetBackdrop(vUI.BackdropAndBorder)
-	Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
-	Panel:SetBackdropBorderColor(0, 0, 0)
-	Panel:SetFrameStrata("LOW")
+	self.Panel = CreateFrame("Frame", "vUI Bags Window", vUI.UIParent)
+	self.Panel:SetSize(206, 40)
+	self.Panel:SetPoint("BOTTOMRIGHT", -10, 10)
+	self.Panel:SetBackdrop(vUI.BackdropAndBorder)
+	self.Panel:SetBackdropColor(vUI:HexToRGB(Settings["ui-window-bg-color"]))
+	self.Panel:SetBackdropBorderColor(0, 0, 0)
+	self.Panel:SetFrameStrata("LOW")
 	
-	vUI:CreateMover(Panel)
-	
-	self.Panel = Panel
+	vUI:CreateMover(self.Panel)
 	
 	local Object
 	
 	for i = 1, #self.Objects do
 		Object = self.Objects[i]
 		
-		Object:SetParent(Panel)
+		Object:SetParent(self.Panel)
 		Object:ClearAllPoints()
 		Object:SetSize(32, 32)
 		Object:HookScript("OnEnter", BagsFrameButtonOnEnter)
@@ -137,7 +135,7 @@ function BagsFrame:Load()
 		end
 		
 		if (i == 1) then
-			Object:SetPoint("LEFT", Panel, 4, 0)
+			Object:SetPoint("LEFT", self.Panel, 4, 0)
 			Object:SetSize(18, 32)
 		else
 			Object:SetPoint("LEFT", self.Objects[i-1], "RIGHT", 4, 0)
