@@ -464,6 +464,7 @@ Defaults["tooltips-hide-on-action"] = "NEVER"
 Defaults["tooltips-health-bar-height"] = 15
 Defaults["tooltips-show-health-text"] = true
 Defaults["tooltips-show-target"] = true
+Defaults["tooltips-show-price"] = true
 
 -- Bags
 Defaults["bags-loot-from-left"] = false

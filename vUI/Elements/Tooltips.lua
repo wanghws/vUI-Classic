@@ -26,6 +26,7 @@ local UnitClassification = UnitClassification
 local GetPetHappiness = GetPetHappiness
 local GetMouseFocus = GetMouseFocus
 local GetItemInfo = GetItemInfo
+local GetCoinTextureString = GetCoinTextureString
 local InCombatLockdown = InCombatLockdown
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 local UnitPlayerControlled = UnitPlayerControlled
@@ -350,6 +351,31 @@ local OnTooltipSetItem = function(self)
 		return
 	end
 	
+	if Settings["tooltips-show-price"] then
+		local VendorPrice = select(11, GetItemInfo(Link))
+		
+		if VendorPrice then
+			local Count = 1
+			local MouseFocus = GetMouseFocus()
+
+			if (MouseFocus and MouseFocus.count) then
+				Count = MouseFocus.count
+			end
+
+			if (Count and type(Count) == "number") then
+				local CopperValue = VendorPrice * Count
+
+				if (CopperValue > 0) then
+					local CoinString = GetCoinTextureString(CopperValue)
+
+					if CoinString then
+						self:AddLine(CoinString, 1, 1, 1)
+					end
+				end
+			end
+		end
+	end
+	
 	if Settings["tooltips-show-id"] then
 		local ID = match(Link, ":(%w+)")
 		
@@ -615,6 +641,7 @@ GUI:AddOptions(function(self)
 	Left:CreateSwitch("tooltips-show-target", Settings["tooltips-show-target"], Language["Display Target"], Language["Dislay the units current target"])
 	Left:CreateSwitch("tooltips-on-cursor", Settings["tooltips-on-cursor"], Language["Tooltip On Cursor"], Language["Anchor the tooltip to the mouse cursor"])
 	Left:CreateSwitch("tooltips-show-id", Settings["tooltips-show-id"], Language["Display ID's"], Language["Dislay item and spell ID's in the tooltip"])
+	Left:CreateSwitch("tooltips-show-price", Settings["tooltips-show-price"], Language["Display Vendor Price"], Language["Dislay the vendor price of an item"])
 	
 	Left:CreateHeader(Language["Font"])
 	Left:CreateDropdown("tooltips-font", Settings["tooltips-font"], Assets:GetFontList(), Language["Font"], Language["Set the font of the tooltip text"], nil, "Font")
