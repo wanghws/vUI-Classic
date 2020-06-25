@@ -588,18 +588,18 @@ local ChatFrameOnLeave = function(self)
 	self.CopyButton:SetAlpha(0)
 end
 
-local IgnoreLinkTypes = {
-	["player"] = true,
-	["command"] = true,
+local ValidLinkTypes = {
+	["item"] = true,
+	["spell"] = true,
 }
 
 local OnHyperlinkEnter = function(self, link, text, button)
 	local LinkType = match(link, "^(%a+):")
-
-	if IgnoreLinkTypes[LinkType] then
+	
+	if (not ValidLinkTypes[LinkType]) then
 		return
 	end
-
+	
 	GameTooltip_SetDefaultAnchor(GameTooltip, self)
 	GameTooltip:SetHyperlink(link)
 	GameTooltip:Show()
