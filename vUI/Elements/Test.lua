@@ -1,5 +1,5 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
-
+--[[
 local Languages = {
 	["English"] = "enUS",
 	["German"] = "deDE",
@@ -25,7 +25,7 @@ GUI:AddOptions(function(self)
 	Right:CreateDropdown("ui-language", vUI.UserLocale, Languages, Language["UI Language"], "", ReloadUI):RequiresReload(true)
 	Right:CreateButton(Language["Contribute"], Language["Help Localize"], Language["Contribute"], function() vUI:print("") end)
 end)
-
+]]
 --[[
 local IconSize = 40
 local IconHeight = floor(IconSize * 0.6)
