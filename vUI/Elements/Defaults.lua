@@ -288,6 +288,9 @@ Defaults["auto-vendor-report"] = true
 Defaults["announcements-enable"] = true
 Defaults["announcements-channel"] = "GROUP"
 
+-- Dismount
+Defaults["dismount-enable"] = true
+
 -- Unitframes
 Defaults["unitframes-enable"] = true
 Defaults["unitframes-only-player-debuffs"] = false

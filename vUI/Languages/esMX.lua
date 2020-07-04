@@ -151,6 +151,10 @@ Language["Credits"] = "Credits"
 Language["Supporters"] = "Supporters"
 Language["Scripting Help & Mentoring"] = "Scripting Help & Mentoring"
 
+-- Dismount
+Language["Enable Auto Dismount"] = "Enable Auto Dismount"
+Language["Automatically dismount during actions that can't be performed while mounted"] = "Automatically dismount during actions that can't be performed while mounted"
+
 -- Experience
 Language["Experience"] = "Experience"
 Language["Enable"] = "Enable"
