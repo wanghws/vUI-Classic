@@ -34,6 +34,20 @@ local Private = oUF.Private
 
 local unitExists = Private.unitExists
 
+local UnitThreatSituation = UnitThreatSituation
+
+local ThreatColor = {
+	[1] = {1, 1, 0.47},
+	[2] = {1, 0.6, 0},
+	[3] = {1, 0, 0},
+}
+
+local GetThreatColor = function(value)
+	if ThreatColor[value] then
+		return ThreatColor[value][1], ThreatColor[value][2], ThreatColor[value][3]
+	end
+end
+
 local function Update(self, event, unit)
 	if(unit ~= self.unit) then return end
 
@@ -58,14 +72,13 @@ local function Update(self, event, unit)
 			status = UnitThreatSituation(unit)
 		end
 	end
-
+	
 	local r, g, b
 	if(status and status > 0) then
-		r, g, b = GetThreatStatusColor(status)
+		r, g, b = GetThreatColor(status)
 
-		if(element.SetVertexColor) then
-			element:SetVertexColor(r, g, b)
-		end
+		element.Top:SetVertexColor(r, g, b)
+		element.Bottom:SetVertexColor(r, g, b)
 
 		element:Show()
 	else
@@ -110,10 +123,6 @@ local function Enable(self)
 
 		self:RegisterEvent('UNIT_THREAT_SITUATION_UPDATE', Path)
 		self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', Path)
-
-		if(element:IsObjectType('Texture') and not element:GetTexture()) then
-			element:SetTexture([[Interface\RAIDFRAME\UI-RaidFrame-Threat]])
-		end
 
 		return true
 	end
