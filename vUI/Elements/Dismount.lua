@@ -1,5 +1,11 @@
 local vUI, GUI, Language, Assets, Settings = select(2, ...):get()
 
+--[[
+	ERR_NOT_WHILE_MOUNTED
+	ERR_MOUNT_ALREADYMOUNTED
+	SPELL_FAILED_NOT_STANDING - DoEmote("STAND")
+--]]
+
 local AutoDismount = vUI:NewModule("Dismount")
 
 AutoDismount.Errors = {
