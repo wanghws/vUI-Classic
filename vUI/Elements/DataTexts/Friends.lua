@@ -189,6 +189,11 @@ ClientInfo["WoW"] = function(name, id)
 	Class = GetClass(Class)
 	
 	local ClassColor = vUI.ClassColors[Class]
+	
+	if (not ClassColor) then -- Temporary until I hunt down the issue
+		return name, ProjectIDToName[info.gameAccountInfo.wowProjectID]
+	end
+	
 	ClassColor = vUI:RGBToHex(ClassColor[1], ClassColor[2], ClassColor[3])
 	
 	local LevelColor = GetQuestDifficultyColor(Level)
